@@ -1,0 +1,4 @@
+*.root
+simc_parameter_dump.dat
+./outfiles/*
+./worksim/*

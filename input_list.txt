@@ -1,2 +1,4 @@
 # list of SIMC kinematic input files
-test.data
+
+htest.data
+h2test.data
