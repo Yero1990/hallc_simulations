@@ -1,4 +1,6 @@
 # list of SIMC kinematic input files
 
-htest.data
-h2test.data
+#htest.data
+#h2test.data
+
+d2_pm80_lagetfsi_norad_nom.data
