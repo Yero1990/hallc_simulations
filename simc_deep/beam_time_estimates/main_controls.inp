@@ -1,0 +1,19 @@
+#-------------------------------------------
+#------------MAIN CONTROLS------------------
+#-------------------------------------------
+
+
+#--------------------------------
+#   INITIALIZATION PARAMETERS
+#--------------------------------
+
+# Set beam current (in uA)
+beam_current = 40.
+
+#------------------------
+# Set Input File Names
+#------------------------
+
+fname_file =   inp/set_basic_filenames.inp
+cuts_file  =   inp/set_basic_cuts.inp
+hist_file  =   inp/set_basic_histos.inp

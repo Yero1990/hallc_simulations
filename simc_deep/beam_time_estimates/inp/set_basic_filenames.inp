@@ -1,0 +1,10 @@
+#-----------------------------------------
+#   Set Input/Output FileName Patterns
+-----------------------------------------
+
+# Select Input ROOTfilePattern
+input_ROOTfilePattern = worksim/d2_pm%d_laget%s_%s_mod.root
+
+
+# Select Output ROOTfilePattern
+output_ROOTfilePattern = d2_pm%d_laget%s_%s_mod_output.root

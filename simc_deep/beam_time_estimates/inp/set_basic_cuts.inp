@@ -1,0 +1,48 @@
+#--------------------------------------------
+#------Basic Input Cuts Parameter File-------
+#--------------------------------------------
+
+#------TURN BASIC CUTS FLAG ON/OFF------
+# TRUE (ON) = 1, FALSE (OFF) = 0
+
+
+
+#-----SIMC ANALYSIS CUTS----------
+
+#-----Kinematics Cuts-----
+# 4-Momentum Transfers [GeV^2]
+Q2_cut_flag = 0
+c_Q2_min = 4
+c_Q2_max = 5
+
+# Missing Energy [GeV]
+Em_cut_flag = 0
+c_Em_min = -0.02;
+c_Em_max = 0.04;
+
+
+#------Acceptance Cuts------
+# Hadron Arm Momentum Acceptance, Delta [%] 
+hdelta_cut_flag = 0
+c_hdelta_min = -9.
+c_hdelta_max = 9.
+
+# Electron Arm Momentum Acceptance, Delta [%] 
+edelta_cut_flag = 0
+c_edelta_min = -10.
+c_edelta_max = 22.
+
+# xptar cuts (mrad)
+xptar_cut_flag = 0
+c_xptar_min = -0.05
+c_xptar_max = 0.05
+
+# yptar cuts (mrad)
+yptar_cut_flag = 0
+c_yptar_min = -0.07
+c_yptar_max = 0.07
+
+# z-react target difference [cm]
+ztarDiff_cut_flag = 0
+c_ztarDiff_min = -1.
+c_ztarDiff_max = 1.

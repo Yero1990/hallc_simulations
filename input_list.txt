@@ -1,6 +1,15 @@
 # list of SIMC kinematic input files
-
-#htest.data
-#h2test.data
-
-d2_pm80_lagetfsi_norad_nom.data
+#
+# test input kinematic files
+# htest.data
+# h2test.data
+#
+# nominal high missing momentum settings
+d2_pm700_lagetfsi_rad_nom.data
+d2_pm800_lagetfsi_rad_nom.data
+d2_pm900_lagetfsi_rad_nom.data
+#
+# modified (e-arm) high missing momentum settings
+d2_pm700_lagetfsi_rad_mod.data
+d2_pm800_lagetfsi_rad_mod.data
+d2_pm900_lagetfsi_rad_mod.data

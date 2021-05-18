@@ -1,19 +1,19 @@
 ! Deuteron Experiment D(e,e'p)n : e12-10-003
 ! Central "missing momentum" (pmiss) setting = 120 MeV
-! PWIA | NO radiative effects | YES energy loss | NO energy loss correction 
+! FSI | NO radiative effects | YES energy loss | NO energy loss correction 
 ! 'TF' stands for 'this field'
 ! ONE equals TRUE unless specified otherwise
 
  =?
  &EXPERIMENT
-     ngen  =  50000			!  POS: # of successes
+     ngen  =  200000			!  POS: # of successes
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
      doing_pion  =  F		!  (T = TRUE)
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
-     extra_dbase_file = 'extra_hydrogen_norad.data' !  additional input parameters.
+     extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
      set_allow_scat_in_coll=2  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
@@ -25,7 +25,7 @@
      spec%e%P  =  8335.2                               !  e arm central momentum (MeV/c)
      spec%e%theta  =  12.592                           !  e arm angle setting (degrees)
      spec%p%P  =  3052.3                               !  p arm central momentum (MeV/c)
-     spec%p%theta  =   38.833                          !  p arm angle setting (degrees)
+     spec%p%theta  =   38.633                          !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
@@ -112,7 +112,7 @@
     theory_par%model = 'LAGET_DEUT'               ! select a model name
     theory_par%data_file = './'         ! directory for the data file
     theory_par%FLAGS = 10*F             ! 10 flags are available
-    theory_par%parameter(1) = 0         ! 1 do fsi, 0 do pwia
+    theory_par%parameter(1) = 1         ! 1 do fsi, 0 do pwia
     theory_par%parameter(2) = 1         ! 1 do linear inter, 2 for log
     theory_par%parameter(3) = 1         ! 1 use binary files (fast), 0 ascii (slow)
 / 
