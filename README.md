@@ -44,7 +44,9 @@ If you plan to use this repository for doing hydrogen / deuteron simulations usi
 ### How-To Guide: Doing Simulations in SIMC
 Once you have everything setup, then we can start doing simulations. This is a multi-step process which has been simplified by using a single steering script `simulate.py`. Simply include all the input files you want to simulate in `input_files.txt` and execute:
 
-* `python simulate`
+* `python simulate.py`
 
+The simulation generates three files in `outfiles/` with extension (`.gen`, `.geni`, and `.hist`) and two files in `worksim/` with extension (`.data` and `.root`), where the `.data`
+ ASCII file was converted to a `.root` (see `simulate.py` for details of what is done)
  
-	
+ Now that the simulated `.root` files have been created, the files need to be analyzed in either the `simc_heep/` or `simc_deep/`. See the `README.md` files in said directories for additional details of the analysis.
