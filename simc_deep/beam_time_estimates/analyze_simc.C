@@ -1,53 +1,118 @@
-#include "parse_utils.h"
+#include "utils/parse_utils.h"
 
-void analyze_simc(int pm_set, TString model="fsi", TString rad = "norad"){
+void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_t Ib=0, Double_t time=0){
 
-
+  /* 
+     User Input:
+     pm_set     : central missing momentum setting
+     model      : "pwia" or "fsi"
+     rad_flag   :  1 (true), 0 (false)
+     Ib         : beam current (uA)
+     time       : beam-on-target time (hours)
+  */
+  
   TString h_arm_name = "HMS";
   TString e_arm_name = "SHMS";
-  
+
+  Double_t pi = 3.141592654;
+  Double_t dtr = pi/180.;
+  Double_t MP = 0.938272; //GeV
+  Double_t MD = 1.87561; //GeV
+  Double_t MN = 0.939566; //GeV
+  Double_t me = 0.000510998; //GeV
+   
   //-------------------
   // READ FILENAMES
   //-------------------
 
   //Input parameter controls filenames
-  TString main_controls_fname;
   TString input_CutFileName;
   TString input_HBinFileName;
-  TString input_SetFileName;
 
   //Declare TFile Pointers (reading/writing ROOTfiles)
   TFile *inROOT;
   TFile *outROOT;
 
-  //Input ROOTfile Name (to be read)
+  //SIMC Kin. Input Filename
+  TString simc_infile;
+
+  //Input/Outpu ROOTfile Name (to be read)
   TString simc_InputFileName;
   TString simc_OutputFileName;
   
   TString temp; //temporary string placeholder
 
+  TString rad;
+  if(rad_flag) { rad = "rad";}
+  else {rad = "norad";}
 
-  
+
   //---Read In File Names with cuts and histogram binning information
+  input_CutFileName  = Form("inp/set_basic_cuts_pm%d.inp", pm_set);
+  input_HBinFileName = Form("inp/set_basic_histos_pm%d.inp", pm_set);
 
-  main_controls_fname = "main_controls.inp";
+  //Define File Name Patterns
+  simc_infile = Form("infiles/d2_pm%d_laget%s_%s_mod.data",  pm_set, model.Data(), rad.Data());
+  simc_InputFileName = Form("worksim/d2_pm%d_laget%s_%s_mod.root", pm_set, model.Data(), rad.Data());
+  simc_OutputFileName = Form("d2_pm%d_laget%s_%s_mod_output.root",  pm_set, model.Data(), rad.Data());
 
-  input_SetFileName = trim(split(FindString("fname_file", main_controls_fname.Data())[0], '=')[1]);
-  input_CutFileName  = trim(split(FindString("cuts_file", main_controls_fname.Data())[0], '=')[1]);
-  input_HBinFileName = trim(split(FindString("hist_file", main_controls_fname.Data())[0], '=')[1]);
-
-  //Define Input/Output (.root) File Name Patterns
-  temp = trim(split(FindString("input_ROOTfilePattern", input_SetFileName.Data())[0], '=')[1]);
-  simc_InputFileName = Form(temp.Data(),  pm_set, model.Data(), rad.Data());
-
-  temp = trim(split(FindString("output_ROOTfilePattern", input_SetFileName.Data())[0], '=')[1]);
-  simc_OutputFileName = Form(temp.Data(),  pm_set, model.Data(), rad.Data());
-
-  //---------------------------------------------------------------------------------------------------------
   
+  //---------------------------------------------------------------------------------------------------------
+
+  //----------------------------
+  // READ CENTRAL KIN. SETTINGS
+  //----------------------------
+
+  //beam energy (GeV)
+  Double_t beam_e = (stod(split(split(FindString("Ebeam", simc_infile.Data())[0], '!')[0], '=')[1]))/1000.; 
+
+  //e- arm central momentum setting (GeV/c)
+  Double_t e_Pcen = (stod(split(split(FindString("spec%e%P", simc_infile.Data())[0], '!')[0], '=')[1]))/1000.; 
+  //proton arm central momentum setting (GeV/c)
+  Double_t h_Pcen = (stod(split(split(FindString("spec%p%P", simc_infile.Data())[0], '!')[0], '=')[1]))/1000.; 
+
+  //e- arm angle (deg)
+  Double_t e_angle = (stod(split(split(FindString("spec%e%theta", simc_infile.Data())[0], '!')[0], '=')[1])); 
+  //p arm angle (deg)
+  Double_t h_angle = (stod(split(split(FindString("spec%p%theta", simc_infile.Data())[0], '!')[0], '=')[1])); 
+
+
   //--------------------
   // READ ANALYSIS CUTS
   //-------------------
+
+  //-------Collimator Study-------
+  Bool_t hmsCollCut_flag;      //flag to enable/disable collimator cut
+  Bool_t shmsCollCut_flag;
+
+  Bool_t hmsColl_Cut;
+  Bool_t shmsColl_Cut;
+
+  TCutG *hms_Coll_gCut;   //HMS Collimator Graphical Cut
+  TCutG *shms_Coll_gCut;  //SHMS Collimator Graphical Cut
+
+  //HMS Octagonal Collimator Size (Each of the octagonal points is a multiple of 1 or 1/2 of these values)
+  Double_t hms_hsize = 4.575;  //cm
+  Double_t hms_vsize = 11.646;
+ 
+  //SHMS Octagonal Collimator Size (Each of the octagonal points is a multiple of 1 or 1/2 of these values)
+  Double_t shms_hsize = 17.;  //cm
+  Double_t shms_vsize = 25.;
+
+  //Scaling factor to scale collimator cuts from original size cut
+  Double_t hms_scale=1.;   //Default
+  Double_t shms_scale=1.;
+
+  //==Collimator==
+  hmsCollCut_flag = stoi(split(FindString("hmsCollCut_flag", input_CutFileName.Data())[0], '=')[1]);
+  shmsCollCut_flag = stoi(split(FindString("shmsCollCut_flag", input_CutFileName.Data())[0], '=')[1]);
+  
+  //==Read Collimator Cut Scale Factor==
+  hms_scale  =  stod(split(FindString("hms_scale", input_CutFileName.Data())[0], '=')[1]);
+  shms_scale =  stod(split(FindString("shms_scale", input_CutFileName.Data())[0], '=')[1]);
+  
+  
+  //------------------------------
 
   //---------Kinematics Cuts----------
   //4-Momentum Transfers
@@ -273,7 +338,7 @@ void analyze_simc(int pm_set, TString model="fsi", TString rad = "norad"){
   
 
   //---------------------------------------------------------------------------------------------------------
-  
+
   //--------------------
   // DECLARE HISTOGRAMS
   //-------------------
@@ -289,6 +354,8 @@ void analyze_simc(int pm_set, TString model="fsi", TString rad = "norad"){
   
   //Primary (electron) Kinematics (14 histos)
   TH1F *H_kf      = new TH1F("H_kf", "Final e^{-} Momentum", kf_nbins, kf_xmin, kf_xmax);
+  H_kf->Sumw2();
+  H_kf->SetDefaultSumw2(); 
   TH1F *H_the     = new TH1F("H_the", "Electron Scattering Angle, #theta_{e}", the_nbins, the_xmin, the_xmax);
   TH1F *H_Q2      = new TH1F("H_Q2","4-Momentum Transfer, Q^{2}", Q2_nbins, Q2_xmin, Q2_xmax); 
   TH1F *H_xbj     = new TH1F("H_xbj", "x-Bjorken", X_nbins, X_xmin, X_xmax);  
@@ -299,13 +366,17 @@ void analyze_simc(int pm_set, TString model="fsi", TString rad = "norad"){
   //Secondary (Hadron) Kinematics (recoil and missing are used interchageably) ()
   TH1F *H_Pf      = new TH1F("H_Pf", "Final Hadron Momentum (detected), p_{f}", Pf_nbins, Pf_xmin, Pf_xmax);
   TH1F *H_thx     = new TH1F("H_thx", "Hadron Scattering Angle (detected), #theta_{x}", thx_nbins, thx_xmin, thx_xmax);
-  TH1F *H_Em_nuc  = new TH1F("H_Em_nuc","Nuclear Missing Energy", Em_nbins, Em_xmin, Em_xmax); 
+  TH1F *H_Em      = new TH1F("H_Em","Nuclear Missing Energy", Em_nbins, Em_xmin, Em_xmax); 
   TH1F *H_Pm      = new TH1F("H_Pm","Missing Momentum, P_{miss}", Pm_nbins, Pm_xmin, Pm_xmax); 
   TH1F *H_MM      = new TH1F("H_MM","Missing Mass, M_{miss}", MM_nbins, MM_xmin, MM_xmax);        
   TH1F *H_MM2     = new TH1F("H_MM2","Missing Mass Squared, M^{2}_{miss}", MM2_nbins, MM2_xmin, MM2_xmax); 
   TH1F *H_thxq    = new TH1F("H_thxq", "In-Plane Angle, #theta_{xq}", thxq_nbins, thxq_xmin, thxq_xmax);
   TH1F *H_thrq    = new TH1F("H_thrq", "In-Plane Angle, #theta_{rq}", thrq_nbins, thrq_xmin, thrq_xmax);
 
+  //2D Pm vs. thrq (for cross section calculation)
+  TH2F *H_Pm_vs_thrq  = new TH2F("H_Pm_vs_thrq", "Pm vs. #theta_{rq} (yield)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
+  TH2F *H_Pm_vs_thrq_ps  = new TH2F("H_Pm_vs_thrq_ps", "Pm vs. #theta_{rq} (phase space)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
+  TH2F *H_Pm_vs_thrq_xsec  = new TH2F("H_Pm_vs_thrq_xsec", "Pm vs. #theta_{rq} (xsec)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
     
   //Add Kin Histos to TList
 
@@ -321,13 +392,16 @@ void analyze_simc(int pm_set, TString model="fsi", TString rad = "norad"){
   //Add Secondary Kin Histos
   kin_HList->Add( H_Pf       );
   kin_HList->Add( H_thx      );
-  kin_HList->Add( H_Em_nuc   );
+  kin_HList->Add( H_Em       );
   kin_HList->Add( H_Pm       );
   kin_HList->Add( H_MM       );
   kin_HList->Add( H_MM2      );
   kin_HList->Add( H_thxq     );
   kin_HList->Add( H_thrq     );
 
+  kin_HList->Add( H_Pm_vs_thrq );
+  kin_HList->Add( H_Pm_vs_thrq_ps );
+  kin_HList->Add( H_Pm_vs_thrq_xsec );
 
   //----------------------------------------------------------------------
   //---------HISTOGRAM CATEGORY: Spectrometer Acceptance  (ACCP)----------
@@ -379,6 +453,13 @@ void analyze_simc(int pm_set, TString model="fsi", TString rad = "norad"){
   TH2F *H_hxfp_vs_hyfp  = new TH2F("H_hxfp_vs_hyfp", Form("%s  X_{fp} vs. Y_{fp}; Y_{fp} [cm]; X_{fp} [cm]", h_arm_name.Data()),  hyfp_nbins, hyfp_xmin, hyfp_xmax, hxfp_nbins, hxfp_xmin, hxfp_xmax);
   TH2F *H_exfp_vs_eyfp  = new TH2F("H_exfp_vs_eyfp", Form("%s  X_{fp} vs. Y_{fp}; Y_{fp} [cm]; X_{fp} [cm]", e_arm_name.Data()),  eyfp_nbins, eyfp_xmin, eyfp_xmax, exfp_nbins, exfp_xmin, exfp_xmax);
 
+  //2D HMS v. SHMS Acceptance Correlations
+  TH2F *H_hxptar_vs_exptar = new TH2F("H_hxptar_vs_exptar", "HMS vs. SHMS, X'_{tar}", exptar_nbins, exptar_xmin, exptar_xmax, hxptar_nbins, hxptar_xmin, hxptar_xmax);
+  TH2F *H_hyptar_vs_eyptar = new TH2F("H_hyptar_vs_eyptar", "HMS vs. SHMS, Y'_{tar}", eyptar_nbins, eyptar_xmin, eyptar_xmax, hyptar_nbins, hyptar_xmin, hyptar_xmax);
+  TH2F *H_hdelta_vs_edelta = new TH2F("H_hdelta_vs_edelta", "HMS vs. SHMS, #delta",   edelta_nbins, edelta_xmin, edelta_xmax, hdelta_nbins, hdelta_xmin, hdelta_xmax);
+  
+  
+
   
   //Add ACCP Histos to TList
   accp_HList->Add( H_exfp       );
@@ -415,7 +496,10 @@ void analyze_simc(int pm_set, TString model="fsi", TString rad = "norad"){
   accp_HList->Add( H_hxfp_vs_hyfp  );
   accp_HList->Add( H_exfp_vs_eyfp  );
 
-
+  accp_HList->Add( H_hxptar_vs_exptar );
+  accp_HList->Add( H_hyptar_vs_eyptar );
+  accp_HList->Add( H_hdelta_vs_edelta );
+  
   //---------------------------------------------------------------------------------------------------------
   
   //--------------------------------
@@ -431,6 +515,29 @@ void analyze_simc(int pm_set, TString model="fsi", TString rad = "norad"){
   //Get the data tree
   tree = (TTree*)inROOT->Get("SNT");
   nentries = tree->GetEntries();
+
+  //--- Define Leaf Variable Names ----
+
+  //Primary Kinematics (electron kinematics) (USED BY DATA AND SIMC)
+  Double_t ki;                    //initial electron momentum  
+  Double_t kf;                    //final electron momentum
+  Double_t theta_e;               //Central electron arm angle relative to +z (hall coord. system)
+  Double_t Q2;                   //Four-momentum trasfer
+  Double_t X;                    //B-jorken X  scaling variable
+  Double_t nu;                   //Energy Transfer
+  Double_t q;                  //magnitude of the 3-vector q
+  Double_t th_q;                 //angle between q and +z (hall coord. system)
+  
+  //Secondary Kinematics (USED BY DATA AND SIMC)
+  Double_t Pf;                     //final proton momentum
+  Double_t theta_p;               //to be calculated separately (in data)
+  Double_t Em;                     //Standard Missing Energy for H(e,e'p)
+  Double_t Pm;                     //Missing Momentum (should be zero for H(e,e'p). Should be neutron momentum for D(e,e'p))
+  Double_t MM;                   //Missing Mass (neutron Mass)
+  Double_t MM2;                   //Missing Mass Squared
+  Double_t th_xq;                  //detected particle in-plane angle w.r.to q-vector
+  Double_t th_rq;                  //recoil particle in-plane angle w.r.to q-vector
+
   //Electron Arm Focal Plane / Reconstructed Quantities (USED BY DATA AND SIMC)
   Double_t e_xfp;
   Double_t e_xpfp;
@@ -441,8 +548,6 @@ void analyze_simc(int pm_set, TString model="fsi", TString rad = "norad"){
   Double_t e_yptar;
   Double_t e_xptar;
   Double_t e_delta;
-  Double_t kf;                        //final electron momentum
-  Double_t ki;                        //initial electron momentum
 
   //Hadron Arm Focal Plane / Reconstructed Quantities (USED BY DATA AND SIMC)
   Double_t h_xfp;
@@ -454,16 +559,11 @@ void analyze_simc(int pm_set, TString model="fsi", TString rad = "norad"){
   Double_t h_yptar;
   Double_t h_xptar;
   Double_t h_delta;
-  Double_t Pf;                 //final proton momentum
   
   //Target Quantities (tarx, tary, tarz) in Hall Coord. System (USED BY DATA AND SIMC)
-  Double_t tar_x; //For SIMC ONLY (It is the same for HMS/SHMS)
-
-  Double_t  htar_x;
+  Double_t tar_x;    //For SIMC ONLY (It is the same for HMS/SHMS)
   Double_t  htar_y;
   Double_t  htar_z;
-  
-  Double_t  etar_x;
   Double_t  etar_y;
   Double_t  etar_z;
 
@@ -471,91 +571,41 @@ void analyze_simc(int pm_set, TString model="fsi", TString rad = "norad"){
 
   //Collimators
   Double_t hXColl, hYColl, eXColl, eYColl;
-
-  //Primary Kinematics (electron kinematics) (USED BY DATA AND SIMC)
-  Double_t theta_e;              //Central electron arm angle relative to +z (hall coord. system)
-  Double_t W;                    //Invariant Mass W (should be proton mass in H(e,e'p))
-  Double_t W2;                    //Invariant mass squared
-  Double_t Q2;                   //Four-momentum trasfer
-  Double_t X;                    //B-jorken X  scaling variable
-  Double_t nu;                   //Energy Transfer
-  Double_t q;                  //magnitude of the 3-vector q
-  Double_t th_q;                 //angle between q and +z (hall coord. system)
-
-  //Secondary Kinematics (USED BY DATA AND SIMC)
-  Double_t Ep;                     //proton energy
-  Double_t Em;                    //Standard Missing Energy for H(e,e'p)
-  Double_t Em_nuc;                //Nuclear definition of Missing Energy (Used for D(e,e'p): B.E. of deuteron)
-  Double_t Pm;                    //Missing Momentum (should be zero for H(e,e'p). Should be neutron momentum for D(e,e'p))
-  Double_t Pmx_lab;               //X-Component of Missing Momentum (in Lab(or Hall) frame. +X: beam left, +Y: up, +Z: downstream beam) 
-  Double_t Pmy_lab;
-  Double_t Pmz_lab;
-  Double_t Pmx_q;                 //X-Component of Missing Momentum (in frame where +z_lab is rotated to +z_q. Pmz_q is along +z(parallel to q))
-  Double_t Pmy_q;
-  Double_t Pmz_q;
-  Double_t Kp;                    //Kinetic Energy of detected particle (proton)
-  Double_t Kn;                    //Kinetic Energy of recoil system (neutron)
-  Double_t M_recoil;              //Missing Mass (neutron Mass)
-  Double_t MM2;                   //Missing Mass Squared
-  Double_t E_recoil;              //Recoil Energy of the system (neutron total energy)
-  Double_t En;                    //Same as above
-  Double_t th_pq;                  //Polar angle of detected particle with q   ----> th_pq
-  Double_t th_nq;                  //Polar angle of recoil system with q (rad)  ---> th_nq (neutreon-q angle. IMPORTANT in D(e,e'p))
-  Double_t ph_pq;                  //Azimuth angle of detected particle with q    ----> phi_pq angle between proton and q-vector
-  Double_t ph_nq;                  //Azimuth of recoil system with scattering plane (rad) ----> phi_nq angle between neutron and q-vector
-  Double_t xangle;                //Angle of detected particle with scattered electron (Used to determine hadron angle)
-  Double_t theta_p;               //to be calculated separately (in data)
-
-  //Light-Cone Momentum Variables
-  Double_t PmPar;     //parallel component of recoil momentum relative to q-vector
-  Double_t PmPerp;    //transverse component of recoil momentum relative to q-vector
-  Double_t alpha_n;   //light-cone momentum fraction of the recoil neutron
-  Double_t alpha;     //momentum fraction of struck nucleon (normalized such that: alpha + alpha_n = 2)
-  
+ 
   //SIMC Specific TTree Variable Names
-  Double_t Normfac;
-  
-  //Thrown quantities (Used to determine spec. resolution)
-  Double_t h_deltai;
-  Double_t h_yptari;
-  Double_t h_xptari;
-  Double_t h_ytari;
-  
-  Double_t e_deltai;
-  Double_t e_yptari;
-  Double_t e_xptari;
-  Double_t e_ytari;
-  
-  Double_t epsilon;
-  Double_t corrsing;
-  Double_t fry;
-  Double_t radphot;
-  Double_t sigcc;
+  Double_t Normfac;               //normalization factor, defined as : normfac = luminosity * accepted / generated, luminosity = EXPER charge / targetfac
   Double_t Weight;               //This Weight has the cross section in it
-  Double_t Jacobian;
-  Double_t Genweight;
-  Double_t SF_weight;
   Double_t Jacobian_corr;
-  Double_t sig;
-  Double_t sig_recon;
-  Double_t sigcc_recon;
-  Double_t coul_corr;
-  Double_t Ein;                  //single beam energy value (SIMC Uses this energy. If not corr. for energy loss, it should be same as in input file)
-  Double_t theta_rq;
-  Double_t SF_weight_recon;
-  Double_t h_Thf;
-
   Double_t prob_abs;  // Probability of absorption of particle in the HMS Collimator
                       //(Must be multiplies by the weight. If particle interation is
-                      //NOT simulated, it is set to 1.)
-
-  
+                      //NOT simulated, it is set to 1.)  
   //SIMC Collimator
   Double_t htarx_corr;
   Double_t etarx_corr;
 
   
   //----- Set Branch Address ------
+
+  //Primary Kinematics (electron kinematics)
+  //ki needs to be calculated (initial e- momentum)
+  tree->SetBranchAddress("e_pf",    &kf);
+  tree->SetBranchAddress("theta_e", &theta_e);
+  tree->SetBranchAddress("Q2", &Q2);  
+  //Xbj needs to be calculated in the event loop
+  tree->SetBranchAddress("nu", &nu);
+  tree->SetBranchAddress("q", &q);
+  //th_q needs to be calculated in the event loop
+
+  //Secondary Kinematics (hadron kinematics)
+  tree->SetBranchAddress("h_pf",    &Pf);
+  tree->SetBranchAddress("theta_p", &theta_p);
+  tree->SetBranchAddress("Em", &Em);
+  tree->SetBranchAddress("Pm", &Pm);
+  //Missing Mass (MM) and MM2 will be defined in entry loop
+  tree->SetBranchAddress("theta_pq", &th_xq); 
+  tree->SetBranchAddress("theta_rq", &th_rq);  
+ 
+  
   //Electron Arm Focal Plane / Reconstructed Quantities 
   tree->SetBranchAddress("e_xfp",  &e_xfp);
   tree->SetBranchAddress("e_xpfp", &e_xpfp);
@@ -566,7 +616,6 @@ void analyze_simc(int pm_set, TString model="fsi", TString rad = "norad"){
   tree->SetBranchAddress("e_yptar", &e_yptar);
   tree->SetBranchAddress("e_xptar", &e_xptar);
   tree->SetBranchAddress("e_delta", &e_delta);
-  tree->SetBranchAddress("e_pf",    &kf);
   
   //Hadron Arm Focal Plane / Reconstructed Quantities 
   tree->SetBranchAddress("h_xfp",  &h_xfp);
@@ -578,7 +627,6 @@ void analyze_simc(int pm_set, TString model="fsi", TString rad = "norad"){
   tree->SetBranchAddress("h_yptar", &h_yptar);
   tree->SetBranchAddress("h_xptar", &h_xptar);
   tree->SetBranchAddress("h_delta", &h_delta);
-  tree->SetBranchAddress("h_pf",    &Pf);
   
   //Target Quantities (tarx, tary, tarz) in Hall Coord. System
   tree->SetBranchAddress("tar_x", &tar_x);
@@ -586,68 +634,256 @@ void analyze_simc(int pm_set, TString model="fsi", TString rad = "norad"){
   tree->SetBranchAddress("h_zv",  &htar_z);
   tree->SetBranchAddress("e_yv",  &etar_y);
   tree->SetBranchAddress("e_zv",  &etar_z);
-    
-  //Primary Kinematics (electron kinematics)
-  tree->SetBranchAddress("theta_e", &theta_e);
-  tree->SetBranchAddress("W", &W);
-  tree->SetBranchAddress("Q2", &Q2);  
-  //Xbj needs to be calculated in the event loop
-  tree->SetBranchAddress("nu", &nu);
-  tree->SetBranchAddress("q", &q);
-  //th_q needs to be calculated in the event loop
-
-  //Secondary Kinematics (hadron kinematics)
-  tree->SetBranchAddress("Em", &Em);
-  tree->SetBranchAddress("Pm", &Pm);
   
-  tree->SetBranchAddress("theta_pq", &th_pq); 
-  tree->SetBranchAddress("phi_pq", &ph_pq);  
-  tree->SetBranchAddress("theta_p", &theta_p);
-  
-  //SIMC-SPECIFIC LEAF VARIABLES (Not all may be used here)
+  //SIMC-SPECIFIC LEAF VARIABLES 
   tree->SetBranchAddress("Normfac",  &Normfac);
-  tree->SetBranchAddress("h_deltai", &h_deltai);
-  tree->SetBranchAddress("h_yptari", &h_yptari);
-  tree->SetBranchAddress("h_xptari", &h_xptari);
-  tree->SetBranchAddress("h_ytari",  &h_ytari);
-  
-  tree->SetBranchAddress("e_deltai", &e_deltai);
-  tree->SetBranchAddress("e_yptari", &e_yptari);
-  tree->SetBranchAddress("e_xptari", &e_xptari);
-  tree->SetBranchAddress("e_ytari",  &e_ytari);
-  
-  tree->SetBranchAddress("epsilon",  &epsilon);
-  tree->SetBranchAddress("corrsing", &corrsing);
-  tree->SetBranchAddress("fry",      &fry);
-  tree->SetBranchAddress("radphot",  &radphot);
-  tree->SetBranchAddress("sigcc",    &sigcc);
   tree->SetBranchAddress("Weight",   &Weight);
-  tree->SetBranchAddress("Jacobian", &Jacobian);
-  tree->SetBranchAddress("Genweight",&Genweight);
-  tree->SetBranchAddress("SF_weight", &SF_weight);
   tree->SetBranchAddress("Jacobian_corr", &Jacobian_corr);
-  tree->SetBranchAddress("sig", &sig);
-  tree->SetBranchAddress("sig_recon", &sig_recon);
-  tree->SetBranchAddress("sigcc_recon", &sigcc_recon);
-  tree->SetBranchAddress("coul_corr", &coul_corr);
-  tree->SetBranchAddress("Ein", &Ein);
-  tree->SetBranchAddress("theta_rq", &theta_rq);
-  tree->SetBranchAddress("SF_weight_recon", &SF_weight_recon);
-  tree->SetBranchAddress("h_Thf", &h_Thf);
-  tree->SetBranchAddress("Ein_v", &Ein_v);
-  tree->SetBranchAddress("Q2_v", &Q2_v);
-  tree->SetBranchAddress("nu_v", &nu_v);
-  tree->SetBranchAddress("q_lab_v", &q_lab_v);
-  tree->SetBranchAddress("pm_v", &Pm_v);
-  tree->SetBranchAddress("pm_par_v", &Pm_par_v);
-  tree->SetBranchAddress("pf_v", &Pf_v);
-  tree->SetBranchAddress("Ep_v", &Ep_v);
-  tree->SetBranchAddress("Ef_v", &Ef_v);
-  tree->SetBranchAddress("e_xptar_v", &e_xptar_v);
-  tree->SetBranchAddress("e_yptar_v", &e_yptar_v);
-  tree->SetBranchAddress("h_xptar_v", &h_xptar_v);
-  tree->SetBranchAddress("h_yptar_v", &h_yptar_v);
   tree->SetBranchAddress("probabs", &prob_abs);
+
+
+  //-----------------------------------
+  // DEFINE CUT ON COLLIMATOR GEOMETRY
+  //-----------------------------------
+  
+  //Scaling the HMS/SHMS Collimator Cuts
+  hms_hsize = hms_scale*hms_hsize;  //The scale factor is read from set_heep_cuts.inp
+  hms_vsize = hms_scale*hms_vsize;
+  
+  shms_hsize = shms_scale*shms_hsize;
+  shms_vsize = shms_scale*shms_vsize;  
+
+  //Define HMS Collimator Shape
+  hms_Coll_gCut = new TCutG("hmsCollCut", 8 );
+  hms_Coll_gCut->SetVarX("X");
+  hms_Coll_gCut->SetVarY("Y");
+ 
+  hms_Coll_gCut->SetPoint(0,  hms_hsize,     hms_vsize/2.);
+  hms_Coll_gCut->SetPoint(1,  hms_hsize/2.,  hms_vsize   );
+  hms_Coll_gCut->SetPoint(2, -hms_hsize/2.,  hms_vsize   );
+  hms_Coll_gCut->SetPoint(3, -hms_hsize,     hms_vsize/2.);
+  hms_Coll_gCut->SetPoint(4, -hms_hsize,    -hms_vsize/2.);
+  hms_Coll_gCut->SetPoint(5, -hms_hsize/2., -hms_vsize   );
+  hms_Coll_gCut->SetPoint(6,  hms_hsize/2., -hms_vsize   );
+  hms_Coll_gCut->SetPoint(7,  hms_hsize,    -hms_vsize/2.);
+  hms_Coll_gCut->SetPoint(8,  hms_hsize,     hms_vsize/2.);
+
+  //Define SHMS Collimator Shape
+  shms_Coll_gCut = new TCutG("shmsCollCut", 8 );
+  shms_Coll_gCut->SetVarX("X");
+  shms_Coll_gCut->SetVarY("Y");
+ 
+  shms_Coll_gCut->SetPoint(0,  shms_hsize,     shms_vsize/2.);
+  shms_Coll_gCut->SetPoint(1,  shms_hsize/2.,  shms_vsize   );
+  shms_Coll_gCut->SetPoint(2, -shms_hsize/2.,  shms_vsize   );
+  shms_Coll_gCut->SetPoint(3, -shms_hsize,     shms_vsize/2.);
+  shms_Coll_gCut->SetPoint(4, -shms_hsize,    -shms_vsize/2.);
+  shms_Coll_gCut->SetPoint(5, -shms_hsize/2., -shms_vsize   );
+  shms_Coll_gCut->SetPoint(6,  shms_hsize/2., -shms_vsize   );
+  shms_Coll_gCut->SetPoint(7,  shms_hsize,    -shms_vsize/2.);
+  shms_Coll_gCut->SetPoint(8,  shms_hsize,     shms_vsize/2.);
+
+  
+  //-------------------------------
+  //  DEFINE FULL WEIGHT VARIABLES
+  //-------------------------------
+
+  // STEP1: Determine the charge factor:
+  // definition: total charge deposited on target over a time period
+  // SIMC input files are set to 'events / 1mC'
+   
+  // Charge factor is the total integrated charge assuming a beam current and run time
+  //Double_t Ib = 40;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
+  //Double_t time = 1.0;     //estimated time (in hours) a run takes (start - end) of run
+  Double_t charge_factor = Ib * time * 3600. / 1000.;
+  
+  // STEP2: Estimate Efficiencies (use efficiencies from commissioning experiment)
+  Double_t e_trk = 1;
+  Double_t h_trk = 1;
+  Double_t daq_lt = 1;
+
+  Double_t FullWeight;
+  Double_t PhaseSpace;
+
+  //---------------------
+  //  LOOP OVER ENTRIES
+  //---------------------
+
+  for (Long64_t i=0; i < nentries; i++) {
+
+    //Get the ith entry from the SNT TTree
+    tree->GetEntry(i);
+
+    //-----Define Additional Kinematic Variables--------
+
+    X = Q2 / (2.*MP*nu);
+    th_q = th_xq + theta_p;
+    ztar_diff =  htar_z - etar_z;
+
+    
+    //SIMC Collimator (definition based on HCANA collimator)
+    htarx_corr = tar_x - h_xptar*htar_z*cos(h_angle*dtr);
+    etarx_corr = tar_x - e_xptar*etar_z*cos(e_angle*dtr);  
+    
+    
+    //Define Collimator (same as in HCANA)
+    hXColl = htarx_corr + h_xptar*168.;   //in cm
+    hYColl = h_ytar + h_yptar*168.;
+    eXColl = etarx_corr + e_xptar*253.;
+    eYColl = e_ytar + e_yptar*253.-(0.019+40.*.01*0.052)*e_delta+(0.00019+40*.01*.00052)*e_delta*e_delta; //correct for HB horizontal bend	  
+
+    //------Define ANALYSIS CUTS-------
+
+    //---Collimator CUTS---
+    
+    if(hmsCollCut_flag)  { hmsColl_Cut =  hms_Coll_gCut->IsInside(hYColl, hXColl);}
+    else{hmsColl_Cut=1;}
+    
+    if(shmsCollCut_flag) { shmsColl_Cut =  shms_Coll_gCut->IsInside(eYColl, eXColl);}
+    else{shmsColl_Cut=1;}
+	  
+    //----Kinematics Cuts----
+
+    //Q2
+    if(Q2_cut_flag){c_Q2 = Q2>=c_Q2_min && Q2<=c_Q2_max;}
+    else{c_Q2=1;}
+    
+    //Missing Energy, Em
+    if(Em_cut_flag){c_Em = Em>=c_Em_min && Em<=c_Em_max;}
+    else{c_Em=1;}
+	  
+    //----Acceptance Cuts----
+    if(hdelta_cut_flag){c_hdelta = h_delta>=c_hdelta_min && h_delta<=c_hdelta_max;} 
+    else{c_hdelta=1;}
+    
+    if(edelta_cut_flag){c_edelta = e_delta>=c_edelta_min && e_delta<=c_edelta_max;} 
+    else{c_edelta=1;} 
+    
+    if(ztarDiff_cut_flag){c_ztarDiff = ztar_diff>=c_ztarDiff_min && ztar_diff<=c_ztarDiff_max;} 
+    else{c_ztarDiff=1;} 
+
+    //Combine All CUTS
+    c_accpCuts = c_hdelta && c_edelta && c_ztarDiff && hmsColl_Cut && shmsColl_Cut;
+    c_kinCuts = c_Q2 && c_Em;
+    c_allCuts =  c_accpCuts && c_kinCuts;
+	  
+
+    //Full Weight
+    FullWeight = (Normfac * Weight * charge_factor * e_trk * h_trk * daq_lt ) / nentries;
+
+    PhaseSpace = Normfac * charge_factor * Jacobian_corr  / nentries;    //Phase Space with corr. factor
+    
+    if(c_allCuts) {
+
+      // This is for the 2D cross section Pm vs. thnq binned in thnq 
+      H_Pm_vs_thrq->Fill(th_rq/dtr, Pm, FullWeight);
+      H_Pm_vs_thrq_ps->Fill(th_rq/dtr, Pm, PhaseSpace);
+      
+      //Primary (electron) Kinematics
+      H_kf->Fill(kf/1000., FullWeight);
+      H_the->Fill(theta_e/dtr, FullWeight);
+      H_Q2->Fill(Q2, FullWeight);
+      H_xbj->Fill(X, FullWeight);
+      H_nu->Fill(nu, FullWeight);
+      H_q->Fill(q, FullWeight);
+      H_thq->Fill(th_q/dtr, FullWeight);
+      
+      
+      //Secondary (Hadron) Kinematics
+      H_Pf->Fill(Pf/1000., FullWeight);
+      H_thx->Fill(theta_p/dtr, FullWeight);
+      H_Em->Fill(Em, FullWeight);
+      H_Pm->Fill(Pm, FullWeight);     
+      H_thxq->Fill(th_xq/dtr, FullWeight);
+      H_thrq->Fill(th_rq/dtr, FullWeight);
+
+      //Target Reconstruction (Hall Coord. System)
+      H_htar_x->Fill(tar_x, FullWeight);
+      H_htar_y->Fill(htar_y, FullWeight);
+      H_htar_z->Fill(htar_z, FullWeight);
+      H_etar_x->Fill(tar_x, FullWeight);
+      H_etar_y->Fill(etar_y, FullWeight);
+      H_etar_z->Fill(etar_z, FullWeight);
+      H_ztar_diff->Fill(ztar_diff, FullWeight);
+      
+      //Hadron arm Reconstructed Quantities ( xtar, ytar, xptar, yptar, delta) 
+      H_hytar->Fill(h_ytar, FullWeight);
+      H_hxptar->Fill(h_xptar, FullWeight);
+      H_hyptar->Fill(h_yptar, FullWeight);
+      H_hdelta->Fill(h_delta, FullWeight);
+      
+      //Hadron arm Focal Plane Quantities
+      H_hxfp->Fill(h_xfp, FullWeight);
+      H_hyfp->Fill(h_yfp, FullWeight);
+      H_hxpfp->Fill(h_xpfp, FullWeight);
+      H_hypfp->Fill(h_ypfp, FullWeight);
+      
+      //Electron Arm Reconstructed Quantities ( xtar, ytar, xptar, yptar, delta)
+      H_eytar->Fill(e_ytar, FullWeight);
+      H_exptar->Fill(e_xptar, FullWeight);
+      H_eyptar->Fill(e_yptar, FullWeight);
+      H_edelta->Fill(e_delta, FullWeight);
+      
+      //Electron Arm Focal Plane Quantities
+      H_exfp->Fill(e_xfp, FullWeight);
+      H_eyfp->Fill(e_yfp, FullWeight);
+      H_expfp->Fill(e_xpfp, FullWeight);
+      H_eypfp->Fill(e_ypfp, FullWeight);
+
+      //---- Fill 2D Histos ----
+      
+      // Xfp vs Yfp
+      H_hxfp_vs_hyfp->Fill(h_yfp, h_xfp, FullWeight);
+      H_exfp_vs_eyfp->Fill(e_yfp, e_xfp, FullWeight);
+
+      // 2D Collimator Histos
+      H_hXColl_vs_hYColl->Fill(hYColl, hXColl, FullWeight);
+      H_eXColl_vs_eYColl->Fill(eYColl, eXColl, FullWeight);
+	    
+      // 2D HMS v. SHMS Acceptance Correlations
+      H_hxptar_vs_exptar->Fill(e_xptar, h_xptar, FullWeight); 
+      H_hyptar_vs_eyptar->Fill(e_yptar, h_yptar, FullWeight); 
+      H_hdelta_vs_edelta->Fill(e_delta, h_delta, FullWeight);
+	    
+    }
+    
+  } // end entry loop
+
+
+  //Calculate Xsec
+  H_Pm_vs_thrq_xsec->Divide(H_Pm_vs_thrq, H_Pm_vs_thrq_ps);
+  
+  //-------------------------
+  // WRITE HISTOS TO FILE
+  //-------------------------
+  
+  //Create Output ROOTfile
+  outROOT = new TFile(simc_OutputFileName, "RECREATE");
+  
+  //Make directories to store histograms based on category
+  outROOT->mkdir("kin_plots");
+  outROOT->mkdir("accp_plots");
+  
+  //Write Kinematics histos to kin_plots directory
+  outROOT->cd("kin_plots");
+  kin_HList->Write();
+  
+  //Write Acceptance histos to accp_plots directory
+  outROOT->cd("accp_plots");
+  accp_HList->Write();
+  
+  //Close File
+  outROOT->Close();
+
+  //-------------------------------
+  // Extract Cross Section to File
+  //-------------------------------
   
   
+  //---------------
+  //  MAKE PLOTS
+  //--------------
+
+  
+
 }
