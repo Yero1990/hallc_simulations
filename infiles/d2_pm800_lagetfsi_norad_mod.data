@@ -1,5 +1,5 @@
 ! Deuteron Experiment D(e,e'p)n : e12-10-003
-! Central "missing momentum" (pmiss) setting = 120 MeV
+! Central "missing momentum" (pmiss) setting = 800 MeV
 ! FSI | NO radiative effects | YES energy loss | NO energy loss correction 
 ! 'TF' stands for 'this field'
 ! ONE equals TRUE unless specified otherwise
@@ -13,7 +13,7 @@
      doing_pion  =  F		!  (T = TRUE)
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
-     extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
+     extra_dbase_file = 'extra_hydrogen_norad.data' !  additional input parameters.
      set_allow_scat_in_coll=2  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
@@ -24,8 +24,8 @@
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      spec%e%P  =  8600.0                               !  e arm central momentum (MeV/c)
      spec%e%theta  =  12.2                             !  e arm angle setting (degrees)
-     spec%p%P  =  3052.3                                !  p arm central momentum (MeV/c)
-     spec%p%theta  =   38.6333                            !  p arm angle setting (degrees)
+     spec%p%P  =  2121.0                               !  p arm central momentum (MeV/c)
+     spec%p%theta  =   59.3886                         !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 

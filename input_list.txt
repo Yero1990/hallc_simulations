@@ -4,12 +4,14 @@
 # htest.data
 # h2test.data
 #
+d2_pm120_lagetfsi_rad_mod.data
+#
 # nominal high missing momentum settings
-d2_pm700_lagetfsi_rad_nom.data
-d2_pm800_lagetfsi_rad_nom.data
-d2_pm900_lagetfsi_rad_nom.data
+#d2_pm700_lagetfsi_rad_nom.data
+#d2_pm800_lagetfsi_rad_nom.data
+#d2_pm900_lagetfsi_rad_nom.data
 #
 # modified (e-arm) high missing momentum settings
-d2_pm700_lagetfsi_rad_mod.data
-d2_pm800_lagetfsi_rad_mod.data
-d2_pm900_lagetfsi_rad_mod.data
+#d2_pm700_lagetfsi_rad_mod.data
+#d2_pm800_lagetfsi_rad_mod.data
+#d2_pm900_lagetfsi_rad_mod.data

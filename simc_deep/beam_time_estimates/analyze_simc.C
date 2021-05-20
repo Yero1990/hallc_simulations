@@ -1,4 +1,5 @@
 #include "utils/parse_utils.h"
+#include "utils/hist_utils.h"
 
 void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_t Ib=0, Double_t time=0){
 
@@ -53,7 +54,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
 
   //Define File Name Patterns
   simc_infile = Form("infiles/d2_pm%d_laget%s_%s_mod.data",  pm_set, model.Data(), rad.Data());
-  simc_InputFileName = Form("worksim/d2_pm%d_laget%s_%s_mod.root", pm_set, model.Data(), rad.Data());
+  simc_InputFileName = Form("worksim/d2_pm%d_laget%s_%s_mod_5M.root", pm_set, model.Data(), rad.Data());
   simc_OutputFileName = Form("d2_pm%d_laget%s_%s_mod_output.root",  pm_set, model.Data(), rad.Data());
 
   
@@ -846,6 +847,8 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
       H_hdelta_vs_edelta->Fill(e_delta, h_delta, FullWeight);
 	    
     }
+
+    cout << "SIMC Events Completed: " << std::setprecision(2) << double(i) / nentries * 100. << "  % " << std::flush << "\r";
     
   } // end entry loop
 
@@ -906,7 +909,8 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   //-------------------------------
   // Extract Cross Section to File
   //-------------------------------
-  
+  extract_2d_hist(H_Pm_vs_thrq_xsec, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("xsec_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
+  extract_2d_hist(H_Pm_vs_thrq,      "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("stats_pm%d_model%s_%s_%.1fuA_%.1fhr.txt", pm_set, model.Data(), rad.Data(), Ib, time));
   
   //---------------
   //  MAKE PLOTS
