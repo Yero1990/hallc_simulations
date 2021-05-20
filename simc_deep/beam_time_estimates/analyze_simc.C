@@ -875,6 +875,34 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   //Close File
   outROOT->Close();
 
+  //** IMPORTANT** Consideration of statistical uncertainty based on counts
+  /*
+    In this example, I fill a histogram at 2.2 with a weight of 0.027, and a charge factor of 1 mC, 5mC, and 25 mC, respectively.
+    H->Fill(2.2, 0.027),      charge_factor = 1 mC
+    (Nobs = 8)
+    N_content =  0.2159,  N_err = 0.07636, ~1/sqrt(0.2159)=2.15
+    N_err/N_content = 0.353682
+    
+    H->Fill(2.2, 0.027 * 5),   charge_factor = 5 mC
+    (Nobs = 8),  
+    N_content = 1.08  ,  N_err = 0.381837, ~1/sqrt(1.08)=0.962
+    N_err/N_content = 0.353552
+
+    H->Fill(2.2, 0.027 * 25),   charge_factor = 25 mC
+    (Nobs = 8),  
+    N_content = 5.40  ,  N_err = 1.9091,  ~1/sqrt(5.40) = 0.43
+    N_err/N_content = 0.353552
+
+    Comment: even though there are 8 observations, the relative error N_err/N_content is the same
+    for different charge factors, so it does not make sense to take this as statistical error since one
+    expects that the statistical error gets smaller with increasing charge factor (i.e., beam time and beam current)
+    Since the total number of observations (accepted events) is the same, it also does not make sense to take ~1/sqrt(8)
+    By taking ~1/sqrt(N_content), one sees that the error does decrease with increasing charge, so it makes sense to take
+    this as the statistical uncertainty.
+    
+  */
+
+  
   //-------------------------------
   // Extract Cross Section to File
   //-------------------------------
