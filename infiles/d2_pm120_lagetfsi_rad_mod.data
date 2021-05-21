@@ -1,6 +1,6 @@
 ! Deuteron Experiment D(e,e'p)n : e12-10-003
 ! Central "missing momentum" (pmiss) setting = 120 MeV
-! FSI | NO radiative effects | YES energy loss | NO energy loss correction 
+! FSI | YES radiative effects | YES energy loss | NO energy loss correction 
 ! 'TF' stands for 'this field'
 ! ONE equals TRUE unless specified otherwise
 

@@ -1,12 +1,12 @@
 ! Deuteron Experiment D(e,e'p)n : e12-10-003
-! Central "missing momentum" (pmiss) setting = 800 MeV
+! Central "missing momentum" (pmiss) setting = 700 MeV/c
 ! FSI | YES radiative effects | YES energy loss | NO energy loss correction 
 ! 'TF' stands for 'this field'
 ! ONE equals TRUE unless specified otherwise
 
  =?
  &EXPERIMENT
-     ngen  =  5000000			!  POS: # of successes
+     ngen  =  50000			!  POS: # of successes
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
@@ -22,10 +22,10 @@
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
-     spec%e%P  =  8600.0                               !  e arm central momentum (MeV/c)
-     spec%e%theta  =  12.2                             !  e arm angle setting (degrees)
-     spec%p%P  =  2121.0                               !  p arm central momentum (MeV/c)
-     spec%p%theta  =   59.3886                         !  p arm angle setting (degrees)
+     spec%e%P  =  8922.4                               !  e arm central momentum (MeV/c)
+     spec%e%theta  =  12.1686                          !  e arm angle setting (degrees)
+     spec%p%P  =  2189.0                               !  p arm central momentum (MeV/c)
+     spec%p%theta  =   57.4094                         !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
@@ -112,7 +112,7 @@
     theory_par%model = 'LAGET_DEUT'               ! select a model name
     theory_par%data_file = './'         ! directory for the data file
     theory_par%FLAGS = 10*F             ! 10 flags are available
-    theory_par%parameter(1) = 1         ! 1 do fsi, 0 do pwia
+    theory_par%parameter(1) = 0         ! 1 do fsi, 0 do pwia
     theory_par%parameter(2) = 1         ! 1 do linear inter, 2 for log
     theory_par%parameter(3) = 1         ! 1 use binary files (fast), 0 ascii (slow)
 / 

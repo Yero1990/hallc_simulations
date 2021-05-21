@@ -4,14 +4,17 @@
 # htest.data
 # h2test.data
 #
-d2_pm120_lagetfsi_rad_mod.data
+#---modified kin. file ----
 #
-# nominal high missing momentum settings
-#d2_pm700_lagetfsi_rad_nom.data
-#d2_pm800_lagetfsi_rad_nom.data
-#d2_pm900_lagetfsi_rad_nom.data
+# JML FSI with radiative effects
+# d2_pm120_lagetfsi_rad_mod.data
+# d2_pm700_lagetfsi_rad_mod.data
+# d2_pm800_lagetfsi_rad_mod.data
+d2_pm900_lagetfsi_rad_mod.data
 #
-# modified (e-arm) high missing momentum settings
-#d2_pm700_lagetfsi_rad_mod.data
-#d2_pm800_lagetfsi_rad_mod.data
-#d2_pm900_lagetfsi_rad_mod.data
+# JML FSI with NO radiative effects
+# d2_pm120_lagetfsi_norad_mod.data
+# d2_pm700_lagetfsi_norad_mod.data
+# d2_pm800_lagetfsi_norad_mod.data
+# d2_pm900_lagetfsi_norad_mod.data
+
