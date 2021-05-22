@@ -71,36 +71,34 @@ def plot_yield(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, scl_facto
 
     f = dfile(fname)
 
-    #read xsec data file
+    #read yield data file
     th_rq = np.array(f['x0'])
     pm    = (np.array(f['y0']))[th_rq==thrq]
     pm_bins = max(np.array(f['yb']))  #max number of pm bins
     pm_min = min(np.array(f['ylow'])[th_rq==thrq])
     pm_max = max(np.array(f['yup'])[th_rq==thrq])
-    
     pm_cnts  = (np.array(f['zcont']))[th_rq==thrq] * scl_factor  # pm bin content
     MC_err = (np.array(f['zcont_err']))[th_rq==thrq] * scl_factor  #absolute error of weighted counts (MC statistics error, NOT the exp. statistical error)   
     stats_err = np.sqrt(pm_cnts) #absolute statistical errors
-    print('pm = ', len(pm))
-    print('pm_bins = ', pm_bins)
-    print('weight = ', len(pm_cnts))
-    print('pm_min = ', pm_min)
-    print('pm_max = ', pm_max)
+
     #rel_stats_err = 1. / np.sqrt(pm_cnts) #relative statistical error
-    rel_stats_err = np.divide(1, stats_err, out=np.full_like(stats_err, np.nan), where=stats_err!=0) 
-    rel_stats_err_m = ma.masked_where(np.isnan(rel_stats_err), rel_stats_err)
-    pm_m = ma.masked_where(np.isnan(rel_stats_err), pm)
-    #print('rel_stats_err = ', rel_stats_err*100)
+    rel_stats_err = np.divide(1, stats_err, out=np.full_like(stats_err, 0), where=stats_err!=0)    
+
+    #mask the values if relative statistical error = 0 or > 50 % 
+    rel_stats_err_m = ma.masked_where((rel_stats_err == 0) | (rel_stats_err > 0.5), rel_stats_err)
+    pm_m = ma.masked_where((rel_stats_err == 0) | (rel_stats_err > 0.5), pm)
+    
     rel_stats_err_m = rel_stats_err_m * 100
-    #plt.hist(pm, pm_bins, weights=pm_cnts, edgecolor='k', color=clr, range=[pm_min,pm_max], alpha = 0.2)
+    
     print(rel_stats_err_m)
     if(rel_err_flg):
         plt.ylim(-50,50)
-        plt.xlim(0,1.2)
-
-        return plt.errorbar(pm_m, np.repeat(0, len(pm)), rel_stats_err_m, color=clr, linestyle='none', marker='o', label = r'$I_{beam}$=%.1f $\mu A$, time=%.1f hr'%(Ib, scl_factor))
+        plt.xlim(pm_min,pm_max)
+        return plt.errorbar(pm_m, np.repeat(0, len(pm)), rel_stats_err_m, color=clr, linestyle='none', marker='o', alpha = 0.4, label = r'$I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(Ib, scl_factor))
     else:
-        return plt.errorbar(pm, pm_cnts, yerr=stats_err, linestyle='none', marker='o', color='k', markersize=3)
+        plt.hist(pm, pm_bins, weights=pm_cnts, edgecolor='k', color=clr, range=[pm_min,pm_max], alpha = 0.2)
+        plt.xlim(pm_min,pm_max)
+        return plt.errorbar(pm_m, pm_cnts, yerr=stats_err, linestyle='none', marker='o', color=clr, ecolor=clr, alpha = 0.4, markersize=3, label = r'$I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(Ib, scl_factor))
     
 
 def main():
@@ -170,7 +168,29 @@ def main():
     '''
 
     
+    #-------- Plot Yield and Relative Errors for Beam Time Estimates ---------
+
+    #Make subplots
+    plt.subplots(2,1, figsize=(5,10))
+
+    #adjust margin spacing 
+    plt.subplots_adjust(top=0.95)
+
+    plt.suptitle(r'Relative Errors', fontsize=18)
+    
+    plt.subplot(2,1,1)
+    plot_yield(thrq=35, pm_set=120, model='fsi', rad='rad', Ib=40, time=1, scl_factor=1, clr='b',rel_err_flg=False)
+    plt.ylabel(r'Yield', fontsize=12)
+
+    plt.legend(fontsize=12)
+
+    plt.subplot(2,1,2)
     plot_yield(thrq=35, pm_set=120, model='fsi', rad='rad', Ib=40, time=1, scl_factor=1, clr='b',rel_err_flg=True)
+    plt.ylabel(r'Stat. Relative Error $\sqrt{N}$ / N (\%)', fontsize=12)
+    plt.xlabel(r'Missing Momentum, $P_{m}$ (GeV/c)', fontsize=12)
+
+    plt.legend(fontsize=12)
+    
     plt.show()
     
 if __name__ == "__main__":
