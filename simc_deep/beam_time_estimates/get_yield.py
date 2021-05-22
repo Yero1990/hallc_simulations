@@ -17,7 +17,7 @@ rc('text', usetex=True)
 plt.rcParams["font.family"] = "Times New Roman"
 
 
-def MC_study(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, clr='b',rel_err_flg=0, MC_evt='200k', pm_off=0):
+def MC_study(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, clr='k',rel_err_flg=0, MC_evt='200k', pm_off=0):
 
     # This function (MC_study) is specific to studying how the Monte Carlo (MC) statistics affects
     # the cross sections and respective errors. The more MC statistics, the smaller the variation in xsec error
@@ -62,38 +62,53 @@ def MC_study(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, clr='b',rel
 
 
     
-def plot_xsec(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, clr='b',rel_err_flg=False):
+def plot_yield(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, scl_factor=1, clr='b',rel_err_flg=False):
 
-    fname = 'xsec_pm%d_model%s_%s_%.1fuA_%.1fhr.txt' % (pm_set, model, rad, Ib, time)
-    fname_stats = 'stats_pm%d_model%s_%s_%.1fuA_%.1fhr.txt' % (pm_set, model, rad, Ib, time)
+    #User Inputs:
+    # scl_factor: factor to scale beam time, assuming the time is 1 hr. e.g., to scale counts by 5 hrs, then scl_factor = 5
+
+    fname = 'yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt' % (pm_set, model, rad, Ib, time)
 
     f = dfile(fname)
-    f2 = dfile(fname_stats)
 
     #read xsec data file
     th_rq = np.array(f['x0'])
     pm    = (np.array(f['y0']))[th_rq==thrq]
-    xsec  = (np.array(f['zcont']))[th_rq==thrq]
-    xsec_err = (np.array(f['zcont_err']))[th_rq==thrq]  #absolute error    
-    rel_err = xsec_err / xsec
-
-    #read yield data file to get stats uncertainty based on counts
-    pm_cnts = np.array(f2['zcont'])
-    rel_err_stats = 1. / np.sqrt(pm_cnts)
+    pm_bins = max(np.array(f['yb']))  #max number of pm bins
+    pm_min = min(np.array(f['ylow'])[th_rq==thrq])
+    pm_max = max(np.array(f['yup'])[th_rq==thrq])
     
+    pm_cnts  = (np.array(f['zcont']))[th_rq==thrq] * scl_factor  # pm bin content
+    MC_err = (np.array(f['zcont_err']))[th_rq==thrq] * scl_factor  #absolute error of weighted counts (MC statistics error, NOT the exp. statistical error)   
+    stats_err = np.sqrt(pm_cnts) #absolute statistical errors
+    print('pm = ', len(pm))
+    print('pm_bins = ', pm_bins)
+    print('weight = ', len(pm_cnts))
+    print('pm_min = ', pm_min)
+    print('pm_max = ', pm_max)
+    #rel_stats_err = 1. / np.sqrt(pm_cnts) #relative statistical error
+    rel_stats_err = np.divide(1, stats_err, out=np.full_like(stats_err, np.nan), where=stats_err!=0) 
+    rel_stats_err_m = ma.masked_where(np.isnan(rel_stats_err), rel_stats_err)
+    pm_m = ma.masked_where(np.isnan(rel_stats_err), pm)
+    #print('rel_stats_err = ', rel_stats_err*100)
+    rel_stats_err_m = rel_stats_err_m * 100
+    #plt.hist(pm, pm_bins, weights=pm_cnts, edgecolor='k', color=clr, range=[pm_min,pm_max], alpha = 0.2)
+    print(rel_stats_err_m)
     if(rel_err_flg):
-        return plt.errorbar(pm, np.repeat(0, len(pm)), rel_err, color=clr, linestyle='none', marker='o', label='I=%d, time=%d'%(Ib,time))
-    else:
-        return plt.errorbar(pm, xsec, xsec_err, color=clr, linestyle='none', marker='o', label='I=%d, time=%d'%(Ib,time))
-    
+        plt.ylim(-50,50)
+        plt.xlim(0,1.2)
 
+        return plt.errorbar(pm_m, np.repeat(0, len(pm)), rel_stats_err_m, color=clr, linestyle='none', marker='o', label = r'$I_{beam}$=%.1f $\mu A$, time=%.1f hr'%(Ib, scl_factor))
+    else:
+        return plt.errorbar(pm, pm_cnts, yerr=stats_err, linestyle='none', marker='o', color='k', markersize=3)
+    
 
 def main():
     print('Plotting xec')
 
 
     #---Study the Dependence of the MC Error on MC events----
-    
+    '''
     plt.subplots(3,1, figsize=(5,10))
     
     plt.suptitle(r'Hall C SIMC Monte Carlo Statistics Study', fontsize=18)
@@ -152,7 +167,11 @@ def main():
     
     plt.subplots_adjust(top=0.95)
     plt.show()            
+    '''
+
     
+    plot_yield(thrq=35, pm_set=120, model='fsi', rad='rad', Ib=40, time=1, scl_factor=1, clr='b',rel_err_flg=True)
+    plt.show()
     
 if __name__ == "__main__":
     main()

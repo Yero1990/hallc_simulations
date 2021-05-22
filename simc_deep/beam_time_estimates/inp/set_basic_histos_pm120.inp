@@ -192,13 +192,13 @@ Tr_xmax = 10.
 
 # Missing Mass (Undetected Recoil System Mass)
 MM_nbins = 100
-MM_xmin = 0.
-MM_xmax = 10.
+MM_xmin = 0.8
+MM_xmax = 1.2
 
 # Missing Mass Squared
 MM2_nbins = 100  
-MM2_xmin = -10.
-MM2_xmax = 10.
+MM2_xmin = 0.8
+MM2_xmax = 1.2
 
 # hadron arm central angle
 thx_nbins = 60  
@@ -242,8 +242,8 @@ thxq_cm_xmax = 360.
 
 # final hadron arm momentum [GeV/c]
 Pf_nbins = 100
-Pf_xmin = 0.
-Pf_xmax = 9.
+Pf_xmin = 2.
+Pf_xmax = 4.
 
 # In-plane angle between the recoil system and q in CM frame
 thrq_cm_nbins = 100

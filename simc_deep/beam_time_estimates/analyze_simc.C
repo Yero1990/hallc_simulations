@@ -54,7 +54,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
 
   //Define File Name Patterns
   simc_infile = Form("infiles/d2_pm%d_laget%s_%s_mod.data",  pm_set, model.Data(), rad.Data());
-  simc_InputFileName = Form("worksim/d2_pm%d_laget%s_%s_mod_5M.root", pm_set, model.Data(), rad.Data());
+  simc_InputFileName = Form("worksim/d2_pm%d_laget%s_%s_mod.root", pm_set, model.Data(), rad.Data());
   simc_OutputFileName = Form("d2_pm%d_laget%s_%s_mod_output.root",  pm_set, model.Data(), rad.Data());
 
   
@@ -402,7 +402,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
 
   kin_HList->Add( H_Pm_vs_thrq );
   kin_HList->Add( H_Pm_vs_thrq_ps );
-  kin_HList->Add( H_Pm_vs_thrq_xsec );
+  //kin_HList->Add( H_Pm_vs_thrq_xsec );
 
   //----------------------------------------------------------------------
   //---------HISTOGRAM CATEGORY: Spectrometer Acceptance  (ACCP)----------
@@ -531,6 +531,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   
   //Secondary Kinematics (USED BY DATA AND SIMC)
   Double_t Pf;                     //final proton momentum
+  Double_t Ep;                      //final proton energy (needs to be calculated)
   Double_t theta_p;               //to be calculated separately (in data)
   Double_t Em;                     //Standard Missing Energy for H(e,e'p)
   Double_t Pm;                     //Missing Momentum (should be zero for H(e,e'p). Should be neutron momentum for D(e,e'p))
@@ -697,14 +698,61 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   //Double_t Ib = 40;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
   //Double_t time = 1.0;     //estimated time (in hours) a run takes (start - end) of run
   Double_t charge_factor = Ib * time * 3600. / 1000.;
-  
-  // STEP2: Estimate Efficiencies (use efficiencies from commissioning experiment)
-  Double_t e_trk = 1;
-  Double_t h_trk = 1;
-  Double_t daq_lt = 1;
 
+  //target boiling slopes for Hydrofen and Deuterium (during commissioning)
+  Double_t LH2_slope = 0.00063396; 
+  Double_t LD2_slope = 0.00080029;  //NORM. yield loss / uA
+    
+  // STEP2: Estimate Efficiencies (use efficiencies from commissioning experiment)
+  // coin. rates were ~ 2.5 Hz in commissioning,
+  Double_t e_trk      = 0.964;
+  Double_t h_trk      = 0.988;
+  Double_t daq_lt     = 0.98;   //(it was 0.926 during commissioning due to large logic windows ~100 ns in HMS, but now is smaller)
+  Double_t tgt_boil   = 1. - LD2_slope * Ib;
+  Double_t proton_abs = 0.9534;
+
+  Double_t eff_factor = e_trk * h_trk * daq_lt * tgt_boil * proton_abs;
+  
   Double_t FullWeight;
   Double_t PhaseSpace;
+
+  /* ----------------------------------------------------------
+     
+     NOTE on FullWeight and Phase Space definitions : 
+     
+     FullWeight = Weight * Normfac / n_acc   (assuming 1 mC of charge and detector efficiencies are 100 % (in fraction is 1.0 ) )
+     
+     1)  Weight = (sigma_theory*Jacobian) * main%gen_weight * jacobian_corr * coulomb_corr (see event.f) for 'LAGET_DEUT'
+          --> The Jacobian is explicitly included in file LagetXsec.f of SIMC
+     main%gen_weight = main%gen_weight*(Emax-Emin)/(gen%e%E%max-gen%e%E%min) ----> using the definitions below:  main%gen_weight * (min(gen%sumEgen%max,gen%sumEgen%max) - max(gen%sumEgen%min,gen%sumEgen%min)) / (gen%sumEgen%max - gen%sumEgen%min)
+
+     Emax = =gen%e%E%max = gen%sumEgen%max,  Emin = gen%e%E%min = gen%sumEgen%min  (see init.f and event.f)
+     Emin = max(Emin,gen%sumEgen%min)
+     Emax = min(Emax,gen%sumEgen%max)
+     
+     It seems main%gen_weight should be 1 for the deuteron, (without radiative effects), so Phase Space must ONLY be calculated WITHOUT RADIATIVE EFFECTS ! ! !
+     
+                                                                          |---------- dE'---------|
+     2) Normfac / n_acc =  (luminosity / n_tried) * domega_e * domega_p * (gen%e%E%max-gen%e%E%min)
+     
+     where n_acc -> nentries (in this code), and n_tried is total number of MC events generated (thrown into a volume)
+     
+   
+     Combining definirions from  1) and 2):   
+
+                  |---------------------------------------------------------------------------------- main%weight ----------------------------------------------------------------------------|
+                  |------- main%sig -------|  |------------------------------------------- main%gen_weight -------------------------------------------------|                                    |------------------------------'Normfac / n_acc'----------------------------|
+     FullWeight = (sigma_theory * Jacobian) * ( (min(gen%sumEgen%max,gen%sumEgen%max) - max(gen%sumEgen%min,gen%sumEgen%min)) / (gen%e%E%max - gen%e%E%min) )  * jacobian_corr * coulomb_corr  * ( (luminosity / n_tried) * domega_e * domega_p * ((gen%e%E%max-gen%e%E%min)) )
+     
+     
+     PhaseSpace = FullWeight / (sigma_theory*Jacobian) =  Genweight * Jacobian_corr * coulomb_corr  * ( (luminosity / n_tried) * domega_e * domega_p * (dE') )
+     **NOTE: Phase space MUST only be calculated in SIMC without raditative effects: Genweight = 1, Jacobian_corr ~ 1, and coulomb_corr = 1
+     
+     For estimates of yields (i.e., beam time to be allocated), one only needs to weight the events by the FullWeight, assuming 1 hr beam time, and then the yields can be scaled by the time. 
+     Also, remember that the actual statistical error on the yield, say in Pm bins,  is ~ 1/sqrt(N_counts) per Pm kinematic bin,  where N_counts is the number of weighted counts
+
+     ----------------------------------------------------------
+  */
 
   //---------------------
   //  LOOP OVER ENTRIES
@@ -721,7 +769,13 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
     th_q = th_xq + theta_p;
     ztar_diff =  htar_z - etar_z;
 
+    Pf = Pf/1000.;  //final proton momentum (GeV/c)
+    Ep = sqrt(MP*MP + Pf*Pf);
     
+    //Missing Mass
+    MM = sqrt( pow(nu+MD-Ep,2) - Pm*Pm );  //recoil mass (neutron missing mass)
+    MM2 = MM * MM;
+	  
     //SIMC Collimator (definition based on HCANA collimator)
     htarx_corr = tar_x - h_xptar*htar_z*cos(h_angle*dtr);
     etarx_corr = tar_x - e_xptar*etar_z*cos(e_angle*dtr);  
@@ -770,9 +824,8 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
 	  
 
     //Full Weight
-    FullWeight = (Normfac * Weight * charge_factor * e_trk * h_trk * daq_lt ) / nentries;
-
-    PhaseSpace = Normfac * charge_factor * Jacobian_corr  / nentries;    //Phase Space with corr. factor
+    FullWeight = (Normfac * charge_factor * eff_factor * Weight ) / nentries;
+    PhaseSpace =  Normfac * charge_factor * eff_factor * Jacobian_corr  / nentries;    //Phase Space with jacobian corr. factor
     
     if(c_allCuts) {
 
@@ -791,13 +844,15 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
       
       
       //Secondary (Hadron) Kinematics
-      H_Pf->Fill(Pf/1000., FullWeight);
+      H_Pf->Fill(Pf, FullWeight);
       H_thx->Fill(theta_p/dtr, FullWeight);
       H_Em->Fill(Em, FullWeight);
       H_Pm->Fill(Pm, FullWeight);     
       H_thxq->Fill(th_xq/dtr, FullWeight);
       H_thrq->Fill(th_rq/dtr, FullWeight);
-
+      H_MM->Fill(MM, FullWeight);
+      H_MM2->Fill(MM2, FullWeight);
+   
       //Target Reconstruction (Hall Coord. System)
       H_htar_x->Fill(tar_x, FullWeight);
       H_htar_y->Fill(htar_y, FullWeight);
@@ -854,7 +909,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
 
 
   //Calculate Xsec
-  H_Pm_vs_thrq_xsec->Divide(H_Pm_vs_thrq, H_Pm_vs_thrq_ps);
+  //H_Pm_vs_thrq_xsec->Divide(H_Pm_vs_thrq, H_Pm_vs_thrq_ps);
   
   //-------------------------
   // WRITE HISTOS TO FILE
@@ -880,37 +935,23 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
 
   //** IMPORTANT** Consideration of statistical uncertainty based on counts
   /*
-    In this example, I fill a histogram at 2.2 with a weight of 0.027, and a charge factor of 1 mC, 5mC, and 25 mC, respectively.
-    H->Fill(2.2, 0.027),      charge_factor = 1 mC
-    (Nobs = 8)
-    N_content =  0.2159,  N_err = 0.07636, ~1/sqrt(0.2159)=2.15
-    N_err/N_content = 0.353682
-    
-    H->Fill(2.2, 0.027 * 5),   charge_factor = 5 mC
-    (Nobs = 8),  
-    N_content = 1.08  ,  N_err = 0.381837, ~1/sqrt(1.08)=0.962
-    N_err/N_content = 0.353552
+    The uncertainty calculated per kinematic bin in SIMC is representative of the
+    number of events simulated, and is therefore not OK to use it as an estimate
+    of the experimental stat. uncertainty. In other words, the greater the number
+    of Monte-Carlo events, the smaller the error bar per kinematic bin. 
 
-    H->Fill(2.2, 0.027 * 25),   charge_factor = 25 mC
-    (Nobs = 8),  
-    N_content = 5.40  ,  N_err = 1.9091,  ~1/sqrt(5.40) = 0.43
-    N_err/N_content = 0.353552
-
-    Comment: even though there are 8 observations, the relative error N_err/N_content is the same
-    for different charge factors, so it does not make sense to take this as statistical error since one
-    expects that the statistical error gets smaller with increasing charge factor (i.e., beam time and beam current)
-    Since the total number of observations (accepted events) is the same, it also does not make sense to take ~1/sqrt(8)
-    By taking ~1/sqrt(N_content), one sees that the error does decrease with increasing charge, so it makes sense to take
-    this as the statistical uncertainty.
+    To get a realistic estimate of the statistical uncertainty per kinematic bin,
+    assuming the bin (say in missing momentum, Pm) has been properly weighted (See FullWeight above)
+    one has to use the standard error for counting N independent variables: absolute error of bin = sqrt(N),
+    and relative error = sqrt(N) / N = 1 / sqrt(N)
     
   */
 
   
-  //-------------------------------
-  // Extract Cross Section to File
-  //-------------------------------
-  extract_2d_hist(H_Pm_vs_thrq_xsec, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("xsec_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
-  extract_2d_hist(H_Pm_vs_thrq,      "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("stats_pm%d_model%s_%s_%.1fuA_%.1fhr.txt", pm_set, model.Data(), rad.Data(), Ib, time));
+  //------------------------------------------
+  // Extract The Yield binned in Pm vs th_rq
+  //------------------------------------------
+  extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
   
   //---------------
   //  MAKE PLOTS
