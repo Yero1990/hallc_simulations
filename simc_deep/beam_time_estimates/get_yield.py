@@ -64,9 +64,21 @@ def MC_study(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, clr='k',rel
     
 def plot_yield(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, scl_factor=1, clr='b',rel_err_flg=False, pm_off=0):
 
-    #User Inputs:
-    # scl_factor: factor to scale beam time, assuming the time is 1 hr. e.g., to scale counts by 5 hrs, then scl_factor = 5
+    # Brief: this function reads a .txt file with the 2D bin information of the th_rq vs Pm histogram yield, and plots the yield and relative error.
+    
+    # User Inputs:
+    # thrq : recoil angle central value (can be looked up in the .txt file
+    # pm_set: central missing momentum setting (this is based on the .txt file name (e.g., 120, 700, 800, 900)
+    # model : deuteron cross section model ("fsi" or "pwia" based on the .txt file name
+    # rad: with radiative effects ("rad") or without ("norad"), based on the .txt file name
+    # Ib: beam current (uA) based on the .txt file name
+    # time: beam-on-target time (hrs) based on the .txt file name
+    # scl_factor: factor to scale beam time, **NOTE** : this scale factor assumes the time is 1 hr. e.g., to scale counts by 5 hrs, then scl_factor = 5
+    # clr: data point color
+    # rel_err_flg: flag to determine whether to plot relative errors or not (if false, will plot missing momentum for the given th_rq bin)
+    # pm_off : missing momentum offset (a few MeV), to slightly offset (by ~MeV/c) the overlappong relative error data points and make it easier to compare
 
+    
     fname = 'yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt' % (pm_set, model, rad, Ib, time)
 
     f = dfile(fname)

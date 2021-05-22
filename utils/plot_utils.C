@@ -154,7 +154,7 @@ void plot_hist(TH1F *hist, TString xlabel="", TString ylabel="", TString title="
   }
 
   hist->Draw("samehistE0");
-
+  
   
   hist->SetTitle(title);
   
@@ -163,32 +163,32 @@ void plot_hist(TH1F *hist, TString xlabel="", TString ylabel="", TString title="
   
   hist->GetYaxis()->SetTitle(ylabel);
   hist->GetXaxis()->SetTitle(xlabel);
-
+  
   hist->GetYaxis()->CenterTitle();
   hist->GetXaxis()->CenterTitle();
-
+  
   
   hist->GetYaxis()->SetTitleOffset(1.3);
   hist->GetXaxis()->SetTitleOffset(1.3);
   
   hist->SetLabelFont(font_type, "XY");
   hist->SetTitleFont(font_type, "XY");
-
+  
   //Get DATA, SIMC histogram names to determine which range to integrate
   TString H_name = hist->GetName();
-
+  
   double xmin, xmax;
-  xmin = hist->FindBin(xmin_int), xmax = hist->FindBin(xmax_int);}
-
+  xmin = hist->FindBin(xmin_int), xmax = hist->FindBin(xmax_int);
+  
   
   double nbins = hist->GetNbinsX();  //Get total number of bins (excluding overflow)
   dataI = hist->IntegralAndError(xmin, xmax, dataI_err);
   
   leg->AddEntry(hist,Form("SIMC | Integral: %.3f #pm %.3f", dataI, dataI_err),"f");
   leg->Draw();
+  
 
 }
-
 
 
 //---------------------
