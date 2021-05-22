@@ -62,7 +62,7 @@ def MC_study(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, clr='k',rel
 
 
     
-def plot_yield(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, scl_factor=1, clr='b',rel_err_flg=False):
+def plot_yield(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, scl_factor=1, clr='b',rel_err_flg=False, pm_off=0):
 
     #User Inputs:
     # scl_factor: factor to scale beam time, assuming the time is 1 hr. e.g., to scale counts by 5 hrs, then scl_factor = 5
@@ -87,18 +87,23 @@ def plot_yield(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, scl_facto
     #mask the values if relative statistical error = 0 or > 50 % 
     rel_stats_err_m = ma.masked_where((rel_stats_err == 0) | (rel_stats_err > 0.5), rel_stats_err)
     pm_m = ma.masked_where((rel_stats_err == 0) | (rel_stats_err > 0.5), pm)
-    
+
+    pm_cnts_m = np.where(rel_stats_err_m.mask, 0, pm_cnts)
+
+    #pm_cnts_m =  ma.masked_where((rel_stats_err == 0) | (rel_stats_err > 0.5), pm_cnts)
     rel_stats_err_m = rel_stats_err_m * 100
     
     print(rel_stats_err_m)
     if(rel_err_flg):
-        plt.ylim(-50,50)
+        plt.ylim(-50,80)
         plt.xlim(pm_min,pm_max)
-        return plt.errorbar(pm_m, np.repeat(0, len(pm)), rel_stats_err_m, color=clr, linestyle='none', marker='o', alpha = 0.4, label = r'$I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(Ib, scl_factor))
+        return plt.errorbar(pm_m+pm_off, np.repeat(0, len(pm)), rel_stats_err_m, color=clr, linestyle='none', marker='o', alpha = 0.4, label = r'%d MeV/c, $I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(pm_set, Ib, scl_factor))
     else:
-        plt.hist(pm, pm_bins, weights=pm_cnts, edgecolor='k', color=clr, range=[pm_min,pm_max], alpha = 0.2)
+        plt.ylim(1e-3,1e5)
+        plt.hist(pm_m, pm_bins, weights=pm_cnts, edgecolor='k', color=clr, range=[pm_min,pm_max], alpha = 0.1)
         plt.xlim(pm_min,pm_max)
-        return plt.errorbar(pm_m, pm_cnts, yerr=stats_err, linestyle='none', marker='o', color=clr, ecolor=clr, alpha = 0.4, markersize=3, label = r'$I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(Ib, scl_factor))
+        plt.yscale('log')
+        return plt.errorbar(pm_m, pm_cnts_m, yerr=stats_err, linestyle='none', marker='o', color=clr, ecolor=clr, alpha = 0.4, markersize=3, label = r'%d MeV/c, $I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(pm_set, Ib, scl_factor))
     
 
 def main():
@@ -176,16 +181,26 @@ def main():
     #adjust margin spacing 
     plt.subplots_adjust(top=0.95)
 
-    plt.suptitle(r'Relative Errors', fontsize=18)
+    plt.suptitle(r'Relative Statistical Errors, $\theta_{nq}=45\pm5^{\circ}$', fontsize=18)
     
     plt.subplot(2,1,1)
-    plot_yield(thrq=35, pm_set=120, model='fsi', rad='rad', Ib=40, time=1, scl_factor=1, clr='b',rel_err_flg=False)
+    plot_yield(thrq=45, pm_set=120, model='fsi', rad='rad', Ib=40, time=1, scl_factor=1, clr='m',rel_err_flg=False)
+    plot_yield(thrq=45, pm_set=700, model='fsi', rad='rad', Ib=40, time=1, scl_factor=45, clr='b',rel_err_flg=False)
+    plot_yield(thrq=45, pm_set=800, model='fsi', rad='rad', Ib=40, time=1, scl_factor=102, clr='g',rel_err_flg=False)
+    plot_yield(thrq=45, pm_set=900, model='fsi', rad='rad', Ib=40, time=1, scl_factor=204, clr='r',rel_err_flg=False)
+
+    
     plt.ylabel(r'Yield', fontsize=12)
 
-    plt.legend(fontsize=12)
+    plt.legend(fontsize=12, loc='upper right')
 
     plt.subplot(2,1,2)
-    plot_yield(thrq=35, pm_set=120, model='fsi', rad='rad', Ib=40, time=1, scl_factor=1, clr='b',rel_err_flg=True)
+    plot_yield(thrq=45, pm_set=120, model='fsi', rad='rad', Ib=40, time=1, scl_factor=1, clr='m',rel_err_flg=True)
+    plot_yield(thrq=45, pm_set=700, model='fsi', rad='rad', Ib=40, time=1, scl_factor=45, clr='b',rel_err_flg=True)
+    plot_yield(thrq=45, pm_set=800, model='fsi', rad='rad', Ib=40, time=1, scl_factor=102, clr='g',rel_err_flg=True, pm_off=0.005)
+    plot_yield(thrq=45, pm_set=900, model='fsi', rad='rad', Ib=40, time=1, scl_factor=204, clr='r',rel_err_flg=True, pm_off=0.01)
+
+
     plt.ylabel(r'Stat. Relative Error $\sqrt{N}$ / N (\%)', fontsize=12)
     plt.xlabel(r'Missing Momentum, $P_{m}$ (GeV/c)', fontsize=12)
 
