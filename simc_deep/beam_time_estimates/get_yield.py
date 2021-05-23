@@ -116,7 +116,7 @@ def plot_yield(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, scl_facto
         plt.yscale('log')
         return plt.errorbar(pm_m, pm_cnts_m, yerr=stats_err, linestyle='none', marker='o', color=clr, ecolor=clr, alpha = 0.4, markersize=3, label = r'%d MeV/c, $I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(pm_set, Ib, scl_factor))
     
-def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1, scl_factor=[], rel_err_flg=False):
+def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1, scl_factor=[]):
 
     #Brief this method takes multiple pm settings (say, 700, 800, 900, for example), and combines the yield for overlapping bins of a specified thrq setting
 
@@ -192,7 +192,13 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
         plt.ylabel(r'Stat. Relative Error $\sqrt{N}$ / N (\%)', fontsize=14)
         plt.xlabel(r'Missing Momentum, $P_{m}$ (GeV/c)', fontsize=14)
         plt.errorbar(pm_masked[idx]+pm_off[idx], np.repeat(0, len(pm_masked[idx])), rel_stats_err_masked[idx]*100., color=clr[idx], linestyle='none', marker='o', alpha = 0.4, label = r'%d MeV/c, $I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(pm_set[idx], Ib, scl_factor[idx]))
+        x_coord = [pm_low, pm_hi]
+        y_coord_1 = [10, 10]
+        y_coord_2 = [-10, -10]
+        plt.plot(x_coord, y_coord_1, linestyle='dashed', color='k', linewidth=1)
+        plt.plot(x_coord, y_coord_2, linestyle='dashed', color='k', linewidth=1)
 
+        
         #------------------------
 
     
@@ -207,7 +213,7 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
     rel_stats_err_comb_masked = ma.masked_where((rel_stats_err_comb == 0) | (rel_stats_err_comb > 0.5), rel_stats_err_comb) 
     stats_err_comb_masked =  ma.masked_array(stats_err_comb, mask=rel_stats_err_comb_masked.mask) 
     pm_masked = np.where(rel_stats_err_comb_masked.mask, np.nan, pm[0]) 
-    pm_cnts_comb_masked = np.where(rel_stats_err_comb_masked.mask, np.nan, pm_cnts_comb)
+    pm_cnts_comb_masked = np.where(rel_stats_err_comb_masked.mask, 0, pm_cnts_comb)
         
 
     print(pm_cnts_comb)
@@ -217,7 +223,7 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
     #setup subplots for plotting combined yield and relative errors
     plt.subplots(2,1, figsize=(10,10))
     plt.subplots_adjust(top=0.95)
-    plt.suptitle(r'$^{2}$H$(e,e^{\prime}p)n$ Projected Yields (Combined P_{m} Settings), $\theta_{nq}=%d\pm5^{\circ}$'%(thrq), fontsize=18)
+    plt.suptitle(r'$^{2}$H$(e,e^{\prime}p)n$ Projected Yields (Combined $P_{m}$ Settings), $\theta_{nq}=%d\pm5^{\circ}$'%(thrq), fontsize=18)
 
     # charge to appropiate subplot
     plt.subplot(2,1,1)
@@ -237,9 +243,41 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
     plt.xlabel(r'Missing Momentum, $P_{m}$ (GeV/c)', fontsize=14)
     plt.errorbar(pm_masked, np.repeat(0, len(pm_masked)), rel_stats_err_comb_masked*100., color='gray', linestyle='none', marker='o', alpha = 0.4, label = r'$I_{\textrm{beam}}$=%.1f $\mu A$'%(Ib) )
 
-    plt.show()
+    x_coord = [pm_low, pm_hi]
+    y_coord_1 = [10, 10]
+    y_coord_2 = [-10, -10]
+    plt.plot(x_coord, y_coord_1, linestyle='dashed', color='k', linewidth=1)
+    plt.plot(x_coord, y_coord_2, linestyle='dashed', color='k', linewidth=1)
+    
+    #plt.show()
 
+    print('pm[0] = ', len(pm[0]))
+    print('pm_cnts_comb_mask = ', len(pm_cnts_comb_masked))
+    print('rel_stats_err_comb_mask = ',len(rel_stats_err_comb_masked))
+    beam_time_1 = np.sum(scl_factor)
+    fout_name = 'd2_projected_errors_2021.txt'
+    fout = open(fout_name, 'w')
+    fout.write('# projected deuteron exp. (2021) relative statistical uncertainty \n'
+               '# Total PAC days: 21 (504 hrs at 50 %% beam efficiency) \n'
+               '# Commissioning PAC days: 3 (72 hrs at 50 %% beam efficiency)\n'   
+               '# Remaining PAC days: 18 (432 hrs at 50 %% beam efficiency)\n'   
+               '# beam time allocated for low/high-pm settings: %.1f hrs\n'
+               '# beam time allocated for other studies (elastics, tgt boiling, etc): %.1f hrs\n'
+               '# \n'
+               '# thnq             : %d +/- 5 deg\n'
+               '# pm_bin           : central bin value (GeV/c)\n'
+               '# yield            : simulated experimental yield\n'
+               '# rel_stats_err    : relative statistical error \n'
+               '# \n'
+               '#! pm_bin[f,0]/ Yield[f,1]/ rel_stats_err[f,1]/  \n' % (beam_time_1, 432-beam_time_1, thrq) )
 
+    #data = np.column_stack([pm[0], pm_cnts_comb_masked, rel_stats_err_comb_masked])
+    #print(data)
+    table = np.column_stack([pm[0], pm_cnts_comb_masked, rel_stats_err_comb_masked])
+    np.savetxt(fout, table, fmt=['%.2f\t', '%.2f\t', '%.4e'])
+    fout.close()
+    
+           
 def main():
     print('Plotting xec')
 
@@ -343,7 +381,7 @@ def main():
     plt.show()
     '''
     
-    plot_combined_yield(thrq=35, pm_set=[120,700,800,900], model='fsi', rad='rad', Ib=40, time=1, scl_factor=[1,45,102,204])
+    plot_combined_yield(thrq=35, pm_set=[120,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.,45.,102.,204.])
     
 if __name__ == "__main__":
     main()

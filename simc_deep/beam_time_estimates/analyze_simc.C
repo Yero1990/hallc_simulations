@@ -358,7 +358,9 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   H_kf->Sumw2();
   H_kf->SetDefaultSumw2(); 
   TH1F *H_the     = new TH1F("H_the", "Electron Scattering Angle, #theta_{e}", the_nbins, the_xmin, the_xmax);
-  TH1F *H_Q2      = new TH1F("H_Q2","4-Momentum Transfer, Q^{2}", Q2_nbins, Q2_xmin, Q2_xmax); 
+  TH1F *H_Q2      = new TH1F("H_Q2","4-Momentum Transfer, Q^{2}", Q2_nbins, Q2_xmin, Q2_xmax);
+  TH1F *H_Q2_nsc  = new TH1F("H_Q2_nsc","4-Momentum Transfer, Q^{2}", Q2_nbins, Q2_xmin, Q2_xmax);  //nsc stands for no self-cut (i.e, all cuts except on itself)
+
   TH1F *H_xbj     = new TH1F("H_xbj", "x-Bjorken", X_nbins, X_xmin, X_xmax);  
   TH1F *H_nu      = new TH1F("H_nu","Energy Transfer, #nu", nu_nbins, nu_xmin, nu_xmax); 
   TH1F *H_q       = new TH1F("H_q", "3-Momentum Transfer, |#vec{q}|", q_nbins, q_xmin, q_xmax);
@@ -368,6 +370,8 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   TH1F *H_Pf      = new TH1F("H_Pf", "Final Hadron Momentum (detected), p_{f}", Pf_nbins, Pf_xmin, Pf_xmax);
   TH1F *H_thx     = new TH1F("H_thx", "Hadron Scattering Angle (detected), #theta_{x}", thx_nbins, thx_xmin, thx_xmax);
   TH1F *H_Em      = new TH1F("H_Em","Nuclear Missing Energy", Em_nbins, Em_xmin, Em_xmax); 
+  TH1F *H_Em_nsc      = new TH1F("H_Em_nsc","Nuclear Missing Energy", Em_nbins, Em_xmin, Em_xmax); 
+
   TH1F *H_Pm      = new TH1F("H_Pm","Missing Momentum, P_{miss}", Pm_nbins, Pm_xmin, Pm_xmax); 
   TH1F *H_MM      = new TH1F("H_MM","Missing Mass, M_{miss}", MM_nbins, MM_xmin, MM_xmax);        
   TH1F *H_MM2     = new TH1F("H_MM2","Missing Mass Squared, M^{2}_{miss}", MM2_nbins, MM2_xmin, MM2_xmax); 
@@ -385,6 +389,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   kin_HList->Add( H_kf     );
   kin_HList->Add( H_the    );
   kin_HList->Add( H_Q2     );
+  kin_HList->Add( H_Q2_nsc );
   kin_HList->Add( H_xbj    );
   kin_HList->Add( H_nu     );
   kin_HList->Add( H_q      );
@@ -394,6 +399,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   kin_HList->Add( H_Pf       );
   kin_HList->Add( H_thx      );
   kin_HList->Add( H_Em       );
+  kin_HList->Add( H_Em_nsc   );
   kin_HList->Add( H_Pm       );
   kin_HList->Add( H_MM       );
   kin_HList->Add( H_MM2      );
@@ -420,6 +426,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   TH1F *H_exptar = new TH1F("H_exptar", Form("%s X'_{tar}; X'_{tar} [rad]; Counts / mC", e_arm_name.Data()), exptar_nbins, exptar_xmin, exptar_xmax);
   TH1F *H_eyptar = new TH1F("H_eyptar", Form("%s Y'_{tar}; Y'_{tar} [rad]; Counts / mC", e_arm_name.Data()), eyptar_nbins, eyptar_xmin, eyptar_xmax);
   TH1F *H_edelta = new TH1F("H_edelta", Form("%s Momentum Acceptance, #delta; #delta [%%]; Counts / mC", e_arm_name.Data()), edelta_nbins, edelta_xmin, edelta_xmax);
+  TH1F *H_edelta_nsc = new TH1F("H_edelta_nsc", Form("%s Momentum Acceptance, #delta; #delta [%%]; Counts / mC", e_arm_name.Data()), edelta_nbins, edelta_xmin, edelta_xmax);
   
   //Hadron arm Focal Plane Quantities
   TH1F *H_hxfp = new TH1F("H_hxfp", Form("%s  X_{fp}; X_{fp} [cm]; Counts / mC", h_arm_name.Data()), hxfp_nbins, hxfp_xmin, hxfp_xmax);
@@ -432,6 +439,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   TH1F *H_hxptar = new TH1F("H_hxptar", Form("%s  X'_{tar}; X'_{tar} [rad]; Counts / mC", h_arm_name.Data()), hxptar_nbins, hxptar_xmin, hxptar_xmax);
   TH1F *H_hyptar = new TH1F("H_hyptar", Form("%s  Y'_{tar}; Y'_{tar} [rad]; Counts / mC", h_arm_name.Data()), hyptar_nbins, hyptar_xmin, hyptar_xmax );
   TH1F *H_hdelta = new TH1F("H_hdelta", Form("%s  Momentum Acceptance, #delta; #delta [%%]; Counts / mC", h_arm_name.Data()), hdelta_nbins, hdelta_xmin, hdelta_xmax);
+  TH1F *H_hdelta_nsc = new TH1F("H_hdelta_nsc", Form("%s  Momentum Acceptance, #delta; #delta [%%]; Counts / mC", h_arm_name.Data()), hdelta_nbins, hdelta_xmin, hdelta_xmax);
   
 
   //Target Reconstruction (Hall Coord. System) 
@@ -444,11 +452,16 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
 
   //difference in reaction vertex z (user-defined)
   TH1F *H_ztar_diff = new TH1F("H_ztar_diff", "Ztar Difference; z-Target Difference [cm]; Counts / mC", ztar_diff_nbins, ztar_diff_xmin, ztar_diff_xmax);
+  TH1F *H_ztar_diff_nsc = new TH1F("H_ztar_diff_nsc", "Ztar Difference; z-Target Difference [cm]; Counts / mC", ztar_diff_nbins, ztar_diff_xmin, ztar_diff_xmax);
 
 
   //2D Collimator Histos
   TH2F *H_hXColl_vs_hYColl = new TH2F("H_hXColl_vs_hYColl", Form("%s Collimator; %s Y-Collimator [cm]; %s X-Collimator [cm]", h_arm_name.Data(), h_arm_name.Data(), h_arm_name.Data()), hYColl_nbins, hYColl_xmin, hYColl_xmax,  hXColl_nbins, hXColl_xmin, hXColl_xmax);
   TH2F *H_eXColl_vs_eYColl = new TH2F("H_eXColl_vs_eYColl", Form("%s Collimator; %s Y-Collimator [cm]; %s X-Collimator [cm]", e_arm_name.Data(), e_arm_name.Data(), e_arm_name.Data()), eYColl_nbins, eYColl_xmin, eYColl_xmax, eXColl_nbins, eXColl_xmin, eXColl_xmax); 
+  
+  TH2F *H_hXColl_vs_hYColl_nsc = new TH2F("H_hXColl_vs_hYColl_nsc", Form("%s Collimator; %s Y-Collimator [cm]; %s X-Collimator [cm]", h_arm_name.Data(), h_arm_name.Data(), h_arm_name.Data()), hYColl_nbins, hYColl_xmin, hYColl_xmax,  hXColl_nbins, hXColl_xmin, hXColl_xmax);
+  TH2F *H_eXColl_vs_eYColl_nsc = new TH2F("H_eXColl_vs_eYColl_nsc", Form("%s Collimator; %s Y-Collimator [cm]; %s X-Collimator [cm]", e_arm_name.Data(), e_arm_name.Data(), e_arm_name.Data()), eYColl_nbins, eYColl_xmin, eYColl_xmax, eXColl_nbins, eXColl_xmin, eXColl_xmax); 
+
   
   //2D Hour Glass Histos
   TH2F *H_hxfp_vs_hyfp  = new TH2F("H_hxfp_vs_hyfp", Form("%s  X_{fp} vs. Y_{fp}; Y_{fp} [cm]; X_{fp} [cm]", h_arm_name.Data()),  hyfp_nbins, hyfp_xmin, hyfp_xmax, hxfp_nbins, hxfp_xmin, hxfp_xmax);
@@ -458,6 +471,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   TH2F *H_hxptar_vs_exptar = new TH2F("H_hxptar_vs_exptar", "HMS vs. SHMS, X'_{tar}", exptar_nbins, exptar_xmin, exptar_xmax, hxptar_nbins, hxptar_xmin, hxptar_xmax);
   TH2F *H_hyptar_vs_eyptar = new TH2F("H_hyptar_vs_eyptar", "HMS vs. SHMS, Y'_{tar}", eyptar_nbins, eyptar_xmin, eyptar_xmax, hyptar_nbins, hyptar_xmin, hyptar_xmax);
   TH2F *H_hdelta_vs_edelta = new TH2F("H_hdelta_vs_edelta", "HMS vs. SHMS, #delta",   edelta_nbins, edelta_xmin, edelta_xmax, hdelta_nbins, hdelta_xmin, hdelta_xmax);
+  TH2F *H_hdelta_vs_edelta_nsc = new TH2F("H_hdelta_vs_edelta_nsc", "HMS vs. SHMS, #delta",   edelta_nbins, edelta_xmin, edelta_xmax, hdelta_nbins, hdelta_xmin, hdelta_xmax);
   
   
 
@@ -472,6 +486,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   accp_HList->Add( H_exptar      );
   accp_HList->Add( H_eyptar      );
   accp_HList->Add( H_edelta      );
+  accp_HList->Add( H_edelta_nsc  );
   
   accp_HList->Add( H_hxfp       );
   accp_HList->Add( H_hyfp       );
@@ -482,6 +497,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   accp_HList->Add( H_hxptar      );
   accp_HList->Add( H_hyptar      );
   accp_HList->Add( H_hdelta      );
+  accp_HList->Add( H_hdelta_nsc  );
 
   accp_HList->Add( H_htar_x       );
   accp_HList->Add( H_htar_y       );
@@ -490,9 +506,12 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   accp_HList->Add( H_etar_y       );
   accp_HList->Add( H_etar_z       );
   accp_HList->Add( H_ztar_diff    );
+  accp_HList->Add( H_ztar_diff_nsc);
 
   accp_HList->Add( H_hXColl_vs_hYColl  );
+  accp_HList->Add( H_hXColl_vs_hYColl_nsc );
   accp_HList->Add( H_eXColl_vs_eYColl  );
+  accp_HList->Add( H_eXColl_vs_eYColl_nsc );
   
   accp_HList->Add( H_hxfp_vs_hyfp  );
   accp_HList->Add( H_exfp_vs_eyfp  );
@@ -500,6 +519,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   accp_HList->Add( H_hxptar_vs_exptar );
   accp_HList->Add( H_hyptar_vs_eyptar );
   accp_HList->Add( H_hdelta_vs_edelta );
+  accp_HList->Add( H_hdelta_vs_edelta_nsc);
   
   //---------------------------------------------------------------------------------------------------------
   
@@ -903,6 +923,19 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
 	    
     }
 
+    //No Self Cut Histos
+    if(c_accpCuts &&  c_Q2) { H_Em_nsc->Fill(Em, FullWeight); }
+    if(c_accpCuts &&  c_Em) { H_Q2_nsc->Fill(Em, FullWeight); }
+
+    if(c_kinCuts && c_hdelta && c_edelta && hmsColl_Cut && shmsColl_Cut) { H_ztar_diff->Fill(ztar_diff, FullWeight); }
+
+    if(c_kinCuts && c_edelta && c_ztarDiff && hmsColl_Cut && shmsColl_Cut) {H_hdelta->Fill(h_delta, FullWeight); }
+    if(c_kinCuts && c_hdelta && c_ztarDiff && hmsColl_Cut && shmsColl_Cut) {H_edelta->Fill(e_delta, FullWeight); }
+
+    if(c_kinCuts && c_hdelta && c_edelta && c_ztarDiff && shmsColl_Cut) { H_hXColl_vs_hYColl->Fill(hYColl, hXColl, FullWeight); }
+    if(c_kinCuts && c_hdelta && c_edelta && c_ztarDiff && hmsColl_Cut) { H_eXColl_vs_eYColl->Fill(eYColl, eXColl, FullWeight); }
+
+    
     cout << "SIMC Events Completed: " << std::setprecision(2) << double(i) / nentries * 100. << "  % " << std::flush << "\r";
     
   } // end entry loop
