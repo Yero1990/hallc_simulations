@@ -925,15 +925,15 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
 
     //No Self Cut Histos
     if(c_accpCuts &&  c_Q2) { H_Em_nsc->Fill(Em, FullWeight); }
-    if(c_accpCuts &&  c_Em) { H_Q2_nsc->Fill(Em, FullWeight); }
+    if(c_accpCuts &&  c_Em) { H_Q2_nsc->Fill(Q2, FullWeight); }
 
-    if(c_kinCuts && c_hdelta && c_edelta && hmsColl_Cut && shmsColl_Cut) { H_ztar_diff->Fill(ztar_diff, FullWeight); }
+    if(c_kinCuts && c_hdelta && c_edelta && hmsColl_Cut && shmsColl_Cut) { H_ztar_diff_nsc->Fill(ztar_diff, FullWeight); }
 
-    if(c_kinCuts && c_edelta && c_ztarDiff && hmsColl_Cut && shmsColl_Cut) {H_hdelta->Fill(h_delta, FullWeight); }
-    if(c_kinCuts && c_hdelta && c_ztarDiff && hmsColl_Cut && shmsColl_Cut) {H_edelta->Fill(e_delta, FullWeight); }
+    if(c_kinCuts && c_edelta && c_ztarDiff && hmsColl_Cut && shmsColl_Cut) {H_hdelta_nsc->Fill(h_delta, FullWeight); }
+    if(c_kinCuts && c_hdelta && c_ztarDiff && hmsColl_Cut && shmsColl_Cut) {H_edelta_nsc->Fill(e_delta, FullWeight); }
 
-    if(c_kinCuts && c_hdelta && c_edelta && c_ztarDiff && shmsColl_Cut) { H_hXColl_vs_hYColl->Fill(hYColl, hXColl, FullWeight); }
-    if(c_kinCuts && c_hdelta && c_edelta && c_ztarDiff && hmsColl_Cut) { H_eXColl_vs_eYColl->Fill(eYColl, eXColl, FullWeight); }
+    if(c_kinCuts && c_hdelta && c_edelta && c_ztarDiff && shmsColl_Cut) { H_hXColl_vs_hYColl_nsc->Fill(hYColl, hXColl, FullWeight); }
+    if(c_kinCuts && c_hdelta && c_edelta && c_ztarDiff && hmsColl_Cut) { H_eXColl_vs_eYColl_nsc->Fill(eYColl, eXColl, FullWeight); }
 
     
     cout << "SIMC Events Completed: " << std::setprecision(2) << double(i) / nentries * 100. << "  % " << std::flush << "\r";

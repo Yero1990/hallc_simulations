@@ -144,8 +144,8 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
 
     #setup subplots for plotting individual pm_set yield and relative errors
     plt.subplots(2,1, figsize=(10,10))
-    plt.subplots_adjust(top=0.95)
-    plt.suptitle(r'$^{2}$H$(e,e^{\prime}p)n$ Projected Yields, $\theta_{nq}=%d\pm5^{\circ}$'%(thrq), fontsize=18)
+    plt.subplots_adjust(top=0.93)
+    plt.suptitle(r'$^{2}$H$(e,e^{\prime}p)n$ Projected Yields, $\theta_{nq}=%d\pm5^{\circ}$'%(thrq), fontsize=22)
     
     for i in enumerate(pm_set):
 
@@ -174,7 +174,10 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
         pm_cnts_masked.append( np.where(rel_stats_err_masked[idx].mask, np.nan, pm_cnts[idx]) )
 
         #--------MAKE PLOTS------
-        
+
+        matplotlib.rc('xtick', labelsize=19) 
+        matplotlib.rc('ytick', labelsize=19)
+
         # charge to appropiate subplot
         plt.subplot(2,1,1)
         # Plot yield for each pm_set value at a given th_rq
@@ -183,13 +186,13 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
         plt.ylim(1e-3,1e5)
         plt.xlim(pm_low, pm_hi)
         plt.yscale('log')
-        plt.ylabel(r'Yield', fontsize=14)
+        plt.ylabel(r'Yield', fontsize=22)
         plt.legend(loc='upper right', fontsize=12)
        
         plt.subplot(2,1,2)
         plt.ylim(-50,80)
         plt.xlim(pm_low,pm_hi)
-        plt.ylabel(r'Stat. Relative Error $\sqrt{N}$ / N (\%)', fontsize=14)
+        plt.ylabel(r'Stat. Relative Error $\sqrt{N}$ / N (\%)', fontsize=22)
         plt.xlabel(r'Missing Momentum, $P_{m}$ (GeV/c)', fontsize=14)
         plt.errorbar(pm_masked[idx]+pm_off[idx], np.repeat(0, len(pm_masked[idx])), rel_stats_err_masked[idx]*100., color=clr[idx], linestyle='none', marker='o', alpha = 0.4, label = r'%d MeV/c, $I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(pm_set[idx], Ib, scl_factor[idx]))
         x_coord = [pm_low, pm_hi]
@@ -197,6 +200,7 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
         y_coord_2 = [-10, -10]
         plt.plot(x_coord, y_coord_1, linestyle='dashed', color='k', linewidth=1)
         plt.plot(x_coord, y_coord_2, linestyle='dashed', color='k', linewidth=1)
+
 
         
         #------------------------
@@ -222,9 +226,13 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
 
     #setup subplots for plotting combined yield and relative errors
     plt.subplots(2,1, figsize=(10,10))
-    plt.subplots_adjust(top=0.95)
-    plt.suptitle(r'$^{2}$H$(e,e^{\prime}p)n$ Projected Yields (Combined $P_{m}$ Settings), $\theta_{nq}=%d\pm5^{\circ}$'%(thrq), fontsize=18)
+    plt.subplots_adjust(top=0.93)
+    plt.suptitle(r'$^{2}$H$(e,e^{\prime}p)n$ Projected Yields (Combined $P_{m}$ Settings), $\theta_{nq}=%d\pm5^{\circ}$'%(thrq), fontsize=22)
 
+    matplotlib.rc('xtick', labelsize=19) 
+    matplotlib.rc('ytick', labelsize=19)
+
+        # charge to appropiate subplot
     # charge to appropiate subplot
     plt.subplot(2,1,1)
      
@@ -233,14 +241,14 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
     plt.ylim(1e-3,1e5)
     plt.xlim(pm_low, pm_hi)
     plt.yscale('log')
-    plt.ylabel(r'Yield', fontsize=14)
+    plt.ylabel(r'Yield', fontsize=22)
     plt.legend(loc='upper right', fontsize=12)
 
     plt.subplot(2,1,2)
     plt.ylim(-50,80)
     plt.xlim(pm_low,pm_hi)
-    plt.ylabel(r'Stat. Relative Error $\sqrt{N}$ / N (\%)', fontsize=14)
-    plt.xlabel(r'Missing Momentum, $P_{m}$ (GeV/c)', fontsize=14)
+    plt.ylabel(r'Stat. Relative Error $\sqrt{N}$ / N (\%)', fontsize=22)
+    plt.xlabel(r'Missing Momentum, $P_{m}$ (GeV/c)', fontsize=22)
     plt.errorbar(pm_masked, np.repeat(0, len(pm_masked)), rel_stats_err_comb_masked*100., color='gray', linestyle='none', marker='o', alpha = 0.4, label = r'$I_{\textrm{beam}}$=%.1f $\mu A$'%(Ib) )
 
     x_coord = [pm_low, pm_hi]
@@ -249,13 +257,13 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
     plt.plot(x_coord, y_coord_1, linestyle='dashed', color='k', linewidth=1)
     plt.plot(x_coord, y_coord_2, linestyle='dashed', color='k', linewidth=1)
     
-    #plt.show()
+    plt.show()
 
     print('pm[0] = ', len(pm[0]))
     print('pm_cnts_comb_mask = ', len(pm_cnts_comb_masked))
     print('rel_stats_err_comb_mask = ',len(rel_stats_err_comb_masked))
     beam_time_1 = np.sum(scl_factor)
-    fout_name = 'd2_projected_errors_2021.txt'
+    fout_name = 'd2_projected_errors_thnq%ddeg.txt'% (thrq)
     fout = open(fout_name, 'w')
     fout.write('# projected deuteron exp. (2021) relative statistical uncertainty \n'
                '# Total PAC days: 21 (504 hrs at 50 %% beam efficiency) \n'
@@ -382,6 +390,8 @@ def main():
     '''
     
     plot_combined_yield(thrq=35, pm_set=[120,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.,45.,102.,204.])
+    plot_combined_yield(thrq=45, pm_set=[120,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.,45.,102.,204.])
+    plot_combined_yield(thrq=75, pm_set=[120], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.])
     
 if __name__ == "__main__":
     main()

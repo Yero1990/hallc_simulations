@@ -379,3 +379,87 @@ void combine_sets(TH1F *hist80, TH1F *hist_580set1, TH1F *hist_580set2, TH1F *hi
 
 
 }
+
+void overlay_pmset(TH1F *hist_pm120, TH1F *hist_pm700, TH1F *hist_pm800, TH1F *hist_pm900, TString xlabel="", TString ylabel="", TString title="", Double_t scale_factor=1)
+{
+
+  //This function adds histograms of multiple data sets from the same kinematic setting (i.e., 580_set1 + 580_set2)
+
+  fname = "d2_pm120_lagetfsi_rad_mod_output.root";
+
+  //Clone histograms and rename them total
+  TH1F *hist_580tot = (TH1F*)hist_580set1->Clone("hist_580tot");
+  TH1F *hist_750tot = (TH1F*)hist_750set1->Clone("hist_750tot");
+
+  //Add remaining histograms to total
+  hist_580tot->Add(hist_580set2);
+
+  hist_750tot->Add(hist_750set2);
+  hist_750tot->Add(hist_750set3);
+
+  
+  int font_type = 132;
+
+  gStyle->SetOptStat(0);
+  gStyle->SetTitleFontSize(0.05);
+  gStyle->SetTitleFont(font_type, "");
+  gStyle->SetLegendBorderSize(0);
+  gStyle->SetLegendFont(font_type);
+  gStyle->SetLegendTextSize(0.03);
+
+  //Create Canvas
+  TCanvas *c = new TCanvas(title, "c", 900, 700);
+  c->SetFrameLineWidth(2);
+  c->cd();
+
+  //Set Frame Margin spacing (smaller spacing->tighter frame)
+  gPad->SetLeftMargin(0.13);
+  gPad->SetRightMargin(0.05);
+  gPad->SetTopMargin(0.1);
+  gPad->SetBottomMargin(0.12);
+  
+  hist80->SetLineColor(kBlue);
+  hist80->SetLineWidth(2);
+  hist80->SetFillColorAlpha(kBlue, 0.6);
+  hist80->SetFillStyle(3004);
+
+  hist_580tot->SetLineColor(kRed);
+  hist_580tot->SetLineWidth(2);
+  hist_580tot->SetFillColorAlpha(kRed, 0.6);
+  hist_580tot->SetFillStyle(3004);
+
+  hist_750tot->SetLineColor(kMagenta);
+  hist_750tot->SetLineWidth(2);
+  hist_750tot->SetFillColorAlpha(kMagenta, 0.6);
+  hist_750tot->SetFillStyle(3005);
+
+
+  //Set Histos Axis Label Size
+  hist80->GetYaxis()->SetLabelSize(0.05);
+  hist80->SetTitleSize(0.05, "XY");
+  
+  //Draw combined histos
+  hist80->Scale(1./scale_factor);  //scale down the 80MeV setting so it may be comaprable to other settings
+  hist80->Draw("samehistE0");
+  hist_580tot->Draw("samehistE0");
+  hist_750tot->Draw("samehistE0");
+
+  hist80->SetTitle(title);
+  
+  hist80->GetXaxis()->SetLabelSize(0.05);
+  hist80->GetYaxis()->SetLabelSize(0.05);
+  
+  hist80->GetYaxis()->SetTitle(ylabel);
+  hist80->GetXaxis()->SetTitle(xlabel);
+
+  hist80->GetYaxis()->CenterTitle();
+  hist80->GetXaxis()->CenterTitle();
+  
+  hist80->GetYaxis()->SetTitleOffset(1.35);
+  hist80->GetXaxis()->SetTitleOffset(1.);
+  
+  hist80->SetLabelFont(font_type, "XY");
+  hist80->SetTitleFont(font_type, "XY");
+
+
+}
