@@ -40,7 +40,7 @@ def plot_1d_hist(fname_pattern='', pm_set=[], clr=[], scl_factor=[], title=r'', 
         xmin = min(xlo)
         xmax = max(xup)
 
-        # the scaler factor is to scale the bin contents by time, if needed)
+        # the scaler factor is to scale the bin contents by beam time (hrs), if needed)
         bin_cnt = f['bin_cnt'] * scl_factor[idx]            # bin content
         bin_cnt_err = f['bin_cnt_err'] * scl_factor[idx]  # absolute error in bin content
 
@@ -60,6 +60,7 @@ def plot_1d_hist(fname_pattern='', pm_set=[], clr=[], scl_factor=[], title=r'', 
 
     plt.legend(loc='upper right', fontsize=14)
     ax.set_ylim(ymin=1e-3)
+    ax.set_yscale('log')
     plt.title(title, fontsize=22)
     plt.xticks(fontsize=19)
     plt.yticks(fontsize=19)
@@ -74,7 +75,7 @@ def main():
     print('Main')
 
     #plot kinematics for the low/high pmiss settings separately
-    fname_path = './' #'./histogram_data/jml_fsi_rad_70uA_1hr/'
+    fname_path = './histogram_data/jml_fsi_rad_70uA_1hr/'
 
     #4-Momentum Transfers
     #plot_1d_hist(fname_pattern=fname_path+'yield_Q2_pm%d.txt', pm_set=[120], clr=['m'], scl_factor=[1], title=r'4-Momentum Transfer $Q^{2}$', xlabel=r'$Q^{2}$ (GeV/c)$^{2}$', ylabel=r'Yield', simc_flag=True)
@@ -87,10 +88,10 @@ def main():
     #plot_1d_hist(fname_pattern=fname_path+'yield_Em_pm%d.txt', pm_set=[700, 800, 900], clr=['b', 'g', 'r'], scl_factor=[45., 102., 204.], title = t, xlabel = xl, ylabel=r'Yield', simc_flag=True)
 
     #Missing Momentum
-    t  = r'Missing Momentum'
+    t  = r'Missing Momentum: Rates Estimates'
     xl = r'Missing Momentum, $P_{m}$ (GeV/c)'
     #plot_1d_hist(fname_pattern=fname_path+'yield_Pm_pm%d.txt', pm_set=[120], clr=['m'], scl_factor=[1], title = t, xlabel = xl, ylabel=r'Yield', simc_flag=True)
-    plot_1d_hist(fname_pattern=fname_path+'yield_Pm_pm%d.txt', pm_set=[700], clr=['b'], scl_factor=[45.], title = t, xlabel = xl, ylabel=r'Yield', simc_flag=True)
+    plot_1d_hist(fname_pattern=fname_path+'yield_Pm_pm%d.txt', pm_set=[120,700,800,900], clr=['m', 'b', 'g', 'r'], scl_factor=[1., 45., 102., 204.], title = t, xlabel = xl, ylabel=r'Counts', simc_flag=True)
     
     
 if __name__ == "__main__":
