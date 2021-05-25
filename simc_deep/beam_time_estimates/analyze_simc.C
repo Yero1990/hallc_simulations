@@ -989,13 +989,18 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   //--------
   // Extrack numerical data for histogram plotting
   //--------
-
-  extract_1d_hist(H_Q2_nsc, "4-Momentum Transfers, Q2 (GeV^2)", Form("yield_Q2_pm%d", pm_set));
-  extract_1d_hist(H_Em_nsc, "Missing Energy, Em (GeV)", Form("yield_Em_pm%d", pm_set));
-  extract_1d_hist(H_edelta_nsc, "SHMS Delta (%%)", Form("yield_edelta_pm%d", pm_set));
-  extract_1d_hist(H_hdelta_nsc, "HMS Delta (%%)", Form("yield_hdelta_pm%d", pm_set));
-  extract_1d_hist(H_ztar_diff_nsc, "Ztar diff (cm)", Form("yield_ztardiff_pm%d", pm_set));
   
+  extract_1d_hist(H_Pm, "Missing Momentum, Pm[GeV]", Form("yield_Pm_pm%d", pm_set));
+  extract_1d_hist(H_Q2_nsc, "4-Momentum Transfers, Q2 [GeV^2]", Form("yield_Q2_pm%d", pm_set));
+  extract_1d_hist(H_Em_nsc, "Missing Energy, Em [GeV]", Form("yield_Em_pm%d", pm_set));
+  extract_1d_hist(H_edelta_nsc, "SHMS Delta [%%]", Form("yield_edelta_pm%d", pm_set));
+  extract_1d_hist(H_hdelta_nsc, "HMS Delta [%%]", Form("yield_hdelta_pm%d", pm_set));
+  extract_1d_hist(H_ztar_diff_nsc, "Ztar diff [cm]", Form("yield_ztardiff_pm%d", pm_set));
+
+  extract_2d_hist(H_hXColl_vs_hYColl_nsc, "HMS Y Collimator [cm]", "HMS X Collimator [cm]", Form("yield_hColl_pm%d.txt",  pm_set));
+  extract_2d_hist(H_eXColl_vs_eYColl_nsc, "SHMS Y Collimator [cm]", "SHMS X Collimator [cm]", Form("yield_eColl_pm%d.txt",  pm_set));
+  extract_2d_hist(H_hdelta_vs_edelta_nsc, "SHMS Delta [%%]", "HMS Delta [%%]", Form("yield_delta2d_pm%d.txt",  pm_set));
+
     
   //---------------
   //  MAKE PLOTS
