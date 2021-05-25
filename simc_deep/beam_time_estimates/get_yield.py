@@ -193,7 +193,7 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
         plt.ylim(-50,80)
         plt.xlim(pm_low,pm_hi)
         plt.ylabel(r'Stat. Relative Error $\sqrt{N}$ / N (\%)', fontsize=22)
-        plt.xlabel(r'Missing Momentum, $P_{m}$ (GeV/c)', fontsize=14)
+        plt.xlabel(r'Missing Momentum, $P_{m}$ (GeV/c)', fontsize=22)
         plt.errorbar(pm_masked[idx]+pm_off[idx], np.repeat(0, len(pm_masked[idx])), rel_stats_err_masked[idx]*100., color=clr[idx], linestyle='none', marker='o', alpha = 0.4, label = r'%d MeV/c, $I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(pm_set[idx], Ib, scl_factor[idx]))
         x_coord = [pm_low, pm_hi]
         y_coord_1 = [10, 10]

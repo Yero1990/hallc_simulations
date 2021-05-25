@@ -984,8 +984,19 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   //------------------------------------------
   // Extract The Yield binned in Pm vs th_rq
   //------------------------------------------
-  extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
+  //extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
+
+  //--------
+  // Extrack numerical data for histogram plotting
+  //--------
+
+  extract_1d_hist(H_Q2_nsc, "4-Momentum Transfers, Q2 (GeV^2)", Form("yield_Q2_pm%d", pm_set));
+  extract_1d_hist(H_Em_nsc, "Missing Energy, Em (GeV)", Form("yield_Em_pm%d", pm_set));
+  extract_1d_hist(H_edelta_nsc, "SHMS Delta (%%)", Form("yield_edelta_pm%d", pm_set));
+  extract_1d_hist(H_hdelta_nsc, "HMS Delta (%%)", Form("yield_hdelta_pm%d", pm_set));
+  extract_1d_hist(H_ztar_diff_nsc, "Ztar diff (cm)", Form("yield_ztardiff_pm%d", pm_set));
   
+    
   //---------------
   //  MAKE PLOTS
   //--------------

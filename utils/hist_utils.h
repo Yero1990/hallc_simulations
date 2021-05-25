@@ -3,6 +3,89 @@
 
 using namespace std;
 
+//Brief: This function extracts 1D Histogram Bin Information
+// Useful for extracting bin contents, and errors for plotting in python
+void extract_1d_hist(TH1F *h1, TString xlabel, TString out_fname)
+{
+
+  /*
+    User Arguments:
+    h1: 1D Histogram Object
+    xlabel, ylabel : axes label
+    out_fname: output file name to write 1D Histo information
+
+  */
+ 
+  //Output File Stream to write datafile
+  ofstream ofile;
+
+  //----------------------------------
+  //----Histogram Bin Information-----
+  //----------------------------------
+  
+  //Get the bin content (and error) corresponding to the 2d bin (y,x)
+  Double_t z_cont, z_cont_err;
+  
+  //Get Number of Bins in X-axis
+  Int_t x_Nbins = h1->GetNbinsX();
+
+  //Get Bin Number for x and a global bin number for each 1d bin
+  Int_t xb, ib;
+  
+  //Get Bin Width (Assuming same width for all bins)
+  Double_t xbin_width = h1->GetXaxis()->GetBinWidth(1);
+  
+  //Get Central Value / Low Edge / UpEdge for each bin
+  Double_t x0, xlow, xup;
+
+  ofile.open(out_fname.Data());
+
+  TString header = Form("# 1D Histogram Bin Extraction \n"
+			"#                   \n"
+			"# histogram parameters:  \n"
+			"# xbins      = %d   | xlabel: %s \n"
+			"# xbin width = %.3f \n"
+			"#                   \n"
+			"# header definitions:\n"
+			"# ib:          x-bin number \n"
+			"# xb:          x-axis bin number \n"
+			"# x0:          x-axis central bin value \n"
+			"# xlow:        x-axis low-edge bin value \n"
+			"# xup:         x-axis up-edge bin value \n"
+			"# bin_cnt:     bin content (y-axis) \n"
+			"# bin_cnt_err: bin content error (y-axis) \n"
+			"#                                        \n"
+			"#! ib[i,0]/  xb[i,1]/  x0[f,2]/  xlow[f,3]/  xup[f,4]/  bin_cnt[f,5]/  bin_cnt_err[f,6]/  "
+			,x_Nbins, xlabel.Data(), xbin_width  );
+
+  //Write header to data file
+  ofile << header.Data() << endl;
+  
+  //loop over x-bins
+  for(int xb=1; xb<=x_Nbins; xb++){
+    
+    //Get 1d bin number
+    ib = h1->GetBin(xb);
+
+    //Get bin content and error for each (y, x) bin
+    z_cont = h1->GetBinContent(xb);
+    z_cont_err = h1->GetBinError(xb);
+    
+    //Get value at bin center / low / up edges of the bin
+    xlow = h1->GetXaxis()->GetBinLowEdge(xb);
+    xup  = h1->GetXaxis()->GetBinUpEdge(xb);
+    x0   = (xlow + xup)/2.; //h2->GetXaxis()->GetBinCenter(xb);
+    
+    
+    ofile  << std::setw(7) << ib << std::setw(10) << xb << std::setw(14) << x0 << std::setw(10) << xlow << std::setw(10) << xup << std::setw(12)  << z_cont << std::setw(14) << z_cont_err << endl;
+    
+  }// end x-bins loop
+  
+
+  ofile.close();
+
+    
+}
 
 //Brief: This function extracts 2D Histogram Bin Information
 // Useful for extracting yields or cross sections binned in 2D kinematics
