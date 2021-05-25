@@ -1,0 +1,35 @@
+# 1D Histogram Bin Extraction 
+#                   
+# histogram parameters:  
+# xbins      = 19   | xlabel: Neutron Angle wrto q-vector, thrq, [deg] 
+# xbin width = 10.000 
+#                   
+# header definitions:
+# ib:          x-bin number 
+# xb:          x-axis bin number 
+# x0:          x-axis central bin value 
+# xlow:        x-axis low-edge bin value 
+# xup:         x-axis up-edge bin value 
+# bin_cnt:     bin content (y-axis) 
+# bin_cnt_err: bin content error (y-axis) 
+#                                        
+#! ib[i,0]/  xb[i,1]/  x0[f,2]/  xlow[f,3]/  xup[f,4]/  bin_cnt[f,5]/  bin_cnt_err[f,6]/  
+      1         1             5         0        10     568.923       29.2962
+      2         2            15        10        20      1820.7       58.3736
+      3         3            25        20        30     2888.41       73.8143
+      4         4            35        30        40     3919.28       89.5458
+      5         5            45        40        50     4633.05       94.3841
+      6         6            55        50        60      5127.2       103.184
+      7         7            65        60        70     4581.99       88.4258
+      8         8            75        70        80     4059.87       85.1178
+      9         9            85        80        90     2564.26       63.0065
+     10        10            95        90       100     1323.41       48.6738
+     11        11           105       100       110     349.729       30.6871
+     12        12           115       110       120     53.3123       16.4084
+     13        13           125       120       130     19.1984       14.1978
+     14        14           135       130       140           0             0
+     15        15           145       140       150           0             0
+     16        16           155       150       160           0             0
+     17        17           165       160       170           0             0
+     18        18           175       170       180           0             0
+     19        19           185       180       190           0             0
