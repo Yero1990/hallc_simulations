@@ -79,7 +79,7 @@ def plot_yield(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, scl_facto
     # pm_off : missing momentum offset (a few MeV), to slightly offset (by ~MeV/c) the overlappong relative error data points and make it easier to compare
 
     
-    fname = 'yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt' % (pm_set, model, rad, Ib, time)
+    fname = 'yield_estimates/yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt' % (pm_set, model, rad, Ib, time)
 
     f = dfile(fname)
 
@@ -232,7 +232,7 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
     matplotlib.rc('xtick', labelsize=19) 
     matplotlib.rc('ytick', labelsize=19)
 
-        # charge to appropiate subplot
+    # charge to appropiate subplot
     # charge to appropiate subplot
     plt.subplot(2,1,1)
      
