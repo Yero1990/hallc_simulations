@@ -17,6 +17,46 @@ rc('text', usetex=True)
 plt.rcParams["font.family"] = "Times New Roman"
 
 
+def calc_Xsec_corr(thrq=0):
+    # This function calculates the momentum dist. ratio of commissioning d(e,e'p)n Xsec  to JML Pari FSI
+    # to get a correction factor, since the measures cross sections were found to be different (slighly lower)
+    # than the SIMC JML Paris model Xsec. This way, for future simulation of yield estimates using the JML Paris
+    # model, we can correct for each (th_nq, pm) bin to get more realistic yields in simulation
+
+    # For a given thrq central value (i.e., 35, 45, etc.), calculate the ratio of data/jml red. xsec
+    # for the corresponding pm_bin array (0.02, 0.06, 0.1, 0.140, etc.) which uses the same binning scheme throughout
+    # This ratio, a numerical value for each (thrq, pm_bin) is multiplied by the simulated yields
+
+    base = '../../commissioning_data/numerical_data_combined/'
+
+    jml_paris = base + 'jml_paris_thnq%d.txt' % (thrq)
+    comm_data = base + 'pm_distributions_hallc_thnq%d.txt' % (thrq)
+
+    ftheory = dfile(jml_paris)
+    fdata   = dfile(comm_data)
+
+    #for JML/data, pm_bin (central pm value)  should be the exactly the same
+    
+    #read commissioning data
+    pm_data      = np.array(fdata['pm_bin'])
+    redXsec_data = np.array(fdata['red_dataXsec'])
+    
+    #read theory
+    pm_theory      = np.array(ftheory['pm_bin'])
+    redXsec_theory = np.array(ftheory['red_theoryXsec_fsi'])
+    
+    R_xsec_corr = redXsec_data / redXsec_theory
+
+    # If the ratio is nan (i.e., no data point, then set the ratio to 1,
+    # so that when this is multiplied by the yield, the yield remains unchanged
+    # in the case the ratio is in non-existend (due to lack of comm. data)
+    R_xsec_corr = np.nan_to_num(R_xsec_corr, nan=1.0)
+
+    print('Correction Factor: \n')
+    print('pm = ', pm_theory, 'R_xsec_corr=',R_xsec_corr)
+    
+    return (pm_data, R_xsec_corr)
+    
 def MC_study(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, clr='k',rel_err_flg=0, MC_evt='200k', pm_off=0):
 
     # This function (MC_study) is specific to studying how the Monte Carlo (MC) statistics affects
@@ -134,13 +174,27 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
     MC_err    = []
     stats_err = []
     rel_stats_err = []
-
+     
     pm_masked            = []
     pm_cnts_masked       = []
     stats_err_masked     = []
     rel_stats_err_masked = []
+
+    #only for purpose of plotting colored plots
+    pm_cnts_xcor   = []
+    stats_err_xcor = []
+    rel_stats_err_xcor = []
+     
+    pm_masked_xcor            = []
+    pm_cnts_masked_xcor       = []
+    stats_err_masked_xcor     = []
+    rel_stats_err_masked_xcor = []
     
     clr = ['m', 'b', 'g', 'r']
+
+    #Get comm. data / jml paris FSI red. xsec ratios for all pm_bins of a given th_rq (use as correction factor for the yields)
+    pm_bin = calc_Xsec_corr(thrq)[0]
+    R_xcorr = calc_Xsec_corr(thrq)[1]
 
     #setup subplots for plotting individual pm_set yield and relative errors
     plt.subplots(2,1, figsize=(10,10))
@@ -152,7 +206,7 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
         idx = i[0]     #enumerated index (0, 1, 2, ...)
         
         #append generic file name
-        fnames.append('yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt'%(pm_set[idx], model, rad, Ib, time))
+        fnames.append('yield_estimates/yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt'%(pm_set[idx], model, rad, Ib, time))
         #print(idx,', ',fnames[idx])
         f[idx] = dfile(fnames[idx])
 
@@ -173,6 +227,16 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
         pm_masked.append( np.where(rel_stats_err_masked[idx].mask, np.nan, pm[idx]) )
         pm_cnts_masked.append( np.where(rel_stats_err_masked[idx].mask, np.nan, pm_cnts[idx]) )
 
+        #For the purpose of plots only, calculate the corrected yields to be plotted (per individual setting)
+        pm_cnts_xcor.append( (f[idx]['zcont'])[th_rq[idx]==thrq] * R_xcorr * scl_factor[idx] )    #pm bin content (scale by time (hrs) scl_factor)
+        stats_err_xcor.append( np.sqrt(pm_cnts_xcor[idx]) )  #absolute exp. statistical error
+        rel_stats_err_xcor.append( np.divide(1, stats_err_xcor[idx], out=np.full_like(stats_err_xcor[idx], 0), where=stats_err_xcor[idx]!=0) ) #relative exp. statistics error
+
+        rel_stats_err_masked_xcor.append( ma.masked_where((rel_stats_err_xcor[idx] == 0) | (rel_stats_err_xcor[idx] > 0.5), rel_stats_err_xcor[idx]) ) 
+        stats_err_masked_xcor.append( ma.masked_array(stats_err_xcor[idx], mask=rel_stats_err_masked_xcor[idx].mask) )
+        pm_masked_xcor.append( np.where(rel_stats_err_masked_xcor[idx].mask, np.nan, pm[idx]) )
+        pm_cnts_masked_xcor.append( np.where(rel_stats_err_masked_xcor[idx].mask, np.nan, pm_cnts_xcor[idx]) )
+        
         #--------MAKE PLOTS------
 
         matplotlib.rc('xtick', labelsize=19) 
@@ -181,8 +245,8 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
         # charge to appropiate subplot
         plt.subplot(2,1,1)
         # Plot yield for each pm_set value at a given th_rq
-        plt.hist(pm[idx], bins=pm_bins, weights=pm_cnts_masked[idx], edgecolor='k', color=clr[idx], range=[pm_low, pm_hi], alpha = 0.1)
-        plt.errorbar(pm[idx], pm_cnts_masked[idx], yerr=stats_err_masked[idx], linestyle='none', marker='o', color=clr[idx], ecolor=clr[idx], alpha = 0.4, markersize=3, label = r'%d MeV/c, $I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(pm_set[idx], Ib, scl_factor[idx]))
+        plt.hist(pm[idx], bins=pm_bins, weights=pm_cnts_masked_xcor[idx], edgecolor='k', color=clr[idx], range=[pm_low, pm_hi], alpha = 0.1)
+        plt.errorbar(pm[idx], pm_cnts_masked_xcor[idx], yerr=stats_err_masked_xcor[idx], linestyle='none', marker='o', color=clr[idx], ecolor=clr[idx], alpha = 0.4, markersize=3, label = r'%d MeV/c, $I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(pm_set[idx], Ib, scl_factor[idx]))
         plt.ylim(1e-3,1e5)
         plt.xlim(pm_low, pm_hi)
         plt.yscale('log')
@@ -194,7 +258,7 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
         plt.xlim(pm_low,pm_hi)
         plt.ylabel(r'Stat. Relative Error $\sqrt{N}$ / N (\%)', fontsize=22)
         plt.xlabel(r'Missing Momentum, $P_{m}$ (GeV/c)', fontsize=22)
-        plt.errorbar(pm_masked[idx]+pm_off[idx], np.repeat(0, len(pm_masked[idx])), rel_stats_err_masked[idx]*100., color=clr[idx], linestyle='none', marker='o', alpha = 0.4, label = r'%d MeV/c, $I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(pm_set[idx], Ib, scl_factor[idx]))
+        plt.errorbar(pm_masked_xcor[idx]+pm_off[idx], np.repeat(0, len(pm_masked_xcor[idx])), rel_stats_err_masked_xcor[idx]*100., color=clr[idx], linestyle='none', marker='o', alpha = 0.4, label = r'%d MeV/c, $I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(pm_set[idx], Ib, scl_factor[idx]))
         x_coord = [pm_low, pm_hi]
         y_coord_1 = [10, 10]
         y_coord_2 = [-10, -10]
@@ -207,16 +271,28 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
 
     
     #Combine overlapping bin contents from different pm_sets
-    pm_cnts_comb = [sum(i) for i in zip(*pm_cnts)]
 
+    
+    pm_cnts_comb_noxcor = [sum(i) for i in zip(*pm_cnts)]
+    pm_cnts_comb = pm_cnts_comb_noxcor * R_xcorr    # Apply R = data_Xsec / jml_paris_fsi_xsec correction to account for differences between measured and model xsec    
+    
     #calculate absolute and relative stats error of the combined bins
+    stats_err_comb_noxcor = np.sqrt(pm_cnts_comb_noxcor)
     stats_err_comb = np.sqrt(pm_cnts_comb)
-    rel_stats_err_comb = np.divide(1, stats_err_comb, out=np.full_like(stats_err_comb, 0), where=stats_err_comb!=0)    
 
+    rel_stats_err_comb_noxcor = np.divide(1, stats_err_comb_noxcor, out=np.full_like(stats_err_comb_noxcor, 0), where=stats_err_comb_noxcor!=0)    
+    rel_stats_err_comb = np.divide(1, stats_err_comb, out=np.full_like(stats_err_comb, 0), where=stats_err_comb!=0)    
+    
     #mask the values if relative statistical error = 0 or > 50 % 
-    rel_stats_err_comb_masked = ma.masked_where((rel_stats_err_comb == 0) | (rel_stats_err_comb > 0.5), rel_stats_err_comb) 
+    rel_stats_err_comb_masked_noxcor = ma.masked_where((rel_stats_err_comb_noxcor == 0) | (rel_stats_err_comb_noxcor > 0.5), rel_stats_err_comb_noxcor) 
+    rel_stats_err_comb_masked = ma.masked_where((rel_stats_err_comb == 0) | (rel_stats_err_comb > 0.5), rel_stats_err_comb)
+    
+    stats_err_comb_masked_noxcor =  ma.masked_array(stats_err_comb_noxcor, mask=rel_stats_err_comb_masked_noxcor.mask) 
     stats_err_comb_masked =  ma.masked_array(stats_err_comb, mask=rel_stats_err_comb_masked.mask) 
+
     pm_masked = np.where(rel_stats_err_comb_masked.mask, np.nan, pm[0]) 
+
+    pm_cnts_comb_masked_noxcor = np.where(rel_stats_err_comb_masked_noxcor.mask, 0, pm_cnts_comb_noxcor)
     pm_cnts_comb_masked = np.where(rel_stats_err_comb_masked.mask, 0, pm_cnts_comb)
         
 
@@ -263,7 +339,7 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
     print('pm_cnts_comb_mask = ', len(pm_cnts_comb_masked))
     print('rel_stats_err_comb_mask = ',len(rel_stats_err_comb_masked))
     beam_time_1 = np.sum(scl_factor)
-    fout_name = 'd2_projected_errors_thnq%ddeg.txt'% (thrq)
+    fout_name = 'd2_xsec-corr_projected_errors_thnq%ddeg.txt'% (thrq)
     fout = open(fout_name, 'w')
     fout.write('# projected deuteron exp. (2021) relative statistical uncertainty \n'
                '# Total PAC days: 21 (504 hrs at 50 %% beam efficiency) \n'
@@ -271,18 +347,23 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
                '# Remaining PAC days: 18 (432 hrs at 50 %% beam efficiency)\n'   
                '# beam time allocated for low/high-pm settings: %.1f hrs\n'
                '# beam time allocated for other studies (elastics, tgt boiling, etc): %.1f hrs\n'
+               '# NOTE: the yields have been multiplied by R = data_xsec / jml_paris_fsi_xsec to\n'
+               '# account for the differences between measured data and model during the commissioing phase\n'
                '# \n'
                '# thnq             : %d +/- 5 deg\n'
                '# pm_bin           : central bin value (GeV/c)\n'
-               '# yield            : simulated experimental yield\n'
+               '# Yield            : simulated projected yield\n'
                '# rel_stats_err    : relative statistical error \n'
+               '# Yield_xcorr            : simulated projected yield (after cross-section corrections i.e., multiplied by R)\n'
+               '# rel_stats_err_xcorr    : relative statistical error (after cross-section corrections)\n'
+               '# R_xcorr                : cross-section correction factor, R = commissioning_dataXsec / JML_Paris_FSI_Xsec'
                '# \n'
-               '#! pm_bin[f,0]/ Yield[f,1]/ rel_stats_err[f,1]/  \n' % (beam_time_1, 432-beam_time_1, thrq) )
+               '#! pm_bin[f,0]/ Yield[f,1]/ rel_stats_err[f,1]/ Yield_xcorr[f,2]/  rel_stats_err_xcorr[f,3]/ R_xcorr[f,4]/\n' % (beam_time_1, 432-beam_time_1, thrq) )
 
     #data = np.column_stack([pm[0], pm_cnts_comb_masked, rel_stats_err_comb_masked])
     #print(data)
-    table = np.column_stack([pm[0], pm_cnts_comb_masked, rel_stats_err_comb_masked])
-    np.savetxt(fout, table, fmt=['%.2f\t', '%.2f\t', '%.4e'])
+    table = np.column_stack([pm[0], pm_cnts_comb_masked_noxcor, rel_stats_err_comb_masked_noxcor, pm_cnts_comb_masked, rel_stats_err_comb_masked, R_xcorr])
+    np.savetxt(fout, table, fmt=['%.2f\t', '%.2f\t', '%.4e', '%.2f\t', '%.4e\t', '%.9f'])
     fout.close()
     
            
@@ -388,11 +469,20 @@ def main():
     
     plt.show()
     '''
+
+    #---Original Beam Time Allocation to low/high pmiss settings-----
+    #plot_combined_yield(thrq=35, pm_set=[120,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.,45.,102.,204.])
+    #plot_combined_yield(thrq=45, pm_set=[120,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.,45.,102.,204.])
+    #plot_combined_yield(thrq=75, pm_set=[120], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.])
+
+    #---New Beam Time Allocation (After considering xsec correction factors, and trasnferred more time from calibration runs to pmiss runs)
+    plot_combined_yield(thrq=35, pm_set=[120,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.,116.,116.,175.])
+    plot_combined_yield(thrq=45, pm_set=[120,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.,116.,116.,175.])
     
-    plot_combined_yield(thrq=35, pm_set=[120,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.,45.,102.,204.])
-    plot_combined_yield(thrq=45, pm_set=[120,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.,45.,102.,204.])
-    plot_combined_yield(thrq=75, pm_set=[120], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.])
-    
+
+    # test
+    # print('pm =',calc_Xsec_corr(thrq=35)[0], 'R = ', calc_Xsec_corr(thrq=35)[1])
+
 if __name__ == "__main__":
     main()
 

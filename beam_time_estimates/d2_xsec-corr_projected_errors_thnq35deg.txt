@@ -1,0 +1,47 @@
+# projected deuteron exp. (2021) relative statistical uncertainty 
+# Total PAC days: 21 (504 hrs at 50 % beam efficiency) 
+# Commissioning PAC days: 3 (72 hrs at 50 % beam efficiency)
+# Remaining PAC days: 18 (432 hrs at 50 % beam efficiency)
+# beam time allocated for low/high-pm settings: 408.0 hrs
+# beam time allocated for other studies (elastics, tgt boiling, etc): 24.0 hrs
+# NOTE: the yields have been multiplied by R = data_xsec / jml_paris_fsi_xsec to
+# account for the differences between measured data and model during the commissioing phase
+# 
+# thnq             : 35 +/- 5 deg
+# pm_bin           : central bin value (GeV/c)
+# Yield            : simulated projected yield
+# rel_stats_err    : relative statistical error 
+# Yield_xcorr            : simulated projected yield (after cross-section corrections i.e., multiplied by R)
+# rel_stats_err_xcorr    : relative statistical error (after cross-section corrections)
+# R_xcorr                : cross-section correction factor, R = commissioning_dataXsec / JML_Paris_FSI_Xsec# 
+#! pm_bin[f,0]/ Yield[f,1]/ rel_stats_err[f,1]/ Yield_xcorr[f,2]/  rel_stats_err_xcorr[f,3]/ R_xcorr[f,4]/
+0.02	 487.04	 4.5312e-02 399.81	 5.0012e-02	 0.820893023
+0.06	 1841.81	 2.3301e-02 1612.21	 2.4905e-02	 0.875342172
+0.10	 1092.83	 3.0250e-02 1121.44	 2.9861e-02	 1.026181914
+0.14	 367.61	 5.2156e-02 400.70	 4.9957e-02	 1.090000252
+0.18	 99.83	 1.0008e-01 94.55	 1.0284e-01	 0.947079848
+0.22	 23.87	 2.0466e-01 27.79	 1.8968e-01	 1.164165477
+0.26	 5.49	 4.2667e-01 5.10	 4.4294e-01	 0.927861641
+0.30	 0.00	 1.1413e+00 0.00	 1.1413e+00	 1.000000000
+0.34	 0.00	 5.3952e+00 0.00	 5.3952e+00	 1.000000000
+0.38	 0.00	 4.8661e+01 0.00	 4.8661e+01	 1.000000000
+0.42	 0.00	 0.0000e+00 0.00	 0.0000e+00	 1.000000000
+0.46	 0.00	 0.0000e+00 0.00	 0.0000e+00	 0.503558152
+0.50	 0.00	 9.3875e-01 0.00	 1.3707e+00	 0.469033078
+0.54	 24.31	 2.0282e-01 11.38	 2.9648e-01	 0.468005627
+0.58	 84.02	 1.0910e-01 23.20	 2.0762e-01	 0.276099712
+0.62	 152.78	 8.0902e-02 69.87	 1.1963e-01	 0.457330060
+0.66	 205.06	 6.9833e-02 69.95	 1.1956e-01	 0.341133504
+0.70	 235.30	 6.5192e-02 111.60	 9.4658e-02	 0.474312033
+0.74	 244.70	 6.3927e-02 131.17	 8.7314e-02	 0.536056996
+0.78	 232.57	 6.5573e-02 205.88	 6.9693e-02	 0.885270042
+0.82	 200.71	 7.0585e-02 135.26	 8.5985e-02	 0.673872073
+0.86	 160.48	 7.8939e-02 184.45	 7.3632e-02	 1.149361560
+0.90	 119.02	 9.1662e-02 119.79	 9.1369e-02	 1.006439796
+0.94	 82.98	 1.0978e-01 106.52	 9.6892e-02	 1.283622023
+0.98	 54.81	 1.3507e-01 54.81	 1.3507e-01	 1.000000000
+1.02	 34.79	 1.6954e-01 34.79	 1.6954e-01	 1.000000000
+1.06	 21.20	 2.1717e-01 21.20	 2.1717e-01	 1.000000000
+1.10	 12.39	 2.8413e-01 12.39	 2.8413e-01	 1.000000000
+1.14	 7.09	 3.7555e-01 7.09	 3.7555e-01	 1.000000000
+1.18	 0.00	 5.1577e-01 0.00	 5.1577e-01	 1.000000000
