@@ -5,9 +5,9 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
 
   /* 
      User Input:
-     pm_set     : central missing momentum setting
+     pm_set     : central missing momentum setting (580, 700, 800, etc,.)
      model      : "pwia" or "fsi"
-     rad_flag   :  1 (true), 0 (false)
+     rad_flag   :  1 (true - simulate radiative effects), 0 (false - simulate without radiative effects)
      Ib         : beam current (uA)
      time       : beam-on-target time (hours)
   */
@@ -784,7 +784,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
     tree->GetEntry(i);
 
     //-----Define Additional Kinematic Variables--------
-
+    
     X = Q2 / (2.*MP*nu);
     th_q = th_xq + theta_p;
     ztar_diff =  htar_z - etar_z;
@@ -846,8 +846,18 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
     //Full Weight
     FullWeight = (Normfac * charge_factor * eff_factor * Weight ) / nentries;
     PhaseSpace =  Normfac * charge_factor * eff_factor * Jacobian_corr  / nentries;    //Phase Space with jacobian corr. factor
-    
+
+    /*
+    cout << "FullWeight = " << FullWeight << endl;
+    cout << "Normfac = " << Normfac << endl;
+    cout << "charge_factor = " << charge_factor << endl;
+    cout << "eff_factor = " << eff_factor << endl;
+    cout << "Weight = " << Weight << endl;
+    cout << "nentries = " << nentries << endl;
+    cout << "Jacobian_corr = " << Jacobian_corr << endl;
+    */
     if(c_allCuts) {
+
 
       // This is for the 2D cross section Pm vs. thnq binned in thnq 
       H_Pm_vs_thrq->Fill(th_rq/dtr, Pm, FullWeight);
@@ -861,8 +871,8 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
       H_nu->Fill(nu, FullWeight);
       H_q->Fill(q, FullWeight);
       H_thq->Fill(th_q/dtr, FullWeight);
-      
-      
+
+ 
       //Secondary (Hadron) Kinematics
       H_Pf->Fill(Pf, FullWeight);
       H_thx->Fill(theta_p/dtr, FullWeight);
@@ -984,7 +994,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   //------------------------------------------
   // Extract The Yield binned in Pm vs th_rq
   //------------------------------------------
-  //extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
+  extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
 
   //--------
   // Extrack numerical data for histogram plotting
@@ -1017,7 +1027,7 @@ void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_
   
   //extract hadron kinematics
   //extract_1d_hist(H_MM, "Missing Mass, MM [GeV]", Form("yield_MM_pm%d.txt", pm_set));  
-  extract_1d_hist(H_Pm, "Missing Momentum, Pm [GeV/c]", Form("yield_Pm_pm%d_noCUTS.txt", pm_set));
+  //extract_1d_hist(H_Pm, "Missing Momentum, Pm [GeV/c]", Form("yield_Pm_pm%d_noCUTS.txt", pm_set));
   /*
   extract_1d_hist(H_Pf, "Final Proton Momentum, Pf, [GeV]", Form("yield_Pf_pm%d.txt", pm_set));
   extract_1d_hist(H_thx, "Proton Scattering Angle, th_p, [deg]", Form("yield_thp_pm%d.txt", pm_set));

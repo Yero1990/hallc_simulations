@@ -165,7 +165,7 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
     f = [None] * len(pm_set)
 
     #small x-axis offsets for ease of comparison of overlapping relative errors
-    pm_off = [0, 0, 0.005, 0.01]
+    pm_off = [0, 0, 0.005, 0.01, 0.015]
     
     #create empty list of lists for headers to read from file (outer list pm_set, inner list, array per set)
     th_rq     = []
@@ -190,7 +190,7 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
     stats_err_masked_xcor     = []
     rel_stats_err_masked_xcor = []
     
-    clr = ['m', 'b', 'g', 'r']
+    clr = ['m', 'orange', 'b', 'g', 'r']
 
     #Get comm. data / jml paris FSI red. xsec ratios for all pm_bins of a given th_rq (use as correction factor for the yields)
     pm_bin = calc_Xsec_corr(thrq)[0]
@@ -476,8 +476,8 @@ def main():
     #plot_combined_yield(thrq=75, pm_set=[120], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.])
 
     #---New Beam Time Allocation (After considering xsec correction factors, and trasnferred more time from calibration runs to pmiss runs)
-    plot_combined_yield(thrq=35, pm_set=[120,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.,116.,116.,175.])
-    plot_combined_yield(thrq=45, pm_set=[120,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.,116.,116.,175.])
+    plot_combined_yield(thrq=35, pm_set=[120,580,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1., 24., 108., 108., 167.])
+    plot_combined_yield(thrq=45, pm_set=[120,580,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1., 24., 108., 108., 167.])
     
 
     # test
