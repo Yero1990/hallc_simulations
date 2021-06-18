@@ -32,7 +32,7 @@ def calc_d2_kin():
     Q2 = 4.25   #4-momentum transfer
 
     #output file to write kinematics
-    fname = 'kin_summary_Eb%.2f_test.txt' % (Ei)
+    fname = 'kin_summary_Eb%.2f.txt' % (Ei)
     ofile = open(fname, 'w')
     ofile.write('# D(e,e\'p)n Central Kinematics Summary\n')
     ofile.write('# Beam Energy (Ei) = %.3f GeV\n' % (Ei))

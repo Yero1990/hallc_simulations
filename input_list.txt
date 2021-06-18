@@ -8,12 +8,13 @@
 #
 # JML FSI with radiative effects
 # d2_pm120_lagetfsi_rad_mod.data
+d2_pm580_lagetfsi_rad_mod.data
 # d2_pm700_lagetfsi_rad_mod.data
 # d2_pm800_lagetfsi_rad_mod.data
 # d2_pm900_lagetfsi_rad_mod.data
 #
 # JML FSI with NO radiative effects
-d2_pm120_lagetfsi_norad_mod.data
+# d2_pm120_lagetfsi_norad_mod.data
 # d2_pm700_lagetfsi_norad_mod.data
 # d2_pm800_lagetfsi_norad_mod.data
 # d2_pm900_lagetfsi_norad_mod.data
