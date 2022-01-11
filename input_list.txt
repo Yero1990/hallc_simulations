@@ -2,13 +2,21 @@
 #
 # test input kinematic files
 # htest.data
-# h2test.data
+# d2_test.data
+c12_cafe_lowpmiss_norad.data
 #
+# --- cafe experiment kinematics ---
+# d2_cafe_lowpmiss_lagetfsi_norad.data 
+# d2_cafe_lowpmiss_lagetfsi_rad.data
+#
+#
+#-- deuteron experiment kinematics ---
+# used for PAC49 Jeopardy calculations 
 #---modified kin. file ----
 #
 # JML FSI with radiative effects
 # d2_pm120_lagetfsi_rad_mod.data
-d2_pm580_lagetfsi_rad_mod.data
+# d2_pm580_lagetfsi_rad_mod.data
 # d2_pm700_lagetfsi_rad_mod.data
 # d2_pm800_lagetfsi_rad_mod.data
 # d2_pm900_lagetfsi_rad_mod.data
@@ -18,4 +26,3 @@ d2_pm580_lagetfsi_rad_mod.data
 # d2_pm700_lagetfsi_norad_mod.data
 # d2_pm800_lagetfsi_norad_mod.data
 # d2_pm900_lagetfsi_norad_mod.data
-

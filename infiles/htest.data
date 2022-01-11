@@ -7,7 +7,7 @@
 
  =?
  &EXPERIMENT
-     ngen  =  1000			!  POS: # of successe
+     ngen  =  50000			!  POS: # of successe
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
@@ -27,10 +27,10 @@
      spec%e%theta  = 12.194                        ! e arm angle setting (degrees)
      spec%p%P  = 2935.545                          ! 2928.428 2938. p arm central momentum (MeV/c)
      spec%p%theta  = 37.338                       ! p arm angle setting (degrees)     Add yptar offsets in angle rather than below
-!     spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in e Arm           
-!     spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm                                                             
-     spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 0.075                 !add extra smear. in recon eArm (Ytar, xptar(in mr), yptar(in mr), delta(in %)) 
-     spec%p%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 0.075                !add extra smear. in  recon pArm 
+     spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in e Arm           
+     spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm                                                             
+     spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1e-8                 !add extra smear. in recon eArm (Ytar, xptar(in mr), yptar(in mr), delta(in %)) 
+     spec%p%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1e-8                !add extra smear. in  recon pArm 
      spec%e%shift%p_mom  =   0.                        !  shift e-momentum for reconstruction [MeV] (for systematic studies)	
      spec%e%shift%theta  =   0.                        !  shift e-angle for reconstruction [rad]
      spec%e%shift%phi  =   0.                          !  shift e-Oop angle for reconstruction
@@ -89,23 +89,23 @@
      targ%fr_pattern  =  3		!  raster pattern: 1=square, 2=circular, 3=real square
      targ%fr1  =  0.13		!  horizontal size OR inner radius(2)
      targ%fr2  =  0.13		!  vertical size OR outer radius(2)
-     targ%xoffset  =  -0.026316		!  target x-offset (cm): +x = beam right   (Beam Position, XBPM, EPICS (opposite of hcana))
-     targ%yoffset  =  0.016888		!  target y-offset (cm): +y = up          (Beam Position, YBPM)
+     targ%xoffset  =  0.0		!  target x-offset (cm): +x = beam right   (Beam Position, XBPM, EPICS (opposite of hcana))
+     targ%yoffset  =  0.0		!  target y-offset (cm): +y = up          (Beam Position, YBPM)
      targ%zoffset  =  0.0		!  target z-offset (cm): +z = downstream
    				!   zreal = znominal + zoffset
 /
 
  &E_ARM_OFFSET
-     spec%e%offset%x  =  -0.126		!  x offset (cm)
-     spec%e%offset%y  =   0.06		!  y offset (cm)
+     spec%e%offset%x  =  0.0		!  x offset (cm)
+     spec%e%offset%y  =  0.0		!  y offset (cm)
      spec%e%offset%z  =  0.		!  z offset (cm)
      spec%e%offset%xptar  =  0.	        !  xptar offset (mr)
      spec%e%offset%yptar  =  0.         !  yptar offset (mr)
 /
 
  &P_ARM_OFFSET
-     spec%p%offset%x  =  0.083188		!  x offset (cm)
-     spec%p%offset%y  =  0.286020		!  y offset (cm)
+     spec%p%offset%x  =  0.0		!  x offset (cm)
+     spec%p%offset%y  =  0.0		!  y offset (cm)
      spec%p%offset%z  =  0.       		!  z offset (cm)
      spec%p%offset%xptar  =  0.             !  xptar offset (mr)
      spec%p%offset%yptar  =  0.	                !  yptar offset (mr)

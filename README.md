@@ -24,7 +24,8 @@ If you plan to use this repository for doing hydrogen / deuteron simulations usi
 
 1. Make sure the `deut_simc` (SIMC gfortran for deuteron analysis) has been cloned and compiled in `../hallc_simulations` by doing the following: 
 
- `git clone https://github.com/Yero1990/deut_simc`
+ `git clone https://github.com/Yero1990/deut_simc` <br>
+ and in the directory `deut_simc` type: `make` to compile the code and generate an executable, `simc`.
     
 2. Set up the binary file `grid.bin` read in by SIMC to do the proper deuteron cross-section weighting using the J.M. Laget theoretical cross sections (using Paris NN potential). You will need the .tar file which I can provide via e-mail if needed (email: cyero@jlab.org)
 

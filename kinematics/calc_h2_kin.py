@@ -23,76 +23,6 @@ import numpy as np
 import LT.box as B
 import matplotlib.pyplot as plt
 
-
-
-
-def calc_h2_kin():
-    print('main')
-
-  
-    #For H(e,e'p) Elastics, require Xbj = 1
-    #Recall: Xbj = Q2 / ( 2Mp(E-E') )
-    
-
-    #Read deuteron kinematics settings to be used in calculating the corresponding H(e,e'p) elastics 
-    fname = 'd2kin_summary_Eb10.60_reduced.txt'
-    f = B.get_file(fname)
-    Pr = B.get_data(f, 'Pr')      # recoil momentum setting in deuteron [GeV]
-    the = B.get_data(f, 'th_e')  #e- scattering angle [deg]
-
-
-    Ei = 10.6;  #beam energy [GeV]
-
-    #output file to write kinematics
-    foname = 'h2_kin_summary_Eb%.2f.txt' % (Ei)
-    ofile = open(foname, 'w')
-    ofile.write('# H(e,e\'p) Elastics Central Kinematics Summary\n')
-    ofile.write('# Beam Energy (Ei) = %.3f GeV\n' % (Ei))
-    ofile.write('# \n')
-    ofile.write('#! Pr[f,0]/ \t  xbj[f,1]/ \t kf[f,2]/ \t th_e[f,3]/ \t Pf[f,4]/ \t th_p[f,5]/ \t q[f,6]/ \t Q2[f,7]/\n')
-    
-    #------------------------------------------------------------
-    # Case 1: For a fixed beam energy (E), and e- angle (th_e),
-    # What does final e- energy (Ee) need to be for Xbj = 1 ?
-    #------------------------------------------------------------
-
-
-    for idx, th_e in enumerate(the):
-        #final e- energy required for elastics (given fixed th_e and Ei)
-        Ee = 2. * MP * Ei / ( 4. * Ei * np.sin(th_e/2. * dtr)**2 + 2.*MP )  
-
-        #Calculate initial/final e- momentum [GeV / c]
-        ki = np.sqrt(Ei**2 - me**2)  #basically ki = Ei, since me is 1/2 MeV (but done, for completeness)
-        kf = np.sqrt(Ee**2 - me**2)
-        
-        #energy transfer [GeV]
-        omega = Ei -  Ee 
-
-        #4-momentum transfer [GeV^2]
-        Q2 = 4. * Ei * Ee * np.sin(th_e/2. * dtr)**2
-        
-        xbj = Q2 / (2.* MP * omega)
-
-        print('Ee = ',Ee,' omega = ',omega,' th_e =', th_e, 'Q2 = ', Q2)
-
-        #Calculate 3-momentum transfer magnitude (|q|)
-        q = np.sqrt(Q2 + omega**2)
-        
-        #Calculate final (elastic) proton energy / momentum
-        Ef = omega + MP
-        Pf = np.sqrt(Ef**2 - MP**2)
-        
-        
-        
-        #Calculate final (elastic) proton scattering angle
-        sthp = kf * np.sin(th_e * dtr) / Pf  #sine of proton scattering angle
-        th_p = np.arcsin(sthp) / dtr  #proton scattering angle [deg] 
-        
-
-        #Write to file
-        ofile.write("  %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f\n" % (Pr[idx], xbj, kf, th_e, Pf, th_p, q, Q2 ) )
-            
-    ofile.close()
    
 def calc_h2(Ei=-1, th_e=-1, kf=-1, e_arm='SHMS', case='case1', verbose=False):
 
@@ -196,13 +126,78 @@ def calc_h2(Ei=-1, th_e=-1, kf=-1, e_arm='SHMS', case='case1', verbose=False):
               
     return (kf, th_p, Pf, Q2, q, omega, xbj)  
 
+
+def calc_elec_kin(Ei=-1, th_e=-1, kf=-1, Q2=-1, xbj=-1, e_arm='SHMS', case='case1',):
+
+
+    # Calculates electron kinematics ONLY
+    if(case=='case1'):
+
+        # Case 1: Given beam energy (Ei), electron angle (th_e) and momentum (kf)
+
+        # Calculate electron final energy
+        Ee = np.sqrt(kf**2 + me**2)
+
+        #4-momentum transfer [GeV^2]
+        Q2 = 4. * Ei * Ee * np.sin(th_e/2. * dtr)**2
     
+        # Calculate energy transer omega = (Ei - Ee) [GeV]
+        omega = Ei - Ee
+
+        # Calculate x-Bjorken
+        xbj = Q2 / (2. * MP * omega)
+        
+
+        # Calculate electron scattering angle, th_e [deg]
+        th_e = 2. * np.arcsin( np.sqrt( Q2 / ( 4 * Ei * Ee ) ) ) / dtr
+
+        print('------------------------------\n'
+              'Electron Kinematics, given:  \n'
+              'Beam Energy (Eb)          = %.3f GeV' % (Ei),'\n'
+              'e- angle (th_e)           = %.3f deg' % (th_e),'\n'            
+              'e- momentum (kf)          = %.3f GeV/c' % (kf),'\n'
+              '------------------------------\n'
+              '4-momentum transfer (Q2)  = %.3f (GeV/c)^2' % (Q2),'\n'
+              'x-Bjorken                 = %.3f'    % (xbj),'\n'
+              'e- final energy (Ee)      = %.3f GeV' % (Ee),'\n'
+              'energy transfer           = %.3f GeV' % (omega),'\n'     
+              )
+    
+    # Calculates electron kinematics ONLY
+    if(case=='case4'):
+
+        # Case 4: Given Q2, xbj, and beam energy (Ei) 
+
+        # Calculate energy transer omega = (Ei - Ef) [GeV]
+        omega = Q2 / (2. * MP * xbj)    
+
+        # Calculate final electron energy and momentum [GeV]
+        Ee = Ei - omega
+        kf = np.sqrt(Ee**2 - me**2)
+
+        # Calculate electron scattering angle, th_e [deg]
+        th_e = 2. * np.arcsin( np.sqrt( Q2 / ( 4 * Ei * Ee ) ) ) / dtr
+
+        print('------------------------------\n'
+              'Electron Kinematics, given:  \n'
+              'Beam Energy (Eb)          = %.3f GeV' % (Ei),'\n'
+              '4-momentum transfer (Q2)  = %.3f (GeV/c)^2' % (Q2),'\n'
+              'x-Bjorken                 = %.3f'    % (xbj),'\n'
+              '------------------------------\n'
+              'e- angle (th_e)           = %.3f deg' % (th_e),'\n'            
+              'e- momentum (kf)          = %.3f GeV/c' % (kf),'\n'
+              'e- final energy (Ee)      = %.3f GeV' % (Ee),'\n'
+              'energy transfer           = %.3f GeV' % (omega),'\n'     
+              )
+        
+        
+# Main Functions (Call other functions above)
 if __name__ == "__main__":
 
     print('Main')
 
+    # Call function to calculate H(e,e'p) elastic kinematics
+    #kf, th_p, Pf, Q2, q, omega, xbj = calc_h2(10.6, 12.1686, -1, 'SHMS', 'case1', True)
+
     
-    #calc_h2_kin()
-
-    kf, th_p, Pf, Q2, q, omega, xbj = calc_h2(10.6, 12.1686, -1, 'SHMS', 'case1', True)
-
+    calc_elec_kin(Ei=10.6, th_e=-1, kf=-1, Q2=2.1, xbj=0.976, e_arm='SHMS', case='case4')
