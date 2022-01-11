@@ -1,0 +1,26 @@
+# 1D Histogram Bin Extraction 
+#                   
+# histogram parameters:  
+# xbins      = 10   | xlabel: Recoil Angle q relative to +z (lab), th_q [deg] 
+# xbin width = 2.800 
+#                   
+# header definitions:
+# ib:          x-bin number 
+# xb:          x-axis bin number 
+# x0:          x-axis central bin value 
+# xlow:        x-axis low-edge bin value 
+# xup:         x-axis up-edge bin value 
+# bin_cnt:     bin content (y-axis) 
+# bin_cnt_err: bin content error (y-axis) 
+#                                        
+#! ib[i,0]/  xb[i,1]/  x0[f,2]/  xlow[f,3]/  xup[f,4]/  bin_cnt[f,5]/  bin_cnt_err[f,6]/  
+      1         1          33.4        32      34.8           0             0
+      2         2          36.2      34.8      37.6     1337.26       86.2993
+      3         3            39      37.6      40.4     24132.4       225.012
+      4         4          41.8      40.4      43.2     5987.23       44.1073
+      5         5          44.6      43.2        46     381.562       8.85708
+      6         6          47.4        46      48.8     62.4509       1.27994
+      7         7          50.2      48.8      51.6      8.2391     0.0515332
+      8         8            53      51.6      54.4    0.260355    0.00578513
+      9         9          55.8      54.4      57.2 0.000378621   9.84527e-05
+     10        10          58.6      57.2        60           0             0
