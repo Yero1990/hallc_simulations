@@ -1,0 +1,43 @@
+# projected deuteron exp. (2021) relative statistical uncertainty 
+# Total PAC days: 21 (504 hrs at 50 % beam efficiency) 
+# Commissioning PAC days: 3 (72 hrs at 50 % beam efficiency)
+# Remaining PAC days: 18 (432 hrs at 50 % beam efficiency)
+# beam time allocated for low/high-pm settings: 1.0 hrs
+# beam time allocated for other studies (elastics, tgt boiling, etc): 431.0 hrs
+# 
+# thnq             : 75 +/- 5 deg
+# pm_bin           : central bin value (GeV/c)
+# yield            : simulated experimental yield
+# rel_stats_err    : relative statistical error 
+# 
+#! pm_bin[f,0]/ Yield[f,1]/ rel_stats_err[f,1]/  
+0.02	 355.81	 5.3014e-02
+0.06	 1503.70	 2.5788e-02
+0.10	 1181.19	 2.9096e-02
+0.14	 559.95	 4.2260e-02
+0.18	 228.61	 6.6138e-02
+0.22	 92.67	 1.0388e-01
+0.26	 48.87	 1.4305e-01
+0.30	 28.47	 1.8741e-01
+0.34	 16.51	 2.4614e-01
+0.38	 12.75	 2.8001e-01
+0.42	 10.06	 3.1535e-01
+0.46	 9.25	 3.2882e-01
+0.50	 5.43	 4.2897e-01
+0.54	 0.00	 5.3624e-01
+0.58	 0.00	 7.5179e-01
+0.62	 0.00	 1.0795e+00
+0.66	 0.00	 1.6811e+00
+0.70	 0.00	 2.8252e+00
+0.74	 0.00	 4.9669e+00
+0.78	 0.00	 9.9985e+00
+0.82	 0.00	 2.3774e+01
+0.86	 0.00	 6.2015e+01
+0.90	 0.00	 0.0000e+00
+0.94	 0.00	 0.0000e+00
+0.98	 0.00	 0.0000e+00
+1.02	 0.00	 0.0000e+00
+1.06	 0.00	 0.0000e+00
+1.10	 0.00	 0.0000e+00
+1.14	 0.00	 0.0000e+00
+1.18	 0.00	 0.0000e+00
