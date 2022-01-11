@@ -4,6 +4,6 @@ outfiles/*.gen
 outfiles/*.geni
 outfiles/*.hist
 worksim/*.data
-beam_time_estimates/*.key
-beam_time_estimates/*.root
-beam_time_estimates/*.data
+*.key
+*.root
+*.data
