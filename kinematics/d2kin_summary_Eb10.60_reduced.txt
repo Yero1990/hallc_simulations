@@ -1,0 +1,72 @@
+# D(e,e'p)n Central Kinematics Summary
+# Beam Energy (Ei) = 10.600 GeV
+# 
+# Previous D(e,e'p) commissioning experiment low-pmiss kin (Pr = 80 MeV setting):
+# Ei = 10.6005, kf = 8.5342 GeV/c, th_e = 12.194 deg, Pf = 2.840 GeV/c, th_p = 38.896 deg 
+# Q2 = 4.0822 GeV^2, xbj = 1.0528 
+# 
+# Header Definitions: 
+# Pr   : Central Missing Momentum [GeV/c] 
+# xbj  : Bjorken x  
+# kf   : e- final momentum [GeV/c] 
+# th_e : e- scattering angle [deg] 
+# Pf   : final proton momentum [GeV/c] 
+# th_p : proton scattering angle [deg] 
+# q    : 3-momentum transfer [GeV]  
+# th_q : relative angle between q-vector and +z (lab)  [deg] 
+# th_nq: relative angle between q-vector and recoil neutron [deg] 
+# th_pq: relative angle between q-vector and knocked-out proton [deg] 
+# Q2   : 4-Momentum Transfer [GeV^2]  
+# 
+#! Pr[f,0]/ 	  xbj[f,1]/ 	 kf[f,2]/ 	 th_e[f,3]/ 	 Pf[f,4]/ 	 th_p[f,5]/ 	 q[f,6]/ 	 th_q[f,7]/ 	 th_nq[f,8]/ 	 th_pq[f,9]/ 	 Q2[f,10]/
+# Low Missing momentum setting
+  0.0800 	 1.0000 	 8.3352 	 12.5916 	 3.0567 	 37.8868 	 3.0626 	 36.3927 	 85.0360 	 1.4941 	 4.2500
+  0.0900 	 1.0000 	 8.3352 	 12.5916 	 3.0557 	 38.0736 	 3.0626 	 36.3927 	 84.8105 	 1.6808 	 4.2500
+  0.1000 	 1.0000 	 8.3352 	 12.5916 	 3.0547 	 38.2602 	 3.0626 	 36.3927 	 84.5484 	 1.8675 	 4.2500
+  0.1100 	 1.0000 	 8.3352 	 12.5916 	 3.0535 	 38.4468 	 3.0626 	 36.3927 	 84.2598 	 2.0541 	 4.2500
+  0.1200 	 1.0000 	 8.3352 	 12.5916 	 3.0523 	 38.6333 	 3.0626 	 36.3927 	 83.9515 	 2.2406 	 4.2500
+  0.1300 	 1.0000 	 8.3352 	 12.5916 	 3.0509 	 38.8198 	 3.0626 	 36.3927 	 83.6282 	 2.4271 	 4.2500
+  0.1400 	 1.0000 	 8.3352 	 12.5916 	 3.0494 	 39.0061 	 3.0626 	 36.3927 	 83.2933 	 2.6134 	 4.2500
+  0.1500 	 1.0000 	 8.3352 	 12.5916 	 3.0478 	 39.1924 	 3.0626 	 36.3927 	 82.9493 	 2.7997 	 4.2500
+# High Missing momentum setting
+  0.5000 	 1.3500 	 8.9224 	 12.1686 	 2.3053 	 53.2526 	 2.6579 	 45.0402 	 41.1925 	 8.2124 	 4.2500
+  0.5500 	 1.3500 	 8.9224 	 12.1686 	 2.2789 	 54.3301 	 2.6579 	 45.0402 	 41.9814 	 9.2899 	 4.2500
+  0.5800 	 1.3500 	 8.9224 	 12.1686 	 2.2622 	 54.9613 	 2.6579 	 45.0402 	 42.2222 	 9.9212 	 4.2500
+  0.6000 	 1.3500 	 8.9224 	 12.1686 	 2.2507 	 55.3771 	 2.6579 	 45.0402 	 42.3063 	 10.3369 	 4.2500
+  0.6500 	 1.3500 	 8.9224 	 12.1686 	 2.2207 	 56.4017 	 2.6579 	 45.0402 	 42.3015 	 11.3615 	 4.2500
+  0.7000 	 1.3500 	 8.9224 	 12.1686 	 2.1890 	 57.4094 	 2.6579 	 45.0402 	 42.0560 	 12.3692 	 4.2500
+  0.7500 	 1.3500 	 8.9224 	 12.1686 	 2.1557 	 58.4040 	 2.6579 	 45.0402 	 41.6318 	 13.3638 	 4.2500
+  0.8000 	 1.3500 	 8.9224 	 12.1686 	 2.1210 	 59.3886 	 2.6579 	 45.0402 	 41.0728 	 14.3485 	 4.2500
+  0.8500 	 1.3500 	 8.9224 	 12.1686 	 2.0848 	 60.3657 	 2.6579 	 45.0402 	 40.4113 	 15.3255 	 4.2500
+  0.9000 	 1.3500 	 8.9224 	 12.1686 	 2.0474 	 61.3373 	 2.6579 	 45.0402 	 39.6712 	 16.2971 	 4.2500
+  0.9500 	 1.3500 	 8.9224 	 12.1686 	 2.0088 	 62.3051 	 2.6579 	 45.0402 	 38.8704 	 17.2649 	 4.2500
+  1.0000 	 1.3500 	 8.9224 	 12.1686 	 1.9690 	 63.2707 	 2.6579 	 45.0402 	 38.0227 	 18.2305 	 4.2500
+
+#Angular Acceptance
+# HMS:  horizontal (theta) = +/- 32 mrad (+/- 1.833 deg), vertical (phi) = +/- 85 mrad (+/- 4.87 deg)
+# SHMS: horizontal (theta) = +/- 18 mrad (+/- 1.031 deg), vertical (phi) = +/- 50 mrad (+/- 2.864 deg)
+
+#Momentum Acceptance
+#Low Pmiss (120 MeV/c): SHMS | kf_central = 8.3352, kf_min ( delta = -10% ) = 7.50168,  kf_max ( delta = 22% ) = 10.168944  | 0.083352 GeV / % change
+#                       HMS  | Pf_central = 3.0523, Pf_min ( delta = -9%)   = 2.777593, Pf_max ( delta = 9%  ) = 3.327007   | 0.030523 GeV / % change
+
+
+# Carlos' Comments:
+# 
+# Above is a small sample I selected of all the deuteron kinematics at fixed Q2 = 4.25 (for both low and high pmiss settings)
+#
+# I thought it would be a good idea to select a low pmiss setting, just as it was done in the commissioning part, but am not sure exactly which kinematic
+# or whether it should be a a lower Q2.  I think there may be more data at lower Q2 (less beam time to accumulate statistics for this setting)
+#
+# For the high pmiss setting, I kept the xbj = 1.35 and Q2 = 4.25, just as in the original proposal
+# Note the th_nq ~ 40 deg, as expected from these kinematic settings.
+# In terms of selecting the high p-miss setting, I guess it depends on the time. How much time can we realistically get ?
+# Based on the commissioning data, just for 580 / 750 MeV/c setting we had very wide coverage, so I would pick pm = 700, 800 and 900 MeV/c. Let me know what you think.
+#
+# Probably we should try to match the low pmiss SHMS angle/momentum with that of the high pmiss setting just so we don't have to move the SHMS, as cross sections are sensitive to e- angle
+# (we can check with simulation where will the low p-miss data land in the focal plane, i.e., how far will the shifts be from the center of focal plane in erms of momentum and angle acceptance?
+#
+# I think we should probably also take a few hydrogen elsatic settings that covers the entire momentum range of the deuteron settings (I guess once we know how much time we will have)
+# We can set up meeting some time this week (tomorrow) or next week to discuss this, if there is time.
+#
+#
