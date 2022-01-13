@@ -1,20 +1,5 @@
 # list of SIMC kinematic input files
-#
-# test input kinematic files
-# htest.data
-# h2test.data
-d2_test.data
-#---modified kin. file ----
-#
-# JML FSI with radiative effects
-# d2_pm120_lagetfsi_rad_mod.data
-# d2_pm580_lagetfsi_rad_mod.data
-# d2_pm700_lagetfsi_rad_mod.data
-# d2_pm800_lagetfsi_rad_mod.data
-# d2_pm900_lagetfsi_rad_mod.data
-#
-# JML FSI with NO radiative effects
-# d2_pm120_lagetfsi_norad_mod.data
-# d2_pm700_lagetfsi_norad_mod.data
-# d2_pm800_lagetfsi_norad_mod.data
-# d2_pm900_lagetfsi_norad_mod.data
+# cafe_d2_lowpm_lagetfsi_rad_open.data
+# cafe_c12_lowpm_rad_open.data
+cafe_d2_hipm_lagetfsi_rad_open.data
+cafe_c12_hipm_rad_open.data

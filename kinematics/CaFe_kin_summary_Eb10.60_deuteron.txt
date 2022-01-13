@@ -26,6 +26,10 @@
 # HMS Pf = 1.8 GeV/c,
 # HMS Angle = 53 deg 
 # --- high pmiss setting ---
+# SHMS kf = 8.55 GeV/c,
+# SHMS Angle = 8.3 deg,
+# HMS Pf = 1.7 GeV/c,
+# HMS Angle = 61 deg 
 
 #! Pr[f,0]/ 	  xbj[f,1]/ 	 kf[f,2]/ 	 th_e[f,3]/ 	 Pf[f,4]/ 	 th_p[f,5]/ 	 q[f,6]/ 	 th_q[f,7]/ 	 th_nq[f,8]/ 	 th_pq[f,9]/ 	 Q2[f,10]/
   0.1500 	 1.0000 	 9.4809 	 8.2896 	 1.8156 	 52.9846 	 1.8309 	 48.2942 	 81.8021 	 4.6904 	 2.1000
