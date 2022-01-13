@@ -19,8 +19,7 @@
 # 
 # When doing simulations in SIMC, set kf = 8.55 GeV/c (we should still be within the acceptance)
 # the spec. angles were also rounded in the input file, for simplicity
-#
-# so the true starting optimization values in SIMC input file are:  
+# the true starting optimization values for CaFe in SIMC input file are:  
 # --- low pmiss setting ----
 # SHMS kf = 8.55 GeV/c,
 # SHMS Angle = 8.3 deg,

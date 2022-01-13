@@ -1,21 +1,21 @@
-! Additional Parameters (Excluding Radiative Effects)
+! Additional Parameters (Including Radiative Effects)
 
 ! 'TF' stands for 'this field'
 ! ONE equals TRUE unless specified otherwise
-
+ 
  &SIMULATE
      hard_cuts  =  F         !  (ONE = TRUE) SPedge and Em.max are hard cuts(ntuple)
-     using_rad  =  F 	        !  (ONE = TRUE)
-     spect_mode  =  0	        !  0=e+p arms, -1=p arm, -2=e arm only, 1=none
+     using_rad  =  T 	        !  (ONE = TRUE)
+     spect_mode  =  -2	        !  0=e+p arms, -1=p arm, -2=e arm only, 1=none
      cuts%Em%min  =  0.	        !  (Em.min=Em.max=0.0 gives wide open cuts)
      cuts%Em%max  =  200.	!  Must be wider than cuts in analysis(elastic or e,e'p)
      using_Eloss  =  T	        !  (ONE = TRUE)
      correct_Eloss  = F	        !  ONE = correct reconstructed events for eloss.
      correct_raster  =  T	!  ONE = Reconstruct events using 'raster' matrix elements.
      mc_smear  =  T		!  ONE = target & hut mult scatt AND DC smearing.
-     mc_smear_addl = F          !  Additional Smearing from WB                                  
-     recon_mc_smear_addl = F    !  Additional smearing on reconstructed variables  
-     deForest_flag  =  0	!  0=sigcc1, 1=sigcc2, -1=sigcc1 ONSHELL	
+     mc_smear_addl = F          !  add extra smearing from WB, on focal plane 
+     recon_mc_smear_addl = F    !  add extra smearing from WB, on reconstructed variables
+     deForest_flag  =  0	!  0=sigcc1, 1=sigcc2, -1=sigcc1 ONSHELL
      rad_flag  =  0		!  (radiative option #1...see init.f)
      extrad_flag  =  2	        !  (rad. option #2...see init.f)
      lambda(1)  =  0.0	        !  if rad_flag.eq.4 then lambda(1) = {TF}
