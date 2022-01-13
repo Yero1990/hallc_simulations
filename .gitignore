@@ -5,5 +5,3 @@ outfiles/*.geni
 outfiles/*.hist
 worksim/*.data
 *.key
-*.root
-*.data
