@@ -1,5 +1,6 @@
 # list of SIMC kinematic input files
 # cafe_d2_lowpm_lagetfsi_rad_open.data
 # cafe_c12_lowpm_rad_open.data
-cafe_d2_hipm_lagetfsi_rad_open.data
-cafe_c12_hipm_rad_open.data
+# cafe_d2_hipm_lagetfsi_rad_open.data
+# cafe_c12_hipm_rad_open.data
+cafe_c12_hipm_rad_shms9GeV_open.data
