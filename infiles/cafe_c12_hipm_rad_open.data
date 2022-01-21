@@ -3,7 +3,8 @@
 ! Model: Laget FSI
 ! Radiative Effects YES
 ! Energy Loss YES
-! Energy Loss Correction NO 
+! Energy Loss Correction NO
+! Open HMS Collimator (NO HMS Collimator)
 ! 'TF' stands for 'this field'
 ! ONE equals TRUE unless specified otherwise
 

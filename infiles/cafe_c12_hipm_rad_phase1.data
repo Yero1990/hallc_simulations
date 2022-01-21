@@ -1,22 +1,22 @@
 ! CaFe Experiment : e12-16-004
-! Central "missing momentum" (pmiss) setting = 400 MeV
+! Central "missing momentum" (pmiss) setting = 400 MeV (SRC)
 ! Model: Laget FSI
 ! Radiative Effects YES
 ! Energy Loss YES
-! Energy Loss Correction NO 
+! Energy Loss Correction NO
 ! 'TF' stands for 'this field'
 ! ONE equals TRUE unless specified otherwise
 
  =?
  &EXPERIMENT
-     ngen  =  400000			!  POS: # of successes
+     ngen  =  500000			!  POS: # of successes
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
      doing_pion  =  F		!  (T = TRUE)
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
-     extra_dbase_file = 'extra_cafe_rad_spec_mode_-2.data' !  additional input parameters.
+     extra_dbase_file = 'extra_cafe_rad.data' !  additional input parameters.
      set_allow_scat_in_coll=0  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
@@ -25,10 +25,10 @@
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
-     spec%e%P  =  9000.0                               !  e arm central momentum (MeV/c)
+     spec%e%P  =  8550.0                               !  e arm central momentum (MeV/c)
      spec%e%theta  =  8.3                              !  e arm angle setting (degrees)
-     spec%p%P  =  1800.0                               !  p arm central momentum (MeV/c)
-     spec%p%theta  =   61.0                            !  p arm angle setting (degrees)
+     spec%p%P  =  1595.0                               !  p arm central momentum (MeV/c)
+     spec%p%theta  =   55.2                            !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-18, 1.0e-18, 1.0e-18, 1.0e-18 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
@@ -65,21 +65,21 @@
 / 
 
  &E_ARM_ACCEPT
-     SPedge%e%delta%min  =   -50.0	!  delta min (SPECTROMETER ACCEPTANCE)
-     SPedge%e%delta%max  =    50.0	!  delta max
-     SPedge%e%yptar%min  =   -120.0	!  yptar min = {TF} / 1000 (mrad)
-     SPedge%e%yptar%max  =    120.0	!  yptar max = {TF} / 1000
-     SPedge%e%xptar%min  =   -120.0	!  xptar min = {TF} / 1000 (mrad)
-     SPedge%e%xptar%max  =    120.0	!  xptar max = {TF} / 1000
+     SPedge%e%delta%min  =   -20.0	!  delta min (SPECTROMETER ACCEPTANCE)
+     SPedge%e%delta%max  =    30.0	!  delta max
+     SPedge%e%yptar%min  =   -40.0	!  yptar min = {TF} / 1000 (mrad)
+     SPedge%e%yptar%max  =    40.0	!  yptar max = {TF} / 1000
+     SPedge%e%xptar%min  =   -60.0	!  xptar min = {TF} / 1000 (mrad)
+     SPedge%e%xptar%max  =    60.0	!  xptar max = {TF} / 1000
 / 
 
  &P_ARM_ACCEPT
-     SPedge%p%delta%min  =   -30.0	!  delta min (SPECTROMETER ACCEPTANC
-     SPedge%p%delta%max  =    30.0	!  delta max
-     SPedge%p%yptar%min  =   -120.0	!  yptar min = {TF} / 1000 (mrad)
-     SPedge%p%yptar%max  =    120.0	!  yptar max = {TF} / 1000
-     SPedge%p%xptar%min  =   -120.0	!  xptar min = {TF} / 1000 (mrad)
-     SPedge%p%xptar%max  =    120.0	!  xptar max = {TF} / 1000
+     SPedge%p%delta%min  =   -15.0	!  delta min (SPECTROMETER ACCEPTANC
+     SPedge%p%delta%max  =    15.0	!  delta max
+     SPedge%p%yptar%min  =   -50.0	!  yptar min = {TF} / 1000 (mrad)
+     SPedge%p%yptar%max  =    50.0	!  yptar max = {TF} / 1000
+     SPedge%p%xptar%min  =   -100.0	!  xptar min = {TF} / 1000 (mrad)
+     SPedge%p%xptar%max  =    100.0	!  xptar max = {TF} / 1000
 / 
 
  &BEAM_AND_TARGET_INFO
