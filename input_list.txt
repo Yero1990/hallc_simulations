@@ -12,6 +12,4 @@
 # cafe_c12_lowpm_rad_phase1.data
 # cafe_c12_hipm_rad_phase1.data 
 #
-cafe_c12_lowpm_rad_50k.data
-#cafe_c12_lowpm_rad_50k_Tflg.data
-#cafe_c12_lowpm_rad_50k_Tflg0.data
+cafe_c12_lowpm_rad_50k_T1.data
