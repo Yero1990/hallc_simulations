@@ -105,9 +105,9 @@ def calc_eepX_kin():
     # ===================================
     
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 1.53
+    Q2_min = 0.1
     Q2_step = 0.01    
-    Q2_max = 1.57 + Q2_step   #include endpoint (+Pr_step)
+    Q2_max = 2 + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
@@ -117,9 +117,9 @@ def calc_eepX_kin():
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
-    xbj_min = 0.37
+    xbj_min = 0.1
     xbj_step = 0.001
-    xbj_max = 0.43 + xbj_step
+    xbj_max = 1 + xbj_step
     xbj_range = np.arange(xbj_min, xbj_max, xbj_step)
     
     #Loop over 4-Momentum Transfer Q^2

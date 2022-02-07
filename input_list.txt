@@ -1,15 +1,9 @@
 # list of SIMC kinematic input files
 #
-# CaFe optimization: open collimator (phase 0)
-# cafe_d2_lowpm_lagetfsi_rad_open.data
-# cafe_c12_lowpm_rad_open.data
-# cafe_d2_hipm_lagetfsi_rad_open.data
-# cafe_c12_hipm_rad_open.data
-#
-# CaFe optimization: phase 1
-# cafe_d2_lowpm_lagetfsi_rad_phase1.data
-# cafe_d2_hipm_lagetfsi_rad_phase1.data
-# cafe_c12_lowpm_rad_phase1.data
-# cafe_c12_hipm_rad_phase1.data 
-#
-cafe_c12_lowpm_rad_50k_T1.data
+#cafe_c12_MF_rad_kin1_open.data
+#cafe_c12_MF_rad_kin2_open.data
+#cafe_c12_MF_rad_kin3_open.data
+#cafe_d2_SRC_lagetfsi_rad_kin1_open.data
+#cafe_d2_SRC_lagetfsi_rad_kin2_open.data
+#cafe_d2_SRC_lagetfsi_rad_kin3_open.data
+cafe_d2_SRC_lagetfsi_rad_kin1_open_test.data
