@@ -10,7 +10,7 @@
 
  =?
  &EXPERIMENT
-     ngen  =  50000			!  POS: # of successes
+     ngen  =  1000000			!  POS: # of successes
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).

@@ -1,9 +1,10 @@
 # list of SIMC kinematic input files
 #
-#cafe_c12_MF_rad_kin1_open.data
-#cafe_c12_MF_rad_kin2_open.data
-#cafe_c12_MF_rad_kin3_open.data
-#cafe_d2_SRC_lagetfsi_rad_kin1_open.data
-#cafe_d2_SRC_lagetfsi_rad_kin2_open.data
-#cafe_d2_SRC_lagetfsi_rad_kin3_open.data
-cafe_d2_SRC_lagetfsi_rad_kin1_open_test.data
+# cafe_c12_MF_rad_kin1_open.data
+# cafe_c12_MF_rad_kin2_open.data
+# cafe_c12_MF_rad_kin3_open.data
+# cafe_d2_SRC_lagetfsi_rad_kin1_open.data
+# cafe_d2_SRC_lagetfsi_rad_kin2_open.data
+# cafe_d2_SRC_lagetfsi_rad_kin3_open.data
+cafe_d2_SRC_lagetfsi_rad_kin2_more_open.data
+
