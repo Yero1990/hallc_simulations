@@ -200,4 +200,4 @@ if __name__ == "__main__":
     #kf, th_p, Pf, Q2, q, omega, xbj = calc_h2(10.6, 12.1686, -1, 'SHMS', 'case1', True)
 
     
-    calc_elec_kin(Ei=10.6, th_e=-1, kf=-1, Q2=2.1, xbj=0.976, e_arm='SHMS', case='case4')
+    calc_h2(Ei=10.6, th_e=-1, kf=8.55, e_arm='SHMS', case='case2', verbose=True)
