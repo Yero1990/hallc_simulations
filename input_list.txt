@@ -1,4 +1,7 @@
 # list of SIMC kinematic input files
-cafe_c12_MF_rad_pac45.data
-cafe_d2_SRC_lagetfsi_norad_pac45.data
-cafe_d2_SRC_lagetfsi_rad_pac45.data
+cafe_heep_scan_dp0_rad.data
+cafe_heep_scan_-1deg_rad.data
+cafe_heep_scan_-2deg_rad.data
+cafe_heep_scan_-3deg_rad.data
+cafe_heep_scan_-4deg_rad.data
+cafe_heep_scan_8p3deg_rad.data

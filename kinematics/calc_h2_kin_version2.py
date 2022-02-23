@@ -20,7 +20,7 @@ me = 0.000511;  #electron
 
     
 import numpy as np
-import LT.box as B
+#import LT.box as B
 import matplotlib.pyplot as plt
 
    
@@ -200,4 +200,4 @@ if __name__ == "__main__":
     #kf, th_p, Pf, Q2, q, omega, xbj = calc_h2(10.6, 12.1686, -1, 'SHMS', 'case1', True)
 
     
-    calc_h2(Ei=10.6, th_e=-1, kf=8.55, e_arm='SHMS', case='case2', verbose=True)
+    calc_h2(Ei=10.6, th_e=8.3, kf=-1, e_arm='SHMS', case='case1', verbose=True)
