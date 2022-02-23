@@ -1,7 +1,7 @@
 #include "utils/parse_utils.h"
 #include "utils/hist_utils.h"
 
-void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_t rad_flag=false, Double_t Ib=0, Double_t time=0){
+void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t rad_flag=true){
 
   
   /* 
@@ -57,9 +57,9 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
     input_HBinFileName = "inp/set_basic_heep_histos.inp";
     
     //Define File Name Patterns
-    simc_infile = Form("infiles/cafe_heep_scan_dp0_%s.data", rad.Data());
-    simc_InputFileName = Form("worksim/cafe_heep_scan_dp0_%s.root", rad.Data());
-    simc_OutputFileName = Form("cafe_heep_scan_dp0_%s_output.root", rad.Data());
+    simc_infile = Form("infiles/cafe_heep_scan_8p3deg_%s.data", rad.Data());
+    simc_InputFileName = Form("worksim/cafe_heep_scan_8p3deg_%s.root", rad.Data());
+    simc_OutputFileName = Form("cafe_heep_scan_8p3deg_%s_output.root", rad.Data());
   }
 
   else{
@@ -386,6 +386,7 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   TH1F *H_q       = new TH1F("H_q", "3-Momentum Transfer, |#vec{q}|", q_nbins, q_xmin, q_xmax);
   TH1F *H_thq     = new TH1F("H_thq", "In-Plane Angle w.r.t +z(lab), #theta_{q}", thq_nbins, thq_xmin, thq_xmax); 
   TH1F *H_W       = new TH1F("H_W", "Invariant Mass, W", W_nbins, W_xmin, W_xmax);  
+  TH1F *H_W_noCut       = new TH1F("H_W_noCut", "Invariant Mass, W (no cuts, true rates)", W_nbins, W_xmin, W_xmax);  
 
   //Secondary (Hadron) Kinematics (recoil and missing are used interchageably) ()
   TH1F *H_Pf      = new TH1F("H_Pf", "Final Hadron Momentum (detected), p_{f}", Pf_nbins, Pf_xmin, Pf_xmax);
@@ -416,6 +417,7 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   kin_HList->Add( H_q      );
   kin_HList->Add( H_thq    );
   kin_HList->Add( H_W      );
+  kin_HList->Add( H_W_noCut      );
 
   //Add Secondary Kin Histos
   kin_HList->Add( H_Pf       );
@@ -739,8 +741,8 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   // SIMC input files are set to 'events / 1mC'
    
   // Charge factor is the total integrated charge assuming a beam current and run time
-  //Double_t Ib = 40;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
-  //Double_t time = 1.0;     //estimated time (in hours) a run takes (start - end) of run
+  Double_t Ib = 70;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
+  Double_t time = 1.0;     //estimated time (in hours) a run takes (start - end) of run
   Double_t charge_factor = Ib * time * 3600. / 1000.;
 
   //target boiling slopes for Hydrofen and Deuterium (during commissioning)
@@ -770,7 +772,7 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
     tgt_boil   = 1. - LD2_slope * Ib;
   }
 
-  Double_t proton_abs = 0.9534;
+  Double_t proton_abs = 1.0; // 0.9534;  let assume no proton absorption thru material (since for heep singles, only electron thru SHMS, and does NOT get absorbed) 
 
   Double_t eff_factor;
 
@@ -785,6 +787,7 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
 
 
   Double_t FullWeight;
+  Double_t FullWeight_forRates; //this is the full weight for true rate estimates (so no inefficiencies accounted for)
   Double_t PhaseSpace;
 
   /* ----------------------------------------------------------
@@ -903,6 +906,8 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
 
     //Full Weight
     FullWeight = (Normfac * charge_factor * eff_factor * Weight ) / nentries;
+    FullWeight_forRates = (Normfac * charge_factor * Weight ) / nentries;
+
     PhaseSpace =  Normfac * charge_factor * eff_factor * Jacobian_corr  / nentries;    //Phase Space with jacobian corr. factor
 
     /*
@@ -914,6 +919,10 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
     cout << "nentries = " << nentries << endl;
     cout << "Jacobian_corr = " << Jacobian_corr << endl;
     */
+
+    //fill histogram (no cuts)
+    H_W_noCut->Fill(W, FullWeight_forRates);
+     
     if(c_allCuts) {
 
 
@@ -1053,7 +1062,7 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   //------------------------------------------
   // Extract The Yield binned in Pm vs th_rq
   //------------------------------------------
-  extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
+  // extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
 
   //--------
   // Extrack numerical data for histogram plotting
