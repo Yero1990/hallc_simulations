@@ -1,7 +1,4 @@
 # list of SIMC kinematic input files
-cafe_heep_scan_dp0_rad.data
-cafe_heep_scan_-1deg_rad.data
-cafe_heep_scan_-2deg_rad.data
-cafe_heep_scan_-3deg_rad.data
-cafe_heep_scan_-4deg_rad.data
-cafe_heep_scan_8p3deg_rad.data
+cafe_heep_scan_kin0_rad.data
+cafe_heep_scan_kin1_rad.data
+cafe_heep_scan_kin2_rad.data

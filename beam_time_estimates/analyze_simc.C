@@ -55,11 +55,17 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
     //---Read In File Names with cuts and histogram binning information
     input_CutFileName  = "inp/set_basic_heep_cuts.inp";
     input_HBinFileName = "inp/set_basic_heep_histos.inp";
-    
+
+   
+    TString ext0 = "kin0";
+    TString ext1 = "kin1";
+    TString ext2 = "kin2";
+    TString ext = ext2;
+
     //Define File Name Patterns
-    simc_infile = Form("infiles/cafe_heep_scan_8p3deg_%s.data", rad.Data());
-    simc_InputFileName = Form("worksim/cafe_heep_scan_8p3deg_%s.root", rad.Data());
-    simc_OutputFileName = Form("cafe_heep_scan_8p3deg_%s_output.root", rad.Data());
+    simc_infile = Form("infiles/cafe_heep_scan_%s_%s.data", ext.Data(), rad.Data());
+    simc_InputFileName = Form("worksim/cafe_heep_scan_%s_%s.root", ext.Data(), rad.Data());
+    simc_OutputFileName = Form("cafe_heep_scan_%s_%s_output.root", ext.Data(), rad.Data());
   }
 
   else{
@@ -386,7 +392,7 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
   TH1F *H_q       = new TH1F("H_q", "3-Momentum Transfer, |#vec{q}|", q_nbins, q_xmin, q_xmax);
   TH1F *H_thq     = new TH1F("H_thq", "In-Plane Angle w.r.t +z(lab), #theta_{q}", thq_nbins, thq_xmin, thq_xmax); 
   TH1F *H_W       = new TH1F("H_W", "Invariant Mass, W", W_nbins, W_xmin, W_xmax);  
-  TH1F *H_W_noCut       = new TH1F("H_W_noCut", "Invariant Mass, W (no cuts, true rates)", W_nbins, W_xmin, W_xmax);  
+  TH1F *H_W_noCut       = new TH1F("H_W_noCut", "Invariant Mass, W (no cuts, realistic rates)", W_nbins, W_xmin, W_xmax);  
 
   //Secondary (Hadron) Kinematics (recoil and missing are used interchageably) ()
   TH1F *H_Pf      = new TH1F("H_Pf", "Final Hadron Momentum (detected), p_{f}", Pf_nbins, Pf_xmin, Pf_xmax);
@@ -741,7 +747,7 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
   // SIMC input files are set to 'events / 1mC'
    
   // Charge factor is the total integrated charge assuming a beam current and run time
-  Double_t Ib = 70;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
+  Double_t Ib = 60;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
   Double_t time = 1.0;     //estimated time (in hours) a run takes (start - end) of run
   Double_t charge_factor = Ib * time * 3600. / 1000.;
 

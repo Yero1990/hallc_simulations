@@ -201,3 +201,6 @@ if __name__ == "__main__":
 
     
     calc_h2(Ei=10.6, th_e=8.3, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+    calc_h2(Ei=10.6, th_e=7.5, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+    calc_h2(Ei=10.6, th_e=6.8, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+

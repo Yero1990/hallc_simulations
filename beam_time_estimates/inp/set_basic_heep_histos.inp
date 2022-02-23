@@ -69,11 +69,11 @@ the_xmax = 14.0
 
 # final electron arm momentum [GeV/c]
 kf_nbins = 60
-kf_xmin = 8.
-kf_xmax = 9
+kf_xmin = 7.
+kf_xmax = 10.
 
 # invariant mass (assuming proton target mass)
-W_nbins = 100
+W_nbins = 150
 W_xmin = 0.5
 W_xmax = 2.5
 
@@ -89,8 +89,8 @@ Q2_xmax = 4.5
 
 # Bjorken-X
 X_nbins = 60
-X_xmin = 0.6
-X_xmax = 2.
+X_xmin = 0.7
+X_xmax = 1.3
 
 # energy transfer
 nu_nbins = 60
@@ -291,16 +291,16 @@ MandelU_xmax = 10.
 #----Electron Arm Focal Plane-----
 #---------------------------------
 exfp_nbins = 60
-exfp_xmin = -15.
-exfp_xmax = 15.
+exfp_xmin = -30.
+exfp_xmax = 30.
 
 expfp_nbins = 60
 expfp_xmin = -0.06
 expfp_xmax = 0.06
   
 eyfp_nbins = 60
-eyfp_xmin = -10.
-eyfp_xmax = 10.
+eyfp_xmin = -15.
+eyfp_xmax = 15.
 
 eypfp_nbins = 60
 eypfp_xmin = -0.06
@@ -322,8 +322,8 @@ exptar_xmin  = -0.06
 exptar_xmax = 0.06
   
 edelta_nbins = 60
-edelta_xmin = -5.  
-edelta_xmax =  15.  
+edelta_xmin = 0.  
+edelta_xmax = 25.  
 
 #-------------------------------  
 #----Hadron Arm Focal Plane-----

@@ -16,7 +16,7 @@ c_Q2_min = 4
 c_Q2_max = 5
 
 # Missing Energy [GeV]
-Em_cut_flag = 1
+Em_cut_flag = 0
 c_Em_min = -0.01
 c_Em_max = 0.03
 
