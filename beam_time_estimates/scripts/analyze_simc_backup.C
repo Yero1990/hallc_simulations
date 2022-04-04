@@ -1,9 +1,8 @@
 #include "utils/parse_utils.h"
 #include "utils/hist_utils.h"
 
-void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_t rad_flag=false, Double_t Ib=0, Double_t time=0){
+void analyze_simc(int pm_set=0, TString model="", Bool_t rad_flag=false, Double_t Ib=0, Double_t time=0){
 
-  
   /* 
      User Input:
      pm_set     : central missing momentum setting (580, 700, 800, etc,.)
@@ -11,8 +10,6 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
      rad_flag   :  1 (true - simulate radiative effects), 0 (false - simulate without radiative effects)
      Ib         : beam current (uA)
      time       : beam-on-target time (hours)
-  
-     If doing heep check (rate estimates of H(e,e'p) elastics, then set heep_check=true, and leave pm_set and model their default values
   */
   
   TString h_arm_name = "HMS";
@@ -50,30 +47,16 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   if(rad_flag) { rad = "rad";}
   else {rad = "norad";}
 
-  if (heep_check){
 
-    //---Read In File Names with cuts and histogram binning information
-    input_CutFileName  = "inp/set_basic_heep_cuts.inp";
-    input_HBinFileName = "inp/set_basic_heep_histos.inp";
-    
-    //Define File Name Patterns
-    simc_infile = Form("infiles/cafe_heep_scan_dp0_%s.data", rad.Data());
-    simc_InputFileName = Form("worksim/cafe_heep_scan_dp0_%s.root", rad.Data());
-    simc_OutputFileName = Form("cafe_heep_scan_dp0_%s_output.root", rad.Data());
-  }
+  //---Read In File Names with cuts and histogram binning information
+  input_CutFileName  = Form("inp/set_basic_cuts_pm%d.inp", pm_set);
+  input_HBinFileName = Form("inp/set_basic_histos_pm%d.inp", pm_set);
 
-  else{
+  //Define File Name Patterns
+  simc_infile = Form("infiles/d2_pm%d_laget%s_%s_mod.data",  pm_set, model.Data(), rad.Data());
+  simc_InputFileName = Form("worksim/d2_pm%d_laget%s_%s_mod.root", pm_set, model.Data(), rad.Data());
+  simc_OutputFileName = Form("d2_pm%d_laget%s_%s_mod_output.root",  pm_set, model.Data(), rad.Data());
 
-    //---Read In File Names with cuts and histogram binning information
-    input_CutFileName  = Form("inp/set_basic_cuts_pm%d.inp", pm_set);
-    input_HBinFileName = Form("inp/set_basic_histos_pm%d.inp", pm_set);
-    
-    //Define File Name Patterns
-    simc_infile = Form("infiles/d2_pm%d_laget%s_%s_mod.data",  pm_set, model.Data(), rad.Data());
-    simc_InputFileName = Form("worksim/d2_pm%d_laget%s_%s_mod.root", pm_set, model.Data(), rad.Data());
-    simc_OutputFileName = Form("d2_pm%d_laget%s_%s_mod_output.root",  pm_set, model.Data(), rad.Data());
-
-  }
   
   //---------------------------------------------------------------------------------------------------------
 
@@ -209,10 +192,7 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   Double_t thq_xmin  	= stod(split(FindString("thq_xmin",  input_HBinFileName.Data())[0], '=')[1]);
   Double_t thq_xmax  	= stod(split(FindString("thq_xmax",  input_HBinFileName.Data())[0], '=')[1]);
                				          
-  Double_t W_nbins  =  stod(split(FindString("W_nbins",  input_HBinFileName.Data())[0], '=')[1]);
-  Double_t W_xmin   =  stod(split(FindString("W_xmin",  input_HBinFileName.Data())[0], '=')[1]);
-  Double_t W_xmax   =  stod(split(FindString("W_xmax",  input_HBinFileName.Data())[0], '=')[1]);
-  
+               				              
   //Secondary Kinematics
   Double_t Pf_nbins    = stod(split(FindString("Pf_nbins",  	input_HBinFileName.Data())[0], '=')[1]);   //final proton momentum
   Double_t Pf_xmin     = stod(split(FindString("Pf_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
@@ -385,7 +365,6 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   TH1F *H_nu      = new TH1F("H_nu","Energy Transfer, #nu", nu_nbins, nu_xmin, nu_xmax); 
   TH1F *H_q       = new TH1F("H_q", "3-Momentum Transfer, |#vec{q}|", q_nbins, q_xmin, q_xmax);
   TH1F *H_thq     = new TH1F("H_thq", "In-Plane Angle w.r.t +z(lab), #theta_{q}", thq_nbins, thq_xmin, thq_xmax); 
-  TH1F *H_W       = new TH1F("H_W", "Invariant Mass, W", W_nbins, W_xmin, W_xmax);  
 
   //Secondary (Hadron) Kinematics (recoil and missing are used interchageably) ()
   TH1F *H_Pf      = new TH1F("H_Pf", "Final Hadron Momentum (detected), p_{f}", Pf_nbins, Pf_xmin, Pf_xmax);
@@ -415,7 +394,6 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   kin_HList->Add( H_nu     );
   kin_HList->Add( H_q      );
   kin_HList->Add( H_thq    );
-  kin_HList->Add( H_W      );
 
   //Add Secondary Kin Histos
   kin_HList->Add( H_Pf       );
@@ -570,7 +548,6 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   Double_t nu;                   //Energy Transfer
   Double_t q;                  //magnitude of the 3-vector q
   Double_t th_q;                 //angle between q and +z (hall coord. system)
-  Double_t W;                    // invariant mass
   
   //Secondary Kinematics (USED BY DATA AND SIMC)
   Double_t Pf;                     //final proton momentum
@@ -640,7 +617,6 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   tree->SetBranchAddress("nu", &nu);
   tree->SetBranchAddress("q", &q);
   //th_q needs to be calculated in the event loop
-  tree->SetBranchAddress("W", &W);
 
   //Secondary Kinematics (hadron kinematics)
   tree->SetBranchAddress("h_pf",    &Pf);
@@ -744,46 +720,19 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   Double_t charge_factor = Ib * time * 3600. / 1000.;
 
   //target boiling slopes for Hydrofen and Deuterium (during commissioning)
-  //Double_t LH2_slope = 0.00063396; 
-  //Double_t LD2_slope = 0.00080029;  //NORM. yield loss / uA
-
-  //more realistic target boiling slopes based on improved measurements later on
-  Double_t LH2_slope = 0.0002; 
-  Double_t LD2_slope = 0.00025;
-  
+  Double_t LH2_slope = 0.00063396; 
+  Double_t LD2_slope = 0.00080029;  //NORM. yield loss / uA
+    
   // STEP2: Estimate Efficiencies (use efficiencies from commissioning experiment)
   // coin. rates were ~ 2.5 Hz in commissioning,
-  //Double_t e_trk      = 0.964;
-  //Double_t h_trk      = 0.988;
-  //Double_t daq_lt     = 0.98;   //(it was 0.926 during commissioning due to large logic windows ~100 ns in HMS, but now is smaller)
-
-  //for heep checks
-  Double_t e_trk      = 0.99;
-  Double_t h_trk      = 0.99;
-  Double_t daq_lt     = 0.99;
-  
-  Double_t tgt_boil;
-  if(heep_check){
-    tgt_boil   = 1. - LH2_slope * Ib;
-  }
-  else{
-    tgt_boil   = 1. - LD2_slope * Ib;
-  }
-
+  Double_t e_trk      = 0.964;
+  Double_t h_trk      = 0.988;
+  Double_t daq_lt     = 0.98;   //(it was 0.926 during commissioning due to large logic windows ~100 ns in HMS, but now is smaller)
+  Double_t tgt_boil   = 1. - LD2_slope * Ib;
   Double_t proton_abs = 0.9534;
 
-  Double_t eff_factor;
-
-  //assuming heep check singles
-  if(heep_check){
-    eff_factor = e_trk * daq_lt * tgt_boil;
-  }
+  Double_t eff_factor = e_trk * h_trk * daq_lt * tgt_boil * proton_abs;
   
-  else{
-    eff_factor = e_trk * h_trk * daq_lt * tgt_boil * proton_abs;
-  }
-
-
   Double_t FullWeight;
   Double_t PhaseSpace;
 
@@ -844,16 +793,9 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
     Ep = sqrt(MP*MP + Pf*Pf);
     
     //Missing Mass
-    if(heep_check){
-      MM2 = Em*Em - Pm*Pm;
-      MM = sqrt(MM2);
-    }
-    else{
-      MM = sqrt( pow(nu+MD-Ep,2) - Pm*Pm );  //recoil mass (neutron missing mass)
-      MM2 = MM * MM;
-    }
-
-    
+    MM = sqrt( pow(nu+MD-Ep,2) - Pm*Pm );  //recoil mass (neutron missing mass)
+    MM2 = MM * MM;
+	  
     //SIMC Collimator (definition based on HCANA collimator)
     htarx_corr = tar_x - h_xptar*htar_z*cos(h_angle*dtr);
     etarx_corr = tar_x - e_xptar*etar_z*cos(e_angle*dtr);  
@@ -929,7 +871,6 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
       H_nu->Fill(nu, FullWeight);
       H_q->Fill(q, FullWeight);
       H_thq->Fill(th_q/dtr, FullWeight);
-      H_W->Fill(W, FullWeight);
 
  
       //Secondary (Hadron) Kinematics

@@ -10,7 +10,7 @@
 
  =?
  &EXPERIMENT
-     ngen  =  50000			!  POS: # of successes
+     ngen  =  1000000			!  POS: # of successes
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
@@ -27,9 +27,9 @@
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      spec%e%P  =  8550.0                               !  e arm central momentum (MeV/c)
-     spec%e%theta  =  7.5                             !  e arm angle setting (degrees)
-     spec%p%P  =  1700.0                                !  p arm central momentum (MeV/c)
-     spec%p%theta  =   61.0                            !  p arm angle setting (degrees)
+     spec%e%theta  =  8.3                             !  e arm angle setting (degrees)
+     spec%p%P  =  1337.4                                !  p arm central momentum (MeV/c)
+     spec%p%theta  =   71.0272                            !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-18, 1.0e-18, 1.0e-18, 1.0e-18 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
@@ -75,12 +75,12 @@
 / 
 
  &P_ARM_ACCEPT
-     SPedge%p%delta%min  =   -30.0	!  delta min (SPECTROMETER ACCEPTANC
-     SPedge%p%delta%max  =    30.0	!  delta max
-     SPedge%p%yptar%min  =   -200.0	!  yptar min = {TF} / 1000 (mrad)
-     SPedge%p%yptar%max  =    200.0	!  yptar max = {TF} / 1000
-     SPedge%p%xptar%min  =   -200.0	!  xptar min = {TF} / 1000 (mrad)
-     SPedge%p%xptar%max  =    200.0	!  xptar max = {TF} / 1000
+     SPedge%p%delta%min  =   -40.0	!  delta min (SPECTROMETER ACCEPTANC
+     SPedge%p%delta%max  =    40.0	!  delta max
+     SPedge%p%yptar%min  =   -250.0	!  yptar min = {TF} / 1000 (mrad)
+     SPedge%p%yptar%max  =    250.0	!  yptar max = {TF} / 1000
+     SPedge%p%xptar%min  =   -250.0	!  xptar min = {TF} / 1000 (mrad)
+     SPedge%p%xptar%max  =    250.0	!  xptar max = {TF} / 1000
 / 
 
  &BEAM_AND_TARGET_INFO
