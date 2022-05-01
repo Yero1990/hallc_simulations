@@ -1,7 +1,7 @@
 ! CT 2022 Proposal
 ! d(e,e'p)n
 ! Model: Laget FSI
-! Radiative Effects YES
+! Radiative Effects NO
 ! Energy Loss YES
 ! Energy Loss Correction NO
 ! New HMS Collimator INSERTED
@@ -10,14 +10,14 @@
 
  =?
  &EXPERIMENT
-     ngen  =  50000			!  POS: # of successes
+     ngen  =  100000			!  POS: # of successes
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
      doing_pion  =  F		!  (T = TRUE)
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
-     extra_dbase_file = 'extra_ct2022_rad.data' !  additional input parameters.
+     extra_dbase_file = 'extra_ct2022_norad.data' !  additional input parameters.
      set_allow_scat_in_coll=0  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
