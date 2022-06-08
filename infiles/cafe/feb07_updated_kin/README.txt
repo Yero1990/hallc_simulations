@@ -1,9 +1,0 @@
-
-# CaFe Initial Optim. kinematics Updated during Feb 07, 2022  Meeting
-
-# 02/07/22 | CaFe Open Kinematics to start optimization (to determine which config has the highest rates)
-    # kin1:  Eb = 10.6 GeV, Theta_e = 7.5 degree, Pe = 8.55 GeV/c (Q2 = 1.55 GeV^2,   x = Q2/(2*Mp*nu) ~ 0.4 
-    # Kin2:  Eb = 10.6 GeV, Theta_e = 6.5 degree, Pe = 8.55 GeV/c (Q2 = 1.16 GeV^2,   x = Q2/(2*Mp*nu) ~ 0.3 
-    # kin3:  Eb = 8.6 GeV,  Theta_e = 9.5 degree, Pe = 8 GeV/c (Q2 = 1.88 GeV^2,      x = Q2/(2*Mp*nu) ~ 1.6
-
-# Do simulations for mean-field MF (Pm = 150 MeV/c) for C12, and SRC (Pm = 400 MeV/c) for d2
