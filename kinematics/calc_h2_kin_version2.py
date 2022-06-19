@@ -19,9 +19,8 @@ MD = 1.875612;  #deuteron
 me = 0.000511;  #electron
 
     
-import numpy as np
 #import LT.box as B
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
    
 def calc_h2(Ei=-1, th_e=-1, kf=-1, e_arm='SHMS', case='case1', verbose=False):
@@ -29,7 +28,7 @@ def calc_h2(Ei=-1, th_e=-1, kf=-1, e_arm='SHMS', case='case1', verbose=False):
     if(case=='case1'):
         
         #------------------------------------------------------------
-        # Case 1: For a fixed beam energy (E), and e- angle (th_e),
+        # Case 1: For a fixed beam energy (E in Gev), and e- angle (th_e in deg),
         # What does final e- energy (Ee) need to be for Xbj = 1 ?
         # User Input: let kf = -1, and put actual Ei and th_e
         #------------------------------------------------------------
@@ -86,11 +85,19 @@ def calc_h2(Ei=-1, th_e=-1, kf=-1, e_arm='SHMS', case='case1', verbose=False):
         dmin_e = -10  
         dmax_e = 22
         
-        #hadron arm (HMS)
         dmin_h = -9
         dmax_h = 9
-        h_arm = 'HMS'
-        
+        h_arm='HMS'
+
+    if(e_arm=='HMS'):
+        #electron arm (HMS)
+        dmin_e = -9
+        dmax_e = 9
+
+        dmin_h = -10  
+        dmax_h = 22
+        h_arm='SHMS'
+
     #calculate minimum/maximum possible particle momentum P, given the spec. central momentum 
     pmin_e = kf * (1. + dmin_e/100.)
     pmax_e = kf * (1. + dmax_e/100.)
@@ -200,7 +207,10 @@ if __name__ == "__main__":
     #kf, th_p, Pf, Q2, q, omega, xbj = calc_h2(10.6, 12.1686, -1, 'SHMS', 'case1', True)
 
     
-    calc_h2(Ei=10.6, th_e=8.3, kf=-1, e_arm='SHMS', case='case1', verbose=True)
-    calc_h2(Ei=10.6, th_e=7.5, kf=-1, e_arm='SHMS', case='case1', verbose=True)
-    calc_h2(Ei=10.6, th_e=6.8, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+    #calc_h2(Ei=10.6, th_e=8.3, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+    #calc_h2(Ei=10.6, th_e=7.5, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+    #calc_h2(Ei=10.6, th_e=6.8, kf=-1, e_arm='SHMS', case='case1', verbose=True)#
 
+    # pionLT HMS singles check
+    # hms angle = ??, hms_p = -6.792 GeV/c, beam_e = 10.549355
+    calc_h2(Ei=10.549355, th_e=-1, kf=6.792, e_arm='HMS', case='case2', verbose=True)

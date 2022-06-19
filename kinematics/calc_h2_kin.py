@@ -20,8 +20,8 @@ me = 0.000511;  #electron
 
     
 import numpy as np
-import LT.box as B
-import matplotlib.pyplot as plt
+#import LT.box as B
+#import matplotlib.pyplot as plt
 
 
 
