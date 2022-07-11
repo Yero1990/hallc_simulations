@@ -52,7 +52,6 @@ def calc_eepX_kin():
     me = 0.000511  #electron
     
 
-
     # General masses for Target(e,e'p)X  - one-proton knock-out
     me = particle_dict['e']    # e-beam beam particle mass
     Mt = particle_dict['12C']   # target mass
@@ -60,7 +59,7 @@ def calc_eepX_kin():
     Mr = particle_dict['11B']    # recoil system mass
 
     #Initial parameter kinematics [GeV]
-    Ei = 10.6  #beam energy
+    Ei = 10.4  #beam energy
     
     #output file to write kinematics
     fname = 'CaFe_kin_summary_Eb%.2f_C12_MF_kin1.txt' % (Ei)

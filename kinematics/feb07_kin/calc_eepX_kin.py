@@ -60,7 +60,7 @@ def calc_eepX_kin():
     Mr = particle_dict['11B']    # recoil system mass
 
     #Initial parameter kinematics [GeV]
-    Ei = 10.6  #beam energy
+    Ei = 10.4  #beam energy
     
     #output file to write kinematics
     fname = 'CaFe_kin_summary_Eb%.2f_C12_MF_kin1.txt' % (Ei)
