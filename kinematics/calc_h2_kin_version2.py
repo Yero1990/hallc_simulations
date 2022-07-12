@@ -206,11 +206,20 @@ if __name__ == "__main__":
     # Call function to calculate H(e,e'p) elastic kinematics
     #kf, th_p, Pf, Q2, q, omega, xbj = calc_h2(10.6, 12.1686, -1, 'SHMS', 'case1', True)
 
-    
+
+    # cafe elastics| trying to shift SHMS angle for elastics at 10.6 GeV
+    #to match new CaFe MF/SRC production acceptance at 10.3 GeV
+
+    #calc_h2(Ei=10.6, th_e=9.8, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+    calc_h2(Ei=10.6, th_e=9.1, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+    #calc_h2(Ei=10.6, th_e=8.3, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+
+
     #calc_h2(Ei=10.6, th_e=8.3, kf=-1, e_arm='SHMS', case='case1', verbose=True)
     #calc_h2(Ei=10.6, th_e=7.5, kf=-1, e_arm='SHMS', case='case1', verbose=True)
     #calc_h2(Ei=10.6, th_e=6.8, kf=-1, e_arm='SHMS', case='case1', verbose=True)#
 
     # pionLT HMS singles check
     # hms angle = ??, hms_p = -6.792 GeV/c, beam_e = 10.549355
-    calc_h2(Ei=10.549355, th_e=-1, kf=6.792, e_arm='HMS', case='case2', verbose=True)
+    #calc_h2(Ei=10.549355, th_e=-1, kf=6.792, e_arm='HMS', case='case2', verbose=True)
+    #calc_h2(Ei=10.549355, th_e=-1, kf=6.690, e_arm='HMS', case='case2', verbose=True)
