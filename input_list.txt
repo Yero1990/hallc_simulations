@@ -1,4 +1,4 @@
 # list of SIMC kinematic input files
-cafe_heep_scan_kin0_rad.data 
-#cafe_c12_MF_rad.data
-#cafe_d2_SRC_lagetfsi_rad.data
+cafe_heep_scan_kin0_rad_new.data
+cafe_heep_scan_kin1_rad_new.data 
+cafe_heep_scan_kin2_rad_new.data 
