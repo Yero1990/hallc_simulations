@@ -207,11 +207,17 @@ if __name__ == "__main__":
     #kf, th_p, Pf, Q2, q, omega, xbj = calc_h2(10.6, 12.1686, -1, 'SHMS', 'case1', True)
 
 
-    # cafe elastics| trying to shift SHMS angle for elastics at 10.6 GeV
+    #---- Heep elastics for beam energy = 10.3 GeV
+    #calc_h2(Ei=10.3, th_e=8.3, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+    #calc_h2(Ei=10.3, th_e=7.5, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+    calc_h2(Ei=10.3, th_e=9.1, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+
+    
+    #-----cafe elastics| trying to shift SHMS angle for elastics at 10.6 GeV
     #to match new CaFe MF/SRC production acceptance at 10.3 GeV
 
     #calc_h2(Ei=10.6, th_e=9.8, kf=-1, e_arm='SHMS', case='case1', verbose=True)
-    calc_h2(Ei=10.6, th_e=9.1, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+    #calc_h2(Ei=10.6, th_e=9.1, kf=-1, e_arm='SHMS', case='case1', verbose=True)
     #calc_h2(Ei=10.6, th_e=8.3, kf=-1, e_arm='SHMS', case='case1', verbose=True)
 
 
