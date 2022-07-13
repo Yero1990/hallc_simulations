@@ -62,16 +62,18 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
     TString ext2 = "kin2";
     TString ext = ext2;
 
-    /*
+    
     //Define File Name Patterns
-    simc_infile = Form("infiles/cafe_heep_scan_%s_%s.data", ext.Data(), rad.Data());
-    simc_InputFileName = Form("worksim/cafe_heep_scan_%s_%s.root", ext.Data(), rad.Data());
+    simc_infile = Form("infiles/cafe_heep_scan_%s_%s_new.data", ext.Data(), rad.Data());
+    simc_InputFileName = Form("worksim/cafe_heep_scan_%s_%s_new.root", ext.Data(), rad.Data());
     simc_OutputFileName = Form("cafe_heep_scan_%s_%s_output.root", ext.Data(), rad.Data());
-    */ 
+     
+
+    /*
     simc_infile          = "infiles/d2_heep_3288.data";
     simc_InputFileName   = "worksim/d2_heep_3288.root";
     simc_OutputFileName  = "d2_heep_3288_output.root";
-
+    */
   }
 
   else{
