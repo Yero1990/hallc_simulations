@@ -49,9 +49,9 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
   TString rad;
   if(rad_flag) { rad = "rad";}
   else {rad = "norad";}
-
+  
   if (heep_check){
-
+    
     //---Read In File Names with cuts and histogram binning information
     input_CutFileName  = "inp/set_basic_heep_cuts.inp";
     input_HBinFileName = "inp/set_basic_heep_histos.inp";
@@ -60,15 +60,20 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
     TString ext0 = "kin0";
     TString ext1 = "kin1";
     TString ext2 = "kin2";
-    TString ext = ext2;
+    //TString ext = ext0;
+
+        
+    //Define File Name Patterns
+    //simc_infile = Form("infiles/cafe_heep_scan_%s_%s.data", ext2.Data(), rad.Data());
+    //simc_InputFileName = Form("/Users/deuteron/cafe_heep_scan_%s_%s.root", ext2.Data(), rad.Data());
+    //simc_OutputFileName = Form("cafe_heep_scan_%s_%s_output.root", ext2.Data(), rad.Data());
+
+    // for proton absorption studies @ cafe MF kinematics
+    simc_infile = "infiles/cafe_heep_pabs_MF_10p6.data";
+    simc_InputFileName = "/Users/deuteron/cafe_heep_pabs_MF_10p6.root";
+    simc_OutputFileName = "cafe_heep_pabs_MF_10p6.root_output.root";
 
     
-    //Define File Name Patterns
-    simc_infile = Form("infiles/cafe_heep_scan_%s_%s_new.data", ext.Data(), rad.Data());
-    simc_InputFileName = Form("worksim/cafe_heep_scan_%s_%s_new.root", ext.Data(), rad.Data());
-    simc_OutputFileName = Form("cafe_heep_scan_%s_%s_output.root", ext.Data(), rad.Data());
-     
-
     /*
     simc_infile          = "infiles/d2_heep_3288.data";
     simc_InputFileName   = "worksim/d2_heep_3288.root";
@@ -792,7 +797,7 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
 
   //assuming heep check singles
   if(heep_check){
-    eff_factor = e_trk * daq_lt * tgt_boil;
+    eff_factor = 0.95; // 95 % efficiency (fudge factor) //e_trk * daq_lt * tgt_boil;
   }
   
   else{
@@ -934,7 +939,7 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
     cout << "Jacobian_corr = " << Jacobian_corr << endl;
     */
 
-    //fill histogram (no cuts)
+    //fill histogram (no cuts, for daq rates)
     H_W_noCut->Fill(W, FullWeight_forRates);
      
     if(c_allCuts) {
