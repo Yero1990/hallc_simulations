@@ -26,9 +26,9 @@ If you plan to use this repository for doing hydrogen / deuteron simulations usi
 
  `git clone https://github.com/Yero1990/deut_simc`
     
-2. Set up the binary file `grid.bin` read in by SIMC to do the proper deuteron cross-section weighting using the J.M. Laget theoretical cross sections (using Paris NN potential). You will need the .tar file which I can provide via e-mail if needed (email: cyero@jlab.org)
+2. Set up the binary file `grid.bin` read in by SIMC to do the proper deuteron cross-section weighting using the J.M. Laget theoretical cross sections (using Paris NN potential). You will need the .tar file which I can provide via e-mail if needed (email: cyero002@gmail.com or cyero@jlab.org)
 
- * Put the .tar file in `../hallc_simulations` and do: `tar -zxvf Laget.zip`
+ * Put the .tar file in `../hallc_simulations` and do: `tar -zxvf Laget.tar`
 
   The `tar -zxvf` command will unpack the contents (i.e., cross-section numerical data files) onto a directory `Laget/deut_laget`  
   
