@@ -2,7 +2,9 @@
 #cafe_heep_scan_kin0_rad.data
 #cafe_heep_scan_kin1_rad.data
 #cafe_heep_scan_kin2_rad.data
-#cafe_heep_pabs_MF_10p3.data
-#cafe_heep_pabs_MF_10p6.data
-cafe_c12_MF_rad_10p6GeV.data
-cafe_c12_MF_rad_10p3GeV.data
+#cafe_c12_MF_rad.data
+#cafe_d2_SRC_rad.data
+cafe_d2_MF_rad.data 
+#cafe_c12_T0p56_MF_rad.data
+#cafe_c12_T0_MF_rad.data 
+#cafe_c12_T1_MF_rad.data 
