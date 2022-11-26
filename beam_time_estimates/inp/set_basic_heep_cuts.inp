@@ -29,7 +29,7 @@ c_hdelta_max = 10.
 
 # Electron Arm Momentum Acceptance, Delta [%] 
 edelta_cut_flag = 1
-c_edelta_min = -10.
+c_edelta_min = 7.
 c_edelta_max = 22.
 
 # xptar cuts (mrad)

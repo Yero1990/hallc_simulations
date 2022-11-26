@@ -64,14 +64,14 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
 
         
     //Define File Name Patterns
-    //simc_infile = Form("infiles/cafe_heep_scan_%s_%s.data", ext2.Data(), rad.Data());
-    //simc_InputFileName = Form("/Users/deuteron/cafe_heep_scan_%s_%s.root", ext2.Data(), rad.Data());
-    //simc_OutputFileName = Form("cafe_heep_scan_%s_%s_output.root", ext2.Data(), rad.Data());
+    simc_infile = Form("infiles/cafe_heep_scan_%s_%s.data", ext0.Data(), rad.Data());
+    simc_InputFileName = Form("worksim/cafe_heep_scan_%s_%s.root", ext0.Data(), rad.Data());
+    simc_OutputFileName = Form("cafe_heep_scan_%s_%s_output.root", ext0.Data(), rad.Data());
 
     // for proton absorption studies @ cafe MF kinematics
-    simc_infile = "infiles/cafe_heep_pabs_MF_10p6.data";
-    simc_InputFileName = "/Users/deuteron/cafe_heep_pabs_MF_10p6.root";
-    simc_OutputFileName = "cafe_heep_pabs_MF_10p6.root_output.root";
+    //simc_infile = "infiles/cafe_heep_pabs_MF_10p6.data";
+    //simc_InputFileName = "/Users/deuteron/cafe_heep_pabs_MF_10p6.root";
+    //simc_OutputFileName = "cafe_heep_pabs_MF_10p6.root_output.root";
 
     
     /*
@@ -797,7 +797,7 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
 
   //assuming heep check singles
   if(heep_check){
-    eff_factor = 0.95; // 95 % efficiency (fudge factor) //e_trk * daq_lt * tgt_boil;
+    eff_factor = 0.99; // 95 % efficiency (fudge factor) //e_trk * daq_lt * tgt_boil;
   }
   
   else{
