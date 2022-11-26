@@ -218,3 +218,6 @@ if __name__ == "__main__":
     #calc_h2(Ei=10.6, th_e=-1, kf=7, e_arm='SHMS', case='case2', verbose=True)
     #calc_h2(Ei=10.3, th_e=8.3, kf=-1, e_arm='SHMS', case='case1', verbose=True)
 
+    calc_h2(Ei=10.549, th_e=8.2, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+    calc_h2(Ei=10.549, th_e=8.3, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+

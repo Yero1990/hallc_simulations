@@ -5,7 +5,7 @@
 
  =?
  &EXPERIMENT
-     ngen  =  50000			!  POS: # of successe
+     ngen  =  1000000			!  POS: # of successe
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
@@ -45,9 +45,7 @@
      targ%mass_amu  =  1.00794	        !  target mass in amu
      targ%mrec_amu  =  0.	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
      targ%rho  =  0.07231		!  target density (g/cm^3)
-     ! targ%thick  =  2505.		!  target thick 15cm (mg/cm^2) 
      targ%thick  =  723.1		!  target thick 10cm (mg/cm^2)
-     ! targ%thick  =  7.231		!  target thick .1cm (1mm) (mg/cm^2)	
      targ%angle  =  0.		        !  target angle (for solid target) (degrees)
      targ%abundancy  =  100.		!  target purity (%)
      targ%can  =  1                     !  1=beer can (fpi), 2=pudding can (nucpi)
