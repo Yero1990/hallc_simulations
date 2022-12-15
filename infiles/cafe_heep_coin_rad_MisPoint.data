@@ -5,7 +5,7 @@
 
  =?
  &EXPERIMENT
-     ngen  =  1000000			!  POS: # of successe
+     ngen  =  50000			!  POS: # of successe
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
@@ -92,16 +92,16 @@
 /
 
  &E_ARM_OFFSET
-     spec%e%offset%x  =  0.0		!  x offset (cm) Mispointing_x
-     spec%e%offset%y  =  0.0		!  y offset (cm) Mispointing_y (opposite sign in hcana)
+     spec%e%offset%x  =  -0.126		!  x offset (cm) Mispointing_x
+     spec%e%offset%y  =  0.06		!  y offset (cm) Mispointing_y (opposite sign in hcana)
      spec%e%offset%z  =  0.0		!  z offset (cm)
      spec%e%offset%xptar  =  0.0        !  xptar offset (mr)
      spec%e%offset%yptar  =  0.0        !  yptar offset (mr)
 /
 
  &P_ARM_OFFSET
-     spec%p%offset%x  =  0.0		!  x offset (cm)
-     spec%p%offset%y  =  0.0		!  y offset (cm)
+     spec%p%offset%x  =  0.101567 	!  x offset (cm)
+     spec%p%offset%y  =  0.324		!  y offset (cm)
      spec%p%offset%z  =  0.0       	!  z offset (cm)
      spec%p%offset%xptar  =  0.0        !  xptar offset (mr)
      spec%p%offset%yptar  =  0.0	!  yptar offset (mr)
