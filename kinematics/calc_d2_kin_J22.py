@@ -12,7 +12,8 @@ import numpy as np
 #import LT.box as B
 import matplotlib.pyplot as plt
 
-
+import sys
+sys.stdout.flush()
 
 
 def calc_d2_kin_J22():
@@ -20,6 +21,8 @@ def calc_d2_kin_J22():
 
     #degrees-to-radians
     dtr = np.pi / 180.
+
+
     
     #Define Particle Mass [GeV]
     MP = 0.938272  #proton
@@ -28,8 +31,7 @@ def calc_d2_kin_J22():
     me = 0.000511  #electron
 
     #Initial parameter kinematics [GeV]
-    Ei = 12.1  #beam energy
-    Q2 = 4.5   #4-momentum transfer
+    Ei = 16.  #beam energy
 
     #output file to write kinematics
     fname = 'kin_summary_Eb%.2f.txt' % (Ei)
@@ -56,22 +58,25 @@ def calc_d2_kin_J22():
     #ofile.write('#! Pr[f,0]/ \t  xbj[f,1]/ \t kf[f,2]/ \t th_e[f,3]/ \t Pf[f,4]/ \t th_p[f,5]/ \t q[f,6]/ \t th_q[f,7]/ \t th_nq[f,8]/ \t th_pq[f,9]/ \t Q2[f,10]/\n')
     ofile.write('Pr,xbj,kf,th_e,Pf,th_p,q,th_q,th_rq,th_pq,Q2\n') 
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 4.5
-    Q2_step = 0.01    
-    Q2_max = 4.5 + Q2_step   #include endpoint (+Pr_step)
+    Q2_min = 0.0
+    Q2_step = 0.5    
+    Q2_max = 70. + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
-    Pr_min = 1.0
-    Pr_step = 0.2    
-    Pr_max = 1.2 + Pr_step   #include endpoint (+Pr_step)
+    Pr_min = 0.
+    Pr_step = 0.01    
+    Pr_max = 10.0 + Pr_step   #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
-    xbj_min = 1.3
+    xbj_min = 1.0
     xbj_step = 0.05
     xbj_max = 2. + xbj_step
     xbj_range = np.arange(xbj_min, xbj_max, xbj_step)
+
+    cnt  = 0
+    total_count = len(Q2_range) * len(Pr_range) * len(xbj_range)
     
     #Loop over 4-Momentum Transfer Q^2
     for Q2 in Q2_range:
@@ -97,9 +102,7 @@ def calc_d2_kin_J22():
                 #Calculate e- scattering angle
                 th_e = 2. * np.arcsin( np.sqrt( Q2/(4.*Ee*Ei) ) ) / dtr
                 
-                if kf>11.0 or th_e<5.5:
-                    continue
-                    
+              
 
 
                 #Calculate 3-momentum transfer magnitude (|q|)
@@ -112,7 +115,8 @@ def calc_d2_kin_J22():
                 #Calculate Final Proton Momentum
                 Pf = np.sqrt(Ef**2 - MP**2)
                 
-                
+         
+                 
                 #---------------------------------------
                 # Calculate angles relative to q-vector
                 #---------------------------------------
@@ -132,10 +136,20 @@ def calc_d2_kin_J22():
                 #theta_p (proton angle relative to +z (lab))
                 thp = thq + thpq  #this is assuming proton is detected in the forward spec. momentum ( < 90 deg)
 
+
+               
+                if kf<2 or kf>11.0 or th_e<5.5 or th_e>40 or Pf>7.5 or thp<10 or thp>70:
+                    continue
+                
                 if (np.isnan(thp)): continue
+
                 
                 ofile.write("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )
-            
+
+                perc = (float(cnt) / total_count) * 100.0
+                print("Percentage Completed: %2f"%(perc), flush=True)
+                
+                cnt = cnt+1
     ofile.close()
             
 if __name__ == "__main__":
