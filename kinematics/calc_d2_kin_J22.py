@@ -9,7 +9,7 @@ email: cyero@jlab.org
 '''
 
 import numpy as np
-import LT.box as B
+#import LT.box as B
 import matplotlib.pyplot as plt
 
 
@@ -28,8 +28,8 @@ def calc_d2_kin_J22():
     me = 0.000511  #electron
 
     #Initial parameter kinematics [GeV]
-    Ei = 12  #beam energy
-    Q2 = 8.5   #4-momentum transfer
+    Ei = 12.1  #beam energy
+    Q2 = 4.5   #4-momentum transfer
 
     #output file to write kinematics
     fname = 'kin_summary_Eb%.2f.txt' % (Ei)
@@ -37,10 +37,6 @@ def calc_d2_kin_J22():
     ofile.write('# D(e,e\'p)n Central Kinematics Summary\n')
     ofile.write('# Beam Energy (Ei) = %.3f GeV\n' % (Ei))
     ofile.write('# \n'
-                '# Previous D(e,e\'p) commissioning experiment low-pmiss kin (Pr = 80 MeV setting):\n'
-                '# Ei = 10.6005, kf = 8.5342 GeV/c, th_e = 12.194 deg, Pf = 2.840 GeV/c, th_p = 38.896 deg \n'
-                '# Q2 = 4.0822 GeV^2, xbj = 1.0528 \n'
-                '# \n'
                 '# Header Definitions: \n'
                 '# Pr   : Central Missing Momentum [GeV/c] \n'
                 '# xbj  : Bjorken x  \n'
@@ -58,17 +54,17 @@ def calc_d2_kin_J22():
                 )
     
     #ofile.write('#! Pr[f,0]/ \t  xbj[f,1]/ \t kf[f,2]/ \t th_e[f,3]/ \t Pf[f,4]/ \t th_p[f,5]/ \t q[f,6]/ \t th_q[f,7]/ \t th_nq[f,8]/ \t th_pq[f,9]/ \t Q2[f,10]/\n')
-    ofile.write('#Pr,xbj,kf,th_e,Pf,th_p,q,th_q,th_rq,th_pq,Q2\n') 
+    ofile.write('Pr,xbj,kf,th_e,Pf,th_p,q,th_q,th_rq,th_pq,Q2\n') 
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 4.0
+    Q2_min = 4.5
     Q2_step = 0.01    
-    Q2_max = 14.0 + Q2_step   #include endpoint (+Pr_step)
+    Q2_max = 4.5 + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
-    Pr_min = 0.
-    Pr_step = 0.01    
-    Pr_max = 2.0 + Pr_step   #include endpoint (+Pr_step)
+    Pr_min = 1.0
+    Pr_step = 0.2    
+    Pr_max = 1.2 + Pr_step   #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
@@ -101,7 +97,7 @@ def calc_d2_kin_J22():
                 #Calculate e- scattering angle
                 th_e = 2. * np.arcsin( np.sqrt( Q2/(4.*Ee*Ei) ) ) / dtr
                 
-                if kf>11.0 or th_e<6.0:
+                if kf>11.0 or th_e<5.5:
                     continue
                     
 
