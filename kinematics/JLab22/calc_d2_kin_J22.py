@@ -58,15 +58,15 @@ def calc_d2_kin_J22():
     #ofile.write('#! Pr[f,0]/ \t  xbj[f,1]/ \t kf[f,2]/ \t th_e[f,3]/ \t Pf[f,4]/ \t th_p[f,5]/ \t q[f,6]/ \t th_q[f,7]/ \t th_nq[f,8]/ \t th_pq[f,9]/ \t Q2[f,10]/\n')
     ofile.write('Pr,xbj,kf,th_e,Pf,th_p,q,th_q,th_rq,th_pq,Q2\n') 
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 0.0
-    Q2_step = 0.5    
-    Q2_max = 70. + Q2_step   #include endpoint (+Pr_step)
+    Q2_min = 0
+    Q2_step = 0.05    
+    Q2_max = 5. + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
-    Pr_min = 0.
-    Pr_step = 0.01    
-    Pr_max = 10.0 + Pr_step   #include endpoint (+Pr_step)
+    Pr_min = 0.8
+    Pr_step = 0.05    
+    Pr_max = 1.2 + Pr_step   #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
@@ -137,12 +137,16 @@ def calc_d2_kin_J22():
                 thp = thq + thpq  #this is assuming proton is detected in the forward spec. momentum ( < 90 deg)
 
 
-               
-                if kf<2 or kf>11.0 or th_e<5.5 or th_e>40 or Pf>7.5 or thp<10 or thp>70:
+                # spectrometer requirements
+                if kf<2. or kf>11.0 or th_e<5.5 or th_e>40 or Pf<0.4 or Pf>7.3 or thp<10.5 or thp>90:
+                    continue
+
+                if th_e>6:
                     continue
                 
                 if (np.isnan(thp)): continue
 
+            
                 
                 ofile.write("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )
 
