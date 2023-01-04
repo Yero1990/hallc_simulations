@@ -31,7 +31,7 @@ def calc_d2_kin_J22():
     me = 0.000511  #electron
 
     #Initial parameter kinematics [GeV]
-    Ei = 11.  #beam energy
+    Ei = 20.  #beam energy
 
     #output file to write kinematics
     fname = 'kin_summary_Eb%.2f.txt' % (Ei)
@@ -65,7 +65,7 @@ def calc_d2_kin_J22():
     
     #Set Missing Momentum Range to cover [GeV]
     Pr_min = 0.8
-    Pr_step = 0.05    
+    Pr_step = 0.01    
     Pr_max = 1.2 + Pr_step   #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
