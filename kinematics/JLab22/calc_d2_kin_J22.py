@@ -31,7 +31,7 @@ def calc_d2_kin_J22():
     me = 0.000511  #electron
 
     #Initial parameter kinematics [GeV]
-    Ei = 12.  #beam energy
+    Ei = 11.  #beam energy
 
     #output file to write kinematics
     fname = 'kin_summary_Eb%.2f.txt' % (Ei)

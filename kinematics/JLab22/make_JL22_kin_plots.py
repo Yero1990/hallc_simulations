@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # read dataframe
+df_11 = pd.read_csv('kin_summary_Eb11.00.txt', comment='#')
 df_12 = pd.read_csv('kin_summary_Eb12.00.txt', comment='#')
 df_14 = pd.read_csv('kin_summary_Eb14.00.txt', comment='#')
 df_16 = pd.read_csv('kin_summary_Eb16.00.txt', comment='#')
@@ -14,8 +15,9 @@ df_22 = pd.read_csv('kin_summary_Eb22.00.txt', comment='#')
 fig, ax  = plt.subplots(2, 2)
 
 # th_e vs kf
-ax[0,0].plot( df_12['th_e'] , df_12['kf'], linestyle='', marker='o', mec='r', mfc='w', alpha=0.8)
-ax[0,0].plot( df_14['th_e'] , df_14['kf'], linestyle='', marker='o', mec='b', mfc='w', alpha=0.8)
+ax[0,0].plot( df_11['th_e'] , df_11['kf'], linestyle='', marker='o', mec='g', mfc='w', alpha=0.8)
+#ax[0,0].plot( df_12['th_e'] , df_12['kf'], linestyle='', marker='o', mec='r', mfc='w', alpha=0.8)
+#ax[0,0].plot( df_14['th_e'] , df_14['kf'], linestyle='', marker='o', mec='b', mfc='w', alpha=0.8)
 
 #ax[0,0].plot( df_16['th_e'] , df_16['kf'], linestyle='', marker='o', mec='orange', mfc='w', alpha=0.8)
 #ax[0,0].plot( df_18['th_e'] , df_18['kf'], linestyle='', marker='o', mec='r', mfc='w', alpha=0.8)
@@ -25,8 +27,9 @@ ax[0,0].set(xlabel='SHMS Angle [deg]', ylabel='SHMS Momentum [GeV/c]')
 
 
 # Pf vs th_p
-ax[0,1].plot( df_12['th_p'], df_12['Pf'], linestyle='', marker='o', mec='r', mfc='w', alpha=0.8)
-ax[0,1].plot( df_14['th_p'], df_14['Pf'], linestyle='', marker='o', mec='b', mfc='w', alpha=0.8)
+ax[0,1].plot( df_11['th_p'], df_11['Pf'], linestyle='', marker='o', mec='g', mfc='w', alpha=0.8)
+#ax[0,1].plot( df_12['th_p'], df_12['Pf'], linestyle='', marker='o', mec='r', mfc='w', alpha=0.8)
+#ax[0,1].plot( df_14['th_p'], df_14['Pf'], linestyle='', marker='o', mec='b', mfc='w', alpha=0.8)
 
 #ax[0,1].plot( df_16['th_p'], df_16['Pf'], linestyle='', marker='o', mec='orange', mfc='w', alpha=0.8)
 #ax[0,1].plot( df_18['th_p'], df_18['Pf'], linestyle='', marker='o', mec='r', mfc='w', alpha=0.8)
@@ -36,8 +39,9 @@ ax[0,1].set(xlabel='HMS Angle [deg]', ylabel='HMS Momentum [GeV/c]')
 
 
 # Q2 vs xbj
-ax[1,0].plot( df_12['xbj'], df_12['Q2'], linestyle='', marker='o', mec='r', mfc='w', alpha=0.8)
-ax[1,0].plot( df_14['xbj'], df_14['Q2'], linestyle='', marker='o', mec='b', mfc='w', alpha=0.8)
+ax[1,0].plot( df_11['xbj'], df_11['Q2'], linestyle='', marker='o', mec='g', mfc='w', alpha=0.8)
+#ax[1,0].plot( df_12['xbj'], df_12['Q2'], linestyle='', marker='o', mec='r', mfc='w', alpha=0.8)
+#ax[1,0].plot( df_14['xbj'], df_14['Q2'], linestyle='', marker='o', mec='b', mfc='w', alpha=0.8)
 
 #ax[1,0].plot( df_16['xbj'], df_16['Q2'], linestyle='', marker='o', mec='orange', mfc='w', alpha=0.8)
 #ax[1,0].plot( df_18['xbj'], df_18['Q2'], linestyle='', marker='o', mec='r', mfc='w', alpha=0.8)
@@ -46,8 +50,9 @@ ax[1,0].plot( df_14['xbj'], df_14['Q2'], linestyle='', marker='o', mec='b', mfc=
 ax[1,0].set(xlabel=r'$x_{bj}$', ylabel=r'$Q^{2}$ [GeV$^{2}$]')
 
 # Pr vs th_rq
-ax[1,1].plot( df_12['th_rq'], df_12['Pr'], linestyle='', marker='o', mec='r', mfc='w', alpha=0.8, label=r'E$_{b}$=12 GeV')
-ax[1,1].plot( df_14['th_rq'], df_14['Pr'], linestyle='', marker='o', mec='b', mfc='w', alpha=0.8, label=r'E$_{b}$=14 GeV')
+ax[1,1].plot( df_11['th_rq'], df_11['Pr'], linestyle='', marker='o', mec='g', mfc='w', alpha=0.8, label=r'E$_{b}$=11 GeV')
+#ax[1,1].plot( df_12['th_rq'], df_12['Pr'], linestyle='', marker='o', mec='r', mfc='w', alpha=0.8, label=r'E$_{b}$=12 GeV')
+#ax[1,1].plot( df_14['th_rq'], df_14['Pr'], linestyle='', marker='o', mec='b', mfc='w', alpha=0.8, label=r'E$_{b}$=14 GeV')
 
 #ax[1,1].plot( df_16['th_rq'], df_16['Pr'], linestyle='', marker='o', mec='orange', mfc='w', alpha=0.8, label=r'E$_{b}$=16 GeV')
 #ax[1,1].plot( df_18['th_rq'], df_18['Pr'], linestyle='', marker='o', mec='r', mfc='w', alpha=0.8, label=r'E$_{b}$=18 GeV')
