@@ -31,7 +31,7 @@ def calc_d2_kin_J22():
     me = 0.000511  #electron
 
     #Initial parameter kinematics [GeV]
-    Ei = 22.  #beam energy
+    Ei = 14.  #beam energy
 
     #output file to write kinematics
     fname = 'kin_summary_Eb%.2f.txt' % (Ei)
@@ -65,13 +65,13 @@ def calc_d2_kin_J22():
     
     #Set Missing Momentum Range to cover [GeV]
     Pr_min = 0.8
-    Pr_step = 0.1    
+    Pr_step = 0.01    
     Pr_max = 1.2 + Pr_step   #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
     xbj_min = 1.0
-    xbj_step = 0.1
+    xbj_step = 0.01
     xbj_max = 2. + xbj_step
     xbj_range = np.arange(xbj_min, xbj_max, xbj_step)
 
@@ -138,8 +138,8 @@ def calc_d2_kin_J22():
 
 
                 # spectrometer requirements
-                #if kf<2. or kf>11.0 or th_e<5.5 or th_e>40 or Pf<0.4 or Pf>7.3 or thp<10.5 or thp>90:
-                 #   continue
+                if kf<2. or kf>11.0 or th_e<5.5 or th_e>40 or Pf<0.4 or Pf>7.3 or thp<10.5 or thp>90:
+                    continue
             
                 
                 #if th_e>6:

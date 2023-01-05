@@ -1,5 +1,5 @@
 # D(e,e'p)n Central Kinematics Summary
-# Beam Energy (Ei) = 22.000 GeV
+# Beam Energy (Ei) = 14.000 GeV
 # 
 # Header Definitions: 
 # Pr   : Central Missing Momentum [GeV/c] 
