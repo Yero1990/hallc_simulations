@@ -1,0 +1,6 @@
+Ideal kinematics without any spectrometer constraints
+for the following configuration:
+
+Q2 = 9.5 GeV2
+Pr = 1.0 GeV/c
+xbj = 0.7 - 1.6

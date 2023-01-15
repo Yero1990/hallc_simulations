@@ -48,7 +48,7 @@ def calc_d2_kin_J22():
     
     #Set Missing Momentum Range to cover [GeV]
     Pr_min = 1.0
-    Pr_step = 0.01    
+    Pr_step = 0.1    
     Pr_max = 1.0  + Pr_step  #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
@@ -150,9 +150,10 @@ def calc_d2_kin_J22():
                     
                     
                     # spectrometer constraint requirements (based on physical limits)
-                    if kf<2. or kf>11.0 or th_e<5.5 or th_e>40 or Pf<0.4 or Pf>7.3 or thp<10.5 or thp>80:
-                        continue
-                    
+                    #if kf<2. or kf>11.0 or th_e<5.5 or th_e>40 or Pf<0.4 or Pf>7.3 or thp<10.5 or thp>80:
+                    #    continue
+
+                    if Pr>1.: continue
                     #if thnq<70.:
                     #    continue
                     # require max SHMS momentum

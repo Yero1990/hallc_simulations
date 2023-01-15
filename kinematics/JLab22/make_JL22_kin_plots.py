@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 #df_13 = pd.read_csv('kin_summary_Eb13.00.txt', comment='#')
 
-df_14 = pd.read_csv('kin_summary_Eb14.00.txt', comment='#')
+#df_14 = pd.read_csv('kin_summary_Eb14.00.txt', comment='#')
 #df_16 = pd.read_csv('kin_summary_Eb16.00.txt', comment='#')
 #df_18 = pd.read_csv('kin_summary_Eb18.00.txt', comment='#')
 #df_20 = pd.read_csv('kin_summary_Eb20.00.txt', comment='#')
@@ -62,8 +62,8 @@ ax[2,2].set(xlabel=r'$\theta_{rq}$ [deg]', ylabel=r'Recoil Momentum, $P_{r}$ [Ge
 
 
 
-E = [11 ,12,13,14,15,16]
-clr  = ['c',    'm',   'r',   'g',   'b', 'darkorange', 'violet', 'gold'] #'darkgray']
+E = [11,12,14,16,17] #18,20,22]
+clr  = ['grey', 'c',    'm',   'r',   'g',   'b', 'darkorange', 'violet', 'gold', 'lightcoral', 'olive', 'sandybrown'] #'darkgray']
 
 #multi-file read
 #------------------------
@@ -72,7 +72,7 @@ fig, ax  = plt.subplots(3, 3)
 for i in np.arange(len(E)):
 
     print(E[i])
-    df = pd.read_csv('kin_summary_Eb%.2f.txt'%(E[i]), comment='#')
+    df = pd.read_csv('realistic_kinematics/kin_summary_Eb%.2f.txt'%(E[i]), comment='#')
     
 
     # kf vs. th_e
@@ -115,5 +115,5 @@ for i in np.arange(len(E)):
 
 
 plt.tight_layout()
-plt.legend()
+plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
 plt.show()
