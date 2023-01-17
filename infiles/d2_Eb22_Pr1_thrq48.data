@@ -46,8 +46,9 @@
      targ%mass_amu  =  2.014101	        !  target mass in amu
      targ%mrec_amu  =  1.008665	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
      targ%rho  =  0.167		        !  target density (g/cm^3)
+     targ%thick  =  3340.		!  target thick 20cm (mg/cm^2)
      ! targ%thick  =  2505.		!  target thick 15cm (mg/cm^2) 
-     targ%thick  =  1670.		!  target thick 10cm (mg/cm^2)
+     ! targ%thick  =  1670.		!  target thick 10cm (mg/cm^2)
      targ%angle  =  0.		        !  target angle (for solid target) (degrees)
      targ%abundancy  =  100.		!  target purity (%)
      targ%can  =  1                     !  1=beer can (fpi), 2=pudding can (nucpi)
