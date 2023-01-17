@@ -146,7 +146,9 @@ Em_xmin = -0.1
 Em_xmax = 0.2
 
 # Missing (Recoil) Momentum
-Pm_nbins = 40
+# 40, 0, 1.6 (0.04 GeV bins)
+# 8,  0, 1.6 (0.2 GeV bins) -- better for binning in th_rq for angular dist.
+Pm_nbins = 8
 Pm_xmin = 0.
 Pm_xmax = 1.6
 
