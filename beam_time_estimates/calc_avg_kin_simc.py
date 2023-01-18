@@ -1,6 +1,10 @@
 #!/usr/bin/python
 
-# calculate averaged kinematics from SIMC analysis of 2D Histos (Pm vs. th_nq bins)
+
+# C.Y. Jan 17, 2023 | This is a copy of the code to calculate the avergaed kinematics, but modified for JLab 22 GeV variables. I've commented out
+# some lines or variables not relevant for the calculation, to make the data simpler.
+
+# calculate averaged kinematics from SIMC analysis of 2D Histos (Pm vs. th_nq bins) for JLab 22 GeV
 
 import sys
 from sys import argv
@@ -9,7 +13,8 @@ import os
 from LT import datafile
 import bin_info2 as BI
 
-#Set proper paths to import ROOT
+
+#Set proper paths to import ROOT ( I had these paths in ifarm, but am having trouble running the code due to compatibility with ROOT / python)
 sys.path.append('../../../../pyroot/')
 sys.path.append('/apps/root/PRO/lib/')
 sys.path.append('/apps/root/PRO/')
@@ -18,9 +23,7 @@ sys.path.append('/apps/root/PRO/')
 import ROOT as R
 from ROOT import *
 from ROOT import *
-
 import numpy as np
-from deForest_Xsec import *   #import deForest sig_cc1, mott, GMp, GEp functs.
 
 
 # some constants
@@ -33,8 +36,9 @@ MN = 939.566
 MD = 1875.61
 me = 0.51099 
 
+'''
 #------------------------------------------------------------
-# header information for the output file
+# header information for the output file (ORIGINAL)
 header = \
 """
 # averaged kinematics results
@@ -49,10 +53,33 @@ header = \
 #! i_b[i,0]/ i_x[i,1]/ i_y[i,2]/ xb[f,3]/ yb[f,4]/ Ei[f,5]/ kf[f,6]/ th_e[f,7]/ omega_mc[f,8]/ omega[f,9]/ Q2[f,10]/ Q2_calc[f,11]/ q_mc[f,12]/ q_lab[f,13]/ Ep_calc[f,14]/ pf[f,15]/ pm_mc[f,16]/ pm[f,17]/ En_calc[f,18]/ beta_cm[f,19]/ gamma_cm[f,20]/ PfPar_q[f,21]/ PfPerp_q[f,22]/ theta_pq[f,23]/ theta_pq_calc[f,24]/ PfPar_cm[f,25]/ th_pq_cm[f,26]/ th_nq_mc[f,27]/ th_nq_calc[f,28]/  cos_phi[f,29]/  sin_phi[f,30]/  alpha_c[f,31]/  GEp[f,32]/   GMp[f,33]/   sigMott[f,34]/   Ksig_cc1[f,35]/  nx[i,36]/ ny[i,37]/ cont[f,38]/        
 """
 #------------------------------------------------------------
+'''
+#------------------------------------------------------------
+# header information for the output file (FOR JLAB22 GeV)
+header = \
+"""
+# averaged kinematics results
+# averaged kinematic varibles used as input to calculate the averaged 
+# kinematics: Ei, omega, th_e, pf
+#
+# variables with _mc attached are from histograms not calculated
+# alpha is the spectatror (neutron) alpha
+#\\ xb = th_nq
+#\\ yb = pm
+# current header line:
+#! i_b[i,0]/ i_x[i,1]/ i_y[i,2]/ xb[f,3]/ yb[f,4]/ Ei[f,5]/ kf[f,6]/ th_e[f,7]/ omega[f,8]/ Q2_calc[f,9]/ q_lab[f,10]/ Ep_calc[f,11]/ pf[f,12]/ pm_mc[f,13]/ pm[f,14]/ En_calc[f,15]/ beta_cm[f,16]/ gamma_cm[f,17]/ PfPar_q[f,18]/ PfPerp_q[f,19]/ theta_pq[f,20]/ theta_pq_calc[f,21]/ PfPar_cm[f,22]/ th_pq_cm[f,23]/ th_nq_mc[f,24]/ th_nq_calc[f,25]/  alpha_c[f,26]/  nx[i,27]/ ny[i,28]/ cont[f,29]/        
+"""
+#------------------------------------------------------------
+
+
+
+
+
 #print argv
 #usage: /apps/python/2.7.12/bin/python calc_avg_kin.py 80 fsi 1 Em_final40MeV
 
 
+# User Set the general file name Eb, Pr, thrq
 Eb=14
 Pr=1
 thrq=26
@@ -150,7 +177,7 @@ for i,acont in enumerate(all.cont):
       # calculated missing momentum
       Pm_calc2 = (nu_calc+MD-Ep)**2 - MN**2
       if (Pm_calc2 < 0.):
-         print 'calculated pm**2 < 0. ', Pm_calc2, ' use Pm_avg : ', Pm
+         print ('calculated pm**2 < 0. ', Pm_calc2, ' use Pm_avg : ', Pm)
          Pm_calc = Pm   #set it to the average Pm from 2D histo
       else:
          Pm_calc = np.sqrt ( Pm_calc2 )
@@ -293,88 +320,71 @@ for i,acont in enumerate(all.cont):
                                                                                                                                   # 38
                                                                                                                                   all.cont[i])
       '''
-       # for JLab 22 GeV calculation
-       l = "%i %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %i %i %f\n"%( \
-                                                                                                                                  # 0 2d bin number
-                                                                                                                                  i_bin, \
-                                                                                                                                  # 1 
-                                                                                                                                  i_xbin, \
-                                                                                                                                  # 2
-                                                                                                                                  i_ybin, \
-                                                                                                                                  # 3 central thnq_bin
-                                                                                                                                  thnq_b, \
-                                                                                                                                  # 4 central pm_bin
-                                                                                                                                  pm_b, \
-                                                                                                                                  # 5 avg. beam energy 
-                                                                                                                                  Ei, \
-                                                                                                                                  # 6 avg. e- momentum
-                                                                                                                                  kf, \
-                                                                                                                                  # 7 avg. e- angle
-                                                                                                                                  the, \
-                                                                                                                                  # 8 MC average energy transfer
-                                                                                                                                  #nu, \
-                                                                                                                                  # 9 calc. average energy transer
-                                                                                                                                  nu_calc, \
-                                                                                                                                  # 10 MC average 4-Momentum tranfer
-                                                                                                                                  #Q2, \
-                                                                                                                                  # 11 calc. average 4-Momentum transfer
-                                                                                                                                  Q2_calc, \
-                                                                                                                                  # 12 MC average |q| 3-momentum tranfer
-                                                                                                                                  #q, \
-                                                                                                                                  # 13 calc. average |q| 3-momentum transfer
-                                                                                                                                  q_calc, \
-                                                                                                                                  # 14 calc. average final proton energy (assume proton mass)
-                                                                                                                                  Ep, \
-                                                                                                                                  # 15 MC average final proton momentum
-                                                                                                                                  Pf, \
-                                                                                                                                  # 16 MC average missing momentum
-                                                                                                                                  Pm, \
-                                                                                                                                  # 17 calc. average Missing momentum  (assume deuteron mass)
-                                                                                                                                  Pm_calc, \
-                                                                                                                                  # 18
-                                                                                                                                  En_calc, \
-                                                                                                                                  # 19
-                                                                                                                                  beta_cm, \
-                                                                                                                                  # 20
-                                                                                                                                  gamma_cm, \
-                                                                                                                                  # 21
-                                                                                                                                  Pf_par, \
-                                                                                                                                  # 22
-                                                                                                                                  Pf_perp, \
-                                                                                                                                  # 23
-                                                                                                                                  thpq, \
-                                                                                                                                  # 24
-                                                                                                                                  th_pq_calc, \
-                                                                                                                                  # 25
-                                                                                                                                  Pf_par_cm, \
-                                                                                                                                  # 26
-                                                                                                                                  theta_pq_cm, \
-                                                                                                                                  # 27
-                                                                                                                                  thnq, \
-                                                                                                                                  # 28
-                                                                                                                                  theta_nq_calc, \
-                                                                                                                                  # 29
-                                                                                                                                  #cphi_pq, \
-                                                                                                                                  # 30
-                                                                                                                                  #sphi_pq, \
-                                                                                                                                  # 31
-                                                                                                                                  alpha_calc, \
-                                                                                                                                  # 32
-                                                                                                                                  #GE_p, \
-                                                                                                                                  # 33
-                                                                                                                                  #GM_p, \
-                                                                                                                                  # 34
-                                                                                                                                  #sig_Mott, \
-                                                                                                                                  # 35
-                                                                                                                                  #de_Forest, \
-                                                                                                                                  # 36
-                                                                                                                                  all.nx, \
-                                                                                                                                  # 37
-                                                                                                                                  all.ny, \
-                                                                                                                                  # 38
-                                                                                                                                  all.cont[i])
+      '''
+      # for JLab 22 GeV calculation
+      l = "%i %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %i %i %f\n"%( \
+                                                                                                          # 0 2d bin number
+                                                                                                          i_bin, \
+                                                                                                          # 1 
+                                                                                                          i_xbin, \
+                                                                                                          # 2
+                                                                                                          i_ybin, \
+                                                                                                          # 3 central thnq_bin
+                                                                                                          thnq_b, \
+                                                                                                          # 4 central pm_bin
+                                                                                                          pm_b, \
+                                                                                                          # 5 avg. beam energy 
+                                                                                                          Ei, \
+                                                                                                          # 6 avg. e- momentum
+                                                                                                          kf, \
+                                                                                                          # 7 avg. e- angle
+                                                                                                          the, \                                                                     
+                                                                                                          # 8 calc. average energy transer
+                                                                                                          nu_calc, \
+                                                                                                          # 9 calc. average 4-Momentum transfer
+                                                                                                          Q2_calc, \
+                                                                                                          # 10 calc. average |q| 3-momentum transfer
+                                                                                                          q_calc, \
+                                                                                                          # 11 calc. average final proton energy (assume proton mass)
+                                                                                                          Ep, \
+                                                                                                          # 12 MC average final proton momentum
+                                                                                                          Pf, \
+                                                                                                          # 13 MC average missing momentum
+                                                                                                          Pm, \
+                                                                                                          # 14 calc. average Missing momentum  (assume deuteron mass)
+                                                                                                          Pm_calc, \
+                                                                                                          # 15
+                                                                                                          En_calc, \
+                                                                                                          # 16
+                                                                                                          beta_cm, \
+                                                                                                          # 17
+                                                                                                          gamma_cm, \
+                                                                                                          # 18
+                                                                                                          Pf_par, \
+                                                                                                          # 19
+                                                                                                          Pf_perp, \
+                                                                                                          # 20
+                                                                                                          thpq, \
+                                                                                                          # 21
+                                                                                                          th_pq_calc, \
+                                                                                                          # 22
+                                                                                                          Pf_par_cm, \
+                                                                                                          # 23
+                                                                                                          theta_pq_cm, \
+                                                                                                          # 24
+                                                                                                          thnq, \
+                                                                                                          # 25
+                                                                                                          theta_nq_calc, \
+                                                                                                          # 26
+                                                                                                          alpha_calc, \                                         
+                                                                                                          # 27
+                                                                                                          all.nx, \
+                                                                                                          # 28
+                                                                                                          all.ny, \
+                                                                                                          # 29
+                                                                                                          all.cont[i])
        
-                                                                          
+                                                                          '''
       o.write(l)
 o.close()
 

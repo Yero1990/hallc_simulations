@@ -1,66 +1,67 @@
 #include "utils/parse_utils.h"
 #include "utils/hist_utils.h"
 
-TRotation       fToLabRot;              //Rotation matrix from TRANSPORT to lab
-Double_t        fThetaGeo;              //In-plane geographic central angle (rad)
-Double_t        fPhiGeo;                //Out-of-plane geographic central angle (rad)
-Double_t        fThetaSph, fPhiSph;     //Central angles in spherical coords. (rad)
-Double_t        fSinThGeo, fCosThGeo;   //Sine and cosine of central angles
-Double_t        fSinPhGeo, fCosPhGeo;   // in geographical coordinates
-Double_t        fSinThSph, fCosThSph;   //Sine and cosine of central angles in 
-Double_t        fSinPhSph, fCosPhSph;   // spherical coordinates
-
-
-//_____________________________________________________
-void GeoToSph( Double_t  th_geo, Double_t  ph_geo, Double_t& th_sph, Double_t& ph_sph)
-{
+  TRotation       fToLabRot;              //Rotation matrix from TRANSPORT to lab
+  Double_t        fThetaGeo;              //In-plane geographic central angle (rad)
+  Double_t        fPhiGeo;                //Out-of-plane geographic central angle (rad)
+  Double_t        fThetaSph, fPhiSph;     //Central angles in spherical coords. (rad)
+  Double_t        fSinThGeo, fCosThGeo;   //Sine and cosine of central angles
+  Double_t        fSinPhGeo, fCosPhGeo;   // in geographical coordinates
+  Double_t        fSinThSph, fCosThSph;   //Sine and cosine of central angles in 
+  Double_t        fSinPhSph, fCosPhSph;   // spherical coordinates
   
-  // Convert geographical to spherical angles. Units are rad.
   
-  static const Double_t twopi = 2.0*TMath::Pi();
-  Double_t ct = cos(th_geo), cp = cos(ph_geo);
-  Double_t tmp = ct*cp;
-  th_sph = acos( tmp );
-  tmp = sqrt(1.0 - tmp*tmp);
-  ph_sph = (fabs(tmp) < 1e-6 ) ? 0.0 : acos( sqrt(1.0-ct*ct)*cp/tmp );
-  if( th_geo/twopi-floor(th_geo/twopi) > 0.5 ) ph_sph = TMath::Pi() - ph_sph;
-  if( ph_geo/twopi-floor(ph_geo/twopi) > 0.5 ) ph_sph = -ph_sph;
-}
-
-//_______________________________________________________________
-void SetCentralAngles(Double_t th_cent=0, Double_t ph_cent=0)
-{
-
+  //_____________________________________________________
+  void GeoToSph( Double_t  th_geo, Double_t  ph_geo, Double_t& th_sph, Double_t& ph_sph)
+  {
+    
+    // Convert geographical to spherical angles. Units are rad.
+    
+    static const Double_t twopi = 2.0*TMath::Pi();
+    Double_t ct = cos(th_geo), cp = cos(ph_geo);
+    Double_t tmp = ct*cp;
+    th_sph = acos( tmp );
+    tmp = sqrt(1.0 - tmp*tmp);
+    ph_sph = (fabs(tmp) < 1e-6 ) ? 0.0 : acos( sqrt(1.0-ct*ct)*cp/tmp );
+    if( th_geo/twopi-floor(th_geo/twopi) > 0.5 ) ph_sph = TMath::Pi() - ph_sph;
+    if( ph_geo/twopi-floor(ph_geo/twopi) > 0.5 ) ph_sph = -ph_sph;
+  }
   
-  fThetaGeo = TMath::DegToRad()*th_cent; fPhiGeo = TMath::DegToRad()*ph_cent;
-  GeoToSph( fThetaGeo, fPhiGeo, fThetaSph, fPhiSph );
-  fSinThGeo = TMath::Sin( fThetaGeo ); fCosThGeo = TMath::Cos( fThetaGeo );
-  fSinPhGeo = TMath::Sin( fPhiGeo );   fCosPhGeo = TMath::Cos( fPhiGeo );
-  Double_t st, ct, sp, cp;
-  st = fSinThSph = TMath::Sin( fThetaSph ); ct = fCosThSph = TMath::Cos( fThetaSph );
-  sp = fSinPhSph = TMath::Sin( fPhiSph );   cp = fCosPhSph = TMath::Cos( fPhiSph );
+  //_______________________________________________________________
+  void SetCentralAngles(Double_t th_cent=0, Double_t ph_cent=0)
+  {
+    
+    
+    fThetaGeo = TMath::DegToRad()*th_cent; fPhiGeo = TMath::DegToRad()*ph_cent;
+    GeoToSph( fThetaGeo, fPhiGeo, fThetaSph, fPhiSph );
+    fSinThGeo = TMath::Sin( fThetaGeo ); fCosThGeo = TMath::Cos( fThetaGeo );
+    fSinPhGeo = TMath::Sin( fPhiGeo );   fCosPhGeo = TMath::Cos( fPhiGeo );
+    Double_t st, ct, sp, cp;
+    st = fSinThSph = TMath::Sin( fThetaSph ); ct = fCosThSph = TMath::Cos( fThetaSph );
+    sp = fSinPhSph = TMath::Sin( fPhiSph );   cp = fCosPhSph = TMath::Cos( fPhiSph );
+    
+    Double_t norm = TMath::Sqrt(ct*ct + st*st*cp*cp);
+    TVector3 nx( st*st*sp*cp/norm, -norm, st*ct*sp/norm );
+    TVector3 ny( ct/norm,          0.0,   -st*cp/norm   );
+    TVector3 nz( st*cp,            st*sp, ct            );
+    
+    fToLabRot.SetToIdentity().RotateAxes( nx, ny, nz );
+  }
   
-  Double_t norm = TMath::Sqrt(ct*ct + st*st*cp*cp);
-  TVector3 nx( st*st*sp*cp/norm, -norm, st*ct*sp/norm );
-  TVector3 ny( ct/norm,          0.0,   -st*cp/norm   );
-  TVector3 nz( st*cp,            st*sp, ct            );
+  //____________________________________________________________________________________
+  void TransportToLab( Double_t p, Double_t xptar, Double_t yptar, TVector3& pvect) 
+  {
+    
+    TVector3 v( xptar, yptar, 1.0 );
+    v *= p/TMath::Sqrt( 1.0+xptar*xptar+yptar*yptar );
+    pvect = fToLabRot * v;
+  }
   
-  fToLabRot.SetToIdentity().RotateAxes( nx, ny, nz );
-}
-
-//____________________________________________________________________________________
-void TransportToLab( Double_t p, Double_t xptar, Double_t yptar, TVector3& pvect) 
-{
-
-  TVector3 v( xptar, yptar, 1.0 );
-  v *= p/TMath::Sqrt( 1.0+xptar*xptar+yptar*yptar );
-  pvect = fToLabRot * v;
-}
 
 
 void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
 
-  
+ 
   /* 
      User Input:
      basename: generic file name used in input and simulated root file
@@ -712,7 +713,7 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
   Double_t Ein_v;               //incident beam energy at vertex (simulates external rad. has rad. tail) ??? 
   Double_t Q2_v;                //Q2 (vertex)  
   Double_t nu_v;                //energy transfer = Ein_v - Ef_v
-  Double_t q_lab_v;             //magintude of 3-vector q
+  Double_t q_v;             //magintude of 3-vector q
   Double_t Pm_v;                //missing momentum at the vertex
   Double_t Pm_par_v;            //parallel compoent of missing momentum at vertex
   Double_t Pf_v;                //final proton momentum at the vertex
@@ -766,12 +767,15 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
   Double_t Pmz_q_v;
 
   //Vertex q-vector angle relative to beam (+z)
-  Double_t th_q_v;
-  Double_t ph_q_v;
+  Double_t cthq_v;
+  Double_t thq_v;
+  Double_t phq_v;
 
   //Vertex Proton / Neutron angles relative to q
+  Double_t cthpq_v;
   Double_t th_pq_v;     //theta_pq_v
   Double_t ph_pq_v;     //phi_pq_v
+  Double_t cthrq_v;
   Double_t th_rq_v;     //theta_rq_v
   Double_t ph_rq_v;      //phi_rq_v
 
@@ -848,7 +852,7 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
   tree->SetBranchAddress("Ein_v", &Ein_v);
   tree->SetBranchAddress("Q2_v", &Q2_v);
   tree->SetBranchAddress("nu_v", &nu_v);
-  tree->SetBranchAddress("q_lab_v", &q_lab_v);
+  tree->SetBranchAddress("q_lab_v", &q_v);
   tree->SetBranchAddress("pm_v", &Pm_v);
   tree->SetBranchAddress("pm_par_v", &Pm_par_v);
   tree->SetBranchAddress("pf_v", &Pf_v);
@@ -1051,14 +1055,43 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
     Q2_v = Q2_v / 1.e6;
     nu_v = nu_v / 1000.;
     Pm_v = Pm_v / 1000.;
-    q_lab_v = q_lab_v / 1000.;
+    q_v = q_v / 1000.;
     
     ki_v = sqrt(Ein_v*Ein_v - me*me);   //initial electron momentum at vertex
     kf_v = sqrt(Ef_v*Ef_v - me*me);    //final electron momentum at vertex
     
     X_v = Q2_v / (2.*MP*nu_v);         //X-Bjorken at the vertex
 
+    the_v = 2. * asin( sqrt( Q2_v/(4.*Ein_v*Ef_v) ) ) / dtr;
+
+    En_v = sqrt(MN*MN + Pm_v*Pm_v);  // neutron energy at vertex
+    Ep_v = sqrt(MP*MP + Pf_v*Pf_v);   // proton energy at vertex
+
+    cthq_v = (ki_v*ki_v + q_v*q_v - kf_v*kf_v) /  (2.*ki_v*q_v);
+    thq_v = acos(cthq_v) / dtr;
+
+    //theta_pq (relative angle between q-vector and final proton momentum)
+    cthpq_v = (q_v*q_v + Pf_v*Pf_v - Pm_v*Pm_v) / (2.*q_v*Pf_v);
+    th_pq_v = acos(cthpq_v) / dtr;  //theta_pq [deg];
+                    
+    //theta_nq (relative angle between q-vector and recoil momentum)
+    cthrq_v = (q_v*q_v + Pm_v*Pm_v - Pf_v*Pf_v) / (2.*q_v*Pm_v);
+    th_rq_v = acos(cthrq_v) / dtr;  //theta_nq [deg]
+      
+    //theta_p (proton angle relative to +z (lab))
+    thx_v = thq_v + th_pq_v;  //this is assuming proton is detected in the forward spec. momentum ( < 90 deg)
+
+    /*
+    cout << "" << endl;
+    cout << Form("the_v = %.3f", the_v) << endl;
+    cout << Form("thp_v = %.3f", thx_v) << endl;
+    cout << Form("thq_v = %.3f", thq_v) << endl;
+    cout << Form("thpq_v = %.3f", th_pq_v) << endl;
+    cout << Form("thrq_v = %.3f", th_rq_v) << endl;
+    */
+
     
+      /*
     //Calculate electron final momentum 3-vector
     SetCentralAngles(the_central, phe_central);
     TransportToLab(kf_v, e_xptar_v, e_yptar_v, kf_vec_v);
@@ -1095,7 +1128,7 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
     ph_q_v = qvec_v.Phi();
     
     rot_to_q_v.SetZAxis( qvec_v, kfvec_v).Invert();
-    
+
     xq_v = fX_v.Vect();
     bq_v = fB_v.Vect();
     
@@ -1107,17 +1140,29 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
     ph_pq_v = xq_v.Phi();     //"out-of-plane angle", "phi_pq"                                                                    
     th_rq_v = bq_v.Theta();   // theta_rq                                                                                                     
     ph_rq_v = bq_v.Phi();     //"out-of-plane angle", phi_rq
+
+    
+    cout << Form("th_pq_v = %.3f", th_pq_v/dtr) << endl;
+    cout << Form("ph_pq_v = %.3f", ph_pq_v/dtr) << endl;
+    cout << Form("th_rq_v = %.3f", th_rq_v/dtr) << endl;
+    cout << Form("ph_rq_v = %.3f", ph_rq_v/dtr) << endl;
+
+    cout << Form("90-th_pq_v = %.3f", (90-(th_pq_v/dtr))) << endl;
+    cout << Form("ph_pq_v = %.3f", ph_pq_v/dtr) << endl;
+    cout << Form("90-th_rq_v = %.3f", (90-(th_rq_v/dtr)) ) << endl;
+    cout << Form("ph_rq_v = %.3f", ph_rq_v/dtr) << endl;
+
+    cout << Form ("th_xq = %.3f", th_xq/dtr) << endl;
+    cout << Form ("th_rq = %.3f", th_rq/dtr) << endl;
+    
     
     p_miss_q_v = -bq_v;
-
-    
-
 
     //Missing Momentum Components in the q-frame
     Pmz_q_v = p_miss_q_v.Z();   //parallel component to +z (+z is along q)
     Pmx_q_v = p_miss_q_v.X();   //in-plane perpendicular component to +z
     Pmy_q_v = p_miss_q_v.Y();   //out-of-plane component (Oop)
-    
+    */
     
     //---------Light Cone Variables (at vertex) (C.Y. March 05, 2021)---------
     
@@ -1213,15 +1258,26 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
     if(c_allCuts) {
 
       // ------ This is for calculation of avergaed kinematics -------
-      H_Pm_vs_thrq_v    ->Fill(th_rq_v/dtr, Pm_v, FullWeight);	 
-      H_Ein_2Davg       ->Fill(th_rq_v/dtr, Pm_v, Ein_v*FullWeight);
-      H_kf_2Davg        ->Fill(th_rq_v/dtr, Pm_v, kf_v*FullWeight);
-      H_the_2Davg       ->Fill(th_rq_v/dtr, Pm_v, (the_v/dtr)*FullWeight);
-      H_thp_2Davg       ->Fill(th_rq_v/dtr, Pm_v, (thx_v/dtr)*FullWeight);
-      H_Pf_2Davg        ->Fill(th_rq_v/dtr, Pm_v, Pf_v*FullWeight);
-      H_Pm_2Davg        ->Fill(th_rq_v/dtr, Pm_v, Pm_v*FullWeight);
-      H_thrq_2Davg      ->Fill(th_rq_v/dtr, Pm_v, (th_rq_v/dtr)*FullWeight);
+      H_Pm_vs_thrq_v    ->Fill(th_rq_v, Pm_v, FullWeight);	 
+      H_Ein_2Davg       ->Fill(th_rq_v, Pm_v, Ein_v*FullWeight);
+      H_kf_2Davg        ->Fill(th_rq_v, Pm_v, kf_v*FullWeight);
+      H_the_2Davg       ->Fill(th_rq_v, Pm_v, (the_v)*FullWeight);
+      H_thp_2Davg       ->Fill(th_rq_v, Pm_v, (thx_v)*FullWeight);
+      H_Pf_2Davg        ->Fill(th_rq_v, Pm_v, Pf_v*FullWeight);
+      H_Pm_2Davg        ->Fill(th_rq_v, Pm_v, Pm_v*FullWeight);
+      H_thrq_2Davg      ->Fill(th_rq_v, Pm_v, (th_rq_v)*FullWeight);
 
+      /*
+      cout << "" << endl;
+      cout << Form("Pm_v = %.3f", Pm_v) << endl;
+      cout << Form("thrq_v = %.3f", th_rq_v) << endl;
+
+      cout << Form("the_v = %.3f", the_v) << endl;
+      cout << Form("thp_v = %.3f", thx_v) << endl;
+      cout << Form("thq_v = %.3f", thq_v) << endl;
+      cout << Form("thpq_v = %.3f", th_pq_v) << endl;
+      */
+    
       //once they are filled, then divide H_[]_2Davg / H_Pm_vs_thrq_v
 	
       //--------------------------------------------------------------
@@ -1298,7 +1354,8 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
       H_hxptar_vs_exptar->Fill(e_xptar, h_xptar, FullWeight); 
       H_hyptar_vs_eyptar->Fill(e_yptar, h_yptar, FullWeight); 
       H_hdelta_vs_edelta->Fill(e_delta, h_delta, FullWeight);
-      
+
+      /*
       cout << "--------> event: " << i << " <---------" << endl;
       cout << "(vertex, normal) variables:" << endl;
       cout << " (Ein_v, Ein )" <<  Ein_v << ", " << ki << endl;
@@ -1306,7 +1363,7 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
       cout << " (Pf_v, Pf) = " <<  Pf_v  << ", " << Pf <<  endl;
       cout << " (Q2_v, Q2) = " <<  Q2_v  << ", " << Q2 <<  endl;
       cout << " (nu_v, nu) = " <<  nu_v  << ", " << nu <<  endl;
-      cout << " (qlab_v, qlab) = " <<  q_lab_v  << ", " << q << endl;
+      cout << " (qlab_v, qlab) = " <<  q_v  << ", " << q << endl;
       cout << " (X_v, X) = " <<  X_v  << ", " << X <<  endl;
       cout << "theta_e_central = " << the_central << endl;
       cout << "phi_e_central = " << phe_central << endl;
@@ -1321,7 +1378,7 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
       cout << "Compare vertex to normal " << endl;
       cout << "(Pm_v, Pm ): " << Pm_v << ", " << Pm << endl;
       cout << "(thrq_v, thrq ): " << th_rq_v/dtr << ", " << th_rq/dtr << endl;
-      
+      */
 							 
     }
 
@@ -1352,6 +1409,9 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
   H_Pf_2Davg         ->Divide(H_Pm_vs_thrq_v);
   H_Pm_2Davg         ->Divide(H_Pm_vs_thrq_v);
   H_thrq_2Davg       ->Divide(H_Pm_vs_thrq_v);
+
+
+
   
   //Calculate Xsec
   //H_Pm_vs_thrq_xsec->Divide(H_Pm_vs_thrq, H_Pm_vs_thrq_ps);
