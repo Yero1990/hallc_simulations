@@ -89,10 +89,10 @@ def main():
     #plot_1d_hist(fname_pattern=fname_path+'yield_Em_pm%d.txt', pm_set=[700, 800, 900], clr=['b', 'g', 'r'], scl_factor=[45., 102., 204.], title = t, xlabel = xl, ylabel=r'Yield', simc_flag=True)
 
     #Missing Momentum
-    t  = r'Missing Momentum: Rates Estimates'
-    xl = r'Missing Momentum, $P_{m}$ (GeV/c)'
+    #t  = r'Missing Momentum: Rates Estimates'
+    #xl = r'Missing Momentum, $P_{m}$ (GeV/c)'
     #plot_1d_hist(fname_pattern=fname_path+'yield_Pm_pm%d.txt', pm_set=[120], clr=['m'], scl_factor=[1], title = t, xlabel = xl, ylabel=r'Yield', simc_flag=True)
-    plot_1d_hist(fname_pattern=fname_path+'yield_Pm_pm%d.txt', pm_set=[120,700,800,900], clr=['m', 'b', 'g', 'r'], scl_factor=[1., 45., 102., 204.], title = t, xlabel = xl, ylabel=r'Counts', simc_flag=True)
+    #plot_1d_hist(fname_pattern=fname_path+'yield_Pm_pm%d.txt', pm_set=[120,700,800,900], clr=['m', 'b', 'g', 'r'], scl_factor=[1., 45., 102., 204.], title = t, xlabel = xl, ylabel=r'Counts', simc_flag=True)
     
     
 if __name__ == "__main__":

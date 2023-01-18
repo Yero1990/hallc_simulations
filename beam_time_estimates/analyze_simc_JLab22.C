@@ -1,7 +1,64 @@
 #include "utils/parse_utils.h"
 #include "utils/hist_utils.h"
 
-void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
+TRotation       fToLabRot;              //Rotation matrix from TRANSPORT to lab
+Double_t        fThetaGeo;              //In-plane geographic central angle (rad)
+Double_t        fPhiGeo;                //Out-of-plane geographic central angle (rad)
+Double_t        fThetaSph, fPhiSph;     //Central angles in spherical coords. (rad)
+Double_t        fSinThGeo, fCosThGeo;   //Sine and cosine of central angles
+Double_t        fSinPhGeo, fCosPhGeo;   // in geographical coordinates
+Double_t        fSinThSph, fCosThSph;   //Sine and cosine of central angles in 
+Double_t        fSinPhSph, fCosPhSph;   // spherical coordinates
+
+
+//_____________________________________________________
+void GeoToSph( Double_t  th_geo, Double_t  ph_geo, Double_t& th_sph, Double_t& ph_sph)
+{
+  
+  // Convert geographical to spherical angles. Units are rad.
+  
+  static const Double_t twopi = 2.0*TMath::Pi();
+  Double_t ct = cos(th_geo), cp = cos(ph_geo);
+  Double_t tmp = ct*cp;
+  th_sph = acos( tmp );
+  tmp = sqrt(1.0 - tmp*tmp);
+  ph_sph = (fabs(tmp) < 1e-6 ) ? 0.0 : acos( sqrt(1.0-ct*ct)*cp/tmp );
+  if( th_geo/twopi-floor(th_geo/twopi) > 0.5 ) ph_sph = TMath::Pi() - ph_sph;
+  if( ph_geo/twopi-floor(ph_geo/twopi) > 0.5 ) ph_sph = -ph_sph;
+}
+
+//_______________________________________________________________
+void SetCentralAngles(Double_t th_cent=0, Double_t ph_cent=0)
+{
+
+  
+  fThetaGeo = TMath::DegToRad()*th_cent; fPhiGeo = TMath::DegToRad()*ph_cent;
+  GeoToSph( fThetaGeo, fPhiGeo, fThetaSph, fPhiSph );
+  fSinThGeo = TMath::Sin( fThetaGeo ); fCosThGeo = TMath::Cos( fThetaGeo );
+  fSinPhGeo = TMath::Sin( fPhiGeo );   fCosPhGeo = TMath::Cos( fPhiGeo );
+  Double_t st, ct, sp, cp;
+  st = fSinThSph = TMath::Sin( fThetaSph ); ct = fCosThSph = TMath::Cos( fThetaSph );
+  sp = fSinPhSph = TMath::Sin( fPhiSph );   cp = fCosPhSph = TMath::Cos( fPhiSph );
+  
+  Double_t norm = TMath::Sqrt(ct*ct + st*st*cp*cp);
+  TVector3 nx( st*st*sp*cp/norm, -norm, st*ct*sp/norm );
+  TVector3 ny( ct/norm,          0.0,   -st*cp/norm   );
+  TVector3 nz( st*cp,            st*sp, ct            );
+  
+  fToLabRot.SetToIdentity().RotateAxes( nx, ny, nz );
+}
+
+//____________________________________________________________________________________
+void TransportToLab( Double_t p, Double_t xptar, Double_t yptar, TVector3& pvect) 
+{
+
+  TVector3 v( xptar, yptar, 1.0 );
+  v *= p/TMath::Sqrt( 1.0+xptar*xptar+yptar*yptar );
+  pvect = fToLabRot * v;
+}
+
+
+void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
 
   
   /* 
@@ -18,7 +75,10 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
   Double_t MD = 1.87561; //GeV
   Double_t MN = 0.939566; //GeV
   Double_t me = 0.000510998; //GeV
-   
+
+  // SET TARGET MASS
+  Double_t tgt_mass = MD;
+
   //-------------------
   // READ FILENAMES
   //-------------------
@@ -45,18 +105,13 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
   input_CutFileName  = "inp/JLab22/set_basic_cuts_jlab22.inp";
   input_HBinFileName = "inp/JLab22/set_basic_histos_jlab22.inp";
 
-  cout << "pass1" << endl;
   //Define File Name Patterns
   simc_infile = Form("infiles/%s.data",         basename.Data());
-    cout << "pass2" << endl;
 
   simc_InputFileName = Form("worksim/%s.root",  basename.Data());
-    cout << "pass3" << endl;
 
   simc_OutputFileName = Form("%s_output.root",  basename.Data());
-  cout << "pass4" << endl;
-    
-  
+
   
   //---------------------------------------------------------------------------------------------------------
 
@@ -73,12 +128,14 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
   Double_t h_Pcen = (stod(split(split(FindString("spec%p%P", simc_infile.Data())[0], '!')[0], '=')[1]))/1000.; 
 
   //e- arm angle (deg)
-  Double_t e_angle = (stod(split(split(FindString("spec%e%theta", simc_infile.Data())[0], '!')[0], '=')[1])); 
+  Double_t the_central = (stod(split(split(FindString("spec%e%theta", simc_infile.Data())[0], '!')[0], '=')[1])); 
   //p arm angle (deg)
-  Double_t h_angle = (stod(split(split(FindString("spec%p%theta", simc_infile.Data())[0], '!')[0], '=')[1])); 
+  Double_t thp_central = (stod(split(split(FindString("spec%p%theta", simc_infile.Data())[0], '!')[0], '=')[1])); 
 
-  cout << "pass5" << endl;
-
+  // spectrometers are in-plane
+  Double_t phe_central=0;  
+  Double_t php_central=0;
+  
   //--------------------
   // READ ANALYSIS CUTS
   //-------------------
@@ -159,7 +216,6 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
   Bool_t c_kinCuts;   //kinematics cuts
 
   //---------------------------------------------------------------------------------------------------------
-  cout << "pass6" << endl;
 
   //--------------------
   // READ HISTO BINS
@@ -348,7 +404,6 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
   
 
   //---------------------------------------------------------------------------------------------------------
-  cout << "pass7" << endl;
 
   //--------------------
   // DECLARE HISTOGRAMS
@@ -394,7 +449,20 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
   TH2F *H_Pm_vs_thrq  = new TH2F("H_Pm_vs_thrq", "Pm vs. #theta_{rq} (yield)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
   TH2F *H_Pm_vs_thrq_ps  = new TH2F("H_Pm_vs_thrq_ps", "Pm vs. #theta_{rq} (phase space)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
   TH2F *H_Pm_vs_thrq_xsec  = new TH2F("H_Pm_vs_thrq_xsec", "Pm vs. #theta_{rq} (xsec)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
-    
+
+
+  //SIMC 2D Average Kinematics Histograms (Pmiss vs. th_rq averaged over different kinematics) 
+  TH2F *H_Pm_vs_thrq_v   = new TH2F("H_Pm_vs_thrq_v", "Pm vs. #theta_{rq} (vertex)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
+  TH2F *H_Ein_2Davg      = new TH2F("H_Ein_2Davg", "Ein (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
+  TH2F *H_kf_2Davg       = new TH2F("H_kf_2Davg", "Final e^{-} Momentum (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
+  TH2F *H_the_2Davg      = new TH2F("H_the_2Davg", "Electron Scattering Angle (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax); 
+  TH2F *H_thp_2Davg      = new TH2F("H_thp_2Davg", "Proton Scattering Angle (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax); 
+  TH2F *H_Pf_2Davg       = new TH2F("H_Pf_2Davg", "Final Proton Momentum (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
+  TH2F *H_Pm_2Davg     = new TH2F("H_Pm_2Davg","Missing Momentum (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax); 
+  TH2F *H_thrq_2Davg   = new TH2F("H_thrq_2Davg", "#theta_{rq} (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
+
+
+  
   //Add Kin Histos to TList
 
   //Add Primary Kin Histos
@@ -424,6 +492,16 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
   kin_HList->Add( H_Pm_vs_thrq_ps );
   //kin_HList->Add( H_Pm_vs_thrq_xsec );
 
+  // Add averaged kin. histos
+  kin_HList->Add( H_Pm_vs_thrq_v );
+  kin_HList->Add( H_Ein_2Davg    );
+  kin_HList->Add( H_kf_2Davg     );
+  kin_HList->Add( H_the_2Davg    );
+  kin_HList->Add( H_thp_2Davg    );
+  kin_HList->Add( H_Pf_2Davg     );
+  kin_HList->Add( H_Pm_2Davg     );
+  kin_HList->Add( H_thrq_2Davg   );
+  
   //----------------------------------------------------------------------
   //---------HISTOGRAM CATEGORY: Spectrometer Acceptance  (ACCP)----------
   //----------------------------------------------------------------------
@@ -540,7 +618,6 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
   //--------------------------------
   // READ TREE / SET BRANCH ADDRESS
   //--------------------------------
-    cout << "pass8" << endl;
 
   TTree *tree;
   Long64_t nentries;
@@ -621,7 +698,93 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
   Double_t htarx_corr;
   Double_t etarx_corr;
 
+  //--------------------------
+  // --- Vertex Quantities ---
+  //--------------------------
   
+  //Light-Cone Momentum Variables (at vertex)
+  Double_t PmPar_v;     //parallel component of recoil momentum relative to q-vector
+  Double_t PmPerp_v;    //transverse component of recoil momentum relative to q-vector
+  Double_t alpha_n_v;   //light-cone momentum fraction of the recoil neutron
+  Double_t alpha_v;     //momentum fraction of struck nucleon (normalized such that: alpha + alpha_n = 2)
+  
+  //Standard Kinematic variable (at vertex)
+  Double_t Ein_v;               //incident beam energy at vertex (simulates external rad. has rad. tail) ??? 
+  Double_t Q2_v;                //Q2 (vertex)  
+  Double_t nu_v;                //energy transfer = Ein_v - Ef_v
+  Double_t q_lab_v;             //magintude of 3-vector q
+  Double_t Pm_v;                //missing momentum at the vertex
+  Double_t Pm_par_v;            //parallel compoent of missing momentum at vertex
+  Double_t Pf_v;                //final proton momentum at the vertex
+  Double_t Ep_v;                //final proton energy at the vertex
+  Double_t Ef_v;                //final electron energy at the vertex
+  Double_t En_v;                //final neutron energy at the vertex
+  
+  Double_t ki_v;
+  Double_t kf_v;
+  Double_t X_v;
+
+  
+  //Vertex X'tar / Y'tar: 
+  //Recently added (These are needed to use with hcana methods TransportToLab(Pf, xptar, yptar, p_vec),
+  //which required these quantities as input. Then, the angles at the vertex can be determined)
+
+  Double_t e_xptar_v;           
+  Double_t e_yptar_v;
+  Double_t h_xptar_v;
+  Double_t h_yptar_v;
+
+
+  //Declare Neccessary Variables To be used to transport to Lab (at the vertex). **The '_v' suffix refers to vertex
+  TLorentzVector fP0_v;           // Beam 4-momentum
+  TLorentzVector fP1_v;           // Scattered electron 4-momentum
+  TLorentzVector fA_v;            // Target 4-momentum
+  TLorentzVector fA1_v;           // Final system 4-momentum
+  TLorentzVector fQ_v;            // Momentum transfer 4-vector
+  TLorentzVector fX_v;            // Detected secondary particle 4-momentum (GeV)
+  TLorentzVector fB_v;            // Recoil system 4-momentum (GeV)
+
+  TVector3 Pf_vec_v;              //final proton momentum vector at the vertex
+  TVector3 kf_vec_v;              //final electron momentum vector at the vertex
+
+  //Declare necessary variables for rotaion from +z to +q
+  TVector3 qvec_v;
+  TVector3 kfvec_v;
+  TRotation rot_to_q_v;
+  TVector3 bq_v;   //recoil system in lab frame (Pmx, Pmy, Pmz)
+  TVector3 xq_v;   //detected system in lab frame
+  TVector3 p_miss_q_v;   //recoil system in q-frame
+
+  //Additional Vertex Variables
+  //Missing Momentum components in Hall Coord. System (+X beam-left, +Y up, +Z downstream)
+  Double_t Pmx_lab_v;
+  Double_t Pmy_lab_v;
+  Double_t Pmz_lab_v;
+  //Missing Momentum components in the q-frame
+  Double_t Pmx_q_v;
+  Double_t Pmy_q_v;
+  Double_t Pmz_q_v;
+
+  //Vertex q-vector angle relative to beam (+z)
+  Double_t th_q_v;
+  Double_t ph_q_v;
+
+  //Vertex Proton / Neutron angles relative to q
+  Double_t th_pq_v;     //theta_pq_v
+  Double_t ph_pq_v;     //phi_pq_v
+  Double_t th_rq_v;     //theta_rq_v
+  Double_t ph_rq_v;      //phi_rq_v
+
+  //Proton / Electron In-Plane Scattering Angles (vertex)
+  Double_t the_v;     
+  Double_t thx_v;
+
+  //----------Variables Used in Auxiliary Functions--------------------------------------
+
+ 
+  
+  
+
   //----- Set Branch Address ------
 
   //Primary Kinematics (electron kinematics)
@@ -680,7 +843,23 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
   tree->SetBranchAddress("Jacobian_corr", &Jacobian_corr);
   tree->SetBranchAddress("probabs", &prob_abs);
 
+  // ---- SIMC Variables at the vertex (used for calcualting averaged kinematics) ----
 
+  tree->SetBranchAddress("Ein_v", &Ein_v);
+  tree->SetBranchAddress("Q2_v", &Q2_v);
+  tree->SetBranchAddress("nu_v", &nu_v);
+  tree->SetBranchAddress("q_lab_v", &q_lab_v);
+  tree->SetBranchAddress("pm_v", &Pm_v);
+  tree->SetBranchAddress("pm_par_v", &Pm_par_v);
+  tree->SetBranchAddress("pf_v", &Pf_v);
+  tree->SetBranchAddress("Ep_v", &Ep_v);
+  tree->SetBranchAddress("Ef_v", &Ef_v);
+  tree->SetBranchAddress("e_xptar_v", &e_xptar_v);
+  tree->SetBranchAddress("e_yptar_v", &e_yptar_v);
+  tree->SetBranchAddress("h_xptar_v", &h_xptar_v);
+  tree->SetBranchAddress("h_yptar_v", &h_yptar_v);
+ 
+  
   //-----------------------------------
   // DEFINE CUT ON COLLIMATOR GEOMETRY
   //-----------------------------------
@@ -722,10 +901,8 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
   shms_Coll_gCut->SetPoint(7,  shms_hsize,    -shms_vsize/2.);
   shms_Coll_gCut->SetPoint(8,  shms_hsize,     shms_vsize/2.);
 
-    cout << "pass9" << endl;
-
   //-------------------------------
-  //  DEFINE FULL WEIGHT VARIABLES
+  //  DEFINE FULL WEIGHT VARIABLE
   //-------------------------------
 
   // STEP1: Determine the charge factor:
@@ -769,7 +946,7 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
   Double_t eff_factor;
 
  
-  eff_factor = e_trk * h_trk * daq_lt * tgt_boil * proton_abs;
+  eff_factor = 1; // e_trk * h_trk * daq_lt * tgt_boil * proton_abs;
     
 
 
@@ -827,6 +1004,9 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
     //Get the ith entry from the SNT TTree
     tree->GetEntry(i);
 
+    //convert
+    kf = kf/1000.;
+    
     //-----Define Additional Kinematic Variables--------
     
     X = Q2 / (2.*MP*nu);
@@ -848,8 +1028,8 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
 
     
     //SIMC Collimator (definition based on HCANA collimator)
-    htarx_corr = tar_x - h_xptar*htar_z*cos(h_angle*dtr);
-    etarx_corr = tar_x - e_xptar*etar_z*cos(e_angle*dtr);  
+    htarx_corr = tar_x - h_xptar*htar_z*cos(thp_central*dtr);
+    etarx_corr = tar_x - e_xptar*etar_z*cos(the_central*dtr);  
     
     
     //Define Collimator (same as in HCANA)
@@ -858,6 +1038,124 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
     eXColl = etarx_corr + e_xptar*253.;
     eYColl = e_ytar + e_yptar*253.-(0.019+40.*.01*0.052)*e_delta+(0.00019+40*.01*.00052)*e_delta*e_delta; //correct for HB horizontal bend	  
 
+
+
+    //==========
+    
+    //---------Calculate Necessary Vertex Quantities for Average Kinematics----------------
+    
+    //Convert from MeV to GeV
+    Ein_v = Ein_v / 1000.;
+    Ef_v = Ef_v / 1000.;
+    Pf_v = Pf_v / 1000.;
+    Q2_v = Q2_v / 1.e6;
+    nu_v = nu_v / 1000.;
+    Pm_v = Pm_v / 1000.;
+    q_lab_v = q_lab_v / 1000.;
+    
+    ki_v = sqrt(Ein_v*Ein_v - me*me);   //initial electron momentum at vertex
+    kf_v = sqrt(Ef_v*Ef_v - me*me);    //final electron momentum at vertex
+    
+    X_v = Q2_v / (2.*MP*nu_v);         //X-Bjorken at the vertex
+
+    
+    //Calculate electron final momentum 3-vector
+    SetCentralAngles(the_central, phe_central);
+    TransportToLab(kf_v, e_xptar_v, e_yptar_v, kf_vec_v);
+    
+    //Calculate 4-Vectors
+    fP0_v.SetXYZM(0.0, 0.0, ki_v, me);  //set initial e- 4-momentum at the vertex
+    fP1_v.SetXYZM(kf_vec_v.X(), kf_vec_v.Y(), kf_vec_v.Z(), me);  //set final e- 4-momentum at the vertex
+    fA_v.SetXYZM(0.0, 0.0, 0.0, tgt_mass );  //Set initial target at rest
+    fQ_v = fP0_v - fP1_v;
+    fA1_v = fA_v + fQ_v;   //final target (sum of final hadron four momenta)
+    
+    //Get Detected Particle 4-momentum
+    SetCentralAngles(thp_central, php_central);
+    TransportToLab(Pf_v, h_xptar_v, h_yptar_v, Pf_vec_v);
+    fX_v.SetVectM(Pf_vec_v, MP);       //SET FOUR VECTOR OF detected particle
+    fB_v = fA1_v - fX_v;                 //4-MOMENTUM OF UNDETECTED PARTICLE 
+
+    Pmx_lab_v = fB_v.X();
+    Pmy_lab_v = fB_v.Y(); 
+    Pmz_lab_v = fB_v.Z(); 
+    
+    //Electron / Proton In-Plane angles @ the vertex
+    the_v = kf_vec_v.Theta();
+    thx_v = Pf_vec_v.Theta();
+    
+    //Can be checked later against the SIMC pm_v. (It should be identical)
+    //Pm_v = sqrt(Pmx_lab_v*Pmx_lab_v + Pmy_lab_v*Pmy_lab_v + Pmz_lab_v*Pmz_lab_v);
+    
+    //--------Rotate the recoil system from +z to +q-------
+    qvec_v = fQ_v.Vect();
+    kfvec_v = fP1_v.Vect();
+    
+    th_q_v = qvec_v.Theta();
+    ph_q_v = qvec_v.Phi();
+    
+    rot_to_q_v.SetZAxis( qvec_v, kfvec_v).Invert();
+    
+    xq_v = fX_v.Vect();
+    bq_v = fB_v.Vect();
+    
+    xq_v *= rot_to_q_v;
+    bq_v *= rot_to_q_v;
+    
+    //Calculate Angles of q relative to x(detected proton) and b(recoil neutron)
+    th_pq_v = xq_v.Theta();   //"theta_pq"                                       
+    ph_pq_v = xq_v.Phi();     //"out-of-plane angle", "phi_pq"                                                                    
+    th_rq_v = bq_v.Theta();   // theta_rq                                                                                                     
+    ph_rq_v = bq_v.Phi();     //"out-of-plane angle", phi_rq
+    
+    p_miss_q_v = -bq_v;
+
+    
+
+
+    //Missing Momentum Components in the q-frame
+    Pmz_q_v = p_miss_q_v.Z();   //parallel component to +z (+z is along q)
+    Pmx_q_v = p_miss_q_v.X();   //in-plane perpendicular component to +z
+    Pmy_q_v = p_miss_q_v.Y();   //out-of-plane component (Oop)
+    
+    
+    //---------Light Cone Variables (at vertex) (C.Y. March 05, 2021)---------
+    
+    /*
+      NOTE: In analogy to binning the exp. cross section in (Pm, th_rq) 2D histo bins,
+      one can also bin the exp. cross sections in light-cone (alpha, pt) 2D histo bins, which can
+      be later used to extact the light-cone momentum distributions. See https://arxiv.org/abs/1501.05377
+      alpha -> light-cone momentum fraction of the struck nucleon, pt -> transverse momentum component of 
+      the struck nucleon which is equal to the -pt_n (transverse momentum component of the recoil system 
+      (neutron for D(e,e'p)n case)
+    */
+    
+    //neutron energy at the vertex
+    En_v = sqrt(MN*MN + Pm_v*Pm_v);
+    
+    //recoil ("missing neutron") momentum component along q-vector
+    PmPar_v = Pm_v * cos(th_rq_v);
+    
+    //recoil momentum component transverse to q-vector
+    PmPerp_v = sqrt(pow(Pm_v,2) - pow(PmPar_v,2));
+    
+    //light-cone momentum fraction of the recoil neutron
+    alpha_n_v = (En_v - PmPar_v) / (MD/2.);
+    
+    //momentum fraction of struck nucleon (normalized such that: alpha + alpha_n = 2)
+    alpha_v = 2. - alpha_n_v;
+    
+    
+	  
+	  //--------------------------------------------------------------------------------
+
+    //==========
+
+
+    
+
+
+    
     //------Define ANALYSIS CUTS-------
 
     //---Collimator CUTS---
@@ -914,13 +1212,26 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
      
     if(c_allCuts) {
 
+      // ------ This is for calculation of avergaed kinematics -------
+      H_Pm_vs_thrq_v    ->Fill(th_rq_v/dtr, Pm_v, FullWeight);	 
+      H_Ein_2Davg       ->Fill(th_rq_v/dtr, Pm_v, Ein_v*FullWeight);
+      H_kf_2Davg        ->Fill(th_rq_v/dtr, Pm_v, kf_v*FullWeight);
+      H_the_2Davg       ->Fill(th_rq_v/dtr, Pm_v, (the_v/dtr)*FullWeight);
+      H_thp_2Davg       ->Fill(th_rq_v/dtr, Pm_v, (thx_v/dtr)*FullWeight);
+      H_Pf_2Davg        ->Fill(th_rq_v/dtr, Pm_v, Pf_v*FullWeight);
+      H_Pm_2Davg        ->Fill(th_rq_v/dtr, Pm_v, Pm_v*FullWeight);
+      H_thrq_2Davg      ->Fill(th_rq_v/dtr, Pm_v, (th_rq_v/dtr)*FullWeight);
 
-      // This is for the 2D cross section Pm vs. thnq binned in thnq 
+      //once they are filled, then divide H_[]_2Davg / H_Pm_vs_thrq_v
+	
+      //--------------------------------------------------------------
+      
+      // This is for the 2D cross section Pm vs. thrq binned in thrq 
       H_Pm_vs_thrq->Fill(th_rq/dtr, Pm, FullWeight);
       H_Pm_vs_thrq_ps->Fill(th_rq/dtr, Pm, PhaseSpace);
       
       //Primary (electron) Kinematics
-      H_kf->Fill(kf/1000., FullWeight);
+      H_kf->Fill(kf, FullWeight);
       H_the->Fill(theta_e/dtr, FullWeight);
       H_Q2->Fill(Q2, FullWeight);
       H_xbj->Fill(X, FullWeight);
@@ -987,7 +1298,31 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
       H_hxptar_vs_exptar->Fill(e_xptar, h_xptar, FullWeight); 
       H_hyptar_vs_eyptar->Fill(e_yptar, h_yptar, FullWeight); 
       H_hdelta_vs_edelta->Fill(e_delta, h_delta, FullWeight);
-	    
+      
+      cout << "--------> event: " << i << " <---------" << endl;
+      cout << "(vertex, normal) variables:" << endl;
+      cout << " (Ein_v, Ein )" <<  Ein_v << ", " << ki << endl;
+      cout << " (kf_v, kf) = " <<  kf_v  << ", " << kf <<  endl;
+      cout << " (Pf_v, Pf) = " <<  Pf_v  << ", " << Pf <<  endl;
+      cout << " (Q2_v, Q2) = " <<  Q2_v  << ", " << Q2 <<  endl;
+      cout << " (nu_v, nu) = " <<  nu_v  << ", " << nu <<  endl;
+      cout << " (qlab_v, qlab) = " <<  q_lab_v  << ", " << q << endl;
+      cout << " (X_v, X) = " <<  X_v  << ", " << X <<  endl;
+      cout << "theta_e_central = " << the_central << endl;
+      cout << "phi_e_central = " << phe_central << endl;
+      cout << "theta_p_central = " << thp_central << endl;
+      cout << "phi_p_central = " << php_central << endl;
+      
+      cout << "(the_v, th_e) = " << the_v/dtr << ", " << theta_e/dtr << endl;
+      cout << "(thp_v, thp) = " << thx_v/dtr << ", " << theta_p/dtr << endl;
+      cout << "(th_pq_v, thpq) = " << th_pq_v/dtr << ", " << th_xq/dtr << endl;
+      
+      cout << "-------------" << endl;
+      cout << "Compare vertex to normal " << endl;
+      cout << "(Pm_v, Pm ): " << Pm_v << ", " << Pm << endl;
+      cout << "(thrq_v, thrq ): " << th_rq_v/dtr << ", " << th_rq/dtr << endl;
+      
+							 
     }
 
     //No Self Cut Histos
@@ -1003,11 +1338,21 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
     if(c_kinCuts && c_hdelta && c_edelta && c_ztarDiff && hmsColl_Cut) { H_eXColl_vs_eYColl_nsc->Fill(eYColl, eXColl, FullWeight); }
 
     
+    
+    
     cout << "SIMC Events Completed: " << std::setprecision(2) << double(i) / nentries * 100. << "  % " << std::flush << "\r";
     
   } // end entry loop
 
-
+  //Finish Calculating the 2D Average Kinematics (Divide by the sum of the weight)
+  H_Ein_2Davg        ->Divide(H_Pm_vs_thrq_v);
+  H_kf_2Davg         ->Divide(H_Pm_vs_thrq_v);
+  H_the_2Davg        ->Divide(H_Pm_vs_thrq_v);
+  H_thp_2Davg        ->Divide(H_Pm_vs_thrq_v);
+  H_Pf_2Davg         ->Divide(H_Pm_vs_thrq_v);
+  H_Pm_2Davg         ->Divide(H_Pm_vs_thrq_v);
+  H_thrq_2Davg       ->Divide(H_Pm_vs_thrq_v);
+  
   //Calculate Xsec
   //H_Pm_vs_thrq_xsec->Divide(H_Pm_vs_thrq, H_Pm_vs_thrq_ps);
   
@@ -1051,7 +1396,7 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
   //------------------------------------------
   // Extract The Yield binned in Pm vs th_rq
   //------------------------------------------
-  extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("%s_yield_%.1fuA_%.1fhr.txt",  basename.Data(), Ib, time), true);
+  //extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("%s_yield_%.1fuA_%.1fhr.csv",  basename.Data(), Ib, time), true);
 
   //--------
   // Extrack numerical data for histogram plotting
@@ -1093,3 +1438,6 @@ void analyze_simc_JLab22(Bool_t heep_check=true, TString basename=""){
   */
 
 }
+
+
+
