@@ -6,26 +6,26 @@
 
  =?
  &EXPERIMENT
-     ngen  =  500000			!  POS: # of successes
+     ngen  = 500000			!  POS: # of successes
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
      doing_pion  =  F		!  (T = TRUE)
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
-     extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
+     extra_dbase_file = 'extra_hydrogen_norad.data' !  additional input parameters.
      set_allow_scat_in_coll=2  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
  &KINEMATICS_MAIN
-     Ebeam  =  14000.                                  !  (MeV)
+     Ebeam  =  22000.                                  !  (MeV)
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
-     spec%e%P  =  10836.0                               !  e arm central momentum (MeV/c)
-     spec%e%theta  =  14.376                             !  e arm angle setting (degrees)
-     spec%p%P  =  3545.                               !  p arm central momentum (MeV/c)
-     spec%p%theta  =   44.622                         !  p arm angle setting (degrees)
+     spec%e%P  =  17781.3                               !  e arm central momentum (MeV/c)
+     spec%e%theta  =  8.938                             !  e arm angle setting (degrees)
+     spec%p%P  =  4628.1                               !  p arm central momentum (MeV/c)
+     spec%p%theta  =   41.281                          !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
@@ -46,7 +46,7 @@
      targ%mass_amu  =  2.014101	        !  target mass in amu
      targ%mrec_amu  =  1.008665	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
      targ%rho  =  0.167		        !  target density (g/cm^3)
-     targ%thick  =  3340.		!  target thick 20cm (mg/cm^2)	
+     targ%thick  =  3340.		!  target thick 20cm (mg/cm^2)
      ! targ%thick  =  2505.		!  target thick 15cm (mg/cm^2) 
      ! targ%thick  =  1670.		!  target thick 10cm (mg/cm^2)
      targ%angle  =  0.		        !  target angle (for solid target) (degrees)
