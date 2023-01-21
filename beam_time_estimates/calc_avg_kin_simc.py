@@ -19,10 +19,16 @@ sys.path.append('../../../../pyroot/')
 sys.path.append('/apps/root/PRO/lib/')
 sys.path.append('/apps/root/PRO/')
 
+#so far, works with:
+#tags/v6-18-04@v6-18-04
+# python 3.43
+# but still unable to use: from ROOT import * for python3
+
+
 # do the root operations directly here
 import ROOT as R
-from ROOT import *
-from ROOT import *
+#from ROOT import *
+#from ROOT import *
 import numpy as np
 
 
@@ -54,6 +60,7 @@ header = \
 """
 #------------------------------------------------------------
 '''
+
 #------------------------------------------------------------
 # header information for the output file (FOR JLAB22 GeV)
 header = \
@@ -80,12 +87,14 @@ header = \
 
 
 # User Set the general file name Eb, Pr, thrq
-Eb=14
-Pr=1
-thrq=26
+list_of_args = sys.argv
+
+
+Eb=22   #list_of_args[1]
+Pr=1    #list_of_args[2]
+thrq=26 #list_of_args[3]
 
 basename='d2_Eb%s_Pr%s_thrq%s_norad_output' %(Eb, Pr, thrq)
-
 output_file = basename+'_avgkin.txt'
 
 
@@ -94,7 +103,7 @@ o = open(output_file,'w')
 #Open root file to read avg kin histos
 root_file = basename+'.root'
 
-
+print('root_fil',root_file)
 # open ROOTfile
 rf = R.TFile(root_file)
 
@@ -117,15 +126,14 @@ bin_info_kf        = BI.get_histo_data_arrays(rf.H_kf_2Davg)           #final e-
 bin_info_the       = BI.get_histo_data_arrays(rf.H_the_2Davg)          #final e- angle [deg]
 bin_info_Pf        = BI.get_histo_data_arrays(rf.H_Pf_2Davg)           #final p momentum [GeV]
 bin_info_thp       = BI.get_histo_data_arrays(rf.H_thp_2Davg)          #final p angle [deg]
-
-#bin_info_q         = BI.get_histo_data_arrays(rf.H_q_2Davg)            # |q| momentum transfer
-#bin_info_thq       = BI.get_histo_data_arrays(rf.H_theta_q_2Davg)      # q-angle with +z beam
-#bin_info_Q2        = BI.get_histo_data_arrays(rf.H_Q2_2Davg)           # Q2 4-momentum transfer
-#bin_info_nu        = BI.get_histo_data_arrays(rf.H_omega_2Davg)        # omega, energy transfer
-#bin_info_xbj       = BI.get_histo_data_arrays(rf.H_xbj_2Davg)          # Xbj, Bjorken
+bin_info_q         = BI.get_histo_data_arrays(rf.H_q_2Davg)            # |q| momentum transfer
+bin_info_thq       = BI.get_histo_data_arrays(rf.H_theta_q_2Davg)      # q-angle with +z beam
+bin_info_Q2        = BI.get_histo_data_arrays(rf.H_Q2_2Davg)           # Q2 4-momentum transfer
+bin_info_nu        = BI.get_histo_data_arrays(rf.H_nu_2Davg)        # omega, energy transfer
+bin_info_xbj       = BI.get_histo_data_arrays(rf.H_xbj_2Davg)          # Xbj, Bjorken
 bin_info_Pm         = BI.get_histo_data_arrays(rf.H_Pm_2Davg)           # Missing Momentum
-#bin_info_thpq      = BI.get_histo_data_arrays(rf.H_theta_pq_2Davg)     # theta_pq [deg]
-bin_info_thrq       = BI.get_histo_data_arrays(rf.H_thrq_nq_2Davg)     # theta_nq [deg]
+bin_info_thpq      = BI.get_histo_data_arrays(rf.H_theta_pq_2Davg)     # theta_pq [deg]
+bin_info_thrq       = BI.get_histo_data_arrays(rf.H_thrq_2Davg)     # theta_nq [deg]
 #bin_info_cphi_pq   = BI.get_histo_data_arrays(rf.H_cphi_pq_2Davg)      # cos(phi_pq) (-1,1)
 #bin_info_sphi_pq   = BI.get_histo_data_arrays(rf.H_sphi_pq_2Davg)      # sin(phi_pq) (-1,1)
 
@@ -151,13 +159,13 @@ for i,acont in enumerate(all.cont):
       the       = bin_info_the.cont[i]
       Pf        = bin_info_Pf.cont[i]*1000.
       thp       = bin_info_thp.cont[i]
-      #q         = bin_info_q.cont[i]*1000.
-      #thq       = bin_info_thq.cont[i]
-      #Q2        = bin_info_Q2.cont[i]*1.e6
-      #nu        = bin_info_nu.cont[i]*1000.
-      #xbj       = bin_info_xbj.cont[i]
+      q         = bin_info_q.cont[i]*1000.
+      thq       = bin_info_thq.cont[i]
+      Q2        = bin_info_Q2.cont[i]*1.e6
+      nu        = bin_info_nu.cont[i]*1000.
+      xbj       = bin_info_xbj.cont[i]
       Pm        = bin_info_Pm.cont[i]*1000.
-      #thpq      = bin_info_thpq.cont[i]
+      thpq      = bin_info_thpq.cont[i]
       thnq      = bin_info_thrq.cont[i]
       #cphi_pq   = bin_info_cphi_pq.cont[i]
       #sphi_pq   = bin_info_sphi_pq.cont[i]
@@ -181,6 +189,7 @@ for i,acont in enumerate(all.cont):
          Pm_calc = Pm   #set it to the average Pm from 2D histo
       else:
          Pm_calc = np.sqrt ( Pm_calc2 )
+         print('Pm_calc = ', Pm_calc)  
       En_calc = np.sqrt(MN**2 + Pm_calc**2);
 
       # center of mass motion
@@ -238,7 +247,7 @@ for i,acont in enumerate(all.cont):
       #print('ix=',i_xbin,' iy=',i_ybin,' pm=',Pm_calc,' Kfact=',Kfact,' f_rec=',f_rec,' sig_eN=',sig_eN)
       # write output file
 
-            # original
+      # original
       '''
       l = "%i %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %i %i %f\n"%( \
                                                                                                                                   # 0 2d bin number
@@ -319,72 +328,73 @@ for i,acont in enumerate(all.cont):
                                                                                                                                   all.ny, \
                                                                                                                                   # 38
                                                                                                                                   all.cont[i])
+      
       '''
-      
-       # for JLab 22 GeV calculation
-      l = "%i %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %i %i %f\n"%( 
+
+      # for JLab 22 GeV calculation
+      l = "%i %i %i %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %i %i %.3E\n"%( \
                                                                                                           # 0 2d bin number
-                                                                                                          i_bin, 
+                                                                                                          i_bin, \
                                                                                                           # 1 
-                                                                                                          i_xbin, 
+                                                                                                          i_xbin, \
                                                                                                           # 2
-                                                                                                          i_ybin, 
+                                                                                                          i_ybin, \
                                                                                                           # 3 central thnq_bin
-                                                                                                          thnq_b, 
+                                                                                                          thnq_b, \
                                                                                                           # 4 central pm_bin
-                                                                                                          pm_b, 
+                                                                                                          pm_b, \
                                                                                                           # 5 avg. beam energy 
-                                                                                                          Ei, 
+                                                                                                          Ei, \
                                                                                                           # 6 avg. e- momentum
-                                                                                                          kf, 
+                                                                                                          kf, \
                                                                                                           # 7 avg. e- angle
-                                                                                                          the,
+                                                                                                          the,                
                                                                                                           # 8 calc. average energy transer
-                                                                                                          nu_calc, 
+                                                                                                          nu_calc, \
                                                                                                           # 9 calc. average 4-Momentum transfer
-                                                                                                          Q2_calc, 
+                                                                                                          Q2_calc, \
                                                                                                           # 10 calc. average |q| 3-momentum transfer
-                                                                                                          q_calc, 
+                                                                                                          q_calc, \
                                                                                                           # 11 calc. average final proton energy (assume proton mass)
-                                                                                                          Ep, 
+                                                                                                          Ep, \
                                                                                                           # 12 MC average final proton momentum
-                                                                                                          Pf, 
+                                                                                                          Pf, \
                                                                                                           # 13 MC average missing momentum
-                                                                                                          Pm, 
+                                                                                                          Pm, \
                                                                                                           # 14 calc. average Missing momentum  (assume deuteron mass)
-                                                                                                          Pm_calc, 
+                                                                                                          Pm_calc, \
                                                                                                           # 15
-                                                                                                          En_calc, 
+                                                                                                          En_calc, \
                                                                                                           # 16
-                                                                                                          beta_cm, 
+                                                                                                          beta_cm, \
                                                                                                           # 17
-                                                                                                          gamma_cm, 
+                                                                                                          gamma_cm, \
                                                                                                           # 18
-                                                                                                          Pf_par, 
+                                                                                                          Pf_par, \
                                                                                                           # 19
-                                                                                                          Pf_perp, 
+                                                                                                          Pf_perp, \
                                                                                                           # 20
-                                                                                                          thpq, 
+                                                                                                          thpq, \
                                                                                                           # 21
-                                                                                                          th_pq_calc, 
+                                                                                                          th_pq_calc, \
                                                                                                           # 22
-                                                                                                          Pf_par_cm, 
+                                                                                                          Pf_par_cm, \
                                                                                                           # 23
-                                                                                                          theta_pq_cm, 
+                                                                                                          theta_pq_cm, \
                                                                                                           # 24
-                                                                                                          thnq, 
+                                                                                                          thnq, \
                                                                                                           # 25
-                                                                                                          theta_nq_calc, 
+                                                                                                          theta_nq_calc, \
                                                                                                           # 26
-                                                                                                          alpha_calc,   
+                                                                                                          alpha_calc,                                          
                                                                                                           # 27
-                                                                                                          all.nx, 
+                                                                                                          all.nx, \
                                                                                                           # 28
-                                                                                                          all.ny, 
+                                                                                                          all.ny, \
                                                                                                           # 29
-                                                                                                          all.cont[i]
-      )
-      
+                                                                                                          all.cont[i])
+       
+                                                                         
       o.write(l)
 o.close()
 
