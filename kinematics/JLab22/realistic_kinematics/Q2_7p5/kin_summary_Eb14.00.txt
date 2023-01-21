@@ -1,0 +1,24 @@
+# D(e,e'p)n Central Kinematics Summary
+# Beam Energy (Ei) = 14.000 GeV
+# 
+# Header Definitions: 
+# Pr   : Central Missing Momentum [GeV/c] 
+# xbj  : Bjorken x  
+# kf   : e- final momentum [GeV/c] 
+# th_e : e- scattering angle [deg] 
+# Pf   : final proton momentum [GeV/c] 
+# th_p : proton scattering angle [deg] 
+# q    : 3-momentum transfer [GeV] 
+# th_q : relative angle between q-vector and +z (lab)  [deg] 
+# th_nq: relative angle between q-vector and recoil neutron [deg] 
+# th_pq: relative angle between q-vector and knocked-out proton [deg] 
+# Q2   : 4-Momentum Transfer [GeV^2]  
+# 
+Eb,Pr,xbj,kf,th_e,Pf,th_p,q,th_q,th_rq,th_pq,Q2
+14.00,1.0000,0.7000,8.2904,14.6042,6.1418,28.3033,6.3324,19.2750,74.5320,9.0283,7.5000
+14.00,1.0000,0.8000,9.0041,14.0104,5.4187,32.4122,5.6973,22.4960,68.9304,9.9162,7.5000
+14.00,1.0000,0.9000,9.5592,13.5956,4.8544,36.1353,5.2173,25.5114,63.5039,10.6239,7.5000
+14.00,1.0000,1.0000,10.0033,13.2890,4.4013,39.4698,4.8450,28.3328,58.2258,11.1370,7.5000
+14.00,1.0000,1.1000,10.3666,13.0530,4.0290,42.4127,4.5499,30.9701,53.0635,11.4426,7.5000
+14.00,1.0000,1.2000,10.6694,12.8657,3.7175,44.9600,4.3119,33.4330,47.9760,11.5270,7.5000
+14.00,1.0000,1.3000,10.9256,12.7133,3.4526,47.1044,4.1173,35.7314,42.9100,11.3731,7.5000

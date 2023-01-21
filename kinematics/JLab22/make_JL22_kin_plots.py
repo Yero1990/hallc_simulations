@@ -62,7 +62,7 @@ ax[2,2].set(xlabel=r'$\theta_{rq}$ [deg]', ylabel=r'Recoil Momentum, $P_{r}$ [Ge
 
 
 
-E = [11,12,14,16,17] #18,20,22]
+E = [11,12,13, 14, 15, 16, 17] #18,20,22]
 clr  = ['grey', 'c',    'm',   'r',   'g',   'b', 'darkorange', 'violet', 'gold', 'lightcoral', 'olive', 'sandybrown'] #'darkgray']
 
 #multi-file read
@@ -72,7 +72,7 @@ fig, ax  = plt.subplots(3, 3)
 for i in np.arange(len(E)):
 
     print(E[i])
-    df = pd.read_csv('realistic_kinematics/kin_summary_Eb%.2f.txt'%(E[i]), comment='#')
+    df = pd.read_csv('realistic_kinematics/Q2_9p5/kin_summary_Eb%.2f.txt'%(E[i]), comment='#')
     
 
     # kf vs. th_e
