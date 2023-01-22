@@ -41,9 +41,9 @@ def calc_d2_kin_J22():
     Eb_range = np.arange(Eb_min, Eb_max, Eb_step)
     
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 8.5
+    Q2_min = 4.5
     Q2_step = 0.5    
-    Q2_max = 8.5 + Q2_step   #include endpoint (+Pr_step)
+    Q2_max = 4.5 + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
@@ -150,8 +150,8 @@ def calc_d2_kin_J22():
                     
                     
                     # spectrometer constraint requirements (based on physical limits)
-                    if kf<2. or kf>11.0 or th_e<5.5 or th_e>40 or Pf<0.4 or Pf>7.3 or thp<10.5 or thp>80:
-                        continue
+                    #if kf<2. or kf>11.0 or th_e<5.5 or th_e>40 or Pf<0.4 or Pf>7.3 or thp<10.5 or thp>80:
+                    #    continue
 
                     if Pr>1.: continue
                     #if thnq<70.:

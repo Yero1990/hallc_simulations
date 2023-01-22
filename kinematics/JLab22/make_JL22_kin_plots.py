@@ -62,7 +62,7 @@ ax[2,2].set(xlabel=r'$\theta_{rq}$ [deg]', ylabel=r'Recoil Momentum, $P_{r}$ [Ge
 
 
 
-E = [11,12,13, 14, 15, 16, 17] #18,20,22]
+E = [11,12,  14 , 16, 18, 20, 22]
 clr  = ['grey', 'c',    'm',   'r',   'g',   'b', 'darkorange', 'violet', 'gold', 'lightcoral', 'olive', 'sandybrown'] #'darkgray']
 
 #multi-file read
@@ -72,10 +72,16 @@ fig, ax  = plt.subplots(3, 3)
 for i in np.arange(len(E)):
 
     print(E[i])
-    df = pd.read_csv('realistic_kinematics/Q2_9p5/kin_summary_Eb%.2f.txt'%(E[i]), comment='#')
+    df = pd.read_csv('idealistic_kinematics/Q2_4p5/kin_summary_Eb%.2f.txt'%(E[i]), comment='#')
     
 
     # kf vs. th_e
+    if i==0:
+        ax[0,0].axhline(y=2.0, c='red', linestyle='dashed', linewidth=2, zorder=0)
+        ax[0,0].axhline(y=11.0, c='red', linestyle='dashed', linewidth=2, zorder=0)
+        ax[0,0].axvline(x=5.5, c='red', linestyle='dashed', linewidth=2, zorder=0)
+        #ax[0,0].axvline(x=40., c='red', linestyle='dashed', linewidth=2, zorder=0)
+
     ax[0,0].plot( df['th_e'] , df['kf'], linestyle='', marker='o', mec='k', mfc=clr[i], alpha=0.8)
     ax[0,0].set(xlabel='SHMS Angle [deg]', ylabel='SHMS Momentum [GeV/c]')
 

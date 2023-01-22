@@ -107,7 +107,7 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
   input_HBinFileName = "inp/JLab22/set_basic_histos_jlab22.inp";
 
   //Define File Name Patterns
-  simc_infile = Form("infiles/%s.data",         basename.Data());
+  simc_infile = Form("infiles/deuteron/JLab22/Q2_9p5/%s.data",         basename.Data());
 
   simc_InputFileName = Form("worksim/%s.root",  basename.Data());
 
@@ -933,7 +933,7 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
   // SIMC input files are set to 'events / 1mC'
    
   // Charge factor is the total integrated charge assuming a beam current and run time
-  Double_t Ib = 180;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
+  Double_t Ib = 80;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
   Double_t time = 1.0;     //estimated time (in hours) a run takes (start - end) of run
   Double_t charge_factor = Ib * time * 3600. / 1000.;
 
@@ -1496,7 +1496,7 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
   //------------------------------------------
   // Extract The Yield binned in Pm vs th_rq
   //------------------------------------------
-  //extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("%s_yield_%.1fuA_%.1fhr.csv",  basename.Data(), Ib, time), true);
+  extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("%s_yield_%.1fuA_%.1fhr.csv",  basename.Data(), Ib, time), true);
 
   //--------
   // Extrack numerical data for histogram plotting
