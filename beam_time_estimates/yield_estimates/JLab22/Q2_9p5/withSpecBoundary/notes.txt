@@ -1,0 +1,9 @@
+Yield Estimates for d(e,e'p) @ 14 GeV beam energy
+(Using current boundaries on SHMS -- realistic kinematics)
+
+Analyzed data uses V18 FSI model (SIMC)
+Beam Energy: 14 GeV
+Ib: 80 uA
+time: 1 hr
+target: LD2 (20 cm)
+Q2 = 9.5 GeV^2

@@ -27,9 +27,9 @@ void combine_histos()
   TFile *file2 = NULL;
   TFile *file3 = NULL;
 
-  TString file1_path = "d2_Eb14_Pr1_thrq26_norad_output.root";
-  TString file2_path = "d2_Eb14_Pr1_thrq48_norad_output.root";
-  TString file3_path = "d2_Eb14_Pr1_thrq65_norad_output.root";
+  TString file1_path = "Q2_4p5/withSpecBoundary/d2_Eb11_Pr1_thrq27_norad_output.root";
+  TString file2_path = "Q2_4p5/withSpecBoundary/d2_Eb11_Pr1_thrq49_norad_output.root";
+  TString file3_path = "Q2_4p5/withSpecBoundary/d2_Eb11_Pr1_thrq65_norad_output.root";
   
   file1 = new TFile(file1_path.Data());
   file2 = new TFile(file2_path.Data());
@@ -101,7 +101,48 @@ void combine_histos()
   TH1D *h2 = (TH1D*) projh2X_h2->Clone();
   TH1D *h3 = (TH1D*) projh2X_h3->Clone();
 
- 
+  TH1D *h1_s = (TH1D*) projh2X_h1->Clone();
+  TH1D *h2_s = (TH1D*) projh2X_h2->Clone();
+  TH1D *h3_s = (TH1D*) projh2X_h3->Clone();
+
+  
+  h1->SetFillColor(14);
+  h2->SetFillColor(14);
+  h2->SetFillColor(14);
+  h1->SetFillStyle(3025);
+  h2->SetFillStyle(3025);
+  h3->SetFillStyle(3025);
+  
+  // scale by 160/80 uA (double current)
+  h1_s->Scale(2.);
+  h2_s->Scale(2.);
+  h3_s->Scale(2.);
+
+  h1_s->SetFillColorAlpha(kGreen, 0.25);
+  h2_s->SetFillColorAlpha(kRed+1, 0.25);
+  h3_s->SetFillColorAlpha(kBlue+2, 0.25);
+  
+  c3->cd();
+  
+  h1->Draw("histE0same");
+  h2->Draw("histE0same");
+  h3->Draw("histE0same");
+  
+  h1_s->Draw("histE0sames");
+  h2_s->Draw("histE0sames");
+  h3_s->Draw("histE0sames");
+  
+
+
+  
+  /*
+  projh2X_h1->Draw("histE0");
+  projh2X_h2->Draw("histE0same");
+  projh2X_h3->Draw("histE0same");
+  */
+  
+
+  /*
   h1->Sumw2();
   h1->SetFillColorAlpha(40, 0.9);
 
@@ -110,6 +151,7 @@ void combine_histos()
   h1->Add(h3);
 
   h1->Draw();
+  */
   
   /*
   // Add all projections
