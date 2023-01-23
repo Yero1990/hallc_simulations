@@ -107,9 +107,9 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
   input_HBinFileName = "inp/JLab22/set_basic_histos_jlab22.inp";
 
   //Define File Name Patterns
-  simc_infile = Form("infiles/deuteron/JLab22/Q2_9p5/%s.data",         basename.Data());
+  simc_infile = Form("infiles/deuteron/JLab22/Q2_4p5/noSpecBoundary/%s.data",         basename.Data());
 
-  simc_InputFileName = Form("worksim/Q2_9p5/noSpecBoundary/%s.root",  basename.Data());
+  simc_InputFileName = Form("worksim/Q2_4p5/noSpecBoundary/%s.root",  basename.Data());
 
   simc_OutputFileName = Form("%s_output.root",  basename.Data());
 

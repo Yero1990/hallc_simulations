@@ -27,9 +27,9 @@ void combine_histos()
   TFile *file2 = NULL;
   TFile *file3 = NULL;
 
-  TString file1_path = "Q2_4p5/noSpecBoundary/d2_Eb22_Pr1_thrq27_norad_output.root";
-  TString file2_path = "Q2_4p5/noSpecBoundary/d2_Eb22_Pr1_thrq49_norad_output.root";
-  TString file3_path = "Q2_4p5/noSpecBoundary/d2_Eb22_Pr1_thrq65_norad_output.root";
+  TString file1_path = "Q2_4p5/withSpecBoundary/d2_Eb11_Pr1_thrq27_norad_output_5degbins.root";
+  TString file2_path = "Q2_4p5/withSpecBoundary/d2_Eb11_Pr1_thrq49_norad_output_5degbins.root";
+  TString file3_path = "Q2_4p5/withSpecBoundary/d2_Eb11_Pr1_thrq65_norad_output_5degbins.root";
   
   file1 = new TFile(file1_path.Data());
   file2 = new TFile(file2_path.Data());
@@ -97,6 +97,8 @@ void combine_histos()
   c2->cd();
   projh2X_h3->Draw("histE0sames");
 
+
+  /*
   TH1D *h1 = (TH1D*) projh2X_h1->Clone();
   TH1D *h2 = (TH1D*) projh2X_h2->Clone();
   TH1D *h3 = (TH1D*) projh2X_h3->Clone();
@@ -105,7 +107,7 @@ void combine_histos()
   TH1D *h2_s = (TH1D*) projh2X_h2->Clone();
   TH1D *h3_s = (TH1D*) projh2X_h3->Clone();
 
-  /*
+  
   h1->SetFillColor(14);
   h2->SetFillColor(14);
   h2->SetFillColor(14);

@@ -214,7 +214,9 @@ thxq_xmin = 0.
 thxq_xmax = 15.
 
 # In-plane angle between the recoil system and q 
-thrq_nbins = 19
+# 19, 0, 190 (10 deg bins)
+# 38, 0, 190 (5 deg bins) better for angular distributions
+thrq_nbins = 38
 thrq_xmin = 0.
 thrq_xmax = 190.
 
