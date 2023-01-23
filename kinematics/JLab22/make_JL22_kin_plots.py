@@ -99,8 +99,12 @@ for i in np.arange(len(E)):
     ax[1,0].set(xlabel='SHMS Angle [deg]', ylabel=r'Recoil Momentum, $P_{r}$ [GeV/c]')
     
     # th_rq vs. th_e
-    ax[1,1].plot( df['th_e'] , df['th_rq'], linestyle='', marker='o', mec='k', mfc=clr[i], alpha=0.8)
-    ax[1,1].set(xlabel='SHMS Angle [deg]', ylabel=r'$\theta_{rq}$ [deg]')
+    #ax[1,1].plot( df['th_e'] , df['th_rq'], linestyle='', marker='o', mec='k', mfc=clr[i], alpha=0.8)
+    #ax[1,1].set(xlabel='SHMS Angle [deg]', ylabel=r'$\theta_{rq}$ [deg]')
+    
+    # th_rq vs. th_e
+    ax[1,1].plot( df['th_p'] , df['th_rq'], linestyle='', marker='o', mec='k', mfc=clr[i], alpha=0.8)
+    ax[1,1].set(xlabel='HMS Angle [deg]', ylabel=r'$\theta_{rq}$ [deg]')
     
     # Pf vs th_e
     ax[1,2].plot( df['th_e'], df['Pf'], linestyle='', marker='o', mec='k', mfc=clr[i], alpha=0.8)
