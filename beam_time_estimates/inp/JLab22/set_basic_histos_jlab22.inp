@@ -83,8 +83,8 @@ W2_xmin = 0.1
 W2_xmax = 3.0;
 
 # 4-momentum transfer
-Q2_nbins = 80
-Q2_xmin = 6
+Q2_nbins = 100
+Q2_xmin = 0
 Q2_xmax = 12
 
 # Bjorken-X

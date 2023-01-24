@@ -8,13 +8,13 @@ from uncertainties import unumpy
 from scipy.interpolate import make_interp_spline
 
 
-fname_AV18_26='d2_Eb14_Pr1_thrq26_norad_output_avgkin_AV18.csv'
-fname_AV18_48='d2_Eb14_Pr1_thrq48_norad_output_avgkin_AV18.csv'
-fname_AV18_65='d2_Eb14_Pr1_thrq65_norad_output_avgkin_AV18.csv'
+fname_AV18_26='d2_Eb22_Pr1_thrq26_norad_output_avgkin_AV18.csv'
+fname_AV18_48='d2_Eb22_Pr1_thrq48_norad_output_avgkin_AV18.csv'
+fname_AV18_65='d2_Eb22_Pr1_thrq65_norad_output_avgkin_AV18.csv'
 
-fname_CD_26='d2_Eb14_Pr1_thrq26_norad_output_avgkin_CD-Bonn.csv'
-fname_CD_48='d2_Eb14_Pr1_thrq48_norad_output_avgkin_CD-Bonn.csv'
-fname_CD_65='d2_Eb14_Pr1_thrq65_norad_output_avgkin_CD-Bonn.csv'
+fname_CD_26='d2_Eb22_Pr1_thrq26_norad_output_avgkin_CD-Bonn.csv'
+fname_CD_48='d2_Eb22_Pr1_thrq48_norad_output_avgkin_CD-Bonn.csv'
+fname_CD_65='d2_Eb22_Pr1_thrq65_norad_output_avgkin_CD-Bonn.csv'
 
 df_av18_26 = pd.read_csv(fname_AV18_26, comment='#')
 df_av18_48 = pd.read_csv(fname_AV18_48, comment='#')
@@ -25,7 +25,7 @@ df_cd_48 = pd.read_csv(fname_CD_48, comment='#')
 df_cd_65 = pd.read_csv(fname_CD_65, comment='#')
 
 
-Pc_arr = [1.04, 1.6] 
+Pc_arr = [1., 1.6] 
 # loop over different central momentum
 #for Pc in np.arange(0.8, 1.2, 0.04):
 
