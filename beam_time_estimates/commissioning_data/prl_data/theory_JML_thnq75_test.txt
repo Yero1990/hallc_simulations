@@ -1,0 +1,35 @@
+ 
+    # Jean-Marc Laget (JML) theoretical cross sections and reduced cross sections as a function of missing momentum
+    #
+    # theta_nq = %s (deg)
+    #
+    # header definitions
+    #
+    # pm_bin            : missig momentum bin center (GeV/c) (bin width from center is +/- 0.02 GeV)
+    # pm_avg            : average missing momentum over pm_bin (GeV/c)
+    # theory_pwiaXsec      : theoretical cross section using the JML Paris PWIA model ( nb / (MeV Sr^2) ) 
+    # theory_fsiXsec       : theoretical cross section using the JML Paris FSI model ( nb / (MeV Sr^2) )
+    # theory_red_pwiaXsec  : theoretical reduced cross section using the JML Paris PWIA model (fm^3) 
+    # theory_red_fsiXsec   : theoretical reduced cross section using the JML Paris FSI model (fm^3)
+    
+    #! pm_bin[f,0]/ pm_avg[f,1]/ theory_pwiaXsec[f,2]/ theory_fsiXsec[f,3]/  theory_red_pwiaXsec[f,4]/ theory_red_fsiXsec[f,5]/  setting[s,6]/ 
+
+    0.02000  0.03205  1.77483E+00  1.63084E+00  5.50118E+00  5.10726E+00 80_set1
+0.06000  0.06131  5.79515E-01  5.64763E-01  1.79876E+00  1.75628E+00 80_set1
+0.10000  0.09788  1.19968E-01  1.10355E-01  3.70296E-01  3.41152E-01 80_set1
+0.14000  0.13715  2.65053E-02  2.22939E-02  8.21754E-02  6.92453E-02 80_set1
+0.18000  0.17692  7.22137E-03  5.11557E-03  2.25809E-02  1.60044E-02 80_set1
+0.22000  0.21724  2.51301E-03  1.44837E-03  7.84903E-03  4.52712E-03 80_set1
+0.26000  0.25809  1.03823E-03  5.46673E-04  3.21337E-03  1.69454E-03 80_set1
+0.30000  0.29969  4.86376E-04  3.13381E-04  1.47924E-03  9.54312E-04 80_set1
+0.34000  0.33965  2.60547E-04  2.60853E-04  7.76498E-04  7.77023E-04 80_set1
+0.38000  0.37969  1.59651E-04  2.41605E-04  4.63879E-04  7.01678E-04 80_set1
+0.42000  0.41934  1.07553E-04  2.17715E-04  3.04231E-04  6.17108E-04 80_set1
+0.46000  0.45863  7.75542E-05  1.85547E-04  2.12360E-04  5.11861E-04 80_set1
+0.50000  0.49812  5.74246E-05  1.49454E-04  1.52897E-04  4.02310E-04 80_set1
+0.54000  0.53763  4.33821E-05  1.14790E-04  1.12248E-04  2.99588E-04 80_set1
+0.58000  0.57688  3.28303E-05  8.44081E-05  8.22045E-05  2.13536E-04 80_set1
+0.62000  0.61586  2.47369E-05  6.03365E-05  5.98178E-05  1.46509E-04 80_set1
+0.66000  0.65361  1.90650E-05  4.31090E-05  4.41333E-05  9.98866E-05 80_set1
+0.70000  0.69332  1.44442E-05  2.92516E-05  3.18170E-05  6.44518E-05 80_set1
+0.74000  0.73493  1.07228E-05  1.89774E-05  2.27735E-05  3.99732E-05 80_set1

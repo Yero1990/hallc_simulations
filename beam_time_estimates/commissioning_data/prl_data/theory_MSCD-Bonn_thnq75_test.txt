@@ -1,0 +1,34 @@
+ 
+    # Misak Sargsian (MS CD-Bonn) theoretical cross sections and reduced cross sections as a function of missing momentum
+    # 
+    # theta_nq = 75 (deg)
+    #
+    # header definitions
+    #
+    # pm_bin            : missig momentum bin center (GeV/c) (bin width from center is +/- 0.02 GeV)
+    # pm_avg            : average missing momentum over pm_bin (GeV/c)
+    # theory_pwiaXsec      : theoretical cross section using the MS CD-Bonn PWIA model ( nb / (MeV Sr^2) ) 
+    # theory_fsiXsec       : theoretical cross section using the MS CD-Bonn FSI model ( nb / (MeV Sr^2) )
+    # theory_red_pwiaXsec  : theoretical reduced cross section using the MS CD-Bonn PWIA model (fm^3) 
+    # theory_red_fsiXsec   : theoretical reduced cross section using the MS CD-Bonn FSI model (fm^3)
+    
+    #! pm_bin[f,0]/ pm_avg[f,1]/ theory_pwiaXsec[f,2]/ theory_fsiXsec[f,3]/  theory_red_pwiaXsec[f,4]/ theory_red_fsiXsec[f,5]/  setting[s,6]/ 
+    0.02000  0.03205  1.72176E+00  1.66664E+00  5.39199E+00  5.21937E+00 80
+0.06000  0.06131  4.55347E-01  4.26271E-01  1.41602E+00  1.32560E+00 80
+0.10000  0.09788  9.85173E-02  8.74637E-02  3.04556E-01  2.70385E-01 80
+0.14000  0.13715  2.45342E-02  1.87976E-02  7.62037E-02  5.83857E-02 80
+0.18000  0.17692  7.36943E-03  4.42289E-03  2.30558E-02  1.38373E-02 80
+0.22000  0.21724  2.56754E-03  1.51935E-03  8.02525E-03  4.74897E-03 80
+0.26000  0.25809  1.01354E-03  5.39317E-04  3.14172E-03  1.67174E-03 80
+0.30000  0.29969  4.48684E-04  3.70751E-04  1.36634E-03  1.12901E-03 80
+0.34000  0.33965  2.29204E-04  2.96104E-04  6.82747E-04  8.82028E-04 80
+0.38000  0.37969  1.28441E-04  2.90369E-04  3.73021E-04  8.43300E-04 80
+0.42000  0.41934  7.75968E-05  2.77027E-04  2.19946E-04  7.85227E-04 80
+0.46000  0.45863  4.96562E-05  1.85513E-04  1.36984E-04  5.11766E-04 80
+0.50000  0.49812  3.27029E-05  1.26696E-04  8.80318E-05  3.41049E-04 80
+0.54000  0.53763  2.21357E-05  9.54254E-05  5.77717E-05  2.49049E-04 80
+0.58000  0.57688  1.52295E-05  6.38151E-05  3.85276E-05  1.61439E-04 80
+0.62000  0.61586  1.06805E-05  4.42772E-05  2.59343E-05  1.07514E-04 80
+0.66000  0.65361  7.64850E-06  2.52247E-05  1.77221E-05  5.84473E-05 80
+0.70000  0.69332  5.39647E-06  1.42834E-05  1.18904E-05  3.14715E-05 80
+0.74000  0.73493  3.69232E-06  8.53436E-06  7.77737E-06  1.79765E-05 80

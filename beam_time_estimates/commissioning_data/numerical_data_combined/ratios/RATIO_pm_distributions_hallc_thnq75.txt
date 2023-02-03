@@ -1,0 +1,39 @@
+# Hall C d(e,e p)n commissioning numerical data red. Xsec ratio to MS CD-Bonn PWIA 
+# 
+# thnq             : 75 +/- 5 deg 
+# pm_bin           : central missing momentum bin (GeV/c) 
+ # pm_avg           : average missing momentum value in central bin (GeV/c) 
+# R                : reduced data cross-sections / MS_CD-Bonn_PWIA 
+# R_err            : reduced data cross-sections / MS_CD_Bonn_PWIA total error 
+# 
+#! pm_bin[f,0]/    pm_avg[f,1]/    R[f,2]/    R_err[f,3]/
+0.020     0.032054     9.030410E-01      2.715920E-01 
+0.060     0.061312     9.797344E-01      1.130241E-01 
+0.100     0.097880     8.814810E-01      8.125902E-02 
+0.140     0.137151     8.430272E-01      8.068153E-02 
+0.180     0.176925     7.492841E-01      9.108940E-02 
+0.220     0.217235     6.584307E-01      1.208505E-01 
+0.260     0.258085     1.060436E+00      2.437016E-01 
+0.300     0.299686     9.129848E-01      3.229992E-01 
+0.340     0.339653     1.605585E+00      6.154360E-01 
+0.380     0.379691     3.793905E+00      1.364288E+00 
+0.420     0.419340     NAN      1.371947E+00 
+0.460     0.458626     NAN      1.891543E+00 
+0.500     0.498117     NAN      6.810655E+00 
+0.540     0.537633     NAN      8.609133E+00 
+0.580     0.576881     NAN      2.204690E+01 
+0.620     nan     NAN      NAN 
+0.660     nan     NAN      NAN 
+0.700     nan     NAN      NAN 
+0.740     nan     NAN      NAN 
+0.780     nan     NAN      NAN 
+0.820     nan     NAN      NAN 
+0.860     nan     NAN      NAN 
+0.900     nan     NAN      NAN 
+0.940     nan     NAN      NAN 
+0.980     nan     NAN      NAN 
+1.020     nan     NAN      NAN 
+1.060     nan     NAN      NAN 
+1.100     nan     NAN      NAN 
+1.140     nan     NAN      NAN 
+1.180     nan     NAN      NAN 

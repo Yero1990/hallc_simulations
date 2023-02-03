@@ -1,0 +1,39 @@
+# J.W.V. Orden and S. Jeshonnek (JVO WJC2) d(e,e p)n theory reduced cross-sections to MS CD-Bonn PWIA 
+# 
+# thnq                : 75 +/- 5 deg 
+# pm_bin              : central missing momentum bin (GeV/c) 
+ # pm_avg              : average missing momentum value in central bin (GeV/c) 
+# R_pwia              : reduced PWIA theory cross-sections / MS_CD-Bonn_PWIA 
+# R_fsi               : reduced FSI  theory cross-sections / MS_CD-Bonn_PWIA 
+# 
+#! pm_bin[f,0]/    pm_avg[f,1]/    R_pwia[f,2]/    R_fsi[f,3]/
+0.020    0.032054     9.772271E-01      9.427501E-01 
+0.060    0.061312     9.779513E-01      9.147460E-01 
+0.100    0.097880     9.792624E-01      8.562964E-01 
+0.140    0.137151     9.804337E-01      7.656571E-01 
+0.180    0.176925     9.829435E-01      6.535207E-01 
+0.220    0.217235     9.909998E-01      5.450701E-01 
+0.260    0.258085     1.014248E+00      5.016496E-01 
+0.300    0.299686     1.067575E+00      6.258192E-01 
+0.340    0.339653     1.157466E+00      9.932284E-01 
+0.380    0.379691     1.286296E+00      1.607865E+00 
+0.420    0.419340     1.448854E+00      2.359758E+00 
+0.460    0.458626     1.649454E+00      3.110351E+00 
+0.500    0.498117     1.905158E+00      3.804729E+00 
+0.540    0.537633     2.214366E+00      4.347534E+00 
+0.580    0.576881     2.544648E+00      4.663880E+00 
+0.620    nan     NAN      NAN 
+0.660    nan     NAN      NAN 
+0.700    nan     NAN      NAN 
+0.740    nan     NAN      NAN 
+0.780    nan     NAN      NAN 
+0.820    nan     NAN      NAN 
+0.860    nan     NAN      NAN 
+0.900    nan     NAN      NAN 
+0.940    nan     NAN      NAN 
+0.980    nan     NAN      NAN 
+1.020    nan     NAN      NAN 
+1.060    nan     NAN      NAN 
+1.100    nan     NAN      NAN 
+1.140    nan     NAN      NAN 
+1.180    nan     NAN      NAN 

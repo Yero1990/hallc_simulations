@@ -1,0 +1,25 @@
+# Jean-Mark Laget (JML Paris) d(e,e p)n theory reduced cross-sections 
+# 
+# thnq                : 75 +/- 5 deg 
+# pm_bin              : central missing momentum bin (GeV/c) 
+# pm_avg              : average missing momentum value in central bin (GeV/c) 
+# red_theoryXsec_pwia : reduced PWIA theory cross-sections (fm^3) 
+# red_theoryXsec_fsi  : reduced FSI  theory cross-sections (fm^3) 
+# 
+#! pm_bin[f,0]/    pm_avg[f,1]/    red_theoryXsec_pwia[f,2]/    red_theoryXsec_fsi[f,3]/
+0.020     0.032054     5.501184E+00      5.107260E+00 
+0.060     0.061312     1.798762E+00      1.756279E+00 
+0.100     0.097880     3.702956E-01      3.411516E-01 
+0.140     0.137151     8.217544E-02      6.924531E-02 
+0.180     0.176925     2.258091E-02      1.600442E-02 
+0.220     0.217235     7.849033E-03      4.527116E-03 
+0.260     0.258085     3.213372E-03      1.694541E-03 
+0.300     0.299686     1.479237E-03      9.543115E-04 
+0.340     0.339653     7.764981E-04      7.770226E-04 
+0.380     0.379691     4.638791E-04      7.016775E-04 
+0.420     0.419340     3.042311E-04      6.171082E-04 
+0.460     0.458626     2.123602E-04      5.118608E-04 
+0.500     0.498117     1.528975E-04      4.023096E-04 
+0.540     0.537633     1.122481E-04      2.995878E-04 
+0.580     0.576881     8.220447E-05      2.135358E-04 
+

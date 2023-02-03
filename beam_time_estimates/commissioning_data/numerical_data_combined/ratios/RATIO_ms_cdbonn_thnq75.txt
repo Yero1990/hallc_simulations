@@ -1,0 +1,39 @@
+# Misak Sargsian (MS CD-Bonn) d(e,e p)n theory reduced cross-sections ratio to MS CD-Bonn PWIA 
+# 
+# thnq                : 75 +/- 5 deg 
+# pm_bin              : central missing momentum bin (GeV/c) 
+ # pm_avg              : average missing momentum value in central bin (GeV/c) 
+# R_pwia              : reduced PWIA theory cross-sections / MS_CD-Bonn_PWIA 
+# R_fsi               : reduced FSI  theory cross-sections / MS_CD-Bonn_PWIA 
+# 
+#! pm_bin[f,0]/    pm_avg[f,1]/    R_pwia[f,2]/    R_fsi[f,3]/
+0.020     0.032054     1.0      9.679856E-01 
+0.060     0.061312     1.0      9.361438E-01 
+0.100     0.097880     1.0      8.878006E-01 
+0.140     0.137151     1.0      7.661789E-01 
+0.180     0.176925     1.0      6.001669E-01 
+0.220     0.217235     1.0      5.917537E-01 
+0.260     0.258085     1.0      5.321098E-01 
+0.300     0.299686     1.0      8.263077E-01 
+0.340     0.339653     1.0      1.291880E+00 
+0.380     0.379691     1.0      2.260729E+00 
+0.420     0.419340     1.0      3.570084E+00 
+0.460     0.458626     1.0      3.735946E+00 
+0.500     0.498117     1.0      3.874159E+00 
+0.540     0.537633     1.0      4.310918E+00 
+0.580     0.576881     1.0      4.190228E+00 
+0.620     nan     1.0      NAN 
+0.660     nan     1.0      NAN 
+0.700     nan     1.0      NAN 
+0.740     nan     1.0      NAN 
+0.780     nan     1.0      NAN 
+0.820     nan     1.0      NAN 
+0.860     nan     1.0      NAN 
+0.900     nan     1.0      NAN 
+0.940     nan     1.0      NAN 
+0.980     nan     1.0      NAN 
+1.020     nan     1.0      NAN 
+1.060     nan     1.0      NAN 
+1.100     nan     1.0      NAN 
+1.140     nan     1.0      NAN 
+1.180     nan     1.0      NAN 

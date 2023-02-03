@@ -1,0 +1,32 @@
+ 
+# Sabine Jeschonnek, J.W.V.Orden, W.P.Ford (JVO WJC2) theoretical cross sections and reduced cross sections as a function of missing momentum
+# 
+# theta_nq = 75 (deg)
+#
+# header definitions
+#
+# pm_bin               : missig momentum bin center (GeV/c) (bin width from center is +/- 0.02 GeV)
+# pm_avg               : average missing momentum over pm_bin (GeV/c)
+# theory_pwbaXsec      : theoretical cross section using the JVO WJC2 PWBA model ( nb / (MeV Sr^2) ) 
+# theory_fsiXsec       : theoretical cross section using the JVO WJC2 FSI model ( nb / (MeV Sr^2) )
+# theory_red_pwbaXsec  : theoretical reduced cross section using the JVO WJC2 PWBA model (fm^3) 
+# theory_red_fsiXsec   : theoretical reduced cross section using the JVO WJC2 FSI model (fm^3)
+#
+# common values for pm_bin indicate kinematic settings that contribute to the same missing momentum bin and are used in averaging
+#
+#! pm_bin[f,0]/ pm_avg[f,1]/ theory_pwbaXsec[f,2]/ theory_fsiXsec[f,3]/  theory_red_pwbaXsec[f,4]/ theory_red_fsiXsec[f,5]/
+0.02000  0.03205  1.68340E+00  1.62400E+00  5.26922E+00  5.08329E+00 
+0.06000  0.06131  4.45500E-01  4.16720E-01  1.38477E+00  1.29531E+00 
+0.10000  0.09788  9.65160E-02  8.43950E-02  2.98244E-01  2.60789E-01 
+0.14000  0.13715  2.40660E-02  1.87940E-02  7.47143E-02  5.83471E-02 
+0.18000  0.17693  7.24470E-03  4.81630E-03  2.26564E-02  1.50620E-02 
+0.22000  0.21724  2.54500E-03  1.39970E-03  7.95121E-03  4.37301E-03 
+0.26000  0.25809  1.02830E-03  5.08580E-04  3.18586E-03  1.57567E-03 
+0.30000  0.29969  4.79170E-04  2.80910E-04  1.45845E-03  8.55008E-04 
+0.34000  0.33965  2.65440E-04  2.27770E-04  7.90281E-04  6.78128E-04 
+0.38000  0.37969  1.65290E-04  2.06610E-04  4.79822E-04  5.99770E-04 
+0.42000  0.41934  1.12480E-04  1.83200E-04  3.18665E-04  5.19021E-04 
+0.46000  0.45863  8.19360E-05  1.54510E-04  2.25938E-04  4.26060E-04 
+0.50000  0.49812  6.23290E-05  1.24480E-04  1.67706E-04  3.34933E-04 
+0.54000  0.53763  4.90340E-05  9.62720E-05  1.27926E-04  2.51166E-04 
+0.58000  0.57688  3.87700E-05  7.10590E-05  9.80402E-05  1.79691E-04 

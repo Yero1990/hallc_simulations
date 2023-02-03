@@ -27,7 +27,7 @@ def calc_Xsec_corr(thrq=0):
     # for the corresponding pm_bin array (0.02, 0.06, 0.1, 0.140, etc.) which uses the same binning scheme throughout
     # This ratio, a numerical value for each (thrq, pm_bin) is multiplied by the simulated yields
 
-    base = '../../commissioning_data/numerical_data_combined/'
+    base = '../commissioning_data/numerical_data_combined/'
 
     jml_paris = base + 'jml_paris_thnq%d.txt' % (thrq)
     comm_data = base + 'pm_distributions_hallc_thnq%d.txt' % (thrq)
@@ -119,7 +119,7 @@ def plot_yield(thrq=0, pm_set=0, model='fsi', rad='rad', Ib=1, time=1, scl_facto
     # pm_off : missing momentum offset (a few MeV), to slightly offset (by ~MeV/c) the overlappong relative error data points and make it easier to compare
 
     
-    fname = 'yield_estimates/yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt' % (pm_set, model, rad, Ib, time)
+    fname = 'yield_estimates/deuteron/yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt' % (pm_set, model, rad, Ib, time)
 
     f = dfile(fname)
 
@@ -206,7 +206,7 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
         idx = i[0]     #enumerated index (0, 1, 2, ...)
         
         #append generic file name
-        fnames.append('yield_estimates/yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt'%(pm_set[idx], model, rad, Ib, time))
+        fnames.append('yield_estimates/deuteron/yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt'%(pm_set[idx], model, rad, Ib, time))
         #print(idx,', ',fnames[idx])
         f[idx] = dfile(fnames[idx])
 
@@ -251,7 +251,7 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
         plt.xlim(pm_low, pm_hi)
         plt.yscale('log')
         plt.ylabel(r'Yield', fontsize=22)
-        plt.legend(loc='upper right', fontsize=12)
+        #plt.legend(loc='upper right', fontsize=12)
        
         plt.subplot(2,1,2)
         plt.ylim(-50,80)
@@ -318,7 +318,7 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
     plt.xlim(pm_low, pm_hi)
     plt.yscale('log')
     plt.ylabel(r'Yield', fontsize=22)
-    plt.legend(loc='upper right', fontsize=12)
+    #plt.legend(loc='upper right', fontsize=12)
 
     plt.subplot(2,1,2)
     plt.ylim(-50,80)
@@ -433,9 +433,15 @@ def main():
     plt.show()            
     '''
 
-    '''
+    
     #-------- Plot Yield and Relative Errors for Beam Time Estimates ---------
 
+    # these are based on filename pattern (to scale, please change scale factor accordingly)
+    # example: to scale to 40 uA, for a beam time of 24 hours, then scl_factor = (40./70.) * 24.
+    thrq_c = 35
+    Ib_c = 70
+
+    '''
     #Make subplots
     plt.subplots(2,1, figsize=(5,10))
 
@@ -445,10 +451,11 @@ def main():
     plt.suptitle(r'Relative Statistical Errors, $\theta_{nq}=45\pm5^{\circ}$', fontsize=18)
     
     plt.subplot(2,1,1)
-    plot_yield(thrq=45, pm_set=120, model='fsi', rad='rad', Ib=40, time=1, scl_factor=1, clr='m',rel_err_flg=False)
-    plot_yield(thrq=45, pm_set=700, model='fsi', rad='rad', Ib=40, time=1, scl_factor=45, clr='b',rel_err_flg=False)
-    plot_yield(thrq=45, pm_set=800, model='fsi', rad='rad', Ib=40, time=1, scl_factor=102, clr='g',rel_err_flg=False)
-    plot_yield(thrq=45, pm_set=900, model='fsi', rad='rad', Ib=40, time=1, scl_factor=204, clr='r',rel_err_flg=False)
+    plot_yield(thrq=thrq_c, pm_set=120, model='fsi', rad='rad', Ib=Ib_c, time=1, scl_factor=1, clr='m',rel_err_flg=False)
+    plot_yield(thrq=thrq_c, pm_set=580, model='fsi', rad='rad', Ib=Ib_c, time=1, scl_factor=24, clr='b',rel_err_flg=False)
+    plot_yield(thrq=thrq_c, pm_set=700, model='fsi', rad='rad', Ib=Ib_c, time=1, scl_factor=108, clr='b',rel_err_flg=False)
+    plot_yield(thrq=thrq_c, pm_set=800, model='fsi', rad='rad', Ib=Ib_c, time=1, scl_factor=108, clr='g',rel_err_flg=False)
+    plot_yield(thrq=thrq_c, pm_set=900, model='fsi', rad='rad', Ib=Ib_c, time=1, scl_factor=167, clr='r',rel_err_flg=False)
 
     
     plt.ylabel(r'Yield', fontsize=12)
@@ -456,19 +463,24 @@ def main():
     plt.legend(fontsize=12, loc='upper right')
 
     plt.subplot(2,1,2)
-    plot_yield(thrq=45, pm_set=120, model='fsi', rad='rad', Ib=40, time=1, scl_factor=1, clr='m',rel_err_flg=True)
-    plot_yield(thrq=45, pm_set=700, model='fsi', rad='rad', Ib=40, time=1, scl_factor=45, clr='b',rel_err_flg=True)
-    plot_yield(thrq=45, pm_set=800, model='fsi', rad='rad', Ib=40, time=1, scl_factor=102, clr='g',rel_err_flg=True, pm_off=0.005)
-    plot_yield(thrq=45, pm_set=900, model='fsi', rad='rad', Ib=40, time=1, scl_factor=204, clr='r',rel_err_flg=True, pm_off=0.01)
+    plot_yield(thrq=thrq_c, pm_set=120, model='fsi', rad='rad', Ib=Ib_c, time=1, scl_factor=1, clr='m',rel_err_flg=True)
+    plot_yield(thrq=thrq_c, pm_set=580, model='fsi', rad='rad', Ib=Ib_c, time=1, scl_factor=24, clr='b',rel_err_flg=True)
+    plot_yield(thrq=thrq_c, pm_set=700, model='fsi', rad='rad', Ib=Ib_c, time=1, scl_factor=108, clr='b',rel_err_flg=True)
+    plot_yield(thrq=thrq_c, pm_set=800, model='fsi', rad='rad', Ib=Ib_c, time=1, scl_factor=108, clr='g',rel_err_flg=True, pm_off=0.005)
+    plot_yield(thrq=thrq_c, pm_set=900, model='fsi', rad='rad', Ib=Ib_c, time=1, scl_factor=167, clr='r',rel_err_flg=True, pm_off=0.01)
 
 
     plt.ylabel(r'Stat. Relative Error $\sqrt{N}$ / N (\%)', fontsize=12)
     plt.xlabel(r'Missing Momentum, $P_{m}$ (GeV/c)', fontsize=12)
 
     plt.legend(fontsize=12)
+    '''
+    
+    #-------------------
+    plot_combined_yield(thrq=thrq_c, pm_set=[120,580,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.*(40./70.), 24.*(40./70.), 76.*(40./70.), 76.*(40./70.), 135.*(40./70.)])
     
     plt.show()
-    '''
+    
 
     #---Original Beam Time Allocation to low/high pmiss settings-----
     #plot_combined_yield(thrq=35, pm_set=[120,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.,45.,102.,204.])
@@ -476,8 +488,8 @@ def main():
     #plot_combined_yield(thrq=75, pm_set=[120], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.])
 
     #---New Beam Time Allocation (After considering xsec correction factors, and trasnferred more time from calibration runs to pmiss runs)
-    plot_combined_yield(thrq=35, pm_set=[120,580,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1., 24., 108., 108., 167.])
-    plot_combined_yield(thrq=45, pm_set=[120,580,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1., 24., 108., 108., 167.])
+    #plot_combined_yield(thrq=35, pm_set=[120,580,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1., 24., 108., 108., 167.])
+    #plot_combined_yield(thrq=45, pm_set=[120,580,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1., 24., 108., 108., 167.])
     
 
     # test

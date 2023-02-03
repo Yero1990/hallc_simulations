@@ -1,0 +1,20 @@
+# Hall C d(e,e p)n commissioning numerical data 
+# 
+# thnq             : 75 +/- 5 deg 
+# pm_bin           : central missing momentum bin (GeV/c) 
+ # pm_avg           : average missing momentum value in central bin (GeV/c) 
+# red_dataXsec     : reduced data cross-sections (fm^3) 
+# red_dataXsec_err : reduced data cross-sections total error (fm^3) 
+# 
+#! pm_bin[f,0]/    pm_avg[f,1]/    red_dataXsec[f,2]/    red_dataXsec_err[f,3]/
+0.020     0.032054     4.869189E+00      1.464422E+00 
+0.060     0.061312     1.387325E+00      1.600445E-01 
+0.100     0.097880     2.684601E-01      2.474790E-02 
+0.140     0.137151     6.424180E-02      6.148232E-03 
+0.180     0.176925     1.727534E-02      2.100138E-03 
+0.220     0.217235     5.284073E-03      9.698556E-04 
+0.260     0.258085     3.331593E-03      7.656422E-04 
+0.300     0.299686     1.247444E-03      4.413255E-04 
+0.340     0.339653     1.096209E-03      4.201874E-04 
+0.380     0.379691     1.415208E-03      5.089086E-04 
+

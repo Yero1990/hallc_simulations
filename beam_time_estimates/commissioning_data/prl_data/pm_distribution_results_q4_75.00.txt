@@ -1,0 +1,47 @@
+%auto-ignore
+# exp. cross sections as a function of missing momentum 
+# all cross sections include the bin correction factor 
+#
+# theta_nq = 75.0 
+#
+# Averaged for all contributing bins
+#
+# p_miss_av     : fm^-1, missing momentum (use for plotting averaged results)
+# rho           : fm^3, reduced cross section (momentum distribution) 
+# delta_rho     : fm^3, total error in reduced cross section (momentum distribution) 
+# delta_rho1    : fm^3, total error in reduced cross section including chi2 of averaging 
+#
+# Kinematics and cross section for each contributing bin: 
+#
+#  th_e         : electron scattering angle (deg)
+#  Ei           : incident energy (MeV)
+#  omega        : energy transfer (MeV) 
+#  qlab         : 3-momentum transfer in lab (MeV/c)
+#  cos_phi      : cos(phi), phi reaction plane angle
+#  pf           : final proton momentum (MeV/c)
+#  p_miss       : averaged missing momentum (MeV/c)
+#  pm_b         : missing momentum bin_center (MeV/c)
+#  th_nq        : angle between recoiling neutron and qlab
+#  sig_exp      : exp. cross section for this bin (nb/(MeV Sr^2))
+#  dsig_exp     : error in exp cross section for this bin (nb/(MeV Sr^2))
+#  sig_red_exp  : exp. red. cross section (rho) for this bin (fm^3)
+#  bc           : bin centering correction factor used: sig_exp_raw * bc = exp. cross section at avg. kinematics reported above 
+#
+# common values for Nr indicate kinematic settings that contribute to the same missing momentum bin and are used in averaging
+#
+#! Nr[i,0]/ p_miss_av[f,1]/ rho[f,2]/ delta_rho[f,3]/ delta_rho1[f,4]/ th_e[f,5]/ Ei[f,6]/ omega[f,7]/ qlab[f,8]/ cos_phi[f, 9]/ pf[f,10]/ p_miss[f,11]/ pm_b[f,12]/ th_nq[f,13]/ sig_exp[f,14]/ dsig_exp[f,15]/ bc[f,16]/ sig_red_exp[f,17]/ 
+0 0.155  4.892e+00  1.204e+00  1.204e+00 12.282 10599.055 2164.582 2962.734 -0.55836 2954.681   32.054   20.000  75.148  1.556e+00  3.829e-01 0.91338  4.892e+00
+1 0.304  1.394e+00  1.076e-01  1.076e-01 12.326 10599.116 2162.622 2966.423 -0.62909 2951.101   61.312   60.000  74.954  4.464e-01  3.446e-02 1.06666  1.394e+00
+2 0.491  2.697e-01  1.605e-02  1.605e-02 12.378 10598.834 2163.442 2972.687 -0.61769 2948.722   97.880  100.000  74.911  8.690e-02  5.171e-03 1.02273  2.697e-01
+3 0.691  6.454e-02  4.691e-03  4.691e-03 12.436 10598.605 2170.603 2983.859 -0.56247 2951.124  137.151  140.000  74.909  2.070e-02  1.504e-03 0.93278  6.454e-02
+4 0.893  1.736e-02  1.867e-03  1.867e-03 12.481 10598.545 2179.078 2994.357 -0.48096 2953.138  176.925  180.000  74.876  5.526e-03  5.944e-04 0.85037  1.736e-02
+5 1.099  5.309e-03  9.204e-04  9.204e-04 12.493 10598.502 2183.354 2998.457 -0.38224 2948.944  217.235  220.000  74.795  1.692e-03  2.933e-04 0.78924  5.309e-03
+6 1.306  3.347e-03  7.255e-04  7.255e-04 12.496 10598.545 2190.724 3003.490 -0.31769 2946.168  258.085  260.000  74.755  1.076e-03  2.331e-04 0.70685  3.347e-03
+7 1.516  1.253e-03  4.310e-04  4.310e-04 12.493 10598.582 2202.533 3010.779 -0.28602 2946.140  299.686  300.000  74.743  4.099e-04  1.410e-04 0.77938  1.253e-03
+8 1.720  1.101e-03  4.184e-04  4.184e-04 12.488 10598.515 2218.850 3020.894 -0.27361 2949.756  339.653  340.000  74.740  3.683e-04  1.399e-04 0.95463  1.101e-03
+9 1.922  1.422e-03  5.062e-04  5.062e-04 12.486 10598.544 2238.740 3033.683 -0.27430 2955.610  379.691  380.000  74.600  4.876e-04  1.736e-04 0.99890  1.422e-03
+10 2.123  4.275e-04  3.024e-04  3.024e-04 12.487 10598.532 2260.669 3048.181 -0.27623 2962.341  419.340  420.000  74.300  1.502e-04  1.063e-04 1.01909  4.275e-04
+11 2.323  2.599e-04  2.600e-04  2.600e-04 12.486 10598.452 2284.894 3064.108 -0.28239 2970.310  458.626  460.000  73.965  9.386e-05  9.387e-05 1.01212  2.599e-04
+12 2.523  1.038e-03  5.999e-04  5.999e-04 12.491 10598.504 2309.873 3081.222 -0.28832 2977.716  498.117  500.000  73.433  3.843e-04  2.220e-04 0.99804  1.038e-03
+13 2.723  4.987e-04  4.989e-04  4.989e-04 12.490 10598.407 2336.390 3098.908 -0.30042 2985.522  537.633  540.000  72.915  1.904e-04  1.904e-04 0.97890  4.987e-04
+14 2.923  8.514e-04  8.519e-04  8.519e-04 12.494 10598.320 2367.417 3120.352 -0.31890 2997.058  576.881  580.000  72.426  3.353e-04  3.355e-04 0.96503  8.514e-04

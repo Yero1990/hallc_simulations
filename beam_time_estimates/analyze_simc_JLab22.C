@@ -1140,7 +1140,10 @@ void analyze_simc_JLab22(TString basename="",Bool_t heep_check=false){
     //thp (proton angle relative to +z (lab))
     thx_v = thq_v + th_pq_v;  //this is assuming proton is detected in the forward spec. momentum ( < 90 deg)
     
+    // How to calculate phi_pq?
 
+    // E_removal_neutron - E_removal_proton
+    
     
 
     /*

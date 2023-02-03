@@ -40,7 +40,7 @@ def plot_1d_hist(fname_pattern='', pm_set=[], clr=[], scl_factor=[], title=r'', 
         xmin = min(xlo)
         xmax = max(xup)
 
-        # the scaler factor is to scale the bin contents by beam time (hrs), if needed)
+        # the scaler factor is to scale the bin contents by beam time (hrs) or beam current if needed if needed)
         bin_cnt = f['bin_cnt'] * scl_factor[idx]            # bin content
         bin_cnt_err = f['bin_cnt_err'] * scl_factor[idx]  # absolute error in bin content
 

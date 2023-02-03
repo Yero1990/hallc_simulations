@@ -1,0 +1,23 @@
+# Hall A d(e,e p)n numerical data (PRL 2011, W.U.Boeglin et al.) 
+# 
+# thnq             : 75 +/- 5 deg
+# pm_bin           : central missing momentum bin (GeV/c) 
+# pm_avg           : average missing momentum value in central bin (GeV/c) 
+# red_dataXsec     : reduced data cross-sections (fm^3) 
+# red_dataXsec_err : reduced data cross-sections total error (fm^3) 
+# 
+#! pm_bin[f,0]/   pm_avg[f,1]/    red_dataXsec[f,2]/    red_dataXsec_err[f,3]/
+0.020         0.027030     5.935000E+00      3.513000E-01 
+0.060         0.057809     1.496000E+00      6.368000E-02 
+0.100         0.099045     2.465000E-01      9.054000E-03 
+0.140         0.138110     5.585000E-02      2.343000E-03 
+0.180         0.178951     1.378000E-02      6.359000E-04 
+0.220         0.218214     4.132000E-03      2.186000E-04 
+0.260         0.258463     1.567000E-03      9.775000E-05 
+0.300         0.300291     1.064000E-03      6.106000E-05 
+0.340         0.340145     8.682000E-04      4.734000E-05 
+0.380         0.380000     7.651000E-04      4.083000E-05 
+0.420         0.419657     6.140000E-04      3.344000E-05 
+0.460         0.459512     5.112000E-04      2.939000E-05 
+0.500         0.498380     4.106000E-04      2.651000E-05 
+0.540         0.537643     2.797000E-04      2.437000E-05 

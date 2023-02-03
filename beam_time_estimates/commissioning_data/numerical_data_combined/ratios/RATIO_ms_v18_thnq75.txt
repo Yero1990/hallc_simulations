@@ -1,0 +1,39 @@
+# Misak Sargsian (MS AV18) d(e,e p)n theory reduced cross-sections ratio to MS CD-Bonn PWIA
+# 
+# thnq                : 75 +/- 5 deg 
+# pm_bin              : central missing momentum bin (GeV/c) 
+ # pm_avg              : average missing momentum value in central bin (GeV/c) 
+# R_pwia              : reduced PWIA theory cross-sections / MS_CD-Bonn_PWIA 
+# R_fsi               : reduced FSI  theory cross-sections / MS_CD-Bonn_PWIA 
+# 
+#! pm_bin[f,0]/    pm_avg[f,1]/    R_pwia[f,2]/   R_fsi[f,3]/
+0.020     0.032054     9.985170E-01      9.675872E-01 
+0.060     0.061312     9.962249E-01      9.344829E-01 
+0.100     0.097880     9.903101E-01      8.824735E-01 
+0.140     0.137151     9.790949E-01      7.545724E-01 
+0.180     0.176925     9.622684E-01      5.819039E-01 
+0.220     0.217235     9.436502E-01      5.658247E-01 
+0.260     0.258085     9.345736E-01      5.234941E-01 
+0.300     0.299686     9.531091E-01      8.652314E-01 
+0.340     0.339653     1.012089E+00      1.435874E+00 
+0.380     0.379691     1.115986E+00      2.519328E+00 
+0.420     0.419340     1.256785E+00      3.923596E+00 
+0.460     0.458626     1.422786E+00      4.345516E+00 
+0.500     0.498117     1.606085E+00      4.777049E+00 
+0.540     0.537633     1.800022E+00      5.185513E+00 
+0.580     0.576881     1.998998E+00      5.127693E+00 
+0.620     nan     NAN      NAN 
+0.660     nan     NAN      NAN 
+0.700     nan     NAN      NAN 
+0.740     nan     NAN      NAN 
+0.780     nan     NAN      NAN 
+0.820     nan     NAN      NAN 
+0.860     nan     NAN      NAN 
+0.900     nan     NAN      NAN 
+0.940     nan     NAN      NAN 
+0.980     nan     NAN      NAN 
+1.020     nan     NAN      NAN 
+1.060     nan     NAN      NAN 
+1.100     nan     NAN      NAN 
+1.140     nan     NAN      NAN 
+1.180     nan     NAN      NAN 

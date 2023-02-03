@@ -1,0 +1,23 @@
+# Hall A d(e,e p)n numerical data (PRL 2011, W.U.Boeglin et al.) ratio to MS CD-Bonn PWIA
+# 
+# thnq             : 75 +/- 5 deg
+# pm_bin           : central missing momentum bin (GeV/c) 
+# pm_avg           : average missing momentum value in central bin (GeV/c) 
+# R                : reduced data cross-sections / MS_CD-Bonn_PWIA  
+# R_err            : reduced data cross-sections / MS_CD-Bonn_PWIA total error  
+# 
+#!  pm_bin[f,0]/   pm_avg[f,1]/    R[f,2]/    R_err[f,3]/
+0.020       0.027030     9.081548E-01      5.375481E-02 
+0.060       0.057809     8.837375E-01      3.761792E-02 
+0.100       0.099045     8.353049E-01      3.068093E-02 
+0.140       0.138110     7.632136E-01      3.201807E-02 
+0.180       0.178951     6.202455E-01      2.862221E-02 
+0.220       0.218214     5.310329E-01      2.809385E-02 
+0.260       0.258463     5.018337E-01      3.130456E-02 
+0.300       0.300291     7.889322E-01      4.527462E-02 
+0.340       0.340145     1.280713E+00      6.983293E-02 
+0.380       0.380000     2.060532E+00      1.099615E-01 
+0.420       0.419657     2.802432E+00      1.526276E-01 
+0.460       0.459512     3.770678E+00      2.167845E-01 
+0.500       0.498380     4.677495E+00      3.019980E-01 
+0.540       0.537643     4.841951E+00      4.218747E-01 
