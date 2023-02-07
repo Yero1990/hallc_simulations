@@ -5,3 +5,4 @@ outfiles/*.geni
 outfiles/*.hist
 worksim/*.data
 worksim/*/*.data
+worksim
