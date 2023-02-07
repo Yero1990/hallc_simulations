@@ -28,11 +28,11 @@ def calc_d2_kin():
     me = 0.000511  #electron
 
     #Initial parameter kinematics [GeV]
-    Ei = 10.6  #beam energy
-    Q2 = 4.25   #4-momentum transfer
+    Ei = 10.549  #beam energy
+    Q2 = 6.0   #4-momentum transfer
 
     #output file to write kinematics
-    fname = 'kin_summary_Eb%.2f.txt' % (Ei)
+    fname = 'kin_summary_Eb%.2f_Q2_6.txt' % (Ei)
     ofile = open(fname, 'w')
     ofile.write('# D(e,e\'p)n Central Kinematics Summary\n')
     ofile.write('# Beam Energy (Ei) = %.3f GeV\n' % (Ei))
@@ -60,21 +60,21 @@ def calc_d2_kin():
     ofile.write('#! Pr[f,0]/ \t  xbj[f,1]/ \t kf[f,2]/ \t th_e[f,3]/ \t Pf[f,4]/ \t th_p[f,5]/ \t q[f,6]/ \t th_q[f,7]/ \t th_nq[f,8]/ \t th_pq[f,9]/ \t Q2[f,10]/\n')
 
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 4.0
+    Q2_min = 6.0
     Q2_step = 0.01    
-    Q2_max = 4.25 + Q2_step   #include endpoint (+Pr_step)
+    Q2_max = 6.0 + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
     Pr_min = 0.
-    Pr_step = 0.01    
+    Pr_step = 0.1    
     Pr_max = 1.0 + Pr_step   #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
-    xbj_min = 1.0
+    xbj_min = 1.3
     xbj_step = 0.05
-    xbj_max = 1.35 + xbj_step
+    xbj_max = 1.6 + xbj_step
     xbj_range = np.arange(xbj_min, xbj_max, xbj_step)
     
     #Loop over 4-Momentum Transfer Q^2
