@@ -760,7 +760,7 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
   // SIMC input files are set to 'events / 1mC'
    
   // Charge factor is the total integrated charge assuming a beam current and run time
-  Double_t Ib = 60;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
+  Double_t Ib = 70;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
   Double_t time = 1.0;     //estimated time (in hours) a run takes (start - end) of run
   Double_t charge_factor = Ib * time * 3600. / 1000.;
 
@@ -774,14 +774,14 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
   
   // STEP2: Estimate Efficiencies (use efficiencies from commissioning experiment)
   // coin. rates were ~ 2.5 Hz in commissioning,
-  //Double_t e_trk      = 0.964;
-  //Double_t h_trk      = 0.988;
-  //Double_t daq_lt     = 0.98;   //(it was 0.926 during commissioning due to large logic windows ~100 ns in HMS, but now is smaller)
+  Double_t e_trk      = 0.964;
+  Double_t h_trk      = 0.988;
+  Double_t daq_lt     = 0.98;   //(it was 0.926 during commissioning due to large logic windows ~100 ns in HMS, but now is smaller)
 
   //for heep checks
-  Double_t e_trk      = 0.99;
-  Double_t h_trk      = 0.99;
-  Double_t daq_lt     = 0.99;
+  //Double_t e_trk      = 0.99;
+  //Double_t h_trk      = 0.99;
+  //Double_t daq_lt     = 0.99;
   
   Double_t tgt_boil;
   if(heep_check){
@@ -791,7 +791,7 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
     tgt_boil   = 1. - LD2_slope * Ib;
   }
 
-  Double_t proton_abs = 1.0; // 0.9534;  let assume no proton absorption thru material (since for heep singles, only electron thru SHMS, and does NOT get absorbed) 
+  Double_t proton_abs =  0.9534;  //let assume no proton absorption thru material (since for heep singles, only electron thru SHMS, and does NOT get absorbed) 
 
   Double_t eff_factor;
 
