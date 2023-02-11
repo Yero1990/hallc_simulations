@@ -222,6 +222,13 @@ if __name__ == "__main__":
     #calc_h2(Ei=10.549, th_e=8.3, kf=-1, e_arm='SHMS', case='case1', verbose=True)
 
 
-    # ------ deuteron exp. heep elastics -------
-    calc_h2(Ei=10.549, th_e=-1, kf=8.6, e_arm='SHMS', case='case2', verbose=True)
-    
+    # ------ deuteron exp. heep elastics delta scan (feb - march 2023) -------
+    # delta = (P - P0) / P0
+    # for P0 (e-) 8.55 GeV/c,  delta (-10, 22) % --> (7.695, 10.431) GeV/c
+    #calc_h2(Ei=10.549, th_e=-1, kf=7.865, e_arm='SHMS', case='case2', verbose=True)  # delta = -8 %
+    #calc_h2(Ei=10.549, th_e=-1, kf=8.205, e_arm='SHMS', case='case2', verbose=True)  # delta = -4 %    
+    #calc_h2(Ei=10.549, th_e=-1, kf=8.55,  e_arm='SHMS', case='case2', verbose=True)  # delta =  0 %
+    #calc_h2(Ei=10.549, th_e=-1, kf=8.895, e_arm='SHMS', case='case2', verbose=True)  # delta = +4 %
+    #calc_h2(Ei=10.549, th_e=-1, kf=9.235, e_arm='SHMS', case='case2', verbose=True)  # delta = +8 %
+    #calc_h2(Ei=10.549, th_e=-1, kf=9.577, e_arm='SHMS', case='case2', verbose=True)  # delta = +12 %
+    calc_h2(Ei=10.549, th_e=-1, kf=9.919, e_arm='SHMS', case='case2', verbose=True)  # delta = +16 %
