@@ -1,8 +1,4 @@
 *.root
 simc_parameter_dump.dat
-outfiles/*.gen
-outfiles/*.geni
-outfiles/*.hist
-worksim/*.data
-worksim/*/*.data
+outfiles
 worksim
