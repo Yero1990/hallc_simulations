@@ -64,18 +64,18 @@ paero_xmax = 100.
 
 # electron arm central angle
 the_nbins = 40
-the_xmin = 6.0
-the_xmax = 18.0
+the_xmin = 10.0
+the_xmax = 14.0
 
 # final electron arm momentum [GeV/c]
 kf_nbins = 60
-kf_xmin = 7.
-kf_xmax = 10.
+kf_xmin = 7.6
+kf_xmax = 8.8
 
 # invariant mass (assuming proton target mass)
-W_nbins = 150
+W_nbins = 100
 W_xmin = 0.5
-W_xmax = 1.4
+W_xmax = 1.5
 
 # invariant mass squared
 W2_nbins = 100
@@ -84,23 +84,23 @@ W2_xmax = 3.0;
 
 # 4-momentum transfer
 Q2_nbins = 60
-Q2_xmin = 1.0
-Q2_xmax = 10.
+Q2_xmin = 2.5
+Q2_xmax = 5.5
 
 # Bjorken-X
 X_nbins = 60
-X_xmin = 0.7
-X_xmax = 1.3
+X_xmin = 0.6
+X_xmax = 2.
 
 # energy transfer
 nu_nbins = 60
-nu_xmin = 0
-nu_xmax = 6
+nu_xmin = 1.
+nu_xmax = 2.8
 
 # 3-momentum transfer
 q_nbins = 60
-q_xmin = 1.5
-q_xmax = 6.5
+q_xmin = 2.4
+q_xmax = 3.7
 
 # 3-momentum transfer (x-component)
 qx_nbins = 100
@@ -118,8 +118,8 @@ qz_xmin = 0.
 qz_xmax = 10.
 
 # in-plane angle between q-vector and +z (beam)
-thq_nbins = 90
-thq_xmin = 6.
+thq_nbins = 10
+thq_xmin = 32.
 thq_xmax = 60.
 
 # out-of-plane angle between q-vector and +z (beam)
@@ -141,43 +141,43 @@ epsilon_xmax = 100.
 # so there is no need to define the cos, sin bins here !
 
 # Missing Energy
-Em_nbins = 70
-Em_xmin = -0.05
-Em_xmax = 0.25
+Em_nbins = 40
+Em_xmin = -0.1
+Em_xmax = 0.2
 
 # Missing (Recoil) Momentum
-Pm_nbins = 100
-Pm_xmin = -0.05
-Pm_xmax = 0.2
+Pm_nbins = 30
+Pm_xmin = 0.
+Pm_xmax = 1.2
 
 # Missing Momentum (X-component, lab)
 Pmx_lab_nbins = 80 
-Pmx_lab_xmin = -5.
+Pmx_lab_xmin = 0.
 Pmx_lab_xmax = 5.
 
 # Missing Momentum (Y-component, lab)
 Pmy_lab_nbins = 80
-Pmy_lab_xmin = -5.
+Pmy_lab_xmin = 0.
 Pmy_lab_xmax = 5.
 
 # Missing Momentum (Z-component, lab)
 Pmz_lab_nbins = 80
-Pmz_lab_xmin = -5.
+Pmz_lab_xmin = 0.
 Pmz_lab_xmax = 5.
 
 # Missing Momentum (X-component, q-frame: +z_lab rotated to +q)
 Pmx_q_nbins = 80
-Pmx_q_xmin = -5.
+Pmx_q_xmin = 0.
 Pmx_q_xmax = 5.
 
 # Missing Momentum (Y-component, q-frame: +z_lab rotated to +q)
 Pmy_q_nbins = 80
-Pmy_q_xmin = -5.
+Pmy_q_xmin = 0.
 Pmy_q_xmax = 5.
 
 # Missing Momentum (Z-component, q-frame: +z_lab rotated to +q)
 Pmz_q_nbins = 80
-Pmz_q_xmin = -5.
+Pmz_q_xmin = 0.
 Pmz_q_xmax = 5.
 
 # Kinetic Energy (Detected Hadron, X)
@@ -192,18 +192,18 @@ Tr_xmax = 10.
 
 # Missing Mass (Undetected Recoil System Mass)
 MM_nbins = 100
-MM_xmin = -0.1
-MM_xmax = 0.1
+MM_xmin = 0.8
+MM_xmax = 1.2
 
 # Missing Mass Squared
 MM2_nbins = 100  
-MM2_xmin = -0.3
-MM2_xmax = 0.3
+MM2_xmin = 0.8
+MM2_xmax = 1.2
 
 # hadron arm central angle
-thx_nbins = 100  
-thx_xmin = 25.
-thx_xmax = 55.
+thx_nbins = 60  
+thx_xmin = 34.
+thx_xmax = 42.
 
 # In-plane angle between detected particle and q 
 thxq_nbins = 60
@@ -242,8 +242,8 @@ thxq_cm_xmax = 360.
 
 # final hadron arm momentum [GeV/c]
 Pf_nbins = 100
-Pf_xmin = 0.
-Pf_xmax = 4.2
+Pf_xmin = 2.
+Pf_xmax = 4.
 
 # In-plane angle between the recoil system and q in CM frame
 thrq_cm_nbins = 100
@@ -291,16 +291,16 @@ MandelU_xmax = 10.
 #----Electron Arm Focal Plane-----
 #---------------------------------
 exfp_nbins = 60
-exfp_xmin = -30.
-exfp_xmax = 30.
+exfp_xmin = -15.
+exfp_xmax = 10.
 
 expfp_nbins = 60
-expfp_xmin = -0.07
-expfp_xmax = 0.07
+expfp_xmin = -0.06
+expfp_xmax = 0.06
   
 eyfp_nbins = 60
-eyfp_xmin = -20.
-eyfp_xmax = 20.
+eyfp_xmin = -10.
+eyfp_xmax = 10.
 
 eypfp_nbins = 60
 eypfp_xmin = -0.06
@@ -309,9 +309,9 @@ eypfp_xmax = 0.06
 #-----------------------------------
 #----Electron Arm Reconstructed-----
 #-----------------------------------
-eytar_nbins = 70
-eytar_xmin = -2.5
-eytar_xmax = 2.5
+eytar_nbins = 60
+eytar_xmin = -2.
+eytar_xmax = 2.
 
 eyptar_nbins = 60
 eyptar_xmin = -0.06
@@ -321,16 +321,16 @@ exptar_nbins = 60
 exptar_xmin  = -0.06
 exptar_xmax = 0.06
   
-edelta_nbins = 90
-edelta_xmin = -15.  
-edelta_xmax = 22.  
+edelta_nbins = 60
+edelta_xmin = -10.  
+edelta_xmax =  22.  
 
 #-------------------------------  
 #----Hadron Arm Focal Plane-----
 #-------------------------------
 hxfp_nbins = 60
 hxfp_xmin = -50.
-hxfp_xmax = 50.
+hxfp_xmax = 40.
 
 hxpfp_nbins = 60
 hxpfp_xmin = -0.08

@@ -1,7 +1,7 @@
 #include "utils/parse_utils.h"
 #include "utils/hist_utils.h"
 
-void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t rad_flag=true){
+void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_t rad_flag=true){
 
   
   /* 
@@ -73,10 +73,10 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
     //simc_InputFileName = "/Users/deuteron/cafe_heep_pabs_MF_10p6.root";
     //simc_OutputFileName = "cafe_heep_pabs_MF_10p6.root_output.root";
 
-    TString del= // # shms delta scan, -8, -4, 0, 4, 8, 12
-    simc_infile = Form("infiles/d2_heep_scan_rad_%d.data", del.Data(), rad.Data());
-    simc_InputFileName = Form("worksim/d2_heep_scan_rad_%d.root", del.Data(), rad.Data());
-    simc_OutputFileName = Form("d2_heep_scan_%s_%s_output.root", del.Data(), rad.Data());
+    TString delta="+12";  // # shms delta scan, -8, -4, 0, 4, 8, 12
+    simc_infile = Form("infiles/d2_heep_scan_%s_%s.data",rad.Data(), delta.Data());
+    simc_InputFileName = Form("worksim/d2_heep_scan_%s_%s.root", rad.Data(), delta.Data());
+    simc_OutputFileName = Form("d2_heep_scan_%s_%s_output.root", rad.Data(), delta.Data());
 
     
     /*
@@ -89,8 +89,8 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
   else{
 
     //---Read In File Names with cuts and histogram binning information
-    input_CutFileName  = Form("inp/set_basic_cuts_pm%d.inp", pm_set);
-    input_HBinFileName = Form("inp/set_basic_histos_pm%d.inp", pm_set);
+    input_CutFileName  = "inp/set_basic_deep_cuts.inp";
+    input_HBinFileName = "inp/set_basic_deep_histos.inp";
     
     //Define File Name Patterns
     simc_infile = Form("infiles/d2_pm%d_jml%s_%s.data",  pm_set, model.Data(), rad.Data());
@@ -1082,7 +1082,44 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
     
   */
 
-  
+  if(heep_check){
+    
+    float Wmin = 0.85;
+    float Wmax = 1.05;
+    float Wcnts = H_W->Integral(H_W->FindBin(Wmin), H_W->FindBin(Wmax));
+    float rates = Wcnts /  (time * 3600);
+
+    cout << " ----------------------------- " << endl;
+    cout << "    H(e,e'p) Rate Estimates    " << endl;
+    cout << " ----------------------------- " << endl; 
+    cout << "" << endl;
+    cout << Form("Ib [uA]     = %.3f ", Ib) << endl;
+    cout << Form("time [hr]   = %.3f ", time) << endl;
+    cout << Form("charge [mC] = %.3f ", charge_factor)<< endl;
+    cout << Form("W counts [%.3f, %.3f] GeV = %.3f", Wmin, Wmax, Wcnts);
+    cout << Form("H(e,e'p) Rates [Hz] = %.3f ", rates) << endl;
+    cout << " ----------------------------- " << endl; 
+  }
+  else{
+    
+    float Pmcnts = H_Pm->Integral();     
+    float rates = H_Pm->Integral() / (time * 3600);
+
+    cout << " ----------------------------- " << endl; 
+    cout << "    d(e,e'p) Rate Estimates    " << endl;
+    cout << " ----------------------------- " << endl;  
+    cout << "" << endl;  
+    cout << Form("Pm Setting: %d", pm_set) << endl;
+    cout << Form("Model: Laget %s", model.Data()) << endl;
+    cout << Form("Ib [uA]     = %.3f ", Ib) << endl;
+    cout << Form("time [hr]   = %.3f ", time) << endl;
+    cout << Form("charge [mC] = %.3f ", charge_factor)<< endl;  
+    cout << Form("Pm counts  = %.3f", Pmcnts) << endl;  
+    cout << Form("d(e,e'p) Rates [Hz] = %.3E ", rates) << endl;  
+
+
+  }
+
   //------------------------------------------
   // Extract The Yield binned in Pm vs th_rq
   //------------------------------------------
