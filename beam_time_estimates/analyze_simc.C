@@ -64,14 +64,19 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
 
         
     //Define File Name Patterns
-    simc_infile = Form("infiles/cafe_heep_scan_%s_%s.data", ext0.Data(), rad.Data());
-    simc_InputFileName = Form("worksim/cafe_heep_scan_%s_%s.root", ext0.Data(), rad.Data());
-    simc_OutputFileName = Form("cafe_heep_scan_%s_%s_output.root", ext0.Data(), rad.Data());
+    //simc_infile = Form("infiles/cafe_heep_scan_%s_%s.data", ext0.Data(), rad.Data());
+    //simc_InputFileName = Form("worksim/cafe_heep_scan_%s_%s.root", ext0.Data(), rad.Data());
+    //simc_OutputFileName = Form("cafe_heep_scan_%s_%s_output.root", ext0.Data(), rad.Data());
 
     // for proton absorption studies @ cafe MF kinematics
     //simc_infile = "infiles/cafe_heep_pabs_MF_10p6.data";
     //simc_InputFileName = "/Users/deuteron/cafe_heep_pabs_MF_10p6.root";
     //simc_OutputFileName = "cafe_heep_pabs_MF_10p6.root_output.root";
+
+    TString del= // # shms delta scan, -8, -4, 0, 4, 8, 12
+    simc_infile = Form("infiles/d2_heep_scan_rad_%d.data", del.Data(), rad.Data());
+    simc_InputFileName = Form("worksim/d2_heep_scan_rad_%d.root", del.Data(), rad.Data());
+    simc_OutputFileName = Form("d2_heep_scan_%s_%s_output.root", del.Data(), rad.Data());
 
     
     /*
