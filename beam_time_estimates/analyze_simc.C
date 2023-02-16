@@ -88,9 +88,9 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
     input_HBinFileName = Form("inp/set_basic_histos_pm%d.inp", pm_set);
     
     //Define File Name Patterns
-    simc_infile = Form("infiles/d2_pm%d_laget%s_%s_mod.data",  pm_set, model.Data(), rad.Data());
-    simc_InputFileName = Form("worksim/d2_pm%d_laget%s_%s_mod.root", pm_set, model.Data(), rad.Data());
-    simc_OutputFileName = Form("d2_pm%d_laget%s_%s_mod_output.root",  pm_set, model.Data(), rad.Data());
+    simc_infile = Form("infiles/d2_pm%d_jml%s_%s.data",  pm_set, model.Data(), rad.Data());
+    simc_InputFileName = Form("worksim/d2_pm%d_jml%s_%s.root", pm_set, model.Data(), rad.Data());
+    simc_OutputFileName = Form("d2_pm%d_laget%s_%s_output.root",  pm_set, model.Data(), rad.Data());
 
   }
   
@@ -760,7 +760,7 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
   // SIMC input files are set to 'events / 1mC'
    
   // Charge factor is the total integrated charge assuming a beam current and run time
-  Double_t Ib = 70;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
+  Double_t Ib = 40;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
   Double_t time = 1.0;     //estimated time (in hours) a run takes (start - end) of run
   Double_t charge_factor = Ib * time * 3600. / 1000.;
 
@@ -1081,7 +1081,7 @@ void analyze_simc(Bool_t heep_check=true, int pm_set=0, TString model="", Bool_t
   //------------------------------------------
   // Extract The Yield binned in Pm vs th_rq
   //------------------------------------------
-  // extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
+  extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
 
   //--------
   // Extrack numerical data for histogram plotting
