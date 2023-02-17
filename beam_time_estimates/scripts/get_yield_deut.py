@@ -499,9 +499,9 @@ def main():
     #plot_combined_yield(thrq=thrq_c, pm_set=[120,580,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.*(40./70.), 24.*(40./70.), 76.*(40./70.), 76.*(40./70.), 135.*(40./70.)])
     #plot_combined_yield(thrq=thrq_c, pm_set=[120,580,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.*(40./70.), 24.*(40./70.), 100.*(40./70.), 110.*(40./70.)])
     #plot_combined_yield(thrq=25, pm_set=[120, 580, 800, 900], model='fsi', rad='rad', Ib=40, time=1, scl_factor=[1., 24., 109., 130.])
-    #plot_combined_yield(thrq=35, pm_set=[120, 580, 800, 900], model='fsi', rad='rad', Ib=40, time=1, scl_factor=[1., 24., 109., 130.])
-    #plot_combined_yield(thrq=45, pm_set=[120, 580, 800, 900], model='fsi', rad='rad', Ib=40, time=1, scl_factor=[1., 24., 109., 130.])
-    plot_combined_yield(thrq=75, pm_set=[120], model='fsi', rad='rad', Ib=40, time=1, scl_factor=[1.])
+    plot_combined_yield(thrq=35, pm_set=[120, 580, 800, 900], model='fsi', rad='rad', Ib=40, time=1, scl_factor=[1., 24., 109., 130.])
+    plot_combined_yield(thrq=45, pm_set=[120, 580, 800, 900], model='fsi', rad='rad', Ib=40, time=1, scl_factor=[1., 24., 109., 130.])
+    #plot_combined_yield(thrq=75, pm_set=[120], model='fsi', rad='rad', Ib=40, time=1, scl_factor=[1.])
     
     plt.show()
     
