@@ -53,7 +53,9 @@ def calc_Xsec_corr(thrq=0):
     R_xsec_corr = np.nan_to_num(R_xsec_corr, nan=1.0)
 
     print('Correction Factor: \n')
+    print('th_rq=',thrq)
     print('pm = ', pm_theory, 'R_xsec_corr=',R_xsec_corr)
+    print('R_xsec_corr_AVG=',np.average(R_xsec_corr))
     
     return (pm_data, R_xsec_corr)
     
@@ -260,11 +262,19 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
         plt.xlabel(r'Missing Momentum, $P_{m}$ (GeV/c)', fontsize=22)
         plt.errorbar(pm_masked_xcor[idx]+pm_off[idx], np.repeat(0, len(pm_masked_xcor[idx])), rel_stats_err_masked_xcor[idx]*100., color=clr[idx], linestyle='none', marker='o', alpha = 0.4, label = r'%d MeV/c, $I_{\textrm{beam}}$=%.1f $\mu A$, time=%.1f hr'%(pm_set[idx], Ib, scl_factor[idx]))
         x_coord = [pm_low, pm_hi]
+
         y_coord_1 = [10, 10]
         y_coord_2 = [-10, -10]
+
+        y_coord_out_max = [20, 20]
+        y_coord_out_min = [-20, -20]
+
+        
         plt.plot(x_coord, y_coord_1, linestyle='dashed', color='k', linewidth=1)
         plt.plot(x_coord, y_coord_2, linestyle='dashed', color='k', linewidth=1)
 
+        plt.plot(x_coord, y_coord_out_max, linestyle='solid', color='k', linewidth=1)
+        plt.plot(x_coord, y_coord_out_min, linestyle='solid', color='k', linewidth=1)
 
         
         #------------------------
@@ -330,9 +340,18 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
     x_coord = [pm_low, pm_hi]
     y_coord_1 = [10, 10]
     y_coord_2 = [-10, -10]
+
+    
+    y_coord_out_max = [20, 20]
+    y_coord_out_min = [-20, -20]
+
+    
     plt.plot(x_coord, y_coord_1, linestyle='dashed', color='k', linewidth=1)
     plt.plot(x_coord, y_coord_2, linestyle='dashed', color='k', linewidth=1)
-    
+
+    plt.plot(x_coord, y_coord_out_max, linestyle='solid', color='k', linewidth=1)
+    plt.plot(x_coord, y_coord_out_min, linestyle='solid', color='k', linewidth=1)
+
     plt.show()
 
     print('pm[0] = ', len(pm[0]))
@@ -344,9 +363,9 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
     fout.write('# projected deuteron exp. (2021) relative statistical uncertainty \n'
                '# Total PAC days: 21 (504 hrs at 50 %% beam efficiency) \n'
                '# Commissioning PAC days: 3 (72 hrs at 50 %% beam efficiency)\n'   
-               '# Remaining PAC days: 18 (432 hrs at 50 %% beam efficiency)\n'   
-               '# beam time allocated for low/high-pm settings: %.1f hrs\n'
-               '# beam time allocated for other studies (elastics, tgt boiling, etc): %.1f hrs\n'
+               '# Remaining PAC days(CUT): 14 (288 hrs at 50 %% beam efficiency)\n'   
+               '# beam time allocated for low/high-pm settings: 268 hrs\n'
+               '# beam time allocated for other studies (elastics, tgt boiling, etc): 24 hrs\n'
                '# NOTE: the yields have been multiplied by R = data_xsec / jml_paris_fsi_xsec to\n'
                '# account for the differences between measured data and model during the commissioing phase\n'
                '# \n'
@@ -358,7 +377,7 @@ def plot_combined_yield(thrq=0, pm_set=[], model='fsi', rad='rad', Ib=1, time=1,
                '# rel_stats_err_xcorr    : relative statistical error (after cross-section corrections)\n'
                '# R_xcorr                : cross-section correction factor, R = commissioning_dataXsec / JML_Paris_FSI_Xsec'
                '# \n'
-               '#! pm_bin[f,0]/ Yield[f,1]/ rel_stats_err[f,1]/ Yield_xcorr[f,2]/  rel_stats_err_xcorr[f,3]/ R_xcorr[f,4]/\n' % (beam_time_1, 432-beam_time_1, thrq) )
+               '#! pm_bin[f,0]/ Yield[f,1]/ rel_stats_err[f,1]/ Yield_xcorr[f,2]/  rel_stats_err_xcorr[f,3]/ R_xcorr[f,4]/\n' % ( thrq) )
 
     #data = np.column_stack([pm[0], pm_cnts_comb_masked, rel_stats_err_comb_masked])
     #print(data)
@@ -479,7 +498,10 @@ def main():
     #-------------------
     #plot_combined_yield(thrq=thrq_c, pm_set=[120,580,700,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.*(40./70.), 24.*(40./70.), 76.*(40./70.), 76.*(40./70.), 135.*(40./70.)])
     #plot_combined_yield(thrq=thrq_c, pm_set=[120,580,800,900], model='fsi', rad='rad', Ib=70, time=1, scl_factor=[1.*(40./70.), 24.*(40./70.), 100.*(40./70.), 110.*(40./70.)])
-    plot_combined_yield(thrq=thrq_c, pm_set=[120, 580, 800, 900], model='fsi', rad='rad', Ib=40, time=1, scl_factor=[1., 1., 1., 1.])
+    #plot_combined_yield(thrq=25, pm_set=[120, 580, 800, 900], model='fsi', rad='rad', Ib=40, time=1, scl_factor=[1., 24., 109., 130.])
+    #plot_combined_yield(thrq=35, pm_set=[120, 580, 800, 900], model='fsi', rad='rad', Ib=40, time=1, scl_factor=[1., 24., 109., 130.])
+    #plot_combined_yield(thrq=45, pm_set=[120, 580, 800, 900], model='fsi', rad='rad', Ib=40, time=1, scl_factor=[1., 24., 109., 130.])
+    plot_combined_yield(thrq=75, pm_set=[120], model='fsi', rad='rad', Ib=40, time=1, scl_factor=[1.])
     
     plt.show()
     
