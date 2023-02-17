@@ -410,7 +410,7 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   TH1F *H_q       = new TH1F("H_q", "3-Momentum Transfer, |#vec{q}|", q_nbins, q_xmin, q_xmax);
   TH1F *H_thq     = new TH1F("H_thq", "In-Plane Angle w.r.t +z(lab), #theta_{q}", thq_nbins, thq_xmin, thq_xmax); 
   TH1F *H_W       = new TH1F("H_W", "Invariant Mass, W", W_nbins, W_xmin, W_xmax);  
-  TH1F *H_W_noCut       = new TH1F("H_W_noCut", "Invariant Mass, W (no cuts, realistic rates)", W_nbins, W_xmin, W_xmax);  
+  TH1F *H_W_noCut       = new TH1F("H_W_noCut", "Invariant Mass, W (no cuts, DAQ rates)", W_nbins, W_xmin, W_xmax);  
 
   //Secondary (Hadron) Kinematics (recoil and missing are used interchageably) ()
   TH1F *H_Pf      = new TH1F("H_Pf", "Final Hadron Momentum (detected), p_{f}", Pf_nbins, Pf_xmin, Pf_xmax);
@@ -418,7 +418,8 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   TH1F *H_Em      = new TH1F("H_Em","Nuclear Missing Energy", Em_nbins, Em_xmin, Em_xmax); 
   TH1F *H_Em_nsc      = new TH1F("H_Em_nsc","Nuclear Missing Energy", Em_nbins, Em_xmin, Em_xmax); 
 
-  TH1F *H_Pm      = new TH1F("H_Pm","Missing Momentum, P_{miss}", Pm_nbins, Pm_xmin, Pm_xmax); 
+  TH1F *H_Pm      = new TH1F("H_Pm","Missing Momentum, P_{miss}", Pm_nbins, Pm_xmin, Pm_xmax);
+  TH1F *H_Pm_noCut      = new TH1F("H_Pm_noCut","Missing Momentum, P_{miss} (no cuts, DAQ rates)", Pm_nbins, Pm_xmin, Pm_xmax); 
   TH1F *H_MM      = new TH1F("H_MM","Missing Mass, M_{miss}", MM_nbins, MM_xmin, MM_xmax);        
   TH1F *H_MM2     = new TH1F("H_MM2","Missing Mass Squared, M^{2}_{miss}", MM2_nbins, MM2_xmin, MM2_xmax); 
   TH1F *H_thxq    = new TH1F("H_thxq", "In-Plane Angle, #theta_{xq}", thxq_nbins, thxq_xmin, thxq_xmax);
@@ -449,6 +450,7 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   kin_HList->Add( H_Em       );
   kin_HList->Add( H_Em_nsc   );
   kin_HList->Add( H_Pm       );
+  kin_HList->Add( H_Pm_noCut       );
   kin_HList->Add( H_MM       );
   kin_HList->Add( H_MM2      );
   kin_HList->Add( H_thxq     );
@@ -946,6 +948,7 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
 
     //fill histogram (no cuts, for daq rates)
     H_W_noCut->Fill(W, FullWeight_forRates);
+    H_Pm_noCut->Fill(Pm, FullWeight_forRates);
      
     if(c_allCuts) {
 
@@ -1087,7 +1090,10 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
     float Wmin = 0.85;
     float Wmax = 1.05;
     float Wcnts = H_W->Integral(H_W->FindBin(Wmin), H_W->FindBin(Wmax));
+    float Wcnts_noCut = H_W_noCut->Integral();
+
     float rates = Wcnts /  (time * 3600);
+    float daq_rates = Wcnts_noCut /  (time * 3600);
 
     cout << " ----------------------------- " << endl;
     cout << "    H(e,e'p) Rate Estimates    " << endl;
@@ -1098,12 +1104,15 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
     cout << Form("charge [mC] = %.3f ", charge_factor)<< endl;
     cout << Form("W counts [%.3f, %.3f] GeV = %.3f", Wmin, Wmax, Wcnts);
     cout << Form("H(e,e'p) Rates [Hz] = %.3f ", rates) << endl;
+    cout << Form("DAQ Rates [Hz] = %.3f", daq_rates) << endl;
     cout << " ----------------------------- " << endl; 
   }
   else{
     
-    float Pmcnts = H_Pm->Integral();     
+    float Pmcnts = H_Pm->Integral();
+    float Pmcnts_noCut = H_Pm_noCut->Integral();     
     float rates = H_Pm->Integral() / (time * 3600);
+    float daq_rates = H_Pm_noCut->Integral() / (time * 3600);
 
     cout << " ----------------------------- " << endl; 
     cout << "    d(e,e'p) Rate Estimates    " << endl;
@@ -1116,6 +1125,8 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
     cout << Form("charge [mC] = %.3f ", charge_factor)<< endl;  
     cout << Form("Pm counts  = %.3f", Pmcnts) << endl;  
     cout << Form("d(e,e'p) Rates [Hz] = %.3E ", rates) << endl;  
+    cout << Form("DAQ Rates [Hz] = %.3f", daq_rates) << endl;
+    cout << " ----------------------------- " << endl; 
 
 
   }
