@@ -41,6 +41,13 @@ If you plan to use this repository for doing hydrogen / deuteron simulations usi
   `deut_laget` directory so that the deuteron numerical cross-sections can be read during the
   simulation
     
+4. Create directories (or symlinks) to the output files, for example, on ifarm, I've created the following:
+  * `mkdir /volatile/hallc/c-deuteron/cyero/worksim`
+  * `mkdir /volatile/hallc/c-deuteron/cyero/worksim/analyzed`
+  * `ln -sf /volatile/hallc/c-deuteron/cyero/worksim`
+  * `ln -sf /volatile/hallc/c-deuteron/cyero/worksim/analyzed`
+
+  
 ### How-To Guide: Doing Simulations in SIMC
 Once you have everything setup, then we can start doing simulations. This is a multi-step process which has been simplified by using a single steering script `simulate.py`. Simply include all the input files you want to simulate in `input_files.txt` and execute:
 
