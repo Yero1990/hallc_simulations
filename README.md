@@ -45,7 +45,6 @@ If you plan to use this repository for doing hydrogen / deuteron simulations usi
   * `mkdir /volatile/hallc/c-deuteron/cyero/worksim`
   * `mkdir /volatile/hallc/c-deuteron/cyero/worksim/analyzed`
   * `ln -sf /volatile/hallc/c-deuteron/cyero/worksim`
-  * `ln -sf /volatile/hallc/c-deuteron/cyero/worksim/analyzed`
 
   
 ### How-To Guide: Doing Simulations in SIMC
