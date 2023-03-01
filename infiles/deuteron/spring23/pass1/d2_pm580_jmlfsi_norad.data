@@ -1,19 +1,19 @@
 ! Deuteron Experiment D(e,e'p)n : e12-10-003
-! Central "missing momentum" (pmiss) setting = 120 MeV
+! Central "missing momentum" (pmiss) setting = 580 MeV/c
 ! FSI | YES radiative effects | YES energy loss | NO energy loss correction 
 ! 'TF' stands for 'this field'
 ! ONE equals TRUE unless specified otherwise
 
  =?
  &EXPERIMENT
-     ngen  =  5000			!  POS: # of successes
+     ngen  =  5000000			!  POS: # of successes
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
      doing_pion  =  F		!  (T = TRUE)
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
-     extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
+     extra_dbase_file = 'extra_hydrogen_norad.data' !  additional input parameters.
      set_allow_scat_in_coll=2  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
@@ -22,10 +22,10 @@
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
-     spec%e%P  =    8519.0                             !  e arm central momentum (MeV/c) 8550.0 (original)
+     spec%e%P  =  8519.0                              !  e arm central momentum (MeV/c) 8550.0 (original)
      spec%e%theta  =  12.2                             !  e arm angle setting (degrees)
-     spec%p%P  =    3046.561                              !  p arm central momentum (MeV/c) 3052.3 (original) 
-     spec%p%theta  =   38.63                            !  p arm angle setting (degrees)
+     spec%p%P  = 2257.947                                !  p arm central momentum (MeV/c) 2262.2 (original)
+     spec%p%theta  =   54.96                         !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
