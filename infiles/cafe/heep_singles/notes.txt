@@ -1,0 +1,71 @@
+------------------------------
+H(e,e'p) Elastics for  
+Beam Energy (Eb) = 10.549 GeV 
+e- angle (th_e)  = 6.800 deg 
+------------------------------
+e- momentum (kf)          = 9.776 GeV/c 
+proton angle (th_p)       = 53.969 deg 
+proton momentum (Pf)      = 1.431 GeV/c 
+4-momentum transfer (Q2)  = 1.451 (GeV/c)^2 
+3-momentum transfer (|q|) = 1.431 GeV/c 
+energy transfer           = 0.773 GeV 
+x-Bjorken                 = 1.000 
+
+------------------------------
+SHMS (e- arm) Momentum Acceptance         
+------------------------------
+(delta_min, delta_max) = -10.0, 22.0  
+(pmin, pmax) = 8.798, 11.927 GeV/c  
+------------------------------
+HMS (h arm) Momentum Acceptance         
+------------------------------
+(delta_min, delta_max) = -9.0, 9.0  
+(pmin, pmax) = 1.302, 1.560 GeV/c  
+
+------------------------------
+H(e,e'p) Elastics for  
+Beam Energy (Eb) = 10.549 GeV 
+e- angle (th_e)  = 7.495 deg 
+------------------------------
+e- momentum (kf)          = 9.624 GeV/c 
+proton angle (th_p)       = 51.273 deg 
+proton momentum (Pf)      = 1.609 GeV/c 
+4-momentum transfer (Q2)  = 1.735 (GeV/c)^2 
+3-momentum transfer (|q|) = 1.609 GeV/c 
+energy transfer           = 0.925 GeV 
+x-Bjorken                 = 1.000 
+
+------------------------------
+SHMS (e- arm) Momentum Acceptance         
+------------------------------
+(delta_min, delta_max) = -10.0, 22.0  
+(pmin, pmax) = 8.662, 11.742 GeV/c  
+------------------------------
+HMS (h arm) Momentum Acceptance         
+------------------------------
+(delta_min, delta_max) = -9.0, 9.0  
+(pmin, pmax) = 1.464, 1.754 GeV/c  
+
+------------------------------
+H(e,e'p) Elastics for  
+Beam Energy (Eb) = 10.549 GeV 
+e- angle (th_e)  = 8.295 deg 
+------------------------------
+e- momentum (kf)          = 9.439 GeV/c 
+proton angle (th_p)       = 48.402 deg 
+proton momentum (Pf)      = 1.821 GeV/c 
+4-momentum transfer (Q2)  = 2.083 (GeV/c)^2 
+3-momentum transfer (|q|) = 1.821 GeV/c 
+energy transfer           = 1.110 GeV 
+x-Bjorken                 = 1.000 
+
+------------------------------
+SHMS (e- arm) Momentum Acceptance         
+------------------------------
+(delta_min, delta_max) = -10.0, 22.0  
+(pmin, pmax) = 8.495, 11.515 GeV/c  
+------------------------------
+HMS (h arm) Momentum Acceptance         
+------------------------------
+(delta_min, delta_max) = -9.0, 9.0  
+(pmin, pmax) = 1.657, 1.985 GeV/c  

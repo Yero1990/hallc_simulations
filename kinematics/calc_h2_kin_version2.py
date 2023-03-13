@@ -64,7 +64,6 @@ def calc_h2(Ei=-1, th_e=-1, kf=-1, e_arm='SHMS', case='case1', verbose=False):
     
     xbj = Q2 / (2.* MP * omega)
     
-    print('Ee = ',Ee,' omega = ',omega,' th_e =', th_e, 'Q2 = ', Q2)
     
     #Calculate 3-momentum transfer magnitude (|q|) [GeV/c]
     q = np.sqrt(Q2 + omega**2)
