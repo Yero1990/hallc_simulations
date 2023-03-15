@@ -205,15 +205,15 @@ if __name__ == "__main__":
     # CaFe Heep elastics to cover range from +5 to +15 % to cover entire MF,SRC range (regardless of 10.3 or 10.6 beam energy)
     # heep @ shms_delta = +5%
     #calc_h2(Ei=10.6, th_e=-1, kf=8.978, e_arm='SHMS', case='case2', verbose=True)
-    calc_h2(Ei=10.549, th_e=6.8, kf=-1, e_arm='SHMS', case='case1', verbose=True) 
+    calc_h2(Ei=10.549, th_e=30, kf=-1, e_arm='SHMS', case='case1', verbose=True) 
 
     # heep @ shms_delta = +10%
     #calc_h2(Ei=10.6, th_e=-1, kf=9.405, e_arm='SHMS', case='case2', verbose=True)
-    calc_h2(Ei=10.549, th_e=7.495, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+    #calc_h2(Ei=10.549, th_e=7.495, kf=-1, e_arm='SHMS', case='case1', verbose=True)
 
     # heep @ shms_delta = +15%
     #calc_h2(Ei=10.6, th_e=-1, kf=9.833, e_arm='SHMS', case='case2', verbose=True)
-    calc_h2(Ei=10.549, th_e=8.295, kf=-1, e_arm='SHMS', case='case1', verbose=True)
+    #calc_h2(Ei=10.549, th_e=8.295, kf=-1, e_arm='SHMS', case='case1', verbose=True)
     
 
     #------ CaFe heep for proton absorption------
