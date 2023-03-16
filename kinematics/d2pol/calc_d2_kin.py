@@ -32,7 +32,7 @@ def calc_d2_kin():
     Q2 = 3.5   #4-momentum transfer ( this can be ignorde for now)
 
     #output file to write kinematics
-    fname = 'polarized_deut_kin_summary_Eb%.2f.txt' % (Ei)
+    fname = 'polarized_deut_kin_summary_Eb%.2f_pm300_forBKG.txt' % (Ei)
     ofile = open(fname, 'w')
     ofile.write('# d(e,e\'p)n Central Kinematics Summary\n')
     ofile.write('# Beam Energy (Ei) = %.3f GeV\n' % (Ei))
@@ -58,21 +58,21 @@ def calc_d2_kin():
     ofile.write('#! Pr[f,0]/ \t  xbj[f,1]/ \t kf[f,2]/ \t th_e[f,3]/ \t Pf[f,4]/ \t th_p[f,5]/ \t q[f,6]/ \t th_q[f,7]/ \t th_nq[f,8]/ \t th_pq[f,9]/ \t Q2[f,10]/\n')
 
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 2.0
-    Q2_step = 0.1    
-    Q2_max = 5.0 + Q2_step   #include endpoint (+Pr_step)
+    Q2_min = 4.
+    Q2_step = 0.01    
+    Q2_max = 5. + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
-    Pr_min = 0.
-    Pr_step = 0.1    
-    Pr_max = 0.5 + Pr_step   #include endpoint (+Pr_step)
+    Pr_min = 0.12
+    Pr_step = 0.01    
+    Pr_max = 0.12 + Pr_step   #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
-    xbj_min = 1.0
-    xbj_step = 0.1
-    xbj_max = 2.0 + xbj_step
+    xbj_min = 1.
+    xbj_step = 0.05
+    xbj_max = 1.4 + xbj_step
     xbj_range = np.arange(xbj_min, xbj_max, xbj_step)
     
     #Loop over 4-Momentum Transfer Q^2
@@ -130,9 +130,10 @@ def calc_d2_kin():
                 if (np.isnan(thp)): continue
 
                 #if(thp>50): continue
-                if(thp>35): continue
-                if(thnq>50): continue
+                #if(thp>35): continue
+                #if(thnq>50): continue
                 #if(Q2<3.5): continue
+                if(Pr!=0.120): continue
                 ofile.write("  %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )
             
     ofile.close()
