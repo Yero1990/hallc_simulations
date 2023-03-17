@@ -24,6 +24,7 @@ def calc_d2_kin():
     MP = 0.938272  #proton
     MN = 0.939565  #neutron
     MD = 1.875612  #deuteron
+    MC12 = 11.1878988
     me = 0.000511  #electron
 
     #Initial parameter kinematics [GeV]
@@ -32,7 +33,7 @@ def calc_d2_kin():
     Q2 = 3.5   #4-momentum transfer ( this can be ignorde for now)
 
     #output file to write kinematics
-    fname = 'polarized_deut_kin_summary_Eb%.2f_pm300_forBKG.txt' % (Ei)
+    fname = 'polarized_deut_kin_summary_Eb%.2f_pm300_forBKG_C12.txt' % (Ei)
     ofile = open(fname, 'w')
     ofile.write('# d(e,e\'p)n Central Kinematics Summary\n')
     ofile.write('# Beam Energy (Ei) = %.3f GeV\n' % (Ei))
@@ -58,21 +59,21 @@ def calc_d2_kin():
     ofile.write('#! Pr[f,0]/ \t  xbj[f,1]/ \t kf[f,2]/ \t th_e[f,3]/ \t Pf[f,4]/ \t th_p[f,5]/ \t q[f,6]/ \t th_q[f,7]/ \t th_nq[f,8]/ \t th_pq[f,9]/ \t Q2[f,10]/\n')
 
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 4.
+    Q2_min = 4.25
     Q2_step = 0.01    
-    Q2_max = 5. + Q2_step   #include endpoint (+Pr_step)
+    Q2_max = 4.25 + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
-    Pr_min = 0.12
+    Pr_min = 0.
     Pr_step = 0.01    
-    Pr_max = 0.12 + Pr_step   #include endpoint (+Pr_step)
+    Pr_max = 0.3 + Pr_step   #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
     xbj_min = 1.
     xbj_step = 0.05
-    xbj_max = 1.4 + xbj_step
+    xbj_max = 1.2 + xbj_step
     xbj_range = np.arange(xbj_min, xbj_max, xbj_step)
     
     #Loop over 4-Momentum Transfer Q^2
@@ -104,6 +105,7 @@ def calc_d2_kin():
                 Er = np.sqrt(MN**2 + Pr**2)
                 #Calculate Final Proton Energy
                 Ef = omega + MD - Er
+                                
                 #Calculate Final Proton Momentum
                 Pf = np.sqrt(Ef**2 - MP**2)
                 
@@ -133,7 +135,7 @@ def calc_d2_kin():
                 #if(thp>35): continue
                 #if(thnq>50): continue
                 #if(Q2<3.5): continue
-                if(Pr!=0.120): continue
+                #if(Pr!=0.120): continue
                 ofile.write("  %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )
             
     ofile.close()
