@@ -32,11 +32,31 @@ def calc_d2_kin():
 
     Q2 = 3.5   #4-momentum transfer ( this can be ignorde for now)
 
+    #Set Q2 Range to cover [GeV^2]
+    Q2_min = 3.5
+    Q2_step = 0.01    
+    Q2_max = 3.5 + Q2_step   #include endpoint (+Pr_step)
+    Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
+    
+    #Set Missing Momentum Range to cover [GeV]
+    Pr_min = 0.
+    Pr_step = 0.1    
+    Pr_max = 1.0 + Pr_step   #include endpoint (+Pr_step)
+    Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
+    
+    #Set x-Bjorken Range to cover
+    xbj_min = 1.6
+    xbj_step = 0.05
+    xbj_max = 1.6 + xbj_step
+    xbj_range = np.arange(xbj_min, xbj_max, xbj_step)
+    
     #output file to write kinematics
-    fname = 'polarized_deut_kin_summary_Eb%.2f_pm300_forBKG_C12.txt' % (Ei)
+    fname = 'polarized_deut_kin_summary_Eb%.2f_xbj_%.2f_Q2_%.2f.txt' % (Ei, xbj_min, Q2_min)
     ofile = open(fname, 'w')
     ofile.write('# d(e,e\'p)n Central Kinematics Summary\n')
     ofile.write('# Beam Energy (Ei) = %.3f GeV\n' % (Ei))
+    ofile.write('# 4-Momentum Transfer (Q2) = %.2f GeV\n' % (Q2_min))
+    ofile.write('# x-Bjorken (xbj) = %.2f GeV\n' % (xbj_min))    
     ofile.write('# \n'
                 '# Tensor Polarized Deuterium: d(e,e\'p) kinematics :\n'
                 '# \n'
@@ -58,24 +78,6 @@ def calc_d2_kin():
     
     ofile.write('#! Pr[f,0]/ \t  xbj[f,1]/ \t kf[f,2]/ \t th_e[f,3]/ \t Pf[f,4]/ \t th_p[f,5]/ \t q[f,6]/ \t th_q[f,7]/ \t th_nq[f,8]/ \t th_pq[f,9]/ \t Q2[f,10]/\n')
 
-    #Set Q2 Range to cover [GeV^2]
-    Q2_min = 4.25
-    Q2_step = 0.01    
-    Q2_max = 4.25 + Q2_step   #include endpoint (+Pr_step)
-    Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
-    
-    #Set Missing Momentum Range to cover [GeV]
-    Pr_min = 0.
-    Pr_step = 0.01    
-    Pr_max = 0.3 + Pr_step   #include endpoint (+Pr_step)
-    Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
-    
-    #Set x-Bjorken Range to cover
-    xbj_min = 1.
-    xbj_step = 0.05
-    xbj_max = 1.2 + xbj_step
-    xbj_range = np.arange(xbj_min, xbj_max, xbj_step)
-    
     #Loop over 4-Momentum Transfer Q^2
     for Q2 in Q2_range:
     
@@ -134,7 +136,8 @@ def calc_d2_kin():
                 #if(thp>50): continue
                 #if(thp>35): continue
                 #if(thnq>50): continue
-                #if(Q2<3.5): continue
+                if(Q2>Q2_min): continue
+                if(xbj>xbj_min): continue
                 #if(Pr!=0.120): continue
                 ofile.write("  %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )
             

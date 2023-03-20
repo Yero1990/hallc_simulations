@@ -1,0 +1,31 @@
+# d(e,e'p)n Central Kinematics Summary
+# Beam Energy (Ei) = 10.549 GeV
+# 4-Momentum Transfer (Q2) = 4.25 GeV
+# x-Bjorken (xbj) = 1.00 
+# 
+# Tensor Polarized Deuterium: d(e,e'p) kinematics :
+# 
+# Header Definitions: 
+# Pr   : Central Missing Momentum [GeV/c] 
+# xbj  : Bjorken x  
+# kf   : e- final momentum [GeV/c] 
+# th_e : e- scattering angle [deg] 
+# Pf   : final proton momentum [GeV/c] 
+# th_p : proton scattering angle [deg] 
+# q    : 3-momentum transfer [GeV] 
+# th_q : relative angle between q-vector and +z (lab)  [deg] 
+# th_nq: relative angle between q-vector and recoil neutron [deg] 
+# th_pq: relative angle between q-vector and knocked-out proton [deg] 
+# Q2   : 4-Momentum Transfer [GeV^2]  
+# 
+#! Pr[f,0]/ 	  xbj[f,1]/ 	 kf[f,2]/ 	 th_e[f,3]/ 	 Pf[f,4]/ 	 th_p[f,5]/ 	 q[f,6]/ 	 th_q[f,7]/ 	 th_nq[f,8]/ 	 th_pq[f,9]/ 	 Q2[f,10]/
+  0.1000 	 1.0000 	 8.2842 	 12.6611 	 3.0547 	 38.2297 	 3.0626 	 36.3621 	 84.5484 	 1.8675 	 4.2500
+  0.2000 	 1.0000 	 8.2842 	 12.6611 	 3.0382 	 40.0915 	 3.0626 	 36.3621 	 81.1454 	 3.7294 	 4.2500
+  0.3000 	 1.0000 	 8.2842 	 12.6611 	 3.0113 	 41.9413 	 3.0626 	 36.3621 	 77.3877 	 5.5791 	 4.2500
+  0.4000 	 1.0000 	 8.2842 	 12.6611 	 2.9748 	 43.7752 	 3.0626 	 36.3621 	 73.6431 	 7.4130 	 4.2500
+  0.5000 	 1.0000 	 8.2842 	 12.6611 	 2.9295 	 45.5915 	 3.0626 	 36.3621 	 70.0023 	 9.2293 	 4.2500
+  0.6000 	 1.0000 	 8.2842 	 12.6611 	 2.8765 	 47.3903 	 3.0626 	 36.3621 	 66.5014 	 11.0282 	 4.2500
+  0.7000 	 1.0000 	 8.2842 	 12.6611 	 2.8166 	 49.1737 	 3.0626 	 36.3621 	 63.1552 	 12.8115 	 4.2500
+  0.8000 	 1.0000 	 8.2842 	 12.6611 	 2.7508 	 50.9449 	 3.0626 	 36.3621 	 59.9669 	 14.5828 	 4.2500
+  0.9000 	 1.0000 	 8.2842 	 12.6611 	 2.6798 	 52.7087 	 3.0626 	 36.3621 	 56.9328 	 16.3465 	 4.2500
+  1.0000 	 1.0000 	 8.2842 	 12.6611 	 2.6044 	 54.4702 	 3.0626 	 36.3621 	 54.0450 	 18.1081 	 4.2500
