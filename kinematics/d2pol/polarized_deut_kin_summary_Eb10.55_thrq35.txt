@@ -4,7 +4,7 @@
 # x-Bjorken (xbj) = 1.30 - 1.6 (step: 0.01) 
 # Missing Momentum (Pr) = 0.00 - 1.0 GeV (step: 0.10) 
 # 
-# th_nq = 35 +/- 1 deg# 
+# th_nq = 35 +/- 1 deg
 # Tensor Polarized Deuterium: d(e,e'p) kinematics :
 # 
 # Header Definitions: 
