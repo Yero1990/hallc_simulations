@@ -21,10 +21,10 @@
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5=shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5=shms
-     spec%e%P  = 8550.0 			       ! e arm central momentum (MeV/c)
+     spec%e%P  = 8532.045 			       ! e arm central momentum (MeV/c) 8550 * 0.9979
      spec%e%theta  = 6.8                               ! e arm angle setting (degrees)
-     spec%p%P  = 1440.0                              ! p arm central momentum (MeV/c)
-     spec%p%theta  = 53.8                            ! p arm angle setting (degrees)     Add yptar offsets in angle rather than below
+     spec%p%P  = 1425.276                              ! p arm central momentum (MeV/c)  1431 * 0.996
+     spec%p%theta  = 53.969                            ! p arm angle setting (degrees)     Add yptar offsets in angle rather than below
      spec%e%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt. in e Arm           
      spec%p%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt in pArm                                                             
      spec%e%sig_smear = 1.0e-18, 1.0e-18, 1.0e-18, 1.0e-18  ! add extra smear. in recon eArm (Ytar, xptar(in mr), yptar(in mr), delta(in %)) 
@@ -69,12 +69,12 @@
 / 
 
  &P_ARM_ACCEPT
-     SPedge%p%delta%min  =   -15.0	!  delta min (SPECTROMETER ACCEPTANC
-     SPedge%p%delta%max  =   15.0	!  delta max
-     SPedge%p%yptar%min  =  -100.0	!  yptar min = {TF} / 1000 (mrad)
-     SPedge%p%yptar%max  =   100.0	!  yptar max = {TF} / 1000
-     SPedge%p%xptar%min  =  -100.0	!  xptar min = {TF} / 1000 (mrad)
-     SPedge%p%xptar%max  =   100.0	!  xptar max = {TF} / 1000
+     SPedge%p%delta%min  =   -90.0	!  delta min (SPECTROMETER ACCEPTANC
+     SPedge%p%delta%max  =   90.0	!  delta max
+     SPedge%p%yptar%min  =  -600.0	!  yptar min = {TF} / 1000 (mrad)
+     SPedge%p%yptar%max  =   600.0	!  yptar max = {TF} / 1000
+     SPedge%p%xptar%min  =  -600.0	!  xptar min = {TF} / 1000 (mrad)
+     SPedge%p%xptar%max  =   600.0	!  xptar max = {TF} / 1000
 / 
 
 
@@ -85,15 +85,15 @@
      targ%fr_pattern  =  3		!  raster pattern: 1=square, 2=circular, 3=real square
      targ%fr1  =  0.1			!  horizontal size OR inner radius(2)
      targ%fr2  =  0.1			!  vertical size OR outer radius(2)
-     targ%xoffset  =  0.0		!  target x-offset (cm): +x = beam right   (Beam Position, XBPM, EPICS (opposite of hcana))
-     targ%yoffset  =  0.0		!  target y-offset (cm): +y = up          (Beam Position, YBPM)
+     targ%xoffset  =  0.0		!  target x-offset (cm): +x = beam right 0.2354  (Beam Position, XBPM, EPICS (opposite of hcana))
+     targ%yoffset  =  0.0		!  target y-offset (cm): +y = up  0.0141         (Beam Position, YBPM)
      targ%zoffset  =  0.0		!  target z-offset (cm): +z = downstream
    					!   zreal = znominal + zoffset
 /
 
  &E_ARM_OFFSET
-     spec%e%offset%x  =  0.0		!  x offset (cm)
-     spec%e%offset%y  =  0.0		!  y offset (cm)
+     spec%e%offset%x  =  0.0		!  x offset (cm)   -0.126
+     spec%e%offset%y  =  0.0		!  y offset (cm)   0.06 
      spec%e%offset%z  =  0.0		!  z offset (cm)
      spec%e%offset%xptar  =  0.0        !  xptar offset (mr)
      spec%e%offset%yptar  =  0.0        !  yptar offset (mr)

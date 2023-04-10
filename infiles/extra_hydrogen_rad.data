@@ -6,7 +6,7 @@
  &SIMULATE
      hard_cuts  =  F         !  (ONE = TRUE) SPedge and Em.max are hard cuts(ntuple)
      using_rad  =  T 	        !  (ONE = TRUE)
-     spect_mode  =  0	        !  0=e+p arms, -1=p arm, -2=e arm only, 1=none
+     spect_mode  =  -2	        !  0=e+p arms, -1=p arm, -2=e arm only, 1=none
      cuts%Em%min  =  0.	        !  (Em.min=Em.max=0.0 gives wide open cuts)
      cuts%Em%max  =  200.	!  Must be wider than cuts in analysis(elastic or e,e'p)
      using_Eloss  =  T	        !  (ONE = TRUE)
