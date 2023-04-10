@@ -21,10 +21,10 @@
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5=shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5=shms
-     spec%e%P  = 8532.045 			       ! e arm central momentum (MeV/c)  8550 * 0.9979
-     spec%e%theta  = 8.295                               ! e arm angle setting (degrees)
-     spec%p%P  = 1812.72                              ! p arm central momentum (MeV/c)   1820 * 0.996
-     spec%p%theta  = 48.3                            ! p arm angle setting (degrees)     Add yptar offsets in angle rather than below
+     spec%e%P  = 8550.   			       ! e arm central momentum (MeV/c) 
+     spec%e%theta  = 8.295                             ! e arm angle setting (degrees)
+     spec%p%P  = 1820.                                 ! p arm central momentum (MeV/c)   
+     spec%p%theta  = 48.3                              ! p arm angle setting (degrees)     Add yptar offsets in angle rather than below
      spec%e%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt. in e Arm           
      spec%p%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt in pArm                        
      spec%e%sig_smear = 1.0e-18, 1.0e-18, 1.0e-18, 1.0e-18  ! add extra smear. in recon eArm (Ytar, xptar(in mr), yptar(in mr), delta(in %)) 
