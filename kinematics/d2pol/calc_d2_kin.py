@@ -33,9 +33,9 @@ def calc_d2_kin():
     Q2 = 3.5   #4-momentum transfer ( this can be ignorde for now)
 
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 3.5
+    Q2_min = 2.1
     Q2_step = 0.25    
-    Q2_max = 4.5 + Q2_step   #include endpoint (+Pr_step)
+    Q2_max = 2.1 + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
@@ -52,7 +52,7 @@ def calc_d2_kin():
     
     #output file to write kinematics
     #fname = 'polarized_deut_kin_summary_Eb%.2f_xbj_%.2f_Q2_%.2f.txt' % (Ei, xbj_min, Q2_min)
-    fname = 'polarized_deut_kin_summary_Eb%.2f_thrq35.txt' % (Ei)
+    fname = 'polarized_deut_kin_summary_Eb%.2f_Q2_2.1_thrq35.txt' % (Ei)
 
     ofile = open(fname, 'w')
     ofile.write('# d(e,e\'p)n Central Kinematics Summary\n')
