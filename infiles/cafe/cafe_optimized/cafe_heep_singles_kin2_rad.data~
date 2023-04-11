@@ -5,28 +5,28 @@
 
  =?
  &EXPERIMENT
-     ngen  =  5000			!  POS: # of successe
+     ngen  =  100000			!  POS: # of successe
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
      doing_pion  =  F		!  (T = TRUE)
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
-     extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
+     extra_dbase_file = 'extra_hydrogen_singles_rad.data' !  additional input parameters.
      set_allow_scat_in_coll=1  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF 
 / 
  =?
  &KINEMATICS_MAIN
-     Ebeam  =  10549.35                       !  (MeV)
+     Ebeam  =  10549.35                                   !  (MeV)
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5=shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5=shms
-     spec%e%P  = 8550.   			       ! e arm central momentum (MeV/c) 
-     spec%e%theta  = 8.295                             ! e arm angle setting (degrees)
-     spec%p%P  = 1820.                                 ! p arm central momentum (MeV/c)   
-     spec%p%theta  = 48.3                              ! p arm angle setting (degrees)    
+     spec%e%P  = 8550.  			       ! e arm central momentum (MeV/c) 
+     spec%e%theta  = 6.8                               ! e arm angle setting (degrees)
+     spec%p%P  = 1431.0                                ! p arm central momentum (MeV/c)  
+     spec%p%theta  = 53.969                            ! p arm angle setting (degrees)     Add yptar offsets in angle rather than below
      spec%e%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt. in e Arm           
-     spec%p%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt in pArm                        
+     spec%p%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt in pArm                                                             
      spec%e%sig_smear = 1.0e-18, 1.0e-18, 1.0e-18, 1.0e-18  ! add extra smear. in recon eArm (Ytar, xptar(in mr), yptar(in mr), delta(in %)) 
      spec%p%sig_smear = 1.0e-18, 1.0e-18, 1.0e-18, 1.0e-18  ! add extra smear. in  recon pArm 
      spec%e%shift%p_mom  =   0.                        !  shift e-momentum for reconstruction [MeV] (for systematic studies)	
@@ -85,15 +85,15 @@
      targ%fr_pattern  =  3		!  raster pattern: 1=square, 2=circular, 3=real square
      targ%fr1  =  0.1			!  horizontal size OR inner radius(2)
      targ%fr2  =  0.1			!  vertical size OR outer radius(2)
-     targ%xoffset  =  -0.1		!  target x-offset (cm): +x = beam right 0.2363  (Beam Position, XBPM, EPICS (opposite of hcana))
-     targ%yoffset  =  0.01394		!  target y-offset (cm): +y = up  0.01394         (Beam Position, YBPM, opposite of hcana)
+     targ%xoffset  =  0.2354		!  target x-offset (cm): +x = beam right   (Beam Position, XBPM, EPICS (opposite of hcana))  add a '-' sign to data histo when plotting tar_x
+     targ%yoffset  =  -0.0141		!  target y-offset (cm): +y = up          (Beam Position, YBPM)
      targ%zoffset  =  0.0		!  target z-offset (cm): +z = downstream
    					!   zreal = znominal + zoffset
 /
 
  &E_ARM_OFFSET
-     spec%e%offset%x  =  -0.126		!  x offset (cm) -0.126 (mispoint)
-     spec%e%offset%y  =  0.06		!  y offset (cm) 0.06 (mispoint)
+     spec%e%offset%x  =  -0.126		!  x offset (cm)   -0.126
+     spec%e%offset%y  =  0.06		!  y offset (cm)   0.06 
      spec%e%offset%z  =  0.0		!  z offset (cm)
      spec%e%offset%xptar  =  0.0        !  xptar offset (mr)
      spec%e%offset%yptar  =  0.0        !  yptar offset (mr)
