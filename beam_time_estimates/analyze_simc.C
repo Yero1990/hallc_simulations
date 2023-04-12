@@ -93,9 +93,9 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
     input_HBinFileName = "inp/set_basic_deep_histos.inp";
     
     //Define File Name Patterns
-    simc_infile = Form("infiles/d2_pm%d_jml%s_%s.data",  pm_set, model.Data(), rad.Data());
-    simc_InputFileName = Form("worksim/d2_pm%d_jml%s_%s.root", pm_set, model.Data(), rad.Data());
-    simc_OutputFileName = Form("d2_pm%d_laget%s_%s_output.root",  pm_set, model.Data(), rad.Data());
+    simc_infile         = "infiles/deuteron/d2_polarized/d2_pm300_Q2_3p5_rad.data";
+    simc_InputFileName  = "worksim/d2_pm300_Q2_3p5_rad.root";
+    simc_OutputFileName = "d2_pm300_Q2_3p5_rad_output.root";
 
   }
   
@@ -767,8 +767,8 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   // SIMC input files are set to 'events / 1mC'
    
   // Charge factor is the total integrated charge assuming a beam current and run time
-  Double_t Ib = 40;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
-  Double_t time = 1.0;     //estimated time (in hours) a run takes (start - end) of run
+  Double_t Ib = 0.1;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
+  Double_t time = 168;     //estimated time (in hours) a run takes (start - end) of run
   Double_t charge_factor = Ib * time * 3600. / 1000.;
 
   //target boiling slopes for Hydrofen and Deuterium (during commissioning)
@@ -808,7 +808,8 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   }
   
   else{
-    eff_factor = e_trk * h_trk * daq_lt * tgt_boil * proton_abs;
+    //eff_factor = e_trk * h_trk * daq_lt * tgt_boil * proton_abs;
+    eff_factor = 1.;
   }
 
 
@@ -1134,7 +1135,7 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   //------------------------------------------
   // Extract The Yield binned in Pm vs th_rq
   //------------------------------------------
-  extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
+  //extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
 
   //--------
   // Extrack numerical data for histogram plotting

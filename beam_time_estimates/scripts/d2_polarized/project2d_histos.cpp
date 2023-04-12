@@ -268,7 +268,9 @@ void project2d_deut( TH2F *hist2d=0, TString setting="", Bool_t display_plots=0 
 void project2d_histos() {
 
 
-  TString file =Form("worksim/deut_prod_LD2_deep_%d_-1_histos.root", run_num);
+  TString file;
+
+  file = "d2_pm300_Q2_3p5_rad_output.root";
   
  
   
@@ -277,12 +279,12 @@ void project2d_histos() {
   TFile *data_file =  new TFile(file.Data(), "READ");
 
   TH2F *myhist2d = 0;
-  data_file->GetObject(Form("%s", hist2d_name.Data()), myhist2d);
+  data_file->GetObject("kin_plots/H_Pm_vs_thrq", myhist2d);
   
 
   // func2: projectes the 2d histo (slices of x-bins along y-axis) onto 1d bins, the pm_setting is just for histogram naming purposes
   // and should be consistent with the histogram range chosen
-  project2d_deut( myhist2d, "300", true ); // the bool flag is to display the plots (otherwise, they will be saved)
+  project2d_deut( myhist2d, "300_Q2_3.5", true ); // the bool flag is to display the plots (otherwise, they will be saved)
 
 }
 
