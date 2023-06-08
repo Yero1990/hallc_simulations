@@ -1,5 +1,5 @@
-! Simulation for coin. H(e,e'p) runs
-! CaFe H(e,e'p) Elastics 
+! Simulation for coin. H(e,e'p) scan runs (deuteron 2023)
+! H(e,e'p) Elastics Feb 2023
 ! 'TF' stands for 'this field'
 ! ONE equals TRUE unless specified otherwise
 
@@ -17,14 +17,14 @@
 / 
  =?
  &KINEMATICS_MAIN
-     Ebeam  =  10549.35                       !  (MeV)
+     Ebeam  =  10549.35                                  !  (MeV)
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5=shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5=shms
-     spec%e%P  = 8550.   			       ! e arm central momentum (MeV/c) 
-     spec%e%theta  = 8.295                             ! e arm angle setting (degrees)
-     spec%p%P  = 1820.                                 ! p arm central momentum (MeV/c)   
-     spec%p%theta  = 48.3                              ! p arm angle setting (degrees)    
+     spec%e%P  = 8550. 			       ! e arm central momentum (MeV/c) 8.55 (original)
+     spec%e%theta  = 14.153                             ! e arm angle setting (degrees)
+     spec%p%P  = 3499.                                ! p arm central momentum (MeV/c) 3.499 (original)
+     spec%p%theta  = 33.344                             ! p arm angle setting (degrees)     Add yptar offsets in angle rather than below
      spec%e%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt. in e Arm           
      spec%p%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt in pArm                        
      spec%e%sig_smear = 1.0e-18, 1.0e-18, 1.0e-18, 1.0e-18  ! add extra smear. in recon eArm (Ytar, xptar(in mr), yptar(in mr), delta(in %)) 
@@ -85,15 +85,15 @@
      targ%fr_pattern  =  3		!  raster pattern: 1=square, 2=circular, 3=real square
      targ%fr1  =  0.1			!  horizontal size OR inner radius(2)
      targ%fr2  =  0.1			!  vertical size OR outer radius(2)
-     targ%xoffset  =  0.2363		!  target x-offset (cm): +x = beam right  (Beam Position, XBPM, EPICS (opposite of hcana))
-     targ%yoffset  =  -0.01394		!  target y-offset (cm): +y = up  0.01394         (Beam Position, YBPM, opposite of hcana)
+     targ%xoffset  =  0.05484		!  target x-offset (cm): +x = beam right   (Beam Position, XBPM, EPICS (opposite of hcana))
+     targ%yoffset  =  -0.03897		!  target y-offset (cm): +y = up          (Beam Position, YBPM)
      targ%zoffset  =  0.0		!  target z-offset (cm): +z = downstream
    					!   zreal = znominal + zoffset
 /
 
  &E_ARM_OFFSET
-     spec%e%offset%x  =  -0.126		!  x offset (cm) -0.126 (mispoint)
-     spec%e%offset%y  =  0.06		!  y offset (cm) 0.06 (mispoint)
+     spec%e%offset%x  =  0.0		!  x offset (cm) Mispointing_x
+     spec%e%offset%y  =  0.0		!  y offset (cm) Mispointing_y (opposite sign in hcana)
      spec%e%offset%z  =  0.0		!  z offset (cm)
      spec%e%offset%xptar  =  0.0        !  xptar offset (mr)
      spec%e%offset%yptar  =  0.0        !  yptar offset (mr)

@@ -21,10 +21,10 @@
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5=shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5=shms
-     spec%e%P  = 8550.0 			       ! e arm central momentum (MeV/c)
-     spec%e%theta  = 8.3                               ! e arm angle setting (degrees)
-     spec%p%P  = 1820.0                              ! p arm central momentum (MeV/c)
-     spec%p%theta  = 48.3                            ! p arm angle setting (degrees)     Add yptar offsets in angle rather than below
+     spec%e%P  = 8532.  			       ! e arm central momentum (MeV/c) original: 8550.0, 8.55 * 0.9979
+     spec%e%theta  = 8.3                               ! e arm angle setting (degrees) 
+     spec%p%P  = 1815.6                              ! p arm central momentum (MeV/c) original: 1820.0, 1820*0.9976
+     spec%p%theta  = 48.3                            ! p arm angle setting (degrees) 
      spec%e%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt. in e Arm           
      spec%p%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt in pArm                        
      spec%e%sig_smear = 1.0e-18, 1.0e-18, 1.0e-18, 1.0e-18  ! add extra smear. in recon eArm (Ytar, xptar(in mr), yptar(in mr), delta(in %)) 
@@ -85,23 +85,23 @@
      targ%fr_pattern  =  3		!  raster pattern: 1=square, 2=circular, 3=real square
      targ%fr1  =  0.1			!  horizontal size OR inner radius(2)
      targ%fr2  =  0.1			!  vertical size OR outer radius(2)
-     targ%xoffset  =  0.0		!  target x-offset (cm): +x = beam right   (Beam Position, XBPM, EPICS (opposite of hcana))
-     targ%yoffset  =  0.0		!  target y-offset (cm): +y = up          (Beam Position, YBPM)
+     targ%xoffset  =  0.03167		!  target x-offset (cm): +x = beam right   (Beam Position, XBPM, if use same sign as data xbpm_tar, mult -1.* data xbpm_tar) 
+     targ%yoffset  =  -0.01526		!  target y-offset (cm): +y = up           (Beam Position, YBPM, same sign as ybpm_tar)
      targ%zoffset  =  0.0		!  target z-offset (cm): +z = downstream
    					!   zreal = znominal + zoffset
 /
 
  &E_ARM_OFFSET
-     spec%e%offset%x  =  -0.126		!  x offset (cm) Mispointing_x
-     spec%e%offset%y  =  0.06		!  y offset (cm) Mispointing_y (opposite sign in hcana)
+     spec%e%offset%x  =  0.0		!  x offset (cm) Mispointing_x  -0.126
+     spec%e%offset%y  =  0.0		!  y offset (cm) Mispointing_y  -0.06
      spec%e%offset%z  =  0.0		!  z offset (cm)
      spec%e%offset%xptar  =  0.0        !  xptar offset (mr)
-     spec%e%offset%yptar  =  0.0        !  yptar offset (mr)
+     spec%e%offset%yptar  =  0.2        !  yptar offset (mr)
 /
 
  &P_ARM_OFFSET
-     spec%p%offset%x  =  0.101567	!  x offset (cm)
-     spec%p%offset%y  =  0.324		!  y offset (cm)
+     spec%p%offset%x  =  0.101567	!  x offset (cm) 0.101567
+     spec%p%offset%y  =  0.324		!  y offset (cm) 0.324
      spec%p%offset%z  =  0.0       	!  z offset (cm)
      spec%p%offset%xptar  =  0.0        !  xptar offset (mr)
      spec%p%offset%yptar  =  0.0	!  yptar offset (mr)
