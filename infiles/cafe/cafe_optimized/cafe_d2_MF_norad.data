@@ -26,9 +26,9 @@
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
-     spec%e%P  =  8550.0                               !  e arm central momentum (MeV/c)
+     spec%e%P  =  8532.0                               !  e arm central momentum (MeV/c)  original: 8550.0, 8.55 * 0.9979
      spec%e%theta  =  8.3                              !  e arm angle setting (degrees)
-     spec%p%P  =  1820.0                               !  p arm central momentum (MeV/c)
+     spec%p%P  =  1816.0                               !  p arm central momentum (MeV/c)  original: 1820.0, 1820 * 0.9978
      spec%p%theta  =   48.3                            !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt. in eArm focal plane          
      spec%p%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt in pArm focal plane           
@@ -88,8 +88,8 @@
      targ%fr_pattern  =  3	!  raster pattern: 1=square, 2=circular, 3=real square
      targ%fr1  =  0.1		!  horizontal size OR inner radius(2)
      targ%fr2  =  0.1		!  vertical size OR outer radius(2)
-     targ%xoffset  =  0.0	!  target x-offset (cm): +x = beam right (EPICS)
-     targ%yoffset  =  0.0	!  target y-offset (cm): +y = up
+     targ%xoffset  =  0.0322	!  target x-offset (cm): +x = beam right (EPICS)
+     targ%yoffset  =  -0.0149	!  target y-offset (cm): +y = up
      targ%zoffset  =  0.0	!  target z-offset (cm): +z = downstream
    				!   zreal = znominal + zoffset
 /
@@ -99,12 +99,12 @@
      spec%e%offset%y  =  0.0		!  y offset (cm) (Ytar offset) Opposite sign to data to get Ytar SIMC/DATA to agree for now.)
      spec%e%offset%z  =  0.0		!  z offset (cm) (Ztar offset)
      spec%e%offset%xptar  =  0.	        !  xptar offset (mr) xptar = dx/dz (called 'p(h)phi_offset' in HCANA/PARAM/S(H)MS/GEN/s(h)msflags.param)
-     spec%e%offset%yptar  =  0.	        !  yptar offset (mr) yptar = dy/dz (called 'p(h)theta_offset' in HCANA/PARAM/S(H)MS/GEN/s(h)msflags.param)
+     spec%e%offset%yptar  =  0.2	        !  yptar offset (mr) yptar = dy/dz (called 'p(h)theta_offset' in HCANA/PARAM/S(H)MS/GEN/s(h)msflags.param)
 /
 
  &P_ARM_OFFSET
-     spec%p%offset%x  =  0.0		!  x offset (cm)
-     spec%p%offset%y  =  0.0		!  y offset (cm)
+     spec%p%offset%x  =  0.101567		!  x offset (cm)
+     spec%p%offset%y  =  0.324		!  y offset (cm)
      spec%p%offset%z  =  0.0		!  z offset (cm)
      spec%p%offset%xptar  =  0.	!  xptar offset (mr)
      spec%p%offset%yptar  =  0.	!  yptar offset (mr)
