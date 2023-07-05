@@ -1,0 +1,8 @@
+'''
+Brief:
+This script reads Misak's calculation
+of pol, unpol d(e,e'p) theory cross sections
+and attempts to scale the SIMC unpol yields by
+these cross sections to get the polarized yield
+at SIMC
+'''
