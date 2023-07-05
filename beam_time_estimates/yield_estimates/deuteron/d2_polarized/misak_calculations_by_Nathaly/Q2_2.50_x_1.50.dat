@@ -1,0 +1,13 @@
+#numerical data 
+#d(e,e'p) polarized, Q2 = 2.500 
+#Pz = 0.5 and Pzz = 0.5#pm_bin : missing momentum [GeV]
+#sigma_unpol : unpolarized deuteron cross section [nb/GeV/str]
+#sigma_ten : tensor polarized deuteron cross section [nb/GeV/str]
+#AV18, PARIS, CDBONN potentials, with and without offshell effects
+#-------------
+Pmiss [GeV], sigma_unpol_AV18, sigma_ten_AV18, sigma_unpol_PARIS, sigma_ten_PARIS, sigma_unpol_CDBONN, sigma_ten_CDBONN, sigma_unpol_AV18_OFF, sigma_ten_AV18_OFF, sigma_unpol_PARIS_OFF, sigma_ten_PARIS_OFF, sigma_unpol_CDBONN_OFF, sigma_ten_CDBONN_OFF 
+0.5,0.94655,0.09953,0.90553,0.08844,0.58566,0.08920,0.82164,0.08639,0.78603,0.07677,0.50837,0.07743 
+0.60000,0.46291,0.02396,0.43138,0.01794,0.21841,0.01989,0.38882,0.02013,0.36234,0.01507,0.18345,0.01671 
+0.69999,0.21314,0.00334,0.19070,0.00111,0.08004,0.00293,0.17396,0.00273,0.15564,0.00090,0.06533,0.00239 
+0.80000,0.08932,-0.0007,0.07422,-0.0011,0.02742,-9.7993,0.07112,-0.0005,0.05909,-0.0009,0.02183,-7.8023 
+0.89999,0.03326,-0.0007,0.02327,-0.0006,0.00855,-0.0002,0.02590,-0.0006,0.01812,-0.0004,0.00665,-0.0001 
