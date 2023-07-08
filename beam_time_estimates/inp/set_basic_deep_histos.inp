@@ -120,7 +120,7 @@ qz_xmax = 10.
 # in-plane angle between q-vector and +z (beam)
 thq_nbins = 100
 thq_xmin = 40.
-thq_xmax = 60.
+thq_xmax = 80.
 
 # out-of-plane angle between q-vector and +z (beam)
 phq_nbins = 100
@@ -146,14 +146,14 @@ Em_xmin = -0.05
 Em_xmax = 0.1
 
 # Missing (Recoil) Momentum (+/- 20 MeV bin width)
-#Pm_nbins = 30
-#Pm_xmin = 0.
-#Pm_xmax = 1.2
+Pm_nbins = 30
+Pm_xmin = 0.
+Pm_xmax = 1.2
 
 # Missing (Recoil) Momentum (+/- 50 MeV bin width)
-Pm_nbins = 11
-Pm_xmin = -0.05
-Pm_xmax = 1.05
+#Pm_nbins = 11
+#Pm_xmin = -0.05
+#Pm_xmax = 1.05
 
 # Missing Momentum (X-component, lab)
 Pmx_lab_nbins = 80 

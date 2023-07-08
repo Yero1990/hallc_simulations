@@ -93,9 +93,9 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
     input_HBinFileName = "inp/set_basic_deep_histos.inp";
     
     //Define File Name Patterns
-    simc_infile         = "infiles/deuteron/d2_polarized/d2_pm300_Q2_3p5_rad.data";
-    simc_InputFileName  = "worksim/d2_pm300_Q2_3p5_rad.root";
-    simc_OutputFileName = "d2_pm300_Q2_3p5_rad_output.root";
+    simc_infile         = "infiles/deuteron/d2_polarized/d2_pm300_Q2_2p9_rad.data";
+    simc_InputFileName  = "worksim/d2_pm300_Q2_2p9_rad.root";
+    simc_OutputFileName = "d2_pm300_Q2_2p9_rad_output_thrq35.root";
 
   }
   
@@ -951,7 +951,7 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
     H_W_noCut->Fill(W, FullWeight_forRates);
     H_Pm_noCut->Fill(Pm, FullWeight_forRates);
      
-    if(c_allCuts) {
+    if(c_allCuts && (th_rq/dtr>=30. && th_rq/dtr<=40.)) {
 
 
       // This is for the 2D cross section Pm vs. thnq binned in thnq 
@@ -1046,6 +1046,10 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
     
   } // end entry loop
 
+  // extarct histo bin info for future computations
+  extract_1d_hist(H_Pm, "Missing Momentum", "Yield", "d2_pm_bins_Q2_2p9_rad_thrq35.csv");
+
+  
 
   //Calculate Xsec
   //H_Pm_vs_thrq_xsec->Divide(H_Pm_vs_thrq, H_Pm_vs_thrq_ps);
