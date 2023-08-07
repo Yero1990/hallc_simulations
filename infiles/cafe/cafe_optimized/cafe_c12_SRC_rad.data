@@ -95,8 +95,8 @@
 /
 
  &E_ARM_OFFSET
-     spec%e%offset%x  =  0.0		!  x offset (cm) (Xtar offset)
-     spec%e%offset%y  =  0.0		!  y offset (cm) (Ytar offset) Opposite sign to data to get Ytar SIMC/DATA to agree for now.)
+     spec%e%offset%x  =  -0.126		!  x offset (cm) (Xtar offset) Mispointing_x -0.126 
+     spec%e%offset%y  =  -0.06		!  y offset (cm) (Ytar offset) Mispointing_y -0.06 
      spec%e%offset%z  =  0.0		!  z offset (cm) (Ztar offset)
      spec%e%offset%xptar  =  0.	        !  xptar offset (mr) xptar = dx/dz (called 'p(h)phi_offset' in HCANA/PARAM/S(H)MS/GEN/s(h)msflags.param)
      spec%e%offset%yptar  =  0.2        !  yptar offset (mr) yptar = dy/dz (called 'p(h)theta_offset' in HCANA/PARAM/S(H)MS/GEN/s(h)msflags.param)
