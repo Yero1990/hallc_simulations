@@ -30,12 +30,12 @@ def calc_d2_kin():
     #Initial parameter kinematics [GeV]
     Ei = 10.549  #beam energy
 
-    Q2 = 3.5   #4-momentum transfer ( this can be ignorde for now)
+    #Q2 = 2.9   #4-momentum transfer ( this can be ignorde for now)
 
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 2.1
-    Q2_step = 0.25    
-    Q2_max = 2.1 + Q2_step   #include endpoint (+Pr_step)
+    Q2_min = 2.9
+    Q2_step = 0.1    
+    Q2_max = 2.9 + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
@@ -45,14 +45,14 @@ def calc_d2_kin():
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
-    xbj_min = 1.3
-    xbj_step = 0.01
-    xbj_max = 1.6 + xbj_step
+    xbj_min = 0.5
+    xbj_step = 0.1
+    xbj_max = 2. + xbj_step
     xbj_range = np.arange(xbj_min, xbj_max, xbj_step)
     
     #output file to write kinematics
     #fname = 'polarized_deut_kin_summary_Eb%.2f_xbj_%.2f_Q2_%.2f.txt' % (Ei, xbj_min, Q2_min)
-    fname = 'polarized_deut_kin_summary_Eb%.2f_Q2_2.1_thrq35.txt' % (Ei)
+    fname = 'polarized_deut_kin_summary_Eb%.2f.txt' % (Ei)
 
     ofile = open(fname, 'w')
     ofile.write('# d(e,e\'p)n Central Kinematics Summary\n')
@@ -61,7 +61,7 @@ def calc_d2_kin():
     ofile.write('# x-Bjorken (xbj) = %.2f - %.2f (step: %.2f) \n' % (xbj_min, xbj_max, xbj_step))    
     ofile.write('# Missing Momentum (Pr) = %.2f - %.2f GeV (step: %.2f) \n' % (Pr_min, Pr_max, Pr_step))
     ofile.write('# \n')
-    ofile.write('# th_nq = 35 +/- 1 deg')
+    ofile.write('# ')
     ofile.write('# \n'
                 '# Tensor Polarized Deuterium: d(e,e\'p) kinematics :\n'
                 '# \n'
@@ -135,13 +135,15 @@ def calc_d2_kin():
                 thnq = np.arccos(cthnq) / dtr  #theta_nq [deg]
                 
                 #theta_p (proton angle relative to +z (lab))
-                thp = thq + thpq  #this is assuming proton is detected in the forward spec. momentum ( < 90 deg)
+                #thp = thq + thpq  #this is assuming proton is detected in the forward spec. momentum ( < 90 deg)
+                thp = thq - thpq   # phi = 0 (or 180 deg?)
 
                 if (np.isnan(thp)): continue
 
-                #if(thp>50): continue
-                #if(thp>35): continue
-                if(thnq<34. or thnq>36.): continue
+                # restrict the proton angle to < 35 deg (allowed by magnet used in polarization)
+                if(thp>35): continue
+                #if(thnq<30. or thnq>45.): continue
+                #if(Pr>0.6): continue
                 #if(Q2>Q2_min): continue
                 #if(xbj>xbj_min): continue
                 #if(Pr!=0.120): continue
