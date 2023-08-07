@@ -17,7 +17,7 @@
      doing_pion  =  F		!  (T = TRUE)
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
-     extra_dbase_file = 'extra_cafe_rad.data' !  additional input parameters.
+     extra_dbase_file = 'extra_cafe_norad.data' !  additional input parameters.
      set_allow_scat_in_coll=1  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
