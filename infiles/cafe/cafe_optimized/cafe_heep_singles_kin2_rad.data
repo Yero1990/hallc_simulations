@@ -96,7 +96,7 @@
      spec%e%offset%y  =  0.0		!  y offset (cm)   -0.06 
      spec%e%offset%z  =  0.0		!  z offset (cm)
      spec%e%offset%xptar  =  0.0        !  xptar offset (mr)
-     spec%e%offset%yptar  =  0.2        !  yptar offset (mr)
+     spec%e%offset%yptar  =  0.0        !  yptar offset (mr) 0.2
 /
 
  &P_ARM_OFFSET

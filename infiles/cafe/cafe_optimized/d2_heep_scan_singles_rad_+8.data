@@ -17,11 +17,11 @@
 / 
  =?
  &KINEMATICS_MAIN
-     Ebeam  =  10549.35                                  !  (MeV)
+     Ebeam  =  10544.35                                  !  (MeV)
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5=shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5=shms
-     spec%e%P  = 8550.    			       ! e arm central momentum (MeV/c)  8.55 (original)
+     spec%e%P  = 8532.    			       ! e arm central momentum (MeV/c)  8.55 (original)
      spec%e%theta  = 9.125                             ! e arm angle setting (degrees)
      spec%p%P  = 2048.                                ! p arm central momentum (MeV/c) 1.664 (original)
      spec%p%theta  = 45.667                             ! p arm angle setting (degrees)  
