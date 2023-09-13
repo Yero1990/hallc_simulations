@@ -10,6 +10,7 @@ email: cyero@jlab.org
 import numpy as np
 import LT.box as B
 import matplotlib.pyplot as plt
+import pandas as pd
 
 
 
@@ -35,7 +36,7 @@ def calc_d2_kin():
     #Set Q2 Range to cover [GeV^2]
     Q2_min = 2.9
     Q2_step = 0.1    
-    Q2_max = 2.9 + Q2_step   #include endpoint (+Pr_step)
+    Q2_max = 4.5 + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
@@ -45,14 +46,14 @@ def calc_d2_kin():
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
-    xbj_min = 0.5
+    xbj_min = 1.0
     xbj_step = 0.1
     xbj_max = 2. + xbj_step
     xbj_range = np.arange(xbj_min, xbj_max, xbj_step)
     
     #output file to write kinematics
-    #fname = 'polarized_deut_kin_summary_Eb%.2f_xbj_%.2f_Q2_%.2f.txt' % (Ei, xbj_min, Q2_min)
-    fname = 'polarized_deut_kin_summary_Eb%.2f.txt' % (Ei)
+    #fname = 'polarized_deut_kin_summary_Eb%.2f_phi180.csv' % (Ei)
+    fname = 'polarized_deut_kin_summary_Eb%.2f_phi180.txt' % (Ei)
 
     ofile = open(fname, 'w')
     ofile.write('# d(e,e\'p)n Central Kinematics Summary\n')
@@ -60,6 +61,8 @@ def calc_d2_kin():
     ofile.write('# 4-Momentum Transfer (Q2) = %.2f - %.2f GeV (step: %.2f) \n' % (Q2_min, Q2_max-Q2_step, Q2_step))
     ofile.write('# x-Bjorken (xbj) = %.2f - %.2f (step: %.2f) \n' % (xbj_min, xbj_max, xbj_step))    
     ofile.write('# Missing Momentum (Pr) = %.2f - %.2f GeV (step: %.2f) \n' % (Pr_min, Pr_max, Pr_step))
+    ofile.write('# Hadron Out-of-Plane Angle (phi) = 180 deg \n')
+    ofile.write('# thp = thq - thpq, phi = 180 ?  (q-vector scatters at larger  angles than proton scattering angle)')
     ofile.write('# \n')
     ofile.write('# ')
     ofile.write('# \n'
@@ -82,6 +85,7 @@ def calc_d2_kin():
                 )
     
     ofile.write('#! Pr[f,0]/ \t  xbj[f,1]/ \t kf[f,2]/ \t th_e[f,3]/ \t Pf[f,4]/ \t th_p[f,5]/ \t q[f,6]/ \t th_q[f,7]/ \t th_nq[f,8]/ \t th_pq[f,9]/ \t Q2[f,10]/\n')
+    #ofile.write('Pr,xbj,kf,th_e,Pf,th_p,q,th_q,th_nq,th_pq,Q2\n')
 
 
     #Loop over Neutron Recoil ("Missing") Momentum
@@ -135,22 +139,88 @@ def calc_d2_kin():
                 thnq = np.arccos(cthnq) / dtr  #theta_nq [deg]
                 
                 #theta_p (proton angle relative to +z (lab))
-                #thp = thq + thpq  #this is assuming proton is detected in the forward spec. momentum ( < 90 deg)
-                thp = thq - thpq   # phi = 0 (or 180 deg?)
+                #thp = thq + thpq  # phi = 0?  (q-vector scatters at smaller angles than proton scattering angle)
+                thp = thq - thpq   # phi = 180 ?  (q-vector scatters at larger  angles than proton scattering angle)
 
                 if (np.isnan(thp)): continue
 
                 # restrict the proton angle to < 35 deg (allowed by magnet used in polarization)
                 if(thp>35): continue
-                #if(thnq<30. or thnq>45.): continue
-                #if(Pr>0.6): continue
-                #if(Q2>Q2_min): continue
-                #if(xbj>xbj_min): continue
-                #if(Pr!=0.120): continue
+              
                 ofile.write("  %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )
+                #ofile.write("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )
             
     ofile.close()
-            
+
+
+
+#plot kinematic correlations
+def plot_kin():
+
+    csv_file='polarized_deut_kin_summary_Eb10.55_phi180.csv'
+    df           = pd.read_csv(csv_file, comment='#')
+    df.to_numpy()
+
+    clr  = ['grey', 'c',    'm',   'r',   'g',   'b', 'darkorange', 'violet', 'gold', 'lightcoral'] #, 'olive', 'sandybrown'] #'darkgray']
+
+    Pm_c = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    fig, ax  = plt.subplots(3, 3)    
+
+    for i in np.arange(len(Pm_c)):    
+
+        print(i)
+        print('color=',clr[i])
+        print('Pmc=',Pm_c[i])
+        
+        ax[0,0].plot( df['th_e'].loc[df.Pr == Pm_c[i]] , df['kf'].loc[df.Pr == Pm_c[i]], linestyle='', marker='o', mec='k', mfc=clr[i], alpha=0.8)
+        ax[0,0].set(xlabel='SHMS Angle [deg]', ylabel='SHMS Momentum [GeV/c]')
+
+        
+        # Q2 vs. th_e
+        ax[0,1].plot( df['th_e'] , df['Q2'], linestyle='', marker='o', mec='k', mfc=clr[1], alpha=0.8)
+        ax[0,1].set(xlabel='SHMS Angle [deg]', ylabel=r'$Q^{2}$ [GeV$^{2}$]')
+        
+        # xbj vs. th_e
+        ax[0,2].plot( df['th_e'] , df['xbj'], linestyle='', marker='o', mec='k', mfc=clr[i], alpha=0.8)
+        ax[0,2].set(xlabel='SHMS Angle [deg]', ylabel=r'$x_{Bj}$')
+        
+        # Pr vs. th_e
+        ax[1,0].plot( df['th_e'] , df['Pr'], linestyle='', marker='o', mec='k', mfc=clr[i], alpha=0.8)
+        ax[1,0].set(xlabel='SHMS Angle [deg]', ylabel=r'Recoil Momentum, $P_{r}$ [GeV/c]')
+        
+        # th_nq vs. th_e
+        #ax[1,1].plot( df['th_e'] , df['th_nq'], linestyle='', marker='o', mec='k', mfc=clr[i], alpha=0.8)
+        #ax[1,1].set(xlabel='SHMS Angle [deg]', ylabel=r'$\theta_{rq}$ [deg]')
+        
+        # th_nq vs. th_e
+        ax[1,1].plot( df['th_p'] , df['th_nq'], linestyle='', marker='o', mec='k', mfc=clr[i], alpha=0.8)
+        ax[1,1].set(xlabel='HMS Angle [deg]', ylabel=r'$\theta_{rq}$ [deg]')
+        
+        # Pf vs th_e
+        ax[1,2].plot( df['th_e'], df['Pf'], linestyle='', marker='o', mec='k', mfc=clr[i], alpha=0.8)
+        ax[1,2].set(xlabel='SHMS Angle [deg]', ylabel='HMS Momentum [GeV/c]')
+        
+        # Pf vs th_p
+        ax[2,0].plot( df['th_p'], df['Pf'], linestyle='', marker='o', mec='k', mfc=clr[i], alpha=0.8)
+        ax[2,0].set(xlabel='HMS Angle [deg]', ylabel='HMS Momentum [GeV/c]')
+        
+        # Q2 vs xbj
+        ax[2,1].plot( df['xbj'], df['Q2'], linestyle='', marker='o', mec='k', mfc=clr[i], alpha=0.8)
+        ax[2,1].set(xlabel=r'$x_{bj}$', ylabel=r'$Q^{2}$ [GeV$^{2}$]')
+        
+        # Pr vs th_nq
+        ax[2,2].plot( df['th_nq'], df['Pr'], linestyle='', marker='o', mec='k', mfc=clr[i], alpha=0.8)
+        ax[2,2].set(xlabel=r'$\theta_{rq}$ [deg]', ylabel=r'Recoil Momentum, $P_{r}$ [GeV/c]')
+        
+        
+        
+    plt.tight_layout()
+    plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
+    plt.show()
+
+
+    
 if __name__ == "__main__":
     calc_d2_kin()
 
+    #plot_kin()
