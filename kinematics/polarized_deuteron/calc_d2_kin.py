@@ -53,7 +53,7 @@ def calc_d2_kin():
     
     #output file to write kinematics
     #fname = 'polarized_deut_kin_summary_Eb%.2f_phi180.csv' % (Ei)
-    fname = 'polarized_deut_kin_summary_Eb%.2f_phi180.txt' % (Ei)
+    fname = 'polarized_deut_kin_summary_Eb%.2f_phi180_opening35deg.txt' % (Ei)
 
     ofile = open(fname, 'w')
     ofile.write('# d(e,e\'p)n Central Kinematics Summary\n')
@@ -62,7 +62,7 @@ def calc_d2_kin():
     ofile.write('# x-Bjorken (xbj) = %.2f - %.2f (step: %.2f) \n' % (xbj_min, xbj_max, xbj_step))    
     ofile.write('# Missing Momentum (Pr) = %.2f - %.2f GeV (step: %.2f) \n' % (Pr_min, Pr_max, Pr_step))
     ofile.write('# Hadron Out-of-Plane Angle (phi) = 180 deg \n')
-    ofile.write('# thp = thq - thpq, phi = 180 ?  (q-vector scatters at larger  angles than proton scattering angle)')
+    ofile.write('# thp = thq + thpq, phi = 180 ?  (q-vector scatters at smaller  angles than proton scattering angle)')
     ofile.write('# \n')
     ofile.write('# ')
     ofile.write('# \n'
@@ -146,7 +146,10 @@ def calc_d2_kin():
 
                 # restrict the proton angle to < 35 deg (allowed by magnet used in polarization)
                 if(thp>35): continue
-              
+                #if(thp>50): continue
+
+                if(th_e<6.0): continue
+                
                 ofile.write("  %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )
                 #ofile.write("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )
             

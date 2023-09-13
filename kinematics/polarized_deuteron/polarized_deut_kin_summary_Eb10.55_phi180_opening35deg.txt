@@ -1,3 +1,8 @@
+# +/- 35 deg
+# +/- 50 deg
+# MIT-Bates
+# Min Q2: 2.9 GeV^2
+
 # d(e,e'p)n Central Kinematics Summary
 # Beam Energy (Ei) = 10.549 GeV
 # 4-Momentum Transfer (Q2) = 2.90 - 4.50 GeV (step: 0.10) 
