@@ -138,8 +138,8 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   Double_t hms_vsize = 11.646;
  
   //SHMS Octagonal Collimator Size (Each of the octagonal points is a multiple of 1 or 1/2 of these values)
-  Double_t shms_hsize = 17.;  //cm
-  Double_t shms_vsize = 25.;
+  Double_t shms_hsize = 8.5;  //cm
+  Double_t shms_vsize = 12.5;
 
   //Scaling factor to scale collimator cuts from original size cut
   Double_t hms_scale=1.;   //Default

@@ -13,7 +13,7 @@
 # 4-Momentum Transfers [GeV^2]
 Q2_cut_flag = 1
 c_Q2_min = 1.9
-c_Q2_max = 5
+c_Q2_max = 6
 
 # Missing Energy [GeV]
 Em_cut_flag = 1

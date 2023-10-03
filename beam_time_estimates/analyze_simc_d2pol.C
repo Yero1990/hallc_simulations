@@ -1,7 +1,7 @@
 #include "utils/parse_utils.h"
 #include "utils/hist_utils.h"
 
-void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_t rad_flag=true){
+void analyze_simc_d2pol(int pm_set=0, TString model="", Bool_t rad_flag=true){
 
   
   /* 
@@ -46,58 +46,17 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   
   TString temp; //temporary string placeholder
 
-  TString rad;
-  if(rad_flag) { rad = "rad";}
-  else {rad = "norad";}
+
+  //---Read In File Names with cuts and histogram binning information
+  input_CutFileName  = "inp/set_basic_deep_cuts.inp";
+  input_HBinFileName = "inp/set_basic_deep_histos.inp";
   
-  if (heep_check){
-    
-    //---Read In File Names with cuts and histogram binning information
-    input_CutFileName  = "inp/set_basic_heep_cuts.inp";
-    input_HBinFileName = "inp/set_basic_heep_histos.inp";
+  //Define File Name Patterns
+  simc_infile         = "infiles/deuteron/d2_polarized/d2_pm500_Q2_3p0_rad.data";
+  simc_InputFileName  = "worksim/d2_pm500_Q2_3p0_rad.root";
+  simc_OutputFileName = "d2_pm500_Q2_3p0_rad_output.root";
 
-   
-    TString ext0 = "kin0";
-    TString ext1 = "kin1";
-    TString ext2 = "kin2";
-    //TString ext = ext0;
 
-        
-    //Define File Name Patterns
-    //simc_infile = Form("infiles/cafe_heep_scan_%s_%s.data", ext0.Data(), rad.Data());
-    //simc_InputFileName = Form("worksim/cafe_heep_scan_%s_%s.root", ext0.Data(), rad.Data());
-    //simc_OutputFileName = Form("cafe_heep_scan_%s_%s_output.root", ext0.Data(), rad.Data());
-
-    // for proton absorption studies @ cafe MF kinematics
-    //simc_infile = "infiles/cafe_heep_pabs_MF_10p6.data";
-    //simc_InputFileName = "/Users/deuteron/cafe_heep_pabs_MF_10p6.root";
-    //simc_OutputFileName = "cafe_heep_pabs_MF_10p6.root_output.root";
-
-    TString delta="+12";  // # shms delta scan, -8, -4, 0, 4, 8, 12
-    simc_infile = Form("infiles/d2_heep_scan_%s_%s.data",rad.Data(), delta.Data());
-    simc_InputFileName = Form("worksim/d2_heep_scan_%s_%s.root", rad.Data(), delta.Data());
-    simc_OutputFileName = Form("d2_heep_scan_%s_%s_output.root", rad.Data(), delta.Data());
-
-    
-    /*
-    simc_infile          = "infiles/d2_heep_3288.data";
-    simc_InputFileName   = "worksim/d2_heep_3288.root";
-    simc_OutputFileName  = "d2_heep_3288_output.root";
-    */
-  }
-
-  else{
-
-    //---Read In File Names with cuts and histogram binning information
-    input_CutFileName  = "inp/set_basic_deep_cuts.inp";
-    input_HBinFileName = "inp/set_basic_deep_histos.inp";
-    
-    //Define File Name Patterns
-    simc_infile         = "infiles/deuteron/d2_polarized/d2_pm300_Q2_3p5_rad.data";
-    simc_InputFileName  = "worksim/d2_pm300_Q2_3p5_rad.root";
-    simc_OutputFileName = "d2_pm300_Q2_3p5_rad_output.root";
-
-  }
   
   //---------------------------------------------------------------------------------------------------------
 
@@ -138,8 +97,8 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   Double_t hms_vsize = 11.646;
  
   //SHMS Octagonal Collimator Size (Each of the octagonal points is a multiple of 1 or 1/2 of these values)
-  Double_t shms_hsize = 17.;  //cm
-  Double_t shms_vsize = 25.;
+  Double_t shms_hsize = 8.5;  //cm
+  Double_t shms_vsize = 12.5;
 
   //Scaling factor to scale collimator cuts from original size cut
   Double_t hms_scale=1.;   //Default
@@ -251,7 +210,7 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
   Double_t Em_xmax    = stod(split(FindString("Em_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
            	     		  	       
   Double_t Pm_nbins   = stod(split(FindString("Pm_nbins",  	input_HBinFileName.Data())[0], '=')[1]);
-  Double_t Pm_OBxmin    = stod(split(FindString("Pm_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t Pm_xmin    = stod(split(FindString("Pm_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
   Double_t Pm_xmax    = stod(split(FindString("Pm_xmax",  	input_HBinFileName.Data())[0], '=')[1]);               				                 	       				  	       
   	   	     		  	       
   Double_t MM_nbins   = stod(split(FindString("MM_nbins",  	input_HBinFileName.Data())[0], '=')[1]);
@@ -951,7 +910,7 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
     H_W_noCut->Fill(W, FullWeight_forRates);
     H_Pm_noCut->Fill(Pm, FullWeight_forRates);
      
-    if(c_allCuts) {
+    if(c_allCuts && (th_rq/dtr>=30. && th_rq/dtr<=40.)) {
 
 
       // This is for the 2D cross section Pm vs. thnq binned in thnq 
@@ -1046,6 +1005,10 @@ void analyze_simc(Bool_t heep_check=false, int pm_set=0, TString model="", Bool_
     
   } // end entry loop
 
+  // extarct histo bin info for future computations
+  extract_1d_hist(H_Pm, "Missing Momentum", "Yield", "d2_pm_bins_Q2_2p9_rad_thrq35.csv");
+
+  
 
   //Calculate Xsec
   //H_Pm_vs_thrq_xsec->Divide(H_Pm_vs_thrq, H_Pm_vs_thrq_ps);
