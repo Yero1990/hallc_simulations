@@ -50,6 +50,14 @@ void analyze_simc_d2pol(int pm_set=0, TString model="", Bool_t rad_flag=true){
   //---Read In File Names with cuts and histogram binning information
   input_CutFileName  = "inp/set_basic_deep_cuts.inp";
   input_HBinFileName = "inp/set_basic_deep_histos.inp";
+
+  /*
+    d2_pm100_Q2_4p2_rad.root
+    d2_pm300_Q2_3p1_rad.root
+    d2_pm500_Q2_3p0_rad.root
+    d2_pm200_Q2_3p7_rad.root
+    d2_pm400_Q2_3p0_rad.root
+  */
   
   //Define File Name Patterns
   simc_infile         = "infiles/deuteron/d2_polarized/d2_pm500_Q2_3p0_rad.data";
@@ -749,27 +757,17 @@ void analyze_simc_d2pol(int pm_set=0, TString model="", Bool_t rad_flag=true){
   //Double_t h_trk      = 0.99;
   //Double_t daq_lt     = 0.99;
   
-  Double_t tgt_boil;
-  if(heep_check){
-    tgt_boil   = 1. - LH2_slope * Ib;
-  }
-  else{
-    tgt_boil   = 1. - LD2_slope * Ib;
-  }
+
+  Double_t tgt_boil   = 1. - LD2_slope * Ib;
+    
 
   Double_t proton_abs =  0.9534;  //let assume no proton absorption thru material (since for heep singles, only electron thru SHMS, and does NOT get absorbed) 
 
   Double_t eff_factor;
 
-  //assuming heep check singles
-  if(heep_check){
-    eff_factor = 0.99; // 95 % efficiency (fudge factor) //e_trk * daq_lt * tgt_boil;
-  }
+
+  eff_factor = 1.;
   
-  else{
-    //eff_factor = e_trk * h_trk * daq_lt * tgt_boil * proton_abs;
-    eff_factor = 1.;
-  }
 
 
   Double_t FullWeight;
@@ -832,15 +830,10 @@ void analyze_simc_d2pol(int pm_set=0, TString model="", Bool_t rad_flag=true){
     Pf = Pf/1000.;  //final proton momentum (GeV/c)
     Ep = sqrt(MP*MP + Pf*Pf);
     
-    //Missing Mass
-    if(heep_check){
-      MM2 = Em*Em - Pm*Pm;
-      MM = sqrt(MM2);
-    }
-    else{
-      MM = sqrt( pow(nu+MD-Ep,2) - Pm*Pm );  //recoil mass (neutron missing mass)
-      MM2 = MM * MM;
-    }
+
+    MM = sqrt( pow(nu+MD-Ep,2) - Pm*Pm );  //recoil mass (neutron missing mass)
+    MM2 = MM * MM;
+    
 
     
     //SIMC Collimator (definition based on HCANA collimator)
@@ -910,7 +903,7 @@ void analyze_simc_d2pol(int pm_set=0, TString model="", Bool_t rad_flag=true){
     H_W_noCut->Fill(W, FullWeight_forRates);
     H_Pm_noCut->Fill(Pm, FullWeight_forRates);
      
-    if(c_allCuts && (th_rq/dtr>=30. && th_rq/dtr<=40.)) {
+    if(c_allCuts) {
 
 
       // This is for the 2D cross section Pm vs. thnq binned in thnq 
@@ -1049,29 +1042,6 @@ void analyze_simc_d2pol(int pm_set=0, TString model="", Bool_t rad_flag=true){
     
   */
 
-  if(heep_check){
-    
-    float Wmin = 0.85;
-    float Wmax = 1.05;
-    float Wcnts = H_W->Integral(H_W->FindBin(Wmin), H_W->FindBin(Wmax));
-    float Wcnts_noCut = H_W_noCut->Integral();
-
-    float rates = Wcnts /  (time * 3600);
-    float daq_rates = Wcnts_noCut /  (time * 3600);
-
-    cout << " ----------------------------- " << endl;
-    cout << "    H(e,e'p) Rate Estimates    " << endl;
-    cout << " ----------------------------- " << endl; 
-    cout << "" << endl;
-    cout << Form("Ib [uA]     = %.3f ", Ib) << endl;
-    cout << Form("time [hr]   = %.3f ", time) << endl;
-    cout << Form("charge [mC] = %.3f ", charge_factor)<< endl;
-    cout << Form("W counts [%.3f, %.3f] GeV = %.3f", Wmin, Wmax, Wcnts);
-    cout << Form("H(e,e'p) Rates [Hz] = %.3f ", rates) << endl;
-    cout << Form("DAQ Rates [Hz] = %.3f", daq_rates) << endl;
-    cout << " ----------------------------- " << endl; 
-  }
-  else{
     
     float Pmcnts = H_Pm->Integral();
     float Pmcnts_noCut = H_Pm_noCut->Integral();     
@@ -1093,7 +1063,7 @@ void analyze_simc_d2pol(int pm_set=0, TString model="", Bool_t rad_flag=true){
     cout << " ----------------------------- " << endl; 
 
 
-  }
+ 
 
   //------------------------------------------
   // Extract The Yield binned in Pm vs th_rq

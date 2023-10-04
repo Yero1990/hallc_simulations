@@ -43,16 +43,16 @@
 
  ?=
  &TARGET
-     targ%A  =  2.0			!  target A
+     targ%A  =  2.0			!  target A 
      targ%Z  =  1.0			!  target Z
-     targ%mass_amu  =  2.014101	        !  target mass in amu
+     targ%mass_amu  =  2.014101	        !  target mass in amu;  change to  (20 amu for ND3)
      targ%mrec_amu  =  1.008665	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
-     targ%rho  =  0.167		        !  target density (g/cm^3)
+     targ%rho  =  0.167		        !  target density (g/cm^3) ;  (3 deuterons/molecule * 1.007 g/cm^3)
      ! targ%thick  =  2505.		!  target thick 15cm (mg/cm^2) 
-     targ%thick  =  1670.		!  target thick 10cm (mg/cm^2)
+     targ%thick  =  1670.		!  target thick 10cm (mg/cm^2)   targ%rho * 3 cm / 1000 )
      targ%angle  =  0.		        !  target angle (for solid target) (degrees)
-     targ%abundancy  =  100.		!  target purity (%)
-     targ%can  =  1                     !  1=beer can (fpi), 2=pudding can (nucpi)
+     targ%abundancy  =  100.		!  target purity (%)   ; 65% pure
+     targ%can  =  1                     !  1=beer can (fpi), 2=pudding can (nucpi) ; change to puddin can
 / 
 
  &DEBUG_PARM
