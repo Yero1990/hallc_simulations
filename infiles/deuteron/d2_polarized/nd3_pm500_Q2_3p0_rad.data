@@ -1,5 +1,5 @@
 ! Deuteron Experiment D(e,e'p)n : polarized deuteron
-! Central "missing momentum" (pmiss) setting = 100 MeV
+! Central "missing momentum" (pmiss) setting = 500 MeV
 ! Proton Angle Restriction: < 35 deg
 ! Out-of-Plane Angle (phi): 180 deg 
 ! FSI | YES radiative effects | YES energy loss | NO energy loss correction 
@@ -16,7 +16,7 @@
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
      extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
-     set_allow_scat_in_coll=2  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
+     set_allow_scat_in_coll=0  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
  &KINEMATICS_MAIN
@@ -24,10 +24,10 @@
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
-     spec%e%P  =    8311.                              !  e arm central momentum (MeV/c) 
-     spec%e%theta  =  12.57                            !  e arm angle setting (degrees)
-     spec%p%P  =    3027.                             !  p arm central momentum (MeV/c) 
-     spec%p%theta  =   34.69                           !  p arm angle setting (degrees)
+     spec%e%P  =    8950.                              !  e arm central momentum (MeV/c) 
+     spec%e%theta  =  10.23                            !  e arm angle setting (degrees)
+     spec%p%P  =    2220.                             !  p arm central momentum (MeV/c) 
+     spec%p%theta  =   30.32                           !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
@@ -45,14 +45,13 @@
  &TARGET
      targ%A  =  2.0			!  target A 
      targ%Z  =  1.0			!  target Z
-     targ%mass_amu  =  2.014101	        !  target mass in amu;  
+     targ%mass_amu  =  20.049	        !  target mass in amu; ND3 solid amu (g/mol)
      targ%mrec_amu  =  1.008665	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
-     targ%rho  =  0.167		        !  target density (g/cm^3) ; 
-     ! targ%thick  =  2505.		!  target thick 15cm (mg/cm^2) 
-     targ%thick  =  1670.		!  target thick 10cm (mg/cm^2)  
+     targ%rho  =  3.021		        !  target density (g/cm^3) ;  deut rho = (ND3 rho * 3 deut/molecule) = 1.007 * 3 g/cm^3
+     targ%thick  =  9062.9		!  target thick 3 cm (mg/cm^2)   3.021 g/cm3 * 3 cm * 1000 mg / 1 g 
      targ%angle  =  0.		        !  target angle (for solid target) (degrees)
-     targ%abundancy  =  100.		!  target purity (%)   ;
-     targ%can  =  1                     !  1=beer can (fpi), 2=pudding can (nucpi) ; 
+     targ%abundancy  =  65.		!  target purity (%)   ; ND3 is 65 % pure (packing fraction)
+     targ%can  =  2                     !  1=beer can (fpi), 2=pudding can (nucpi) ; ND3 is pudding can
 / 
 
  &DEBUG_PARM

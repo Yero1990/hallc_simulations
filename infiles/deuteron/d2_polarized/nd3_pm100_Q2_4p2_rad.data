@@ -1,4 +1,4 @@
-! Deuteron Experiment D(e,e'p)n : polarized deuteron
+! Deuteron Experiment D(e,e'p)n : polarized ND3 (solid target)
 ! Central "missing momentum" (pmiss) setting = 100 MeV
 ! Proton Angle Restriction: < 35 deg
 ! Out-of-Plane Angle (phi): 180 deg 
@@ -16,7 +16,7 @@
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
      extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
-     set_allow_scat_in_coll=2  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
+     set_allow_scat_in_coll=0  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
  &KINEMATICS_MAIN
@@ -45,14 +45,13 @@
  &TARGET
      targ%A  =  2.0			!  target A 
      targ%Z  =  1.0			!  target Z
-     targ%mass_amu  =  2.014101	        !  target mass in amu;  
+     targ%mass_amu  =  20.049	        !  target mass in amu; ND3 solid amu (g/mol)
      targ%mrec_amu  =  1.008665	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
-     targ%rho  =  0.167		        !  target density (g/cm^3) ; 
-     ! targ%thick  =  2505.		!  target thick 15cm (mg/cm^2) 
-     targ%thick  =  1670.		!  target thick 10cm (mg/cm^2)  
+     targ%rho  =  3.021		        !  target density (g/cm^3) ;  deut rho = (ND3 rho * 3 deut/molecule) = 1.007 * 3 g/cm^3
+     targ%thick  =  9062.9		!  target thick 3 cm (mg/cm^2)   3.021 g/cm3 * 3 cm * 1000 mg / 1 g 
      targ%angle  =  0.		        !  target angle (for solid target) (degrees)
-     targ%abundancy  =  100.		!  target purity (%)   ;
-     targ%can  =  1                     !  1=beer can (fpi), 2=pudding can (nucpi) ; 
+     targ%abundancy  =  65.		!  target purity (%)   ; ND3 is 65 % pure (packing fraction)
+     targ%can  =  2                     !  1=beer can (fpi), 2=pudding can (nucpi) ; ND3 is pudding can
 / 
 
  &DEBUG_PARM
