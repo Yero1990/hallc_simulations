@@ -1,8 +1,8 @@
 '''
 Script to calculate the deuteron D(e,e'p)n reaction kinematics
 to determine at which central settings (in angle and momentum)
-the Hall C spectrometers should
-be placed
+the Hall C spectrometers should be placed for proposal on fsi angular
+distribution measurements 
 
 Author: C. Yero
 email: cyero@jlab.org
@@ -16,7 +16,7 @@ import sys
 sys.stdout.flush()
 
 
-def calc_d2_kin_J22():
+def calc_d2_fsi_kin():
     print('main')
 
     #degrees-to-radians
@@ -35,9 +35,9 @@ def calc_d2_kin_J22():
 
 
     #Set Eb Range to cover [GeV^2]
-    Eb_min = 11.
+    Eb_min = 10.549
     Eb_step = 1.    
-    Eb_max = 22. + Eb_step   #include endpoint (+Pr_step)
+    Eb_max = 10.549 + Eb_step   #include endpoint (+Pr_step)
     Eb_range = np.arange(Eb_min, Eb_max, Eb_step)
     
     #Set Q2 Range to cover [GeV^2]
@@ -47,15 +47,15 @@ def calc_d2_kin_J22():
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
-    Pr_min = 1.0
+    Pr_min = 0.5
     Pr_step = 0.1    
-    Pr_max = 1.0  + Pr_step  #include endpoint (+Pr_step)
+    Pr_max = 0.9  + Pr_step  #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
-    xbj_min = 0.7
+    xbj_min = 0.5
     xbj_step = 0.1
-    xbj_max = 1.6 + xbj_step
+    xbj_max = 1.8 + xbj_step
     xbj_range = np.arange(xbj_min, xbj_max, xbj_step)
 
     cnt  = 0
@@ -65,10 +65,11 @@ def calc_d2_kin_J22():
     for Eb in Eb_range:
 
         #output file to write kinematics
-        fname = 'kin_summary_Eb%.2f.txt' % (Eb)
+        fname = 'kin_summary_Eb%.3f.txt' % (Eb)
         ofile = open(fname, 'w')
         ofile.write('# D(e,e\'p)n Central Kinematics Summary\n')
         ofile.write('# Beam Energy (Ei) = %.3f GeV\n' % (Eb))
+        ofile.write('# Out-of-Plane Angle (Phi) = 0 deg\n')
         ofile.write('# \n'
                     '# Header Definitions: \n'
                     '# Pr   : Central Missing Momentum [GeV/c] \n'
@@ -150,10 +151,10 @@ def calc_d2_kin_J22():
                     #thp = thq - thpq   # phi = 180 ?  (q-vector scatters at larger  angles than proton scattering angle)
                      
                     # spectrometer constraint requirements (based on physical limits)
-                    #if kf<2. or kf>11.0 or th_e<5.5 or th_e>40 or Pf<0.4 or Pf>7.3 or thp<10.5 or thp>80:
-                    #    continue
+                    if kf<2. or kf>11.0 or th_e<5.5 or th_e>40. or Pf<0.4 or Pf>7.3 or thp<10.5 or thp>80:
+                        continue
 
-                    if Pr>1.: continue
+                    #if Pr>1.: continue
                     #if thnq<70.:
                     #    continue
                     # require max SHMS momentum
@@ -172,5 +173,5 @@ def calc_d2_kin_J22():
     ofile.close()
             
 if __name__ == "__main__":
-    calc_d2_kin_J22()
+    calc_d2_fsi_kin()
 
