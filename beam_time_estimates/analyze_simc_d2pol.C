@@ -57,12 +57,19 @@ void analyze_simc_d2pol(int pm_set=0, TString model="", Bool_t rad_flag=true){
     d2_pm500_Q2_3p0_rad.root
     d2_pm200_Q2_3p7_rad.root
     d2_pm400_Q2_3p0_rad.root
+
+    nd3_pm100_Q2_4p2_rad
+    nd3_pm200_Q2_3p7_rad
+    nd3_pm300_Q2_3p1_rad
+    nd3_pm400_Q2_3p0_rad
+    nd3_pm500_Q2_3p0_rad
+    
   */
   
   //Define File Name Patterns
-  simc_infile         = "infiles/deuteron/d2_polarized/d2_pm500_Q2_3p0_rad.data";
-  simc_InputFileName  = "worksim/d2_pm500_Q2_3p0_rad.root";
-  simc_OutputFileName = "d2_pm500_Q2_3p0_rad_output.root";
+  simc_infile         = "infiles/deuteron/d2_polarized/nd3_pm500_Q2_3p0_rad.data";
+  simc_InputFileName  = "worksim/nd3_pm500_Q2_3p0_rad.root";
+  simc_OutputFileName = "nd3_pm500_Q2_3p0_rad_output.root";
 
 
   
