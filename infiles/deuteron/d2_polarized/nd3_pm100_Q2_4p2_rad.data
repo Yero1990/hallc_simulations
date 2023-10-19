@@ -45,10 +45,10 @@
  &TARGET
      targ%A  =  2.0			!  target A 
      targ%Z  =  1.0			!  target Z
-     targ%mass_amu  =  20.049	        !  target mass in amu; ND3 solid amu (g/mol)
+     targ%mass_amu  =  2.014101	        !  target mass in amu;  deut amu (g/mol)
      targ%mrec_amu  =  1.008665	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
-     targ%rho  =  3.021		        !  target density (g/cm^3) ;  deut rho = (ND3 rho * 3 deut/molecule) = 1.007 * 3 g/cm^3
-     targ%thick  =  9062.9		!  target thick 3 cm (mg/cm^2)   3.021 g/cm3 * 3 cm * 1000 mg / 1 g 
+     targ%rho  =  0.303		        !  target density (g/cm^3) ;  deut_eff_rho = nd3_rho * (deut_amu * 3 g/mol) / (nd3_amu g/mol) = 1.007 * (2.014101 * 3) / (20.049) =  0.30348 g/cm3
+     targ%thick  =  910.459		!  target thick 3 cm (mg/cm^2)   0.303 g/cm3 * 3 cm * 1000 mg / 1 g 
      targ%angle  =  0.		        !  target angle (for solid target) (degrees)
      targ%abundancy  =  65.		!  target purity (%)   ; ND3 is 65 % pure (packing fraction)
      targ%can  =  2                     !  1=beer can (fpi), 2=pudding can (nucpi) ; ND3 is pudding can
