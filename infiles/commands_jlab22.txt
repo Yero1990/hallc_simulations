@@ -15,3 +15,6 @@ ipython simulate.py d2_Eb22_Pr1_thrq48.data
 
 screen -S d2_Eb22_Pr1_thrq65
 ipython simulate.py d2_Eb22_Pr1_thrq65.data
+
+# remove all links in current dir.
+find . -type l -exec unlink {} \;
