@@ -51,6 +51,7 @@ void analyze_simc_d2pol(int pm_set=0, TString model="", Bool_t rad_flag=true){
   input_CutFileName  = "inp/set_basic_deep_cuts.inp";
   input_HBinFileName = "inp/set_basic_deep_histos.inp";
 
+  
   /*
     d2_pm100_Q2_4p2_rad.root
     d2_pm300_Q2_3p1_rad.root
@@ -65,11 +66,20 @@ void analyze_simc_d2pol(int pm_set=0, TString model="", Bool_t rad_flag=true){
     nd3_pm500_Q2_3p0_rad
     
   */
+  TString basename;
+
+  //basename="d2_pm100_Q2_4p2_rad";
+  //basename="d2_pm200_Q2_3p7_rad";
+  //basename="d2_pm300_Q2_3p1_rad";
+  //basename="d2_pm400_Q2_3p0_rad";
+  basename="d2_pm500_Q2_3p0_rad";
+
+
   
   //Define File Name Patterns
-  simc_infile         = "infiles/deuteron/d2_polarized/nd3_pm500_Q2_3p0_rad.data";
-  simc_InputFileName  = "worksim/nd3_pm500_Q2_3p0_rad.root";
-  simc_OutputFileName = "nd3_pm500_Q2_3p0_rad_output.root";
+  simc_infile         = Form("infiles/deuteron/d2_polarized/%s.data", basename.Data());
+  simc_InputFileName  = Form("worksim/d2_pol/%s.root", basename.Data());
+  simc_OutputFileName = Form("%s_output.root", basename.Data());
 
 
   
