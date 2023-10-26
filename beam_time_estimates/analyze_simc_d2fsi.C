@@ -101,18 +101,19 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   
   TString temp; //temporary string placeholder
 
-
+  // cout << "L104 OK" << endl;
   //---Read In File Names with cuts and histogram binning information
   input_CutFileName  = "inp/JLab22/set_basic_cuts_jlab22.inp";
   input_HBinFileName = "inp/JLab22/set_basic_histos_jlab22.inp";
 
   //Define File Name Patterns
-  simc_infile = Form("infiles/%s.data",         basename.Data());
+  simc_infile = Form("infiles/deuteron/fsi_deuteron/Q2_4p5/%s.data",         basename.Data());
 
-  simc_InputFileName = Form("worksim/%s.root",  basename.Data());
+  simc_InputFileName = Form("worksim/d2_fsi/raw/%s.root",  basename.Data());
 
-  simc_OutputFileName = Form("%s_output.root",  basename.Data());
+  simc_OutputFileName = Form("worksim/d2_fsi/analyzed/%s_output.root",  basename.Data());
 
+  //cout << "L116 OK" << endl;
   
   //---------------------------------------------------------------------------------------------------------
 
@@ -120,10 +121,8 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   // READ CENTRAL KIN. SETTINGS
   //----------------------------
 
-  cout << "OK" << endl;
   //beam energy (GeV)
   Double_t beam_e = (stod(split(split(FindString("Ebeam", simc_infile.Data())[0], '!')[0], '=')[1]))/1000.; 
-  cout << "L126" << endl;
   //e- arm central momentum setting (GeV/c)
   Double_t e_Pcen = (stod(split(split(FindString("spec%e%P", simc_infile.Data())[0], '!')[0], '=')[1]))/1000.; 
   //proton arm central momentum setting (GeV/c)
@@ -137,7 +136,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   // spectrometers are in-plane
   Double_t phe_central=0;  
   Double_t php_central=0;
-  
+  //  cout << "L139 OK" << endl;
   //--------------------
   // READ ANALYSIS CUTS
   //-------------------
@@ -451,6 +450,10 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
 
   //2D Pm vs. thrq (for cross section calculation)
   TH2F *H_Pm_vs_thrq  = new TH2F("H_Pm_vs_thrq", "Pm vs. #theta_{rq} (yield)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
+
+  // pmiss +/- 50 MeV (100 MeV BIN width, centered at intergal pmiss = 0.1, 0.2, 0.3, . . . )
+  TH2F *H_Pm_vs_thrq_largebins  = new TH2F("H_Pm_vs_thrq_largebins", "Pm vs. #theta_{rq} (yield)", thrq_nbins, thrq_xmin, thrq_xmax, 13, -0.05, 1.25);
+
   TH2F *H_Pm_vs_thrq_ps  = new TH2F("H_Pm_vs_thrq_ps", "Pm vs. #theta_{rq} (phase space)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
   TH2F *H_Pm_vs_thrq_xsec  = new TH2F("H_Pm_vs_thrq_xsec", "Pm vs. #theta_{rq} (xsec)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
 
@@ -504,6 +507,8 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   
   kin_HList->Add( H_Pm_vs_thrq );
   kin_HList->Add( H_Pm_vs_thrq_ps );
+  kin_HList->Add( H_Pm_vs_thrq_largebins);
+  
   //kin_HList->Add( H_Pm_vs_thrq_xsec );
 
   // Add averaged kin. histos
@@ -644,10 +649,10 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
 
   TTree *tree;
   Long64_t nentries;
-  
+  //  cout << "L651 OK" << endl;
   //Read ROOTfile
   inROOT = new TFile(simc_InputFileName.Data(), "READ");
-  
+  //cout << "L654 OK" << endl;
   //Get the data tree
   tree = (TTree*)inROOT->Get("SNT");
   nentries = tree->GetEntries();
@@ -934,7 +939,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   //-------------------------------
   //  DEFINE FULL WEIGHT VARIABLE
   //-------------------------------
-
+  // cout << "L941 OK" << endl;
   // STEP1: Determine the charge factor:
   // definition: total charge deposited on target over a time period
   // SIMC input files are set to 'events / 1mC'
@@ -1341,6 +1346,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
       //--------------------------------------------------------------
       
       // This is for the 2D cross section Pm vs. thrq binned in thrq 
+      H_Pm_vs_thrq_largebins->Fill(th_rq/dtr, Pm, FullWeight);
       H_Pm_vs_thrq->Fill(th_rq/dtr, Pm, FullWeight);
       H_Pm_vs_thrq_ps->Fill(th_rq/dtr, Pm, PhaseSpace);
       
@@ -1455,7 +1461,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
     cout << "SIMC Events Completed: " << std::setprecision(2) << double(i) / nentries * 100. << "  % " << std::flush << "\r";
     
   } // end entry loop
-
+  // cout << "L1463 OK" << endl;
   //Finish Calculating the 2D Average Kinematics (Divide by the sum of the weight)
   H_Ein_2Davg        ->Divide(H_Pm_vs_thrq);
   H_kf_2Davg         ->Divide(H_Pm_vs_thrq);
@@ -1522,7 +1528,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   //------------------------------------------
   // Extract The Yield binned in Pm vs th_rq
   //------------------------------------------
-  //extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("%s_yield_%.1fuA_%.1fhr.csv",  basename.Data(), Ib, time), true);
+  extract_2d_hist(H_Pm_vs_thrq_largebins, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("%s_yield_%.1fuA_%.1fhr.csv",  basename.Data(), Ib, time));
 
   //--------
   // Extrack numerical data for histogram plotting

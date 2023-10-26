@@ -89,7 +89,7 @@ void extract_2d_hist(TH2F *h2, TString xlabel, TString ylabel, TString out_fname
       x0   = (xlow + xup)/2.; //h2->GetXaxis()->GetBinCenter(xb);
 
       
-      ofile  << std::setw(7) << ib << std::setw(10) << xb << std::setw(10) << yb << std::setw(14) << x0 << std::setw(10) << xlow << std::setw(10) << xup << std::setw(12) << y0 << std::setw(10) << ylow << std::setw(12) << yup << std::setw(12) << z_cont << std::setw(14) << z_cont_err << endl;
+      ofile  << std::setw(7) << ib <<","<< std::setw(10) << xb << "," << std::setw(10) << yb << "," << std::setw(14) << x0 << "," << std::setw(10) << xlow << "," << std::setw(10) << xup << "," << std::setw(12) << y0 << "," << std::setw(10) << ylow << "," << std::setw(12) << yup << "," << std::setw(12) << z_cont << "," << std::setw(14) << z_cont_err << endl;
 
     }// end x-bins loop
     
