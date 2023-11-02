@@ -42,7 +42,7 @@ def calc_d2_kin():
     #Set Missing Momentum Range to cover [GeV]
     Pr_min = 0.
     Pr_step = 0.1    
-    Pr_max = 1.0 + Pr_step   #include endpoint (+Pr_step)
+    Pr_max = 0.5 + Pr_step   #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
@@ -53,7 +53,7 @@ def calc_d2_kin():
     
     #output file to write kinematics
     #fname = 'polarized_deut_kin_summary_Eb%.2f_phi180.csv' % (Ei)
-    fname = 'polarized_deut_kin_summary_Eb%.2f_phi180_opening35deg.txt' % (Ei)
+    fname = 'polarized_deut_kin_summary_Eb%.2f_phi180_HMSwideOpen.txt' % (Ei)
 
     ofile = open(fname, 'w')
     ofile.write('# d(e,e\'p)n Central Kinematics Summary\n')
@@ -145,9 +145,12 @@ def calc_d2_kin():
                 if (np.isnan(thp)): continue
 
                 # restrict the proton angle to < 35 deg (allowed by magnet used in polarization)
-                if(thp>35): continue
+                #if(thp>35): continue
                 #if(thp>50): continue
 
+                # restrict the neutron recoil angle relative to q-vector, theta_rq
+                if(thnq < 30. or thnq > 40): continue
+                
                 if(th_e<6.0): continue
                 
                 ofile.write("  %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )

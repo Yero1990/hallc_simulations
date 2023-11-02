@@ -45,5 +45,5 @@ for i in thrq_c:
 
 
         
-#plt.plot(thrq_0p7_, thrq_0p7_ratio, marker='o', linestyle='None')
-#plt.show()
+plt.plot(thrq_0p7_, thrq_0p7_ratio, marker='o', linestyle='None')
+plt.show()
