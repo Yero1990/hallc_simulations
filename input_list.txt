@@ -1,8 +1,4 @@
-d2_pm800_thrq55_pwia_rad.data
-d2_pm800_thrq55_fsi_rad.data
-d2_pm800_thrq60_pwia_rad.data
-d2_pm800_thrq60_fsi_rad.data
-d2_pm800_thrq72_pwia_rad.data
-d2_pm800_thrq72_fsi_rad.data
-d2_pm800_thrq79_pwia_rad.data
-d2_pm800_thrq79_fsi_rad.data
+d2_pm200_Q2_4p0_rad.data
+d2_pm300_Q2_4p0_rad.data
+d2_pm400_Q2_4p0_rad.data
+d2_pm500_Q2_4p0_rad.data
