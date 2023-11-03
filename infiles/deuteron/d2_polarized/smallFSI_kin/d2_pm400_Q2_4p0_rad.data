@@ -1,7 +1,10 @@
 ! Deuteron Experiment D(e,e'p)n : polarized deuteron
-! Central "missing momentum" (pmiss) setting = 200 MeV
-! Proton Angle Restriction: < 35 deg
-! Out-of-Plane Angle (phi): 180 deg 
+! Central "missing momentum" (pmiss) setting = 400 MeV
+! Central Q2: 4.0 GeV^2
+! Pol. Mag. Field direction rotated +20 deg beam-right (towards HMS)
+! Proton Angle Restriction: < 20 + 35 =  55 deg
+! Electron Angle Restriction: < |20 - 35| = 15 deg
+! Out-of-Plane Angle (phi): 180 deg
 ! FSI | YES radiative effects | YES energy loss | NO energy loss correction 
 ! 'TF' stands for 'this field'
 ! ONE equals TRUE unless specified otherwise
@@ -24,10 +27,10 @@
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
-     spec%e%P  =    8577.                              !  e arm central momentum (MeV/c) 
-     spec%e%theta  =  11.61                            !  e arm angle setting (degrees)
-     spec%p%P  =    2730.                             !  p arm central momentum (MeV/c) 
-     spec%p%theta  =   34.64                           !  p arm angle setting (degrees)
+     spec%e%P  =    9026.                              !  e arm central momentum (MeV/c) 
+     spec%e%theta  =  11.76                            !  e arm angle setting (degrees)
+     spec%p%P  =    2184.                             !  p arm central momentum (MeV/c) 
+     spec%p%theta  =   41.52                           !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
