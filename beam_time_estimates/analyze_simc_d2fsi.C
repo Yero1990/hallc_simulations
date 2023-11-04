@@ -103,8 +103,8 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
 
   // cout << "L104 OK" << endl;
   //---Read In File Names with cuts and histogram binning information
-  input_CutFileName  = "inp/JLab22/set_basic_cuts_jlab22.inp";
-  input_HBinFileName = "inp/JLab22/set_basic_histos_jlab22.inp";
+  input_CutFileName  = "inp/d2_fsi/set_basic_cuts_d2fsi.inp";
+  input_HBinFileName = "inp/d2_fsi/set_basic_histos_d2fsi.inp";
 
   //Define File Name Patterns
   simc_infile = Form("infiles/deuteron/fsi_deuteron/Q2_4p5/%s.data",         basename.Data());
@@ -156,8 +156,8 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   Double_t hms_vsize = 11.646;
  
   //SHMS Octagonal Collimator Size (Each of the octagonal points is a multiple of 1 or 1/2 of these values)
-  Double_t shms_hsize = 17.;  //cm
-  Double_t shms_vsize = 25.;
+  Double_t shms_hsize = 17./2.;  //cm
+  Double_t shms_vsize = 25./2.;
 
 
   //------------------------------
@@ -451,9 +451,6 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   //2D Pm vs. thrq (for cross section calculation)
   TH2F *H_Pm_vs_thrq  = new TH2F("H_Pm_vs_thrq", "Pm vs. #theta_{rq} (yield)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
 
-  // pmiss +/- 50 MeV (100 MeV BIN width, centered at intergal pmiss = 0.1, 0.2, 0.3, . . . )
-  TH2F *H_Pm_vs_thrq_largebins  = new TH2F("H_Pm_vs_thrq_largebins", "Pm vs. #theta_{rq} (yield)", thrq_nbins, thrq_xmin, thrq_xmax, 13, -0.05, 1.25);
-
   TH2F *H_Pm_vs_thrq_ps  = new TH2F("H_Pm_vs_thrq_ps", "Pm vs. #theta_{rq} (phase space)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
   TH2F *H_Pm_vs_thrq_xsec  = new TH2F("H_Pm_vs_thrq_xsec", "Pm vs. #theta_{rq} (xsec)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
 
@@ -507,7 +504,6 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   
   kin_HList->Add( H_Pm_vs_thrq );
   kin_HList->Add( H_Pm_vs_thrq_ps );
-  kin_HList->Add( H_Pm_vs_thrq_largebins);
   
   //kin_HList->Add( H_Pm_vs_thrq_xsec );
 
@@ -959,14 +955,14 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   
   // STEP2: Estimate Efficiencies (use efficiencies from commissioning experiment)
   // coin. rates were ~ 2.5 Hz in commissioning,
-  //Double_t e_trk      = 0.964;
-  //Double_t h_trk      = 0.988;
-  //Double_t daq_lt     = 0.98;   //(it was 0.926 during commissioning due to large logic windows ~100 ns in HMS, but now is smaller)
+  Double_t e_trk      = 0.964;
+  Double_t h_trk      = 0.988;
+  Double_t daq_lt     = 0.98;   //(it was 0.926 during commissioning due to large logic windows ~100 ns in HMS, but now is smaller)
 
   //for heep checks
-  Double_t e_trk      = 0.99;
-  Double_t h_trk      = 0.99;
-  Double_t daq_lt     = 0.99;
+  //Double_t e_trk      = 0.99;
+  //Double_t h_trk      = 0.99;
+  //Double_t daq_lt     = 0.99;
 
   Double_t tgt_boil=1.;
   if(heep_check){
@@ -1346,7 +1342,6 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
       //--------------------------------------------------------------
       
       // This is for the 2D cross section Pm vs. thrq binned in thrq 
-      H_Pm_vs_thrq_largebins->Fill(th_rq/dtr, Pm, FullWeight);
       H_Pm_vs_thrq->Fill(th_rq/dtr, Pm, FullWeight);
       H_Pm_vs_thrq_ps->Fill(th_rq/dtr, Pm, PhaseSpace);
       
@@ -1528,7 +1523,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   //------------------------------------------
   // Extract The Yield binned in Pm vs th_rq
   //------------------------------------------
-  extract_2d_hist(H_Pm_vs_thrq_largebins, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("%s_yield_%.1fuA_%.1fhr.csv",  basename.Data(), Ib, time));
+  extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("%s_yield_%.1fuA_%.1fhr.csv",  basename.Data(), Ib, time));
 
   //--------
   // Extrack numerical data for histogram plotting
