@@ -1,7 +1,7 @@
 #include "utils/parse_utils.h"
 #include "utils/hist_utils.h"
 
-void analyze_simc_d2pol(int pm_set=0, TString model="", Bool_t rad_flag=true){
+void analyze_simc_d2pol(TString basename="", int pm_set=0, TString model="", Bool_t rad_flag=true){
 
   
   /* 
@@ -48,38 +48,14 @@ void analyze_simc_d2pol(int pm_set=0, TString model="", Bool_t rad_flag=true){
 
 
   //---Read In File Names with cuts and histogram binning information
-  input_CutFileName  = "inp/set_basic_deep_cuts.inp";
-  input_HBinFileName = "inp/set_basic_deep_histos.inp";
-
-  
-  /*
-    d2_pm100_Q2_4p2_rad.root
-    d2_pm300_Q2_3p1_rad.root
-    d2_pm500_Q2_3p0_rad.root
-    d2_pm200_Q2_3p7_rad.root
-    d2_pm400_Q2_3p0_rad.root
-
-    nd3_pm100_Q2_4p2_rad
-    nd3_pm200_Q2_3p7_rad
-    nd3_pm300_Q2_3p1_rad
-    nd3_pm400_Q2_3p0_rad
-    nd3_pm500_Q2_3p0_rad
-    
-  */
-  TString basename;
-
-  //basename="d2_pm100_Q2_4p2_rad";
-  //basename="d2_pm200_Q2_3p7_rad";
-  //basename="d2_pm300_Q2_3p1_rad";
-  //basename="d2_pm400_Q2_3p0_rad";
-  basename="d2_pm500_Q2_3p0_rad";
-
+  input_CutFileName  = "inp/d2_pol/set_basic_deep_cuts.inp";
+  input_HBinFileName = "inp/d2_pol/set_basic_deep_histos.inp";
 
   
   //Define File Name Patterns
-  simc_infile         = Form("infiles/deuteron/d2_polarized/%s.data", basename.Data());
-  simc_InputFileName  = Form("worksim/d2_pol/%s.root", basename.Data());
-  simc_OutputFileName = Form("%s_output.root", basename.Data());
+  simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/%s.data", basename.Data());
+  simc_InputFileName  = Form("worksim/d2_pol/smallFSI/raw/%s.root", basename.Data());
+  simc_OutputFileName = Form("worksim/d2_pol/smallFSI/analyzed/%s_output.root", basename.Data());
 
 
   
@@ -1015,7 +991,7 @@ void analyze_simc_d2pol(int pm_set=0, TString model="", Bool_t rad_flag=true){
     
   } // end entry loop
 
-  // extarct histo bin info for future computations
+  // extract histo bin info for future computations
   extract_1d_hist(H_Pm, "Missing Momentum", "Yield", "d2_pm_bins_Q2_2p9_rad_thrq35.csv");
 
   
@@ -1085,7 +1061,7 @@ void analyze_simc_d2pol(int pm_set=0, TString model="", Bool_t rad_flag=true){
   //------------------------------------------
   // Extract The Yield binned in Pm vs th_rq
   //------------------------------------------
-  //extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
+  extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_d2pol_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
 
   //--------
   // Extrack numerical data for histogram plotting
