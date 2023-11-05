@@ -150,11 +150,6 @@ Pm_nbins = 30
 Pm_xmin = 0.
 Pm_xmax = 1.2
 
-# Missing (Recoil) Momentum (+/- 50 MeV bin width)
-#Pm_nbins = 11
-#Pm_xmin = -0.05
-#Pm_xmax = 1.05
-
 # Missing Momentum (X-component, lab)
 Pmx_lab_nbins = 80 
 Pmx_lab_xmin = 0.
@@ -215,7 +210,7 @@ thxq_nbins = 80
 thxq_xmin = -0.1
 thxq_xmax = 20.
 
-# In-plane angle between the recoil system and q 
+# In-plane angle between the recoil system and q (+/- 5 deg bins)
 thrq_nbins = 19
 thrq_xmin = 0.
 thrq_xmax = 190.
