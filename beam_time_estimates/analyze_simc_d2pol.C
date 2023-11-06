@@ -1160,12 +1160,13 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
   // Extrack numerical data for histogram plotting
   //--------
 
-  /*
+  
   //extract cuts-related histos
-  extract_1d_hist(H_Q2_nsc, "4-Momentum Transfers, Q2 [GeV^2]", Form("yield_Q2_pm%d.txt", pm_set));
+    extract_1d_hist(H_Q2, "4-Momentum Transfers, Q^{2} [GeV^2]", "Yield", Form("yield_Q2_pm%d.txt", pm_set));
+  /*
   extract_1d_hist(H_Em_nsc, "Missing Energy, Em [GeV]", Form("yield_Em_pm%d.txt", pm_set));
-  extract_1d_hist(H_edelta_nsc, "SHMS Delta [%%]", Form("yield_edelta_pm%d.txt", pm_set));
-  extract_1d_hist(H_hdelta_nsc, "HMS Delta [%%]", Form("yield_hdelta_pm%d.txt", pm_set));
+  extract_1d_hist(H_edelta_nsc, "SHMS #delta [%%]", Form("yield_edelta_pm%d.txt", pm_set));
+  extract_1d_hist(H_hdelta_nsc, "HMS #delta [%%]", Form("yield_hdelta_pm%d.txt", pm_set));
   extract_1d_hist(H_ztar_diff_nsc, "Ztar diff [cm]", Form("yield_ztardiff_pm%d.txt", pm_set));
 
   extract_2d_hist(H_hXColl_vs_hYColl_nsc, "HMS Y Collimator [cm]", "HMS X Collimator [cm]", Form("yield_hColl_pm%d.txt",  pm_set));
@@ -1183,16 +1184,16 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
   extract_1d_hist(H_q, "3-momentum transfer, |q| [GeV/c]", Form("yield_q_pm%d.txt", pm_set));
   extract_1d_hist(H_thq, "Recoil Angle q relative to +z (lab), th_q [deg]", Form("yield_thq_pm%d.txt", pm_set));
   extract_1d_hist(H_xbj, "x-Bjorken", Form("yield_xbj_pm%d.txt", pm_set));
-  */
+ 
   
   //extract hadron kinematics
   //extract_1d_hist(H_MM, "Missing Mass, MM [GeV]", Form("yield_MM_pm%d.txt", pm_set));  
-  //extract_1d_hist(H_Pm, "Missing Momentum, Pm [GeV/c]", Form("yield_Pm_pm%d_noCUTS.txt", pm_set));
-  /*
+
+  extract_1d_hist(H_Pm, "Missing Momentum, P_{m} [GeV/c]", Form("yield_Pm_pm%d.txt", pm_set));
   extract_1d_hist(H_Pf, "Final Proton Momentum, Pf, [GeV]", Form("yield_Pf_pm%d.txt", pm_set));
-  extract_1d_hist(H_thx, "Proton Scattering Angle, th_p, [deg]", Form("yield_thp_pm%d.txt", pm_set));
-  extract_1d_hist(H_thxq, "Proton Angle wrto q-vector, thxq, [deg]", Form("yield_thxq_pm%d.txt", pm_set));
-  extract_1d_hist(H_thrq, "Neutron Angle wrto q-vector, thrq, [deg]", Form("yield_thrq_pm%d.txt", pm_set));
+  extract_1d_hist(H_thx, "Proton Scattering Angle, #th_{p}, [deg]", Form("yield_thp_pm%d.txt", pm_set));
+  extract_1d_hist(H_thxq, "Proton Angle wrto q-vector, #theta_{pq}, [deg]", Form("yield_thxq_pm%d.txt", pm_set));
+  extract_1d_hist(H_thrq, "Neutron Angle wrto q-vector, #theta_{rq}, [deg]", Form("yield_thrq_pm%d.txt", pm_set));
   */
 
 }
