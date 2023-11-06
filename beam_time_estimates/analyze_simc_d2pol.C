@@ -1112,7 +1112,7 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
     ifstream in_file;
     
     //Check if file already exists
-    TString output_file = "output_rates_d2pol_test.csv";
+    TString output_file = "output_rates_d2pol.csv";
     in_file.open(output_file.Data());
 
     if(!in_file.fail()){
