@@ -1,19 +1,27 @@
 #include "utils/parse_utils.h"
 #include "utils/hist_utils.h"
 
-void analyze_simc_d2pol(TString basename="", int pm_set=0, TString model="", Bool_t rad_flag=true){
+void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TString model="", Bool_t rad_flag=true){
 
   
   /* 
      User Input:
+
+     basename   : basename input file (should have same pattern as output)
      pm_set     : central missing momentum setting (580, 700, 800, etc,.)
+     Q2_set     : central Q2 setting (3.5, 4.0, 4.5, etc.)
      model      : "pwia" or "fsi"
      rad_flag   :  1 (true - simulate radiative effects), 0 (false - simulate without radiative effects)
-     Ib         : beam current (uA)
-     time       : beam-on-target time (hours)
   
      If doing heep check (rate estimates of H(e,e'p) elastics, then set heep_check=true, and leave pm_set and model their default values
   */
+
+
+  // debug flag
+  Bool_t debug_flag;
+
+  debug_flag = 1;
+
   
   TString h_arm_name = "HMS";
   TString e_arm_name = "SHMS";
@@ -24,11 +32,19 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, TString model="", Boo
   Double_t MD = 1.87561; //GeV
   Double_t MN = 0.939566; //GeV
   Double_t me = 0.000510998; //GeV
-   
+
+  TString rad="";
+  if(rad_flag==true) {
+    rad = "rad";
+  }
+  else{
+    rad = "norad";
+  }
+
   //-------------------
   // READ FILENAMES
   //-------------------
-
+  
   //Input parameter controls filenames
   TString input_CutFileName;
   TString input_HBinFileName;
@@ -46,7 +62,6 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, TString model="", Boo
   
   TString temp; //temporary string placeholder
 
-
   //---Read In File Names with cuts and histogram binning information
   input_CutFileName  = "inp/d2_pol/set_basic_deep_cuts.inp";
   input_HBinFileName = "inp/d2_pol/set_basic_deep_histos.inp";
@@ -61,6 +76,14 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, TString model="", Boo
   
   //---------------------------------------------------------------------------------------------------------
 
+  
+
+  if(debug_flag == 1){
+    cout << "reading SIMC kin input file: " << endl;
+    cout << "filename: " << simc_infile.Data() << endl;
+  }
+
+  
   //----------------------------
   // READ CENTRAL KIN. SETTINGS
   //----------------------------
@@ -83,6 +106,10 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, TString model="", Boo
   // READ ANALYSIS CUTS
   //-------------------
 
+   if(debug_flag == 1){
+    cout << "reading ANALYSIS CUTS input file" << endl;
+  }
+  
   //-------Collimator Study-------
   Bool_t hmsCollCut_flag;      //flag to enable/disable collimator cut
   Bool_t shmsCollCut_flag;
@@ -159,6 +186,10 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, TString model="", Boo
   //--------------------
   // READ HISTO BINS
   //-------------------
+
+  if(debug_flag == 1){
+    cout << "reading HISTO BINS input file" << endl;
+  }
   
   //---------------------------------
   // Kinematics Histograms Binning
@@ -347,6 +378,11 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, TString model="", Boo
   //--------------------
   // DECLARE HISTOGRAMS
   //-------------------
+
+  if(debug_flag == 1){
+    cout << "declaring HISTOGRAMS" << endl;
+  }
+  
   
   //Create TLists to store categorical histograms
   TList *kin_HList  = new TList();
@@ -536,6 +572,10 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, TString model="", Boo
   //--------------------------------
   // READ TREE / SET BRANCH ADDRESS
   //--------------------------------
+
+  if(debug_flag == 1){
+    cout << "reading TTree / SetBranchAddress" << endl;
+  }
   
   TTree *tree;
   Long64_t nentries;
@@ -809,6 +849,11 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, TString model="", Boo
   //  LOOP OVER ENTRIES
   //---------------------
 
+  
+  if(debug_flag == 1){
+    cout << "loop over entries " << endl;
+  }
+  
   for (Long64_t i=0; i < nentries; i++) {
 
     //Get the ith entry from the SNT TTree
@@ -991,8 +1036,11 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, TString model="", Boo
     
   } // end entry loop
 
+  if(debug_flag == 1){
+    cout << "after entry loop / extracting histo info / write to file " << endl;
+  }
   // extract histo bin info for future computations
-  extract_1d_hist(H_Pm, "Missing Momentum", "Yield", "d2_pm_bins_Q2_2p9_rad_thrq35.csv");
+  //extract_1d_hist(H_Pm, "Missing Momentum", "Yield", "d2_pm_bins_Q2_2p9_rad_thrq35.csv");
 
   
 
@@ -1046,6 +1094,7 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, TString model="", Boo
     cout << " ----------------------------- " << endl;  
     cout << "" << endl;  
     cout << Form("Pm Setting: %d", pm_set) << endl;
+    cout << Form("Q2 Setting: %.2f", Q2_set) << endl;    
     cout << Form("Model: Laget %s", model.Data()) << endl;
     cout << Form("Ib [uA]     = %.3f ", Ib) << endl;
     cout << Form("time [hr]   = %.3f ", time) << endl;
@@ -1056,12 +1105,56 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, TString model="", Boo
     cout << " ----------------------------- " << endl; 
 
 
- 
+    // ------ Write output file for storing rates, counts, etc. -------
 
+    //FileStreams objects to READ/WRITE to a .txt file
+    ofstream out_file;
+    ifstream in_file;
+    
+    //Check if file already exists
+    TString output_file = "output_rates_d2pol_test.csv";
+    in_file.open(output_file.Data());
+
+    if(!in_file.fail()){
+      
+      cout << Form(" %s already exists, will append to it . . . ", output_file.Data() ) << endl;
+      
+      //Open Report FIle in append mode
+      out_file.open(output_file, ios::out | ios::app);
+      out_file << Form("%i,     %.2f,    %.1f,       %.3E,        %.3f,        %.3f,      %.3f,     %.3f ", pm_set, Q2_set, Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
+
+      
+    }
+
+    // create output file if it does not exist
+    if(in_file.fail()){
+
+      out_file.open(output_file);
+      //set headers
+      out_file << "# SIMC rates estimates (polarized deut)" << endl;
+      out_file << "# " << endl;
+      out_file << "# header definitions " << endl;
+      out_file << "# pm_set: central missing momentum setting [MeV] " << endl;
+      out_file << "# Q2_set: central 4-momentum transfer setting [GeV^2] " << endl;
+      out_file << "# pm_counts: missing momentum counts (yield) with all cuts applied \n#    (not binned in any particular kinematics)" << endl;
+      out_file << "# deep_rates: deuteron break-up rates  [Hz] " << endl;
+      out_file << "# daq_rates: data acquisition rates (no analysis cuts) [Hz] " << endl;
+      out_file << "# current: beam current [nA] " << endl;
+      out_file << "# time: beam-on-target time [hrs] " << endl;
+      out_file << "# charge: beam charge [mC] " << endl;
+      out_file << "#" << endl;
+      
+      out_file <<"pm_set,Q2_set,pm_counts,deep_rates,daq_rates,current,time,charge" << endl;
+      out_file << Form("%i,     %.2f,    %.1f,       %.3E,        %.3f,        %.3f,      %.3f,     %.3f ", pm_set, Q2_set, Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
+
+    }
+
+
+    
   //------------------------------------------
   // Extract The Yield binned in Pm vs th_rq
   //------------------------------------------
-  extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_d2pol_pm%d_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, model.Data(), rad.Data(), Ib, time));
+    extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_d2pol_pm%d_Q2_%.1f_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, Q2_set, model.Data(), rad.Data(), Ib, time));
 
   //--------
   // Extrack numerical data for histogram plotting

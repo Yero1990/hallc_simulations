@@ -1,0 +1,17 @@
+# SIMC rates estimates (polarized deut)
+# 
+# header definitions 
+# pm_set: central missing momentum setting [MeV] 
+# Q2_set: central 4-momentum transfer setting [GeV^2] 
+# pm_counts: missing momentum counts (yield) with all cuts applied 
+# deep_rates: deuteron break-up rates  [Hz] 
+# daq_rates: data acquisition rates (no analysis cuts) [Hz] 
+# current: beam current [nA] 
+# time: beam-on-target time [hrs] 
+# charge: beam charge [mC] 
+#
+pm_set,Q2_set,pm_counts,deep_rates,daq_rates,current,time,charge
+200,     4.00,    28197.7,       4.662E-02,        0.077,        100.000,      168.000,     60.480 
+300,     4.00,    19868.3,       3.285E-02,        0.068,        100.000,      168.000,     60.480 
+400,     4.00,    4770.4,        7.888E-03,        0.039,        100.000,      168.000,     60.480 
+500,     4.00,    105.8,         1.749E-04,        0.003,        100.000,      168.000,     60.480 
