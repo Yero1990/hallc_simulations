@@ -1150,33 +1150,55 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
     }
 
 
+
+    //-----------------------------------------------------
+  //Lopp over kin_HList of histogram objects 
+  //----------------------------------------------------
+  for(int i=0; i<kin_HList->GetEntries(); i++) {
     
+    //Get the class name for each element on the list (either "TH1F" or TH2F")
+    class_name = kin_HList->At(i)->ClassName();
+    //Read ith histograms in the list from current run
+    if(class_name=="TH1F") {
+      //Get histogram from the list
+      h_i = (TH1F *)kin_HList->At(i); 
+    }
+    if(class_name=="TH2F") {
+      //Get histogram from the list
+      h2_i = (TH2F *)kin_HList->At(i); 
+    }   
+  }//end loop over kin_HList
+
+    
+    /*
   //------------------------------------------
   // Extract The Yield binned in Pm vs th_rq
   //------------------------------------------
-    extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("yield_d2pol_pm%d_Q2_%.1f_model%s_%s_%.1fuA_%.1fhr.txt",  pm_set, Q2_set, model.Data(), rad.Data(), Ib, time));
+    extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("%s_yield_d2pol_pm%d_Q2_%.1f_model%s_%s_%.1fuA_%.1fhr.txt",  H_Pm_vs_thrq->GetName(), pm_set, Q2_set, model.Data(), rad.Data(), Ib, time));
 
   //--------
   // Extrack numerical data for histogram plotting
   //--------
 
+  //------------extract cuts-related histos--------------
+    extract_1d_hist(H_Q2_nsc, "4-Momentum Transfers, Q^{2} [GeV^2]", "Yield", Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt", H_Q2_nsc->GetName(), pm_set, Q2_set));
+    
+    extract_1d_hist(H_Em_nsc,         "Missing Energy, Em [GeV]", "Yield", Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt", H_Em_nsc->GetName(),        pm_set, Q2_set));
+    extract_1d_hist(H_edelta_nsc,     "SHMS #delta [%%]",         "Yield", Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt", H_edelta_nsc->GetName(),    pm_set, Q2_set));
+    extract_1d_hist(H_hdelta_nsc,     "HMS #delta [%%]",          "Yield", Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt", H_hdelta_nsc->GetName(),    pm_set, Q2_set));
+    extract_1d_hist(H_ztar_diff_nsc,  "Ztar diff [cm]",           "Yield", Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt", H_ztar_diff_nsc->GetName(), pm_set, Q2_set));
+    
+    extract_2d_hist(H_hXColl_vs_hYColl_nsc, "HMS Y Collimator [cm]",  "HMS X Collimator [cm]",  Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt",    H_hXColl_vs_hYColl_nsc->GetName(), pm_set, Q2_set));
+    extract_2d_hist(H_eXColl_vs_eYColl_nsc, "SHMS Y Collimator [cm]", "SHMS X Collimator [cm]", Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt",    H_eXColl_vs_eYColl_nsc->GetName(), pm_set, Q2_set));  
+    extract_2d_hist(H_hdelta_vs_edelta_nsc, "SHMS Delta [%%]",        "HMS Delta [%%]",         Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt",    H_hdelta_vs_edelta_nsc->GetName(), pm_set, Q2_set));
+
+    //----------------------------------------------------
   
-  //extract cuts-related histos
-    extract_1d_hist(H_Q2, "4-Momentum Transfers, Q^{2} [GeV^2]", "Yield", Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt", H_Q2->GetName(), pm_set, Q2_set));
-  /*
-  extract_1d_hist(H_Em_nsc, "Missing Energy, Em [GeV]", Form("yield_Em_pm%d.txt", pm_set));
-  extract_1d_hist(H_edelta_nsc, "SHMS #delta [%%]", Form("yield_edelta_pm%d.txt", pm_set));
-  extract_1d_hist(H_hdelta_nsc, "HMS #delta [%%]", Form("yield_hdelta_pm%d.txt", pm_set));
-  extract_1d_hist(H_ztar_diff_nsc, "Ztar diff [cm]", Form("yield_ztardiff_pm%d.txt", pm_set));
-
-  extract_2d_hist(H_hXColl_vs_hYColl_nsc, "HMS Y Collimator [cm]", "HMS X Collimator [cm]", Form("yield_hColl_pm%d.txt",  pm_set));
-  extract_2d_hist(H_eXColl_vs_eYColl_nsc, "SHMS Y Collimator [cm]", "SHMS X Collimator [cm]", Form("yield_eColl_pm%d.txt",  pm_set));  
-  extract_2d_hist(H_hdelta_vs_edelta_nsc, "SHMS Delta [%%]", "HMS Delta [%%]", Form("yield_delta2d_pm%d.txt",  pm_set));
-
   //extarct focal plane histos
-  extract_2d_hist(H_hxfp_vs_hyfp, "HMS Y Focal Plane [cm]", "HMS X Focal Plane [cm]", Form("yield_hfp_pm%d.txt", pm_set));
+  extract_2d_hist(H_hxfp_vs_hyfp, "HMS Y Focal Plane [cm]",  "HMS X Focal Plane [cm]", Form("yield_hfp_pm%d.txt", pm_set));
   extract_2d_hist(H_exfp_vs_eyfp, "SHMS Y Focal Plane [cm]", "SHMS X Focal Plane [cm]", Form("yield_efp_pm%d.txt", pm_set));
 
+  
   //extract electron kinematics
   extract_1d_hist(H_kf, "Final Electron Momentum, kf, [GeV]", Form("yield_kf_pm%d.txt", pm_set));
   extract_1d_hist(H_the, "Final Electron Angle, th_e, [deg]", Form("yield_the_pm%d.txt", pm_set));
@@ -1186,7 +1208,7 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
   extract_1d_hist(H_xbj, "x-Bjorken", Form("yield_xbj_pm%d.txt", pm_set));
  
   
-  //extract hadron kinematics
+  //extract hadron / recoil kinematics
   //extract_1d_hist(H_MM, "Missing Mass, MM [GeV]", Form("yield_MM_pm%d.txt", pm_set));  
 
   extract_1d_hist(H_Pm, "Missing Momentum, P_{m} [GeV/c]", Form("yield_Pm_pm%d.txt", pm_set));
