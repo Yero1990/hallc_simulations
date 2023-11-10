@@ -1162,7 +1162,7 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
 
   
   //extract cuts-related histos
-    extract_1d_hist(H_Q2, "4-Momentum Transfers, Q^{2} [GeV^2]", "Yield", Form("yield_Q2_pm%d.txt", pm_set));
+    extract_1d_hist(H_Q2, "4-Momentum Transfers, Q^{2} [GeV^2]", "Yield", Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt", H_Q2->GetName(), pm_set, Q2_set));
   /*
   extract_1d_hist(H_Em_nsc, "Missing Energy, Em [GeV]", Form("yield_Em_pm%d.txt", pm_set));
   extract_1d_hist(H_edelta_nsc, "SHMS #delta [%%]", Form("yield_edelta_pm%d.txt", pm_set));
