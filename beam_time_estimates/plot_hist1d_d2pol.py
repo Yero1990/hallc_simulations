@@ -41,8 +41,9 @@ for i, ipm in enumerate(pm_user):
         
         df = pd.read_csv(fname, comment='#')
 
-        #plt.hist(df.x0, bins=len(df.xb), weights=df.ycont, alpha=0.2, density=False, label=r'$Q^{2}=%s$, $P_{m}$=%s' % (jq2, ipm) )
-        plt.errorbar(df.x0, df.ycont, np.sqrt(df.ycont), marker='o', linestyle='None', mec='k',  mfc='r', label=r'$Q^{2}=%s$, $P_{m}$=%s' % (jq2, ipm))
+        #df.x0, df.ycont, np.sqrt(df.ycont)
+        plt.hist(df.x0, bins=len(df.xb), weights=df.ycont, alpha=0.2, density=False, label=r'$Q^{2}=%s$, $P_{m}$=%s' % (jq2, ipm) )
+        #plt.plot([1,2,3], [1,2,3], linestyle='None', mec='k', markersize=20, label=r'$Q^{2}=%s$, $P_{m}$=%s' % (jq2, ipm))
         plt.xlabel(r'x-label [units]')
         plt.ylabel(r'y-label [units]')
         plt.legend(frameon=False)
