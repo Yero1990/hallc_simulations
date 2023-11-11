@@ -233,9 +233,9 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
   Double_t Pf_xmin     = stod(split(FindString("Pf_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
   Double_t Pf_xmax     = stod(split(FindString("Pf_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
   	   
-  Double_t thx_nbins   = stod(split(FindString("thx_nbins",  	input_HBinFileName.Data())[0], '=')[1]);  //proton(hadron) angle
-  Double_t thx_xmin    = stod(split(FindString("thx_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
-  Double_t thx_xmax    = stod(split(FindString("thx_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t thp_nbins   = stod(split(FindString("thx_nbins",  	input_HBinFileName.Data())[0], '=')[1]);  //proton(hadron) angle
+  Double_t thp_xmin    = stod(split(FindString("thx_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t thp_xmax    = stod(split(FindString("thx_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
            
   Double_t Em_nbins   = stod(split(FindString("Em_nbins",  	input_HBinFileName.Data())[0], '=')[1]);
   Double_t Em_xmin    = stod(split(FindString("Em_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
@@ -253,9 +253,9 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
   Double_t MM2_xmin   = stod(split(FindString("MM2_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
   Double_t MM2_xmax   = stod(split(FindString("MM2_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
            
-  Double_t thxq_nbins  = stod(split(FindString("thxq_nbins",  input_HBinFileName.Data())[0], '=')[1]);
-  Double_t thxq_xmin   = stod(split(FindString("thxq_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
-  Double_t thxq_xmax   = stod(split(FindString("thxq_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t thpq_nbins  = stod(split(FindString("thxq_nbins",  input_HBinFileName.Data())[0], '=')[1]);
+  Double_t thpq_xmin   = stod(split(FindString("thxq_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t thpq_xmax   = stod(split(FindString("thxq_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
   	       	      	  	       
   Double_t thrq_nbins  = stod(split(FindString("thrq_nbins",  input_HBinFileName.Data())[0], '=')[1]);
   Double_t thrq_xmin   = stod(split(FindString("thrq_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
@@ -394,37 +394,37 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
   //--------------------------------------------------------
   
   //Primary (electron) Kinematics (14 histos)
-  TH1F *H_kf      = new TH1F("H_kf", "Final e^{-} Momentum", kf_nbins, kf_xmin, kf_xmax);
+  TH1F *H_kf      = new TH1F("H_kf", "Final e^{-} Momentum; e^{-} momentum, k_{f} [GeV/c]; Counts", kf_nbins, kf_xmin, kf_xmax);
   H_kf->Sumw2();
   H_kf->SetDefaultSumw2(); 
-  TH1F *H_the     = new TH1F("H_the", "Electron Scattering Angle, #theta_{e}", the_nbins, the_xmin, the_xmax);
-  TH1F *H_Q2      = new TH1F("H_Q2","4-Momentum Transfer, Q^{2}", Q2_nbins, Q2_xmin, Q2_xmax);
-  TH1F *H_Q2_nsc  = new TH1F("H_Q2_nsc","4-Momentum Transfer, Q^{2}", Q2_nbins, Q2_xmin, Q2_xmax);  //nsc stands for no self-cut (i.e, all cuts except on itself)
+  TH1F *H_the     = new TH1F("H_the",   "Electron Scattering Angle, #theta_{e}; e^{-} scattering angle, #theta_{e}  [deg]; Counts", the_nbins, the_xmin, the_xmax);
+  TH1F *H_Q2      = new TH1F("H_Q2",    "4-Momentum Transfer, Q^{2}; 4-momentum transfer, Q^{2} [GeV^{2}]; Counts", Q2_nbins, Q2_xmin, Q2_xmax);
+  TH1F *H_Q2_nsc  = new TH1F("H_Q2_nsc","4-Momentum Transfer, Q^{2}; 4-momentum transfer, Q^{2} [GeV^{2}]; Counts", Q2_nbins, Q2_xmin, Q2_xmax);  //nsc stands for no self-cut (i.e, all cuts except on itself)
 
-  TH1F *H_xbj     = new TH1F("H_xbj", "x-Bjorken", X_nbins, X_xmin, X_xmax);  
-  TH1F *H_nu      = new TH1F("H_nu","Energy Transfer, #nu", nu_nbins, nu_xmin, nu_xmax); 
-  TH1F *H_q       = new TH1F("H_q", "3-Momentum Transfer, |#vec{q}|", q_nbins, q_xmin, q_xmax);
-  TH1F *H_thq     = new TH1F("H_thq", "In-Plane Angle w.r.t +z(lab), #theta_{q}", thq_nbins, thq_xmin, thq_xmax); 
-  TH1F *H_W       = new TH1F("H_W", "Invariant Mass, W", W_nbins, W_xmin, W_xmax);  
-  TH1F *H_W_noCut       = new TH1F("H_W_noCut", "Invariant Mass, W (no cuts, DAQ rates)", W_nbins, W_xmin, W_xmax);  
+  TH1F *H_xbj     = new TH1F("H_xbj",     "x-Bjorken; x-bjorken, x_{Bj}; Counts", X_nbins, X_xmin, X_xmax);  
+  TH1F *H_nu      = new TH1F("H_nu",      "Energy Transfer, #nu; energy transfer, #nu [GeV]; Counts", nu_nbins, nu_xmin, nu_xmax); 
+  TH1F *H_q       = new TH1F("H_q",       "3-Momentum Transfer, |#vec{q}|; 3-momentum transfer, |#vec{q}| [GeV]; Counts", q_nbins, q_xmin, q_xmax);
+  TH1F *H_thq     = new TH1F("H_thq",     "In-Plane Angle w.r.t +z(lab), #theta_{q}; in-plane recoil angle, #theta_{q}; Counts", thq_nbins, thq_xmin, thq_xmax); 
+  TH1F *H_W       = new TH1F("H_W",       "Invariant Mass, W; invariant mass, W [GeV]; Counts", W_nbins, W_xmin, W_xmax);  
+  TH1F *H_W_noCut = new TH1F("H_W_noCut", "Invariant Mass, W (no cuts, DAQ rates); invariant mass, W [Gev]; Counts", W_nbins, W_xmin, W_xmax);  
 
   //Secondary (Hadron) Kinematics (recoil and missing are used interchageably) ()
-  TH1F *H_Pf      = new TH1F("H_Pf", "Final Hadron Momentum (detected), p_{f}", Pf_nbins, Pf_xmin, Pf_xmax);
-  TH1F *H_thx     = new TH1F("H_thx", "Hadron Scattering Angle (detected), #theta_{x}", thx_nbins, thx_xmin, thx_xmax);
-  TH1F *H_Em      = new TH1F("H_Em","Nuclear Missing Energy", Em_nbins, Em_xmin, Em_xmax); 
-  TH1F *H_Em_nsc      = new TH1F("H_Em_nsc","Nuclear Missing Energy", Em_nbins, Em_xmin, Em_xmax); 
+  TH1F *H_Pf      = new TH1F("H_Pf", "Final Hadron Momentum (detected), p_{f}; final hadron momentum, p_{f} [GeV/c]; Counts", Pf_nbins, Pf_xmin, Pf_xmax);
+  TH1F *H_thp     = new TH1F("H_thp", "Hadron Scattering Angle (detected), #theta_{p}; hadron scattering angle, #theta_{p} [deg]; Counts", thp_nbins, thp_xmin, thp_xmax);
+  TH1F *H_Em      = new TH1F("H_Em","Nuclear Missing Energy; nuclear missing energy, E_{m} [GeV]; Counts", Em_nbins, Em_xmin, Em_xmax); 
+  TH1F *H_Em_nsc      = new TH1F("H_Em_nsc","Nuclear Missing Energy; nuclear missing energy, E_{m} [GeV]; Counts", Em_nbins, Em_xmin, Em_xmax); 
 
-  TH1F *H_Pm      = new TH1F("H_Pm","Missing Momentum, P_{miss}", Pm_nbins, Pm_xmin, Pm_xmax);
-  TH1F *H_Pm_noCut      = new TH1F("H_Pm_noCut","Missing Momentum, P_{miss} (no cuts, DAQ rates)", Pm_nbins, Pm_xmin, Pm_xmax); 
-  TH1F *H_MM      = new TH1F("H_MM","Missing Mass, M_{miss}", MM_nbins, MM_xmin, MM_xmax);        
-  TH1F *H_MM2     = new TH1F("H_MM2","Missing Mass Squared, M^{2}_{miss}", MM2_nbins, MM2_xmin, MM2_xmax); 
-  TH1F *H_thxq    = new TH1F("H_thxq", "In-Plane Angle, #theta_{xq}", thxq_nbins, thxq_xmin, thxq_xmax);
-  TH1F *H_thrq    = new TH1F("H_thrq", "In-Plane Angle, #theta_{rq}", thrq_nbins, thrq_xmin, thrq_xmax);
+  TH1F *H_Pm      = new TH1F("H_Pm","Missing Momentum, P_{miss}; missing momentum, P_{m} [GeV/c]; Counts", Pm_nbins, Pm_xmin, Pm_xmax);
+  TH1F *H_Pm_noCut      = new TH1F("H_Pm_noCut","Missing Momentum, P_{miss} (no cuts, DAQ rates); missing momentum, P_{m} [GeV/c]; Counts", Pm_nbins, Pm_xmin, Pm_xmax); 
+  TH1F *H_MM      = new TH1F("H_MM","Missing Mass, M_{miss}; missing mass, M_{miss} [GeV]", MM_nbins, MM_xmin, MM_xmax);        
+  TH1F *H_MM2     = new TH1F("H_MM2","Missing Mass Squared, M^{2}_{miss}; missing mass, MM^{2} [GeV^{2}]; Counts", MM2_nbins, MM2_xmin, MM2_xmax); 
+  TH1F *H_thpq    = new TH1F("H_thpq", "In-Plane Angle, #theta_{pq}; in-plane angle, #theta_{pq}; Counts", thpq_nbins, thpq_xmin, thpq_xmax);
+  TH1F *H_thrq    = new TH1F("H_thrq", "In-Plane Angle, #theta_{rq}; in-plane angle, #theta_{rq}; Counts", thrq_nbins, thrq_xmin, thrq_xmax);
 
   //2D Pm vs. thrq (for cross section calculation)
-  TH2F *H_Pm_vs_thrq  = new TH2F("H_Pm_vs_thrq", "Pm vs. #theta_{rq} (yield)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
-  TH2F *H_Pm_vs_thrq_ps  = new TH2F("H_Pm_vs_thrq_ps", "Pm vs. #theta_{rq} (phase space)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
-  TH2F *H_Pm_vs_thrq_xsec  = new TH2F("H_Pm_vs_thrq_xsec", "Pm vs. #theta_{rq} (xsec)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
+  TH2F *H_Pm_vs_thrq       = new TH2F("H_Pm_vs_thrq",      "Pm vs. #theta_{rq} (yield); in-plane angle, #theta_{rq} [deg]; missing momentum, P_{m} [GeV/c]", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
+  TH2F *H_Pm_vs_thrq_ps    = new TH2F("H_Pm_vs_thrq_ps",   "Pm vs. #theta_{rq} (phase space); in-plane angle, #theta_{rq} [deg]; missing momentum, P_{m} [GeV/c]", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
+  TH2F *H_Pm_vs_thrq_xsec  = new TH2F("H_Pm_vs_thrq_xsec", "Pm vs. #theta_{rq} (xsec); in-plane angle, #theta_{rq} [deg]; missing momentum, P_{m} [GeV/c]", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
     
   //Add Kin Histos to TList
 
@@ -442,14 +442,14 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
 
   //Add Secondary Kin Histos
   kin_HList->Add( H_Pf       );
-  kin_HList->Add( H_thx      );
+  kin_HList->Add( H_thp      );
   kin_HList->Add( H_Em       );
   kin_HList->Add( H_Em_nsc   );
   kin_HList->Add( H_Pm       );
   kin_HList->Add( H_Pm_noCut       );
   kin_HList->Add( H_MM       );
   kin_HList->Add( H_MM2      );
-  kin_HList->Add( H_thxq     );
+  kin_HList->Add( H_thpq     );
   kin_HList->Add( H_thrq     );
 
   kin_HList->Add( H_Pm_vs_thrq );
@@ -462,43 +462,43 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
 
 
   //Electron Arm Focal Plane Quantities
-  TH1F *H_exfp = new TH1F("H_exfp", Form("%s X_{fp}; X_{fp} [cm]; Counts / mC", e_arm_name.Data()), exfp_nbins, exfp_xmin, exfp_xmax);
-  TH1F *H_eyfp = new TH1F("H_eyfp", Form("%s Y_{fp}; Y_{fp} [cm]; Counts / mC", e_arm_name.Data()), eyfp_nbins, eyfp_xmin, eyfp_xmax);
-  TH1F *H_expfp = new TH1F("H_expfp", Form("%s X'_{fp}; X'_{fp} [rad]; Counts / mC", e_arm_name.Data()), expfp_nbins, expfp_xmin, expfp_xmax);
-  TH1F *H_eypfp = new TH1F("H_eypfp", Form("%s Y'_{fp}; Y'_{fp} [rad]; Counts / mC", e_arm_name.Data()), eypfp_nbins, eypfp_xmin, eypfp_xmax);
+  TH1F *H_exfp = new TH1F("H_exfp", Form("%s X_{fp}; X_{fp} [cm]; Counts", e_arm_name.Data()), exfp_nbins, exfp_xmin, exfp_xmax);
+  TH1F *H_eyfp = new TH1F("H_eyfp", Form("%s Y_{fp}; Y_{fp} [cm]; Counts", e_arm_name.Data()), eyfp_nbins, eyfp_xmin, eyfp_xmax);
+  TH1F *H_expfp = new TH1F("H_expfp", Form("%s X'_{fp}; X'_{fp} [rad]; Counts", e_arm_name.Data()), expfp_nbins, expfp_xmin, expfp_xmax);
+  TH1F *H_eypfp = new TH1F("H_eypfp", Form("%s Y'_{fp}; Y'_{fp} [rad]; Counts", e_arm_name.Data()), eypfp_nbins, eypfp_xmin, eypfp_xmax);
   
   //Electron Arm Reconstructed Quantities 
-  TH1F *H_eytar = new TH1F("H_eytar", Form("%s Y_{tar}; Y_{tar} [cm]; Counts / mC", e_arm_name.Data()), eytar_nbins, eytar_xmin, eytar_xmax);
-  TH1F *H_exptar = new TH1F("H_exptar", Form("%s X'_{tar}; X'_{tar} [rad]; Counts / mC", e_arm_name.Data()), exptar_nbins, exptar_xmin, exptar_xmax);
-  TH1F *H_eyptar = new TH1F("H_eyptar", Form("%s Y'_{tar}; Y'_{tar} [rad]; Counts / mC", e_arm_name.Data()), eyptar_nbins, eyptar_xmin, eyptar_xmax);
-  TH1F *H_edelta = new TH1F("H_edelta", Form("%s Momentum Acceptance, #delta; #delta [%%]; Counts / mC", e_arm_name.Data()), edelta_nbins, edelta_xmin, edelta_xmax);
-  TH1F *H_edelta_nsc = new TH1F("H_edelta_nsc", Form("%s Momentum Acceptance, #delta; #delta [%%]; Counts / mC", e_arm_name.Data()), edelta_nbins, edelta_xmin, edelta_xmax);
+  TH1F *H_eytar = new TH1F("H_eytar", Form("%s Y_{tar}; Y_{tar} [cm]; Counts", e_arm_name.Data()), eytar_nbins, eytar_xmin, eytar_xmax);
+  TH1F *H_exptar = new TH1F("H_exptar", Form("%s X'_{tar}; X'_{tar} [rad]; Counts", e_arm_name.Data()), exptar_nbins, exptar_xmin, exptar_xmax);
+  TH1F *H_eyptar = new TH1F("H_eyptar", Form("%s Y'_{tar}; Y'_{tar} [rad]; Counts", e_arm_name.Data()), eyptar_nbins, eyptar_xmin, eyptar_xmax);
+  TH1F *H_edelta = new TH1F("H_edelta", Form("%s Momentum Acceptance, #delta; #delta_{SHMS} [%%]; Counts", e_arm_name.Data()), edelta_nbins, edelta_xmin, edelta_xmax);
+  TH1F *H_edelta_nsc = new TH1F("H_edelta_nsc", Form("%s Momentum Acceptance, #delta; #delta_{SHMS} [%%]; Counts", e_arm_name.Data()), edelta_nbins, edelta_xmin, edelta_xmax);
   
   //Hadron arm Focal Plane Quantities
-  TH1F *H_hxfp = new TH1F("H_hxfp", Form("%s  X_{fp}; X_{fp} [cm]; Counts / mC", h_arm_name.Data()), hxfp_nbins, hxfp_xmin, hxfp_xmax);
-  TH1F *H_hyfp = new TH1F("H_hyfp", Form("%s  Y_{fp}; Y_{fp} [cm]; Counts / mC", h_arm_name.Data()), hyfp_nbins, hyfp_xmin, hyfp_xmax);
-  TH1F *H_hxpfp = new TH1F("H_hxpfp", Form("%s  X'_{fp}; X'_{fp} [rad]; Counts / mC", h_arm_name.Data()), hxpfp_nbins, hxpfp_xmin, hxpfp_xmax );
-  TH1F *H_hypfp = new TH1F("H_hypfp", Form("%s  Y'_{fp}; Y'_{fp} [rad]; Counts / mC", h_arm_name.Data()), hypfp_nbins, hypfp_xmin, hypfp_xmax);
+  TH1F *H_hxfp = new TH1F("H_hxfp", Form("%s  X_{fp}; X_{fp} [cm]; Counts", h_arm_name.Data()), hxfp_nbins, hxfp_xmin, hxfp_xmax);
+  TH1F *H_hyfp = new TH1F("H_hyfp", Form("%s  Y_{fp}; Y_{fp} [cm]; Counts", h_arm_name.Data()), hyfp_nbins, hyfp_xmin, hyfp_xmax);
+  TH1F *H_hxpfp = new TH1F("H_hxpfp", Form("%s  X'_{fp}; X'_{fp} [rad]; Counts", h_arm_name.Data()), hxpfp_nbins, hxpfp_xmin, hxpfp_xmax );
+  TH1F *H_hypfp = new TH1F("H_hypfp", Form("%s  Y'_{fp}; Y'_{fp} [rad]; Counts", h_arm_name.Data()), hypfp_nbins, hypfp_xmin, hypfp_xmax);
 
   //Hadron arm Reconstructed Quantities 
-  TH1F *H_hytar = new TH1F("H_hytar", Form("%s  Y_{tar}; Y_{tar} [cm]; Counts / mC", h_arm_name.Data()), hytar_nbins, hytar_xmin, hytar_xmax);
-  TH1F *H_hxptar = new TH1F("H_hxptar", Form("%s  X'_{tar}; X'_{tar} [rad]; Counts / mC", h_arm_name.Data()), hxptar_nbins, hxptar_xmin, hxptar_xmax);
-  TH1F *H_hyptar = new TH1F("H_hyptar", Form("%s  Y'_{tar}; Y'_{tar} [rad]; Counts / mC", h_arm_name.Data()), hyptar_nbins, hyptar_xmin, hyptar_xmax );
-  TH1F *H_hdelta = new TH1F("H_hdelta", Form("%s  Momentum Acceptance, #delta; #delta [%%]; Counts / mC", h_arm_name.Data()), hdelta_nbins, hdelta_xmin, hdelta_xmax);
-  TH1F *H_hdelta_nsc = new TH1F("H_hdelta_nsc", Form("%s  Momentum Acceptance, #delta; #delta [%%]; Counts / mC", h_arm_name.Data()), hdelta_nbins, hdelta_xmin, hdelta_xmax);
+  TH1F *H_hytar = new TH1F("H_hytar", Form("%s  Y_{tar}; Y_{tar} [cm]; Counts", h_arm_name.Data()), hytar_nbins, hytar_xmin, hytar_xmax);
+  TH1F *H_hxptar = new TH1F("H_hxptar", Form("%s  X'_{tar}; X'_{tar} [rad]; Counts", h_arm_name.Data()), hxptar_nbins, hxptar_xmin, hxptar_xmax);
+  TH1F *H_hyptar = new TH1F("H_hyptar", Form("%s  Y'_{tar}; Y'_{tar} [rad]; Counts", h_arm_name.Data()), hyptar_nbins, hyptar_xmin, hyptar_xmax );
+  TH1F *H_hdelta = new TH1F("H_hdelta", Form("%s  Momentum Acceptance, #delta; #delta_{HMS} [%%]; Counts", h_arm_name.Data()), hdelta_nbins, hdelta_xmin, hdelta_xmax);
+  TH1F *H_hdelta_nsc = new TH1F("H_hdelta_nsc", Form("%s  Momentum Acceptance, #delta; #delta_{HMS} [%%]; Counts", h_arm_name.Data()), hdelta_nbins, hdelta_xmin, hdelta_xmax);
   
 
   //Target Reconstruction (Hall Coord. System) 
-  TH1F *H_htar_x = new TH1F("H_htar_x", Form("%s x-Target (Lab); x-Target [cm]; Counts / mC", h_arm_name.Data()), tarx_nbins, tarx_xmin, tarx_xmax);
-  TH1F *H_htar_y = new TH1F("H_htar_y", Form("%s y_Target (Lab); y-Target [cm]; Counts / mC", h_arm_name.Data()), tary_nbins, tary_xmin, tary_xmax);
-  TH1F *H_htar_z = new TH1F("H_htar_z", Form("%s z_Target (Lab); z-Target [cm]; Counts / mC", h_arm_name.Data()), tarz_nbins, tarz_xmin, tarz_xmax);
-  TH1F *H_etar_x = new TH1F("H_etar_x", Form("%s x-Target (Lab); x-Target [cm]; Counts / mC", e_arm_name.Data()), tarx_nbins, tarx_xmin, tarx_xmax);
-  TH1F *H_etar_y = new TH1F("H_etar_y", Form("%s y-Target (Lab); y-Target [cm]; Counts / mC", e_arm_name.Data()), tary_nbins, tary_xmin, tary_xmax);
-  TH1F *H_etar_z = new TH1F("H_etar_z", Form("%s z-Target (Lab); z-Target [cm]; Counts / mC", e_arm_name.Data()), tarz_nbins, tarz_xmin, tarz_xmax);
+  TH1F *H_htar_x = new TH1F("H_htar_x", Form("%s x-Target (Lab); x-Target [cm]; Counts", h_arm_name.Data()), tarx_nbins, tarx_xmin, tarx_xmax);
+  TH1F *H_htar_y = new TH1F("H_htar_y", Form("%s y_Target (Lab); y-Target [cm]; Counts", h_arm_name.Data()), tary_nbins, tary_xmin, tary_xmax);
+  TH1F *H_htar_z = new TH1F("H_htar_z", Form("%s z_Target (Lab); z-Target [cm]; Counts", h_arm_name.Data()), tarz_nbins, tarz_xmin, tarz_xmax);
+  TH1F *H_etar_x = new TH1F("H_etar_x", Form("%s x-Target (Lab); x-Target [cm]; Counts", e_arm_name.Data()), tarx_nbins, tarx_xmin, tarx_xmax);
+  TH1F *H_etar_y = new TH1F("H_etar_y", Form("%s y-Target (Lab); y-Target [cm]; Counts", e_arm_name.Data()), tary_nbins, tary_xmin, tary_xmax);
+  TH1F *H_etar_z = new TH1F("H_etar_z", Form("%s z-Target (Lab); z-Target [cm]; Counts", e_arm_name.Data()), tarz_nbins, tarz_xmin, tarz_xmax);
 
   //difference in reaction vertex z (user-defined)
-  TH1F *H_ztar_diff = new TH1F("H_ztar_diff", "Ztar Difference; z-Target Difference [cm]; Counts / mC", ztar_diff_nbins, ztar_diff_xmin, ztar_diff_xmax);
-  TH1F *H_ztar_diff_nsc = new TH1F("H_ztar_diff_nsc", "Ztar Difference; z-Target Difference [cm]; Counts / mC", ztar_diff_nbins, ztar_diff_xmin, ztar_diff_xmax);
+  TH1F *H_ztar_diff = new TH1F("H_ztar_diff", "Ztar Difference; z-target difference [cm]; Counts", ztar_diff_nbins, ztar_diff_xmin, ztar_diff_xmax);
+  TH1F *H_ztar_diff_nsc = new TH1F("H_ztar_diff_nsc", "Ztar Difference; z-target difference [cm]; Counts", ztar_diff_nbins, ztar_diff_xmin, ztar_diff_xmax);
 
 
   //2D Collimator Histos
@@ -514,10 +514,10 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
   TH2F *H_exfp_vs_eyfp  = new TH2F("H_exfp_vs_eyfp", Form("%s  X_{fp} vs. Y_{fp}; Y_{fp} [cm]; X_{fp} [cm]", e_arm_name.Data()),  eyfp_nbins, eyfp_xmin, eyfp_xmax, exfp_nbins, exfp_xmin, exfp_xmax);
 
   //2D HMS v. SHMS Acceptance Correlations
-  TH2F *H_hxptar_vs_exptar = new TH2F("H_hxptar_vs_exptar", "HMS vs. SHMS, X'_{tar}", exptar_nbins, exptar_xmin, exptar_xmax, hxptar_nbins, hxptar_xmin, hxptar_xmax);
-  TH2F *H_hyptar_vs_eyptar = new TH2F("H_hyptar_vs_eyptar", "HMS vs. SHMS, Y'_{tar}", eyptar_nbins, eyptar_xmin, eyptar_xmax, hyptar_nbins, hyptar_xmin, hyptar_xmax);
-  TH2F *H_hdelta_vs_edelta = new TH2F("H_hdelta_vs_edelta", "HMS vs. SHMS, #delta",   edelta_nbins, edelta_xmin, edelta_xmax, hdelta_nbins, hdelta_xmin, hdelta_xmax);
-  TH2F *H_hdelta_vs_edelta_nsc = new TH2F("H_hdelta_vs_edelta_nsc", "HMS vs. SHMS, #delta",   edelta_nbins, edelta_xmin, edelta_xmax, hdelta_nbins, hdelta_xmin, hdelta_xmax);
+  TH2F *H_hxptar_vs_exptar = new TH2F("H_hxptar_vs_exptar", "HMS vs. SHMS, X'_{tar}; SHMS X'_{tar} [cm]; HMS X'_{tar}", exptar_nbins, exptar_xmin, exptar_xmax, hxptar_nbins, hxptar_xmin, hxptar_xmax);
+  TH2F *H_hyptar_vs_eyptar = new TH2F("H_hyptar_vs_eyptar", "HMS vs. SHMS, Y'_{tar}; SHMS Y'_{tar} [cm]; HMS Y'_{tar}", eyptar_nbins, eyptar_xmin, eyptar_xmax, hyptar_nbins, hyptar_xmin, hyptar_xmax);
+  TH2F *H_hdelta_vs_edelta = new TH2F("H_hdelta_vs_edelta", "HMS vs. SHMS, #delta; #delta_{SHMS} [%%]; #delta_{HMS} [%%]",   edelta_nbins, edelta_xmin, edelta_xmax, hdelta_nbins, hdelta_xmin, hdelta_xmax);
+  TH2F *H_hdelta_vs_edelta_nsc = new TH2F("H_hdelta_vs_edelta_nsc", "HMS vs. SHMS, #delta; #delta_{SHMS} [%%]; #delta_{HMS} [%%]",   edelta_nbins, edelta_xmin, edelta_xmax, hdelta_nbins, hdelta_xmin, hdelta_xmax);
   
   
 
@@ -961,10 +961,10 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
  
       //Secondary (Hadron) Kinematics
       H_Pf->Fill(Pf, FullWeight);
-      H_thx->Fill(theta_p/dtr, FullWeight);
+      H_thp->Fill(theta_p/dtr, FullWeight);
       H_Em->Fill(Em, FullWeight);
       H_Pm->Fill(Pm, FullWeight);     
-      H_thxq->Fill(th_xq/dtr, FullWeight);
+      H_thpq->Fill(th_xq/dtr, FullWeight);
       H_thrq->Fill(th_rq/dtr, FullWeight);
       H_MM->Fill(MM, FullWeight);
       H_MM2->Fill(MM2, FullWeight);
@@ -1151,71 +1151,62 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
 
 
 
+    // Write Histogram to numerical data file for plotting 
+
+    TString output_hist_data = "yield_estimates/d2_polarized/smallFSI/histogram_data";
+
+    TString class_name;
+    TH1F *h_i = 0;
+    TH2F *h2_i = 0;
+
     //-----------------------------------------------------
-  //Lopp over kin_HList of histogram objects 
-  //----------------------------------------------------
-  for(int i=0; i<kin_HList->GetEntries(); i++) {
+    //Lopp over kin_HList of histogram objects 
+    //-----------------------------------------------------
     
-    //Get the class name for each element on the list (either "TH1F" or TH2F")
-    class_name = kin_HList->At(i)->ClassName();
-    //Read ith histograms in the list from current run
-    if(class_name=="TH1F") {
-      //Get histogram from the list
-      h_i = (TH1F *)kin_HList->At(i); 
-    }
-    if(class_name=="TH2F") {
-      //Get histogram from the list
-      h2_i = (TH2F *)kin_HList->At(i); 
-    }   
-  }//end loop over kin_HList
-
+    for(int i=0; i<kin_HList->GetEntries(); i++) {
     
-    /*
-  //------------------------------------------
-  // Extract The Yield binned in Pm vs th_rq
-  //------------------------------------------
-    extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("%s_yield_d2pol_pm%d_Q2_%.1f_model%s_%s_%.1fuA_%.1fhr.txt",  H_Pm_vs_thrq->GetName(), pm_set, Q2_set, model.Data(), rad.Data(), Ib, time));
+      //Get the class name for each element on the list (either "TH1F" or TH2F")
+      class_name = kin_HList->At(i)->ClassName();
+      //Read ith histograms in the list from current run
+      if(class_name=="TH1F") {
+	//Get histogram from the list
+	h_i = (TH1F *)kin_HList->At(i);
+	extract_1d_hist(h_i, h_i->GetXaxis()->GetTitle(), h_i->GetYaxis()->GetTitle(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h_i->GetName(), pm_set, Q2_set));
+	
+      }
+      if(class_name=="TH2F") {
+	//Get histogram from the list
+	h2_i = (TH2F *)kin_HList->At(i);
+	extract_2d_hist(h2_i, h2_i->GetXaxis()->GetTitle(), h2_i->GetYaxis()->GetTitle(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, Q2_set));
+	
+      }
+      
+    }//end loop over kin_HList
 
-  //--------
-  // Extrack numerical data for histogram plotting
-  //--------
-
-  //------------extract cuts-related histos--------------
-    extract_1d_hist(H_Q2_nsc, "4-Momentum Transfers, Q^{2} [GeV^2]", "Yield", Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt", H_Q2_nsc->GetName(), pm_set, Q2_set));
+    //-----------------------------------------------------
+    //Lopp over accp_HList of histogram objects 
+    //-----------------------------------------------------
     
-    extract_1d_hist(H_Em_nsc,         "Missing Energy, Em [GeV]", "Yield", Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt", H_Em_nsc->GetName(),        pm_set, Q2_set));
-    extract_1d_hist(H_edelta_nsc,     "SHMS #delta [%%]",         "Yield", Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt", H_edelta_nsc->GetName(),    pm_set, Q2_set));
-    extract_1d_hist(H_hdelta_nsc,     "HMS #delta [%%]",          "Yield", Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt", H_hdelta_nsc->GetName(),    pm_set, Q2_set));
-    extract_1d_hist(H_ztar_diff_nsc,  "Ztar diff [cm]",           "Yield", Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt", H_ztar_diff_nsc->GetName(), pm_set, Q2_set));
+    for(int i=0; i<accp_HList->GetEntries(); i++) {
+      
+      //Get the class name for each element on the list (either "TH1F" or TH2F")
+      class_name = accp_HList->At(i)->ClassName();
+      //Read ith histograms in the list from current run
+      if(class_name=="TH1F") {
+	//Get histogram from the list
+	h_i = (TH1F *)accp_HList->At(i);
+	extract_1d_hist(h_i, h_i->GetXaxis()->GetTitle(), h_i->GetYaxis()->GetTitle(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h_i->GetName(), pm_set, Q2_set));
+	
+      }
+      if(class_name=="TH2F") {
+	//Get histogram from the list
+	h2_i = (TH2F *)accp_HList->At(i);
+	extract_2d_hist(h2_i, h2_i->GetXaxis()->GetTitle(), h2_i->GetYaxis()->GetTitle(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, Q2_set));
+	
+      }
+      
+    }//end loop over accp_HList
     
-    extract_2d_hist(H_hXColl_vs_hYColl_nsc, "HMS Y Collimator [cm]",  "HMS X Collimator [cm]",  Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt",    H_hXColl_vs_hYColl_nsc->GetName(), pm_set, Q2_set));
-    extract_2d_hist(H_eXColl_vs_eYColl_nsc, "SHMS Y Collimator [cm]", "SHMS X Collimator [cm]", Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt",    H_eXColl_vs_eYColl_nsc->GetName(), pm_set, Q2_set));  
-    extract_2d_hist(H_hdelta_vs_edelta_nsc, "SHMS Delta [%%]",        "HMS Delta [%%]",         Form("%s_yield_d2pol_pm%d_Q2_%.1f.txt",    H_hdelta_vs_edelta_nsc->GetName(), pm_set, Q2_set));
 
-    //----------------------------------------------------
-  
-  //extarct focal plane histos
-  extract_2d_hist(H_hxfp_vs_hyfp, "HMS Y Focal Plane [cm]",  "HMS X Focal Plane [cm]", Form("yield_hfp_pm%d.txt", pm_set));
-  extract_2d_hist(H_exfp_vs_eyfp, "SHMS Y Focal Plane [cm]", "SHMS X Focal Plane [cm]", Form("yield_efp_pm%d.txt", pm_set));
-
-  
-  //extract electron kinematics
-  extract_1d_hist(H_kf, "Final Electron Momentum, kf, [GeV]", Form("yield_kf_pm%d.txt", pm_set));
-  extract_1d_hist(H_the, "Final Electron Angle, th_e, [deg]", Form("yield_the_pm%d.txt", pm_set));
-  extract_1d_hist(H_nu, "Energy Transfer, nu [GeV]", Form("yield_nu_pm%d.txt", pm_set));
-  extract_1d_hist(H_q, "3-momentum transfer, |q| [GeV/c]", Form("yield_q_pm%d.txt", pm_set));
-  extract_1d_hist(H_thq, "Recoil Angle q relative to +z (lab), th_q [deg]", Form("yield_thq_pm%d.txt", pm_set));
-  extract_1d_hist(H_xbj, "x-Bjorken", Form("yield_xbj_pm%d.txt", pm_set));
- 
-  
-  //extract hadron / recoil kinematics
-  //extract_1d_hist(H_MM, "Missing Mass, MM [GeV]", Form("yield_MM_pm%d.txt", pm_set));  
-
-  extract_1d_hist(H_Pm, "Missing Momentum, P_{m} [GeV/c]", Form("yield_Pm_pm%d.txt", pm_set));
-  extract_1d_hist(H_Pf, "Final Proton Momentum, Pf, [GeV]", Form("yield_Pf_pm%d.txt", pm_set));
-  extract_1d_hist(H_thx, "Proton Scattering Angle, #th_{p}, [deg]", Form("yield_thp_pm%d.txt", pm_set));
-  extract_1d_hist(H_thxq, "Proton Angle wrto q-vector, #theta_{pq}, [deg]", Form("yield_thxq_pm%d.txt", pm_set));
-  extract_1d_hist(H_thrq, "Neutron Angle wrto q-vector, #theta_{rq}, [deg]", Form("yield_thrq_pm%d.txt", pm_set));
-  */
 
 }
