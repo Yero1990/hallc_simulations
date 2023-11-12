@@ -310,7 +310,7 @@ for i,acont in enumerate(all.cont):
                                                                                                                                   # 27
                                                                                                                                   thnq, \
                                                                                                                                   # 28
-                                                                                                                                  theta_nq_calc, \
+                                                                                                                                  theta_nq_calc, \ 
                                                                                                                                   # 29
                                                                                                                                   cphi_pq, \
                                                                                                                                   # 30
@@ -387,7 +387,7 @@ for i,acont in enumerate(all.cont):
                                                                                                           # 24
                                                                                                           thnq, \
                                                                                                           # 25
-                                                                                                          theta_nq_calc, \                           
+                                                                                                          theta_nq_calc, \                    
                                                                                                           # 26
                                                                                                           cphi_pq, \
                                                                                                           # 27
