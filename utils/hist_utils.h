@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void extract_2d_hist(TH2F *h2, TString xlabel, TString ylabel, TString out_fname)
+void extract_2d_hist(TH2F *h2, TString xlabel, TString ylabel, TString title, TString out_fname)
 {
 
   
@@ -42,6 +42,7 @@ void extract_2d_hist(TH2F *h2, TString xlabel, TString ylabel, TString out_fname
   TString header = Form("# 2D Histogram Bin Extraction \n"
 			"#                   \n"
 			"# histogram parameters:  \n"
+			"# title      : %s \n"
 			"# ybins      : %d \n"
 			"# ylabel     : %s \n"
 			"# xbins      : %d \n"
@@ -63,7 +64,7 @@ void extract_2d_hist(TH2F *h2, TString xlabel, TString ylabel, TString out_fname
 			"# zcont_err:  bin content error (z-axis) \n"
 			"#                                        \n"
 			"ib,xb,yb,x0,xlow,xup,y0,ylow,yup,zcont,zcont_err"
-			,y_Nbins, ylabel.Data(), x_Nbins, xlabel.Data(), ybin_width, xbin_width  );
+			,title.Data(), y_Nbins, ylabel.Data(), x_Nbins, xlabel.Data(), ybin_width, xbin_width  );
 
   //Write header to data file
   ofile << header.Data() << endl;
@@ -102,7 +103,7 @@ void extract_2d_hist(TH2F *h2, TString xlabel, TString ylabel, TString out_fname
     
 }
 
-void extract_1d_hist(TH1F *h1, TString xlabel, TString ylabel, TString out_fname)
+void extract_1d_hist(TH1F *h1, TString xlabel, TString ylabel, TString title, TString out_fname)
 {
 
   
@@ -138,9 +139,11 @@ void extract_1d_hist(TH1F *h1, TString xlabel, TString ylabel, TString out_fname
   TString header = Form("# 1D Histogram Bin Extraction \n"
 			"#                   \n"
 			"# histogram parameters:  \n"
+			"# title      : %s   \n"
 			"# xbins      : %d   \n"
 			"# xlabel     : %s   \n"
 			"# xbin_width : %.3f \n"
+			"# ylabel     : %s   \n"
 			"#                   \n"
 			"# header definitions:\n"
 			"# xb:         x-axis bin number \n"
@@ -151,7 +154,7 @@ void extract_1d_hist(TH1F *h1, TString xlabel, TString ylabel, TString out_fname
 			"# ycont_err:  bin content error (y-axis) \n"
 			"#                                        \n"
 			"xb,x0,xlow,xup,ycont,ycont_err"
-			, x_Nbins, xlabel.Data(),xbin_width  );
+			,title.Data(), x_Nbins, xlabel.Data(),xbin_width,ylabel.Data()  );
 
   //Write header to data file
   ofile << header.Data() << endl;

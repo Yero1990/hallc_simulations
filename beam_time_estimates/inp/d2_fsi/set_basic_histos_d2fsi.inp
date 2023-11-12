@@ -219,14 +219,14 @@ thrq_xmin = 0.
 thrq_xmax = 190.
 
 # Out-of-plane angle between detected particle and q
-phxq_nbins = 60
-phxq_xmin = -1.
-phxq_xmax = 1.
+phxq_nbins = 200
+phxq_xmin = -190.
+phxq_xmax = 190.
 
 # Out-of-plane angle between recoil system and q 
-phrq_nbins = 60
-phrq_xmin = -1.
-phrq_xmax = 1.
+phrq_nbins = 200
+phrq_xmin = -190.
+phrq_xmax = 190.
 
 # Kinetic Energy (Detected Hadron, in CM frame)
 Tx_cm_nbins = 100
@@ -340,7 +340,7 @@ hxpfp_xmin = -0.08
 hxpfp_xmax = 0.08
   
 hyfp_nbins = 60
-hyfp_xmin = -15.
+hyfp_xmin = -25.
 hyfp_xmax = 25.
 
 hypfp_nbins = 60
