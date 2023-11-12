@@ -59,13 +59,14 @@
   
 
 
-void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
+void analyze_simc_d2fsi(TString basename="", int pm_set=0, int thrq_set=0, TString model="", Bool_t heep_check=false){
 
  
   /* 
      User Input:
      basename: generic file name used in input and simulated root file
   */
+
   
   TString h_arm_name = "HMS";
   TString e_arm_name = "SHMS";
@@ -156,8 +157,8 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   Double_t hms_vsize = 11.646;
  
   //SHMS Octagonal Collimator Size (Each of the octagonal points is a multiple of 1 or 1/2 of these values)
-  Double_t shms_hsize = 17./2.;  //cm
-  Double_t shms_vsize = 25./2.;
+  Double_t shms_hsize = 8.5;  //cm
+  Double_t shms_vsize = 12.5;
 
 
   //------------------------------
@@ -454,6 +455,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   TH1F *H_Em_nsc      = new TH1F("H_Em_nsc","Nuclear Missing Energy", Em_nbins, Em_xmin, Em_xmax); 
 
   TH1F *H_Pm      = new TH1F("H_Pm","Missing Momentum, P_{miss}", Pm_nbins, Pm_xmin, Pm_xmax);
+  TH1F *H_Pm_noCut      = new TH1F("H_Pm_noCut","Missing Momentum, P_{miss} (no cuts, DAQ rates); missing momentum, P_{m} [GeV/c]; Counts", Pm_nbins, Pm_xmin, Pm_xmax); 
 
   TH1F *H_MM      = new TH1F("H_MM","Missing Mass, M_{miss}", MM_nbins, MM_xmin, MM_xmax);        
   TH1F *H_MM2     = new TH1F("H_MM2","Missing Mass Squared, M^{2}_{miss}", MM2_nbins, MM2_xmin, MM2_xmax); 
@@ -516,6 +518,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   kin_HList->Add( H_Em       );
   kin_HList->Add( H_Em_nsc   );
   kin_HList->Add( H_Pm       );
+  kin_HList->Add( H_Pm_noCut       );
 
   kin_HList->Add( H_MM       );
   kin_HList->Add( H_MM2      );
@@ -1012,15 +1015,12 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   }
   
   Double_t proton_abs = 1.0; // 0.9534;  let assume no proton absorption thru material (since for heep singles, only electron thru SHMS, and does NOT get absorbed) 
-  
   Double_t eff_factor;
 
- 
   eff_factor = 1; // e_trk * h_trk * daq_lt * tgt_boil * proton_abs;
     
-
-
   Double_t FullWeight;
+  Double_t FullWeight_forRates; //this is the full weight for true rate estimates (so no inefficiencies accounted for)  
   Double_t PhaseSpace;
 
   /* ----------------------------------------------------------
@@ -1111,14 +1111,9 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
     // convert 0->360 to -180 to 180 (for out of plane angle)
     ph_pq = ph_pq / dtr; // convert to deg
 
-    //cout << "" << endl;
-    //cout << "ph_pq (before): " << ph_pq << endl;
     if(ph_pq >= 180){
       ph_pq = ph_pq - 360.;
     }
-    //cout << "ph_pq (after): " << ph_pq << endl;
-    //cout << "" << endl;
-
     //convert back to radians
     ph_pq = ph_pq * dtr;
     
@@ -1197,32 +1192,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
     SetCentralAngles(the_central, phe_central);
     TransportToLab(kf_v, e_xptar_v, e_yptar_v, kf_vec_v);
 
-    /*
-    // e- vector components (checked, makes sense in lab frame)
-    cout << "ki_v_z" << ki_v <<  endl;
-    cout << "kf_v_x = " << kf_vec_v.X() << endl;
-    cout << "kf_v_y = " << kf_vec_v.Y() << endl;
-    cout << "kf_v_z = " << kf_vec_v.Z() << endl;
-    cout << "kf_v = " << kf_v << endl;
-    cout << "kf = " << kf << endl;
-    cout << "theta_e = " << the << endl;
-    cout << "kf*cos(theta_e) = " << kf * cos(the) << endl;
-    cout << "kf*sin(theta_e) = " << kf * sin(the) << endl;
-    */
-    
-    /*
-    cout << "e_xptar = " << e_xptar << endl;
-    cout << "e_yptar = " << e_yptar << endl;
-   
-    cout << "e_xptar_v = " << e_xptar_v << endl;
-    cout << "e_yptar_v = " << e_yptar_v << endl;
-    */
-    //checked
-    //cout << "kf_v = " << kf_v << endl;
-    //cout << "kf = " << kf << endl;
-    //cout << "kf_vec_v  Mag = " << kf_vec_v.Mag() << endl;
-    
-    //Calculate 4-Vectors
+
     /* --- SNIPPET from event.f in SIMC with coordinate definitions ---
    ! CALCULATE ANGLE PHI BETWEEN SCATTERING PLANE AND REACTION PLANE.
    ! Therefore, define a new system with the z axis parallel to q, and
@@ -1240,120 +1210,29 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
    !
    ! SO: x_replay=-y_simc, y_replay=x_simc, z_replay= z_simc
     */
-								   
+
+    //Calculate 4-Vectors at the vertex
+							   
     fP0_v.SetXYZM(0.0, 0.0, ki_v, me);  //set initial e- 4-momentum at the vertex
     fP1_v.SetXYZM(-kf_vec_v.X(), -kf_vec_v.Y(), kf_vec_v.Z(), me);  //set final e- 4-momentum at the vertex (with X -inverted to match coord. in replay, and y-inverted to match Pmy_lab in SIMC)
-
+    
     fA_v.SetXYZM(0.0, 0.0, 0.0, tgt_mass );  //Set initial target at rest
     fQ_v = fP0_v - fP1_v;
     fA1_v = fA_v + fQ_v;   //final target (sum of final hadron four momenta)
 
-    /*
-    // q vector components (OK, however, qx component sign is inverted, which causes Pmx to come out larger that suppoed to be: pmx = qx - pf_x, and affects overall Pm magnitude)
-    // to fix temporarilt, take absolute values of |qx| - |pfx|, and so on ...
-    cout << "qv_x = " << fQ_v.X() << endl;
-    cout << "qv_y = " << fQ_v.Y() << endl;
-    cout << "qv_z = " << fQ_v.Z() << endl;
-    cout << "qv = " << (fQ_v.Vect()).Mag() << endl;
-    cout << "q = " << q << endl;
-    cout << "theta_q = " << th_q << endl;
-    cout << "q*cos(th_q) = " << q * cos(th_q) << endl;
-    cout << "q*sin(th_q) = " << q * sin(th_q) << endl;
-    */
-
-    
-    // checked
-    //cout << "Q2_v = " << Q2_v << endl;
-    //cout << "Q2_v (alt2) = " << -fQ_v.Mag2() << endl;
-
-    // checked
-    //cout << "q_v = " << q_v << endl;
-    //cout << "q_v (alt2) = " << (fQ_v.Vect()).Mag() << endl;
-
-    //checked
-    //cout << "nu_v = " << nu_v << endl;
-    //cout << "nu_v (alt2) = " << fQ_v.E() << endl;
-
-    //checked
-    //cout << " (fA_v.Vect()).Mag() " << (fA_v.Vect()).Mag() << endl;
-    //cout << " fA_v.M() " << fA_v.M() << endl;
-
-    // fA1 checked
-    //cout << " (fA1_v.Vect()).Mag() " << (fA1_v.Vect()).Mag() << endl;
-    //cout << " fA1_v.E() " << fA1_v.E() << endl;
-    
-
-    /*
-    cout << "h_xptar = " << h_xptar << endl;
-    cout << "h_yptar = " << h_yptar << endl;
-   
-    cout << "h_xptar_v = " << h_xptar_v << endl;
-    cout << "h_yptar_v = " << h_yptar_v << endl;
-    */
-    
     SetCentralAngles(thp_central, php_central);
     TransportToLab(Pf_v, h_xptar_v, h_yptar_v, Pf_vec_v);
     fX_v.SetVectM(Pf_vec_v, MP);       //SET FOUR VECTOR OF detected particle
     fB_v = fA1_v - fX_v;                 //4-MOMENTUM OF UNDETECTED PARTICLE 
-
-    /*
-    // proton vector components 
-    cout << "pf_v_x = " << Pf_vec_v.X() << endl;
-    cout << "pf_v_y = " << Pf_vec_v.Y() << endl;
-    cout << "pf_v_z = " << Pf_vec_v.Z() << endl;
-    cout << "pf_v = " << Pf_v << endl;
-    cout << "pf = " << Pf << endl;
-    cout << "theta_p = " << thp << endl;
-    cout << "Pf*cos(theta_p) = " << Pf * cos(thp) << endl;
-    cout << "Pf*sin(theta_p) = " << Pf * sin(thp) << endl;
-
-    
-    cout << "Pmx_v = q_vx - pf_vx = " << fQ_v.X() -  Pf_vec_v.X() << endl;
-    cout << "Pmy_v = q_vy - pf_vy = " << fQ_v.Y() -  Pf_vec_v.Y() << endl;
-    cout << "Pmz_v = q_vz - pf_vz = " << fQ_v.Z() -  Pf_vec_v.Z() << endl;
-
-    cout << "Pmx_lab = " << Pmx_lab << endl;
-    cout << "Pmy_lab = " << Pmy_lab << endl;
-    cout << "Pmz_lab = " << Pmz_lab << endl;
-    */
-    
-    // fX_v checked
-    //cout << "Pf_v = " << Pf_v << endl;
-    //cout << "Ep_v = " << Ep_v/1000. << endl;
-    //cout << "(fX_v.Vect()).Mag() = " << (fX_v.Vect()).Mag() << endl;
-    //cout << "fX_v.E() = " << fX_v.E() << endl;
-
-    //cout << "(fA1_v.Vect() - fX_v.Vect()).Mag() = " << (fA1_v.Vect() - fX_v.Vect()).Mag() << endl;
-
-
     
     Pmx_lab_v = fB_v.Px();
     Pmy_lab_v = fB_v.Py(); 
     Pmz_lab_v = fB_v.Pz();
 
-    /*
-    // consistent, but should not be this larger (need to check why)
-    cout << "(fB_v.Vect()).Mag() = " << (fB_v.Vect()).Mag() << endl;
-    cout << "fB_v.E()  = " << fB_v.E() << endl;
-    cout << "Pm_lab_v (alt2) = " << sqrt( pow(Pmx_lab_v,2) + pow(Pmy_lab_v,2) + pow(Pmz_lab_v,2) ) << endl;
-    cout << "Pm_v = " << Pm_v << endl;
-    cout << "Pm = " << Pm << endl;
-    */
-    
     //Electron / Proton In-Plane angles @ the vertex
     the_v = kf_vec_v.Theta();
     thp_v = Pf_vec_v.Theta();
 
-    /*
-    // checked
-    cout << "theta_e = " << the/dtr << endl;
-    cout << "theta_e_v = " << the_v/dtr << endl; 
-
-    // checked
-    cout << "theta_p = " << thp/dtr << endl;
-    cout << "theta_p_v = " << thp_v/dtr << endl; 
-    */
-    
     //--------Rotate the recoil system from +z to +q-------
 
     qvec_v = fQ_v.Vect();
@@ -1362,22 +1241,10 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
     thq_v = qvec_v.Theta();
     phq_v = qvec_v.Phi();
 
-    // checked
-    //cout << "thq = " <<   th_q  << endl;    
-    //cout << "thq_v (alt2) = " <<   thq_v  << endl;
-    
     rot_to_q_v.SetZAxis( qvec_v, kfvec_v).Invert();
 
-    // checked
-    //cout << "q_v = " << qvec_v.Mag() << endl;
-    //cout << "kf_v = " << kfvec_v.Mag() << endl;
-   
-    //cout << "qvec_v = " << qvec_v.Mag() << endl;
-    //cout << "kfvec_v = " << kfvec_v.Mag() << endl;
-    
     xq_v = fX_v.Vect();
     bq_v = fB_v.Vect();
-
     
     xq_v *= rot_to_q_v;
     bq_v *= rot_to_q_v;
@@ -1389,34 +1256,13 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
     th_rq_v = bq_v.Theta();   // theta_rq                                                                                                     
     ph_rq_v = bq_v.Phi();     //"out-of-plane angle", phi_rq
 
-
-    /*
-    cout << "th_pq = " << th_pq/dtr << endl;
-    cout << "th_pq_v (alt2) = " << th_pq_v/dtr << endl;
-
-    cout << "ph_pq = " << ph_pq/dtr << endl;
-    cout << "ph_pq_v (alt2) = " << ph_pq_v/dtr << endl;
-    */
-    
     p_miss_q_v = -bq_v;
-
-    // ---- > NOT OK, Need to figure out why does pmiss_q_v does NOT match with existing pm_v !!!
-    //cout << "pmiss = " << Pm << endl;
-    //cout << "pmiss_v  = " <<  Pm_v << endl;
-    //cout << "p_miss_q_v.Mag()  = " <<  p_miss_q_v.Mag() << endl;
-
 
     //Missing Momentum Components in the q-frame
     Pmz_q_v = p_miss_q_v.Z();   //parallel component to +z (+z is along q)
     Pmx_q_v = p_miss_q_v.X();   //in-plane perpendicular component to +z
     Pmy_q_v = p_miss_q_v.Y();   //out-of-plane component (Oop)
 
-    // NOT OK
-    //    cout << "Pm_par_v (pm_par) = " << Pm_par_v/1000. << endl;
-
-    //cout << "Pmx_q_v (alt2, pm_perp) = " << Pmx_q_v << endl;
-    //cout << "Pmy_q_v (alt2, pm_oop) = " << Pmy_q_v << endl;
-    //cout << "Pmz_q_v (alt2, pm_par) = " << Pmz_q_v << endl;
 
     //---------Light Cone Variables (at vertex) (C.Y. March 05, 2021)---------
     
@@ -1429,8 +1275,6 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
       (neutron for D(e,e'p)n case)
     */
 
-
-    
     //neutron energy at the vertex
     En_v = sqrt(MN*MN + Pm_v*Pm_v);
     
@@ -1495,60 +1339,41 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
 
     //Full Weight
     FullWeight = (Normfac * charge_factor * eff_factor * Weight ) / nentries;
+    FullWeight_forRates = (Normfac * charge_factor * Weight ) / nentries;
 
     PhaseSpace =  Normfac * charge_factor * eff_factor * Jacobian_corr  / nentries;    //Phase Space with jacobian corr. factor
 
-    /*
-    cout << "FullWeight = " << FullWeight << endl;
-    cout << "Normfac = " << Normfac << endl;
-    cout << "charge_factor = " << charge_factor << endl;
-    cout << "eff_factor = " << eff_factor << endl;
-    cout << "Weight = " << Weight << endl;
-    cout << "nentries = " << nentries << endl;
-    cout << "Jacobian_corr = " << Jacobian_corr << endl;
-    */
 
     //fill histogram (only meaningful if no cuts, and eff_factor set to 1 for daq rates)
-    H_W_noCut->Fill(W, FullWeight); // for coin daq rates estimates
-     
+    H_W_noCut->Fill(W, FullWeight_forRates); // for coin daq rates estimates
+    H_Pm_noCut->Fill(Pm, FullWeight_forRates);
+
+    
     if(c_allCuts) {
 
       
       
-      // ------ This is for calculation of avergaed kinematics ( for now, not usning them at the vertex, since don;t know how to get ph_pq_v
-      // will just use the reconstructed kinematics -------
-      //H_Pm_vs_thrq_v    ->Fill(th_rq/dtr, Pm, FullWeight);	 
-      H_Ein_2Davg       ->Fill(th_rq/dtr, Pm, Ei*FullWeight);
-      H_kf_2Davg        ->Fill(th_rq/dtr, Pm, kf*FullWeight);
-      H_the_2Davg       ->Fill(th_rq/dtr, Pm, (the/dtr)*FullWeight);
-      H_thp_2Davg       ->Fill(th_rq/dtr, Pm, (thp/dtr)*FullWeight);
-      H_Pf_2Davg        ->Fill(th_rq/dtr, Pm, Pf*FullWeight);
-      H_Pm_2Davg        ->Fill(th_rq/dtr, Pm, Pm*FullWeight);
-      H_thrq_2Davg      ->Fill(th_rq/dtr, Pm, (th_rq/dtr)*FullWeight);
+      // ------ This is for calculation of avergaed kinematics ---
+      // will just use the vertex  kinematics -------
+      H_Pm_vs_thrq_v    ->Fill(th_rq_v/dtr, Pm_v, FullWeight);	 
+      H_Ein_2Davg       ->Fill(th_rq_v/dtr, Pm_v, Ein_v*FullWeight);
+      H_kf_2Davg        ->Fill(th_rq_v/dtr, Pm_v, kf_v*FullWeight);
+      H_the_2Davg       ->Fill(th_rq_v/dtr, Pm_v, (the_v/dtr)*FullWeight);
+      H_thp_2Davg       ->Fill(th_rq_v/dtr, Pm_v, (thp_v/dtr)*FullWeight);
+      H_Pf_2Davg        ->Fill(th_rq_v/dtr, Pm_v, Pf_v*FullWeight);
+      H_Pm_2Davg        ->Fill(th_rq_v/dtr, Pm_v, Pm_v*FullWeight);
+      H_thrq_2Davg      ->Fill(th_rq_v/dtr, Pm_v, (th_rq_v/dtr)*FullWeight);
 
-      H_q_2Davg          ->Fill(th_rq/dtr, Pm, q*FullWeight);
-      H_theta_q_2Davg    ->Fill(th_rq/dtr, Pm, (th_q/dtr)*FullWeight);
-      H_Q2_2Davg         ->Fill(th_rq/dtr, Pm, Q2*FullWeight);
-      H_nu_2Davg         ->Fill(th_rq/dtr, Pm, nu*FullWeight);
-      H_xbj_2Davg        ->Fill(th_rq/dtr, Pm, X*FullWeight);
-      H_theta_pq_2Davg   ->Fill(th_rq/dtr, Pm, (th_pq/dtr)*FullWeight);
-      H_phi_pq_2Davg     ->Fill(th_rq/dtr, Pm, (ph_pq/dtr)*FullWeight);
-      H_phi_pq_2Davg     ->Fill(th_rq/dtr, Pm, (ph_pq/dtr)*FullWeight);
-      H_cphi_pq_2Davg    ->Fill(th_rq/dtr, Pm, cos(ph_pq)*FullWeight);
-      H_sphi_pq_2Davg    ->Fill(th_rq/dtr, Pm, sin(ph_pq)*FullWeight); //need to fix calculation of ph_pq_v first
+      H_q_2Davg          ->Fill(th_rq_v/dtr, Pm_v, q_v*FullWeight);
+      H_theta_q_2Davg    ->Fill(th_rq_v/dtr, Pm_v, (thq_v/dtr)*FullWeight);
+      H_Q2_2Davg         ->Fill(th_rq_v/dtr, Pm_v, Q2_v*FullWeight);
+      H_nu_2Davg         ->Fill(th_rq_v/dtr, Pm_v, nu_v*FullWeight);
+      H_xbj_2Davg        ->Fill(th_rq_v/dtr, Pm_v, X_v*FullWeight);
+      H_theta_pq_2Davg   ->Fill(th_rq_v/dtr, Pm_v, (th_pq_v/dtr)*FullWeight);
+      H_phi_pq_2Davg     ->Fill(th_rq_v/dtr, Pm_v, (ph_pq_v/dtr)*FullWeight);
+      H_cphi_pq_2Davg    ->Fill(th_rq_v/dtr, Pm_v, cos(ph_pq_v)*FullWeight);
+      H_sphi_pq_2Davg    ->Fill(th_rq_v/dtr, Pm_v, sin(ph_pq_v)*FullWeight);
 
-
-      /*
-      cout << "" << endl;
-      cout << Form("Pm_v = %.3f", Pm_v) << endl;
-      cout << Form("thrq_v = %.3f", th_rq_v/dtr) << endl;
-
-      cout << Form("the_v = %.3f", the_v) << endl;
-      cout << Form("thp_v = %.3f", thp_v) << endl;
-      cout << Form("thq_v = %.3f", thq_v) << endl;
-      cout << Form("thpq_v = %.3f", th_pq_v) << endl;
-      */
-    
       //once they are filled, then divide H_[]_2Davg / H_Pm_vs_thrq_v
 	
       //--------------------------------------------------------------
@@ -1638,26 +1463,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
       H_hyptar_vs_eyptar->Fill(e_yptar, h_yptar, FullWeight); 
       H_hdelta_vs_edelta->Fill(e_delta, h_delta, FullWeight);
 
-      /*
-      cout << "--------> event: " << i << " <---------" << endl;
-      cout << "(vertex, normal) variables:" << endl;
-      cout << " (Ein_v, Ein )" <<  Ein_v << ", " << ki << endl;
-      cout << " (kf_v, kf) = " <<  kf_v  << ", " << kf <<  endl;
-      cout << " (Pf_v, Pf) = " <<  Pf_v  << ", " << Pf <<  endl;
-      cout << " (Q2_v, Q2) = " <<  Q2_v  << ", " << Q2 <<  endl;
-      cout << " (nu_v, nu) = " <<  nu_v  << ", " << nu <<  endl;
-      cout << " (qlab_v, qlab) = " <<  q_v  << ", " << q << endl;
-      cout << " (X_v, X) = " <<  X_v  << ", " << X <<  endl;
-      cout << "(the_v, th_e) = " << the_v/dtr << ", " << the/dtr << endl;
-      cout << "(thp_v, thp) = " << thp_v/dtr << ", " << thp/dtr << endl;
-      cout << Form("(thq_v, thq) = %.3f, %.3f ", thq_v/dtr, th_q/dtr) <<  endl;
-      cout << Form("(phq_v) = %.3f ", phq_v/dtr) <<  endl;
-      cout << Form("(th_pq_v, thpq) = %.3f, %.3f ", th_pq_v/dtr, th_pq/dtr) << endl;
-      cout << Form("(ph_pq_v = %.3f", ph_pq_v/dtr ) << endl;
-      cout << "(Pm_v, Pm ): " << Pm_v << ", " << Pm << endl;
-      cout << "(thrq_v, thrq ): " << th_rq_v/dtr << ", " << th_rq/dtr << endl;
-      */
-							 
+						 
     }
 
     //No Self Cut Histos
@@ -1672,36 +1478,32 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
     if(c_kinCuts && c_hdelta && c_edelta && c_ztarDiff && shmsColl_Cut) { H_hXColl_vs_hYColl_nsc->Fill(hYColl, hXColl, FullWeight); }
     if(c_kinCuts && c_hdelta && c_edelta && c_ztarDiff && hmsColl_Cut) { H_eXColl_vs_eYColl_nsc->Fill(eYColl, eXColl, FullWeight); }
 
-    
-    
-    
-    //cout << "SIMC Events Completed: " << std::setprecision(2) << double(i) / nentries * 100. << "  % " << std::flush << "\r";
+    cout << "SIMC Events Completed: " << std::setprecision(2) << double(i) / nentries * 100. << "  % " << std::flush << "\r";
     
   } // end entry loop
 
-  // cout << "L1463 OK" << endl;
   //Finish Calculating the 2D Average Kinematics (Divide by the sum of the weight)
-  H_Ein_2Davg        ->Divide(H_Pm_vs_thrq);
-  H_kf_2Davg         ->Divide(H_Pm_vs_thrq);
-  H_the_2Davg        ->Divide(H_Pm_vs_thrq);
-  H_thp_2Davg        ->Divide(H_Pm_vs_thrq);
-  H_Pf_2Davg         ->Divide(H_Pm_vs_thrq);
-  H_Pm_2Davg         ->Divide(H_Pm_vs_thrq);
-  H_thrq_2Davg       ->Divide(H_Pm_vs_thrq);
+  H_Ein_2Davg        ->Divide(H_Pm_vs_thrq_v);
+  H_kf_2Davg         ->Divide(H_Pm_vs_thrq_v);
+  H_the_2Davg        ->Divide(H_Pm_vs_thrq_v);
+  H_thp_2Davg        ->Divide(H_Pm_vs_thrq_v);
+  H_Pf_2Davg         ->Divide(H_Pm_vs_thrq_v);
+  H_Pm_2Davg         ->Divide(H_Pm_vs_thrq_v);
+  H_thrq_2Davg       ->Divide(H_Pm_vs_thrq_v);
 
-  H_q_2Davg          ->Divide(H_Pm_vs_thrq);
-  H_theta_q_2Davg    ->Divide(H_Pm_vs_thrq);
-  H_Q2_2Davg         ->Divide(H_Pm_vs_thrq);
-  H_nu_2Davg         ->Divide(H_Pm_vs_thrq);
-  H_xbj_2Davg        ->Divide(H_Pm_vs_thrq);
-  H_theta_pq_2Davg   ->Divide(H_Pm_vs_thrq);
-  H_phi_pq_2Davg     ->Divide(H_Pm_vs_thrq);
-  H_cphi_pq_2Davg    ->Divide(H_Pm_vs_thrq);
-  H_sphi_pq_2Davg    ->Divide(H_Pm_vs_thrq);
+  H_q_2Davg          ->Divide(H_Pm_vs_thrq_v);
+  H_theta_q_2Davg    ->Divide(H_Pm_vs_thrq_v);
+  H_Q2_2Davg         ->Divide(H_Pm_vs_thrq_v);
+  H_nu_2Davg         ->Divide(H_Pm_vs_thrq_v);
+  H_xbj_2Davg        ->Divide(H_Pm_vs_thrq_v);
+  H_theta_pq_2Davg   ->Divide(H_Pm_vs_thrq_v);
+  H_phi_pq_2Davg     ->Divide(H_Pm_vs_thrq_v);
+  H_cphi_pq_2Davg    ->Divide(H_Pm_vs_thrq_v);
+  H_sphi_pq_2Davg    ->Divide(H_Pm_vs_thrq_v);
 
   
   //Calculate Xsec
-  //H_Pm_vs_thrq_xsec->Divide(H_Pm_vs_thrq, H_Pm_vs_thrq_ps);
+  H_Pm_vs_thrq_xsec->Divide(H_Pm_vs_thrq, H_Pm_vs_thrq_ps);
   
   //-------------------------
   // WRITE HISTOS TO FILE
@@ -1728,7 +1530,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   
   //Close File
   outROOT->Close();
-
+  
   //** IMPORTANT** Consideration of statistical uncertainty based on counts
   /*
     The uncertainty calculated per kinematic bin in SIMC is representative of the
@@ -1742,51 +1544,140 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
     and relative error = sqrt(N) / N = 1 / sqrt(N)
     
   */
+  
+  
+  float Pmcnts = H_Pm->Integral();
+  float Pmcnts_noCut = H_Pm_noCut->Integral();     
+  float rates = H_Pm->Integral() / (time * 3600);
+  float daq_rates = H_Pm_noCut->Integral() / (time * 3600);
+  
+  cout << " ----------------------------- " << endl; 
+  cout << "    d(e,e'p) Rate Estimates    " << endl;
+  cout << " ----------------------------- " << endl;  
+  cout << "" << endl;  
+  cout << Form("Pm Setting: %d", pm_set) << endl;
+  cout << Form("thrq Setting: %d", thrq_set) << endl;    
+  cout << Form("Model: Laget %s", model.Data()) << endl;
+  cout << Form("Ib [uA]     = %.3f ", Ib) << endl;
+  cout << Form("time [hr]   = %.3f ", time) << endl;
+  cout << Form("charge [mC] = %.3f ", charge_factor)<< endl;  
+  cout << Form("Pm counts  = %.3f", Pmcnts) << endl;  
+  cout << Form("d(e,e'p) Rates [Hz] = %.3E ", rates) << endl;  
+  cout << Form("DAQ Rates [Hz] = %.3f", daq_rates) << endl;
+  cout << " ----------------------------- " << endl; 
+
+
+    // ------ Write output file for storing rates, counts, etc. -------
+
+    //FileStreams objects to READ/WRITE to a .txt file
+    ofstream out_file;
+    ifstream in_file;
+    
+    //Check if file already exists
+    TString output_file = "yield_estimates/d2_fsi/output_rates_d2fsi.csv";
+    in_file.open(output_file.Data());
+
+    if(!in_file.fail()){
+      
+      cout << Form(" %s already exists, will append to it . . . ", output_file.Data() ) << endl;
+      
+      //Open Report FIle in append mode
+      out_file.open(output_file, ios::out | ios::app);
+      out_file << Form("%i,     %d,    %s,    %.1f,       %.3E,        %.3f,        %.3f,      %.3f,     %.3f ", pm_set, thrq_set, model.Data(), Pmcnts, rates, daq_rates, Ib, time, charge_factor ) << endl;
+
+      
+    }
+
+    // create output file if it does not exist
+    if(in_file.fail()){
+
+      out_file.open(output_file);
+      //set headers
+      out_file << "# SIMC rates estimates (deut FSI studies)" << endl;
+      out_file << "# " << endl;
+      out_file << "# header definitions " << endl;
+      out_file << "# pm_set: central missing momentum setting [MeV] " << endl;
+      out_file << "# thrq_set: central recoil angle setting [deg] " << endl;
+      out_file << "# model: Laget pwia or fsi (paris NN potential)" << endl;      
+      out_file << "# pm_counts: integrated missing momentum counts (yield) with all cuts applied \n# (not binned in any particular kinematics)" << endl;
+      out_file << "# deep_rates: deuteron break-up rates [Hz] " << endl;
+      out_file << "# daq_rates: data acquisition rates (no analysis cuts) [Hz] " << endl;
+      out_file << "# current: beam current [uA] " << endl;
+      out_file << "# time: beam-on-target time [hrs] " << endl;
+      out_file << "# charge: beam charge [mC] " << endl;
+      out_file << "#" << endl;
+      
+      out_file <<"pm_set,thrq_set,model,pm_counts,deep_rates,daq_rates,current,time,charge" << endl;
+      out_file << Form("%i,     %d,    %s,    %.1f,       %.3E,        %.3f,        %.3f,      %.3f,     %.3f ", pm_set, thrq_set, model.Data(), Pmcnts, rates, daq_rates, Ib, time, charge_factor ) << endl;
+
+    }
+
+
+    // --------------------------------------------------------
+    // Write Histogram to numerical data file for plotting
+    // --------------------------------------------------------
+    
+    TString cmd = "";
+
 
   
-  //------------------------------------------
-  // Extract The Yield binned in Pm vs th_rq
-  //------------------------------------------
-  extract_2d_hist(H_Pm_vs_thrq, "#theta_{rq} [deg]", "Missing Momentum, P_{m} [GeV/c]", Form("%s_yield_%.1fuA_%.1fhr.csv",  basename.Data(), Ib, time));
+    // assumed this directory exists
+    TString output_hist_data = Form("yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s", pm_set, thrq_set, model.Data());
+    cmd = Form("mkdir -p %s", output_hist_data.Data() );
+    gSystem->Exec(cmd); // create study type dir. if it doesn't exist
 
-  //--------
-  // Extrack numerical data for histogram plotting
-  //--------
+    TString class_name;
+    TH1F *h_i = 0;
+    TH2F *h2_i = 0;
 
-  /*
-  //extract cuts-related histos
-  extract_1d_hist(H_Q2_nsc, "4-Momentum Transfers, Q2 [GeV^2]", Form("yield_Q2_pm%d.txt", pm_set));
-  extract_1d_hist(H_Em_nsc, "Missing Energy, Em [GeV]", Form("yield_Em_pm%d.txt", pm_set));
-  extract_1d_hist(H_edelta_nsc, "SHMS Delta [%%]", Form("yield_edelta_pm%d.txt", pm_set));
-  extract_1d_hist(H_hdelta_nsc, "HMS Delta [%%]", Form("yield_hdelta_pm%d.txt", pm_set));
-  extract_1d_hist(H_ztar_diff_nsc, "Ztar diff [cm]", Form("yield_ztardiff_pm%d.txt", pm_set));
+    //-----------------------------------------------------
+    //Lopp over kin_HList of histogram objects 
+    //-----------------------------------------------------
+    
+    for(int i=0; i<kin_HList->GetEntries(); i++) {
+    
+      //Get the class name for each element on the list (either "TH1F" or TH2F")
+      class_name = kin_HList->At(i)->ClassName();
+      //Read ith histograms in the list from current run
+      if(class_name=="TH1F") {
+	//Get histogram from the list
+	h_i = (TH1F *)kin_HList->At(i);
+	extract_1d_hist(h_i, h_i->GetXaxis()->GetTitle(), h_i->GetYaxis()->GetTitle(), Form("%s/%s_yield_d2fsi_pm%d_thrq%d.txt", output_hist_data.Data(), h_i->GetName(), pm_set, thrq_set));
+	
+      }
+      if(class_name=="TH2F") {
+	//Get histogram from the list
+	h2_i = (TH2F *)kin_HList->At(i);
+	extract_2d_hist(h2_i, h2_i->GetXaxis()->GetTitle(), h2_i->GetYaxis()->GetTitle(), Form("%s/%s_yield_d2fsi_pm%d_thrq%d.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, thrq_set));
+	
+      }
+      
+    }//end loop over kin_HList
 
-  extract_2d_hist(H_hXColl_vs_hYColl_nsc, "HMS Y Collimator [cm]", "HMS X Collimator [cm]", Form("yield_hColl_pm%d.txt",  pm_set));
-  extract_2d_hist(H_eXColl_vs_eYColl_nsc, "SHMS Y Collimator [cm]", "SHMS X Collimator [cm]", Form("yield_eColl_pm%d.txt",  pm_set));  
-  extract_2d_hist(H_hdelta_vs_edelta_nsc, "SHMS Delta [%%]", "HMS Delta [%%]", Form("yield_delta2d_pm%d.txt",  pm_set));
-
-  //extarct focal plane histos
-  extract_2d_hist(H_hxfp_vs_hyfp, "HMS Y Focal Plane [cm]", "HMS X Focal Plane [cm]", Form("yield_hfp_pm%d.txt", pm_set));
-  extract_2d_hist(H_exfp_vs_eyfp, "SHMS Y Focal Plane [cm]", "SHMS X Focal Plane [cm]", Form("yield_efp_pm%d.txt", pm_set));
-
-  //extract electron kinematics
-  extract_1d_hist(H_kf, "Final Electron Momentum, kf, [GeV]", Form("yield_kf_pm%d.txt", pm_set));
-  extract_1d_hist(H_the, "Final Electron Angle, th_e, [deg]", Form("yield_the_pm%d.txt", pm_set));
-  extract_1d_hist(H_nu, "Energy Transfer, nu [GeV]", Form("yield_nu_pm%d.txt", pm_set));
-  extract_1d_hist(H_q, "3-momentum transfer, |q| [GeV/c]", Form("yield_q_pm%d.txt", pm_set));
-  extract_1d_hist(H_thq, "Recoil Angle q relative to +z (lab), th_q [deg]", Form("yield_thq_pm%d.txt", pm_set));
-  extract_1d_hist(H_xbj, "x-Bjorken", Form("yield_xbj_pm%d.txt", pm_set));
-  */
-  
-  //extract hadron kinematics
-  //extract_1d_hist(H_MM, "Missing Mass, MM [GeV]", Form("yield_MM_pm%d.txt", pm_set));  
-  //extract_1d_hist(H_Pm, "Missing Momentum, Pm [GeV/c]", Form("yield_Pm_pm%d_noCUTS.txt", pm_set));
-  /*
-  extract_1d_hist(H_Pf, "Final Proton Momentum, Pf, [GeV]", Form("yield_Pf_pm%d.txt", pm_set));
-  extract_1d_hist(H_thp, "Proton Scattering Angle, th_p, [deg]", Form("yield_thp_pm%d.txt", pm_set));
-  extract_1d_hist(H_thpq, "Proton Angle wrto q-vector, thpq, [deg]", Form("yield_thpq_pm%d.txt", pm_set));
-  extract_1d_hist(H_thrq, "Neutron Angle wrto q-vector, thrq, [deg]", Form("yield_thrq_pm%d.txt", pm_set));
-  */
+    //-----------------------------------------------------
+    //Lopp over accp_HList of histogram objects 
+    //-----------------------------------------------------
+    
+    for(int i=0; i<accp_HList->GetEntries(); i++) {
+      
+      //Get the class name for each element on the list (either "TH1F" or TH2F")
+      class_name = accp_HList->At(i)->ClassName();
+      //Read ith histograms in the list from current run
+      if(class_name=="TH1F") {
+	//Get histogram from the list
+	h_i = (TH1F *)accp_HList->At(i);
+	extract_1d_hist(h_i, h_i->GetXaxis()->GetTitle(), h_i->GetYaxis()->GetTitle(), Form("%s/%s_yield_d2fsi_pm%d_thrq%d.txt", output_hist_data.Data(), h_i->GetName(), pm_set, thrq_set));
+	
+      }
+      if(class_name=="TH2F") {
+	//Get histogram from the list
+	h2_i = (TH2F *)accp_HList->At(i);
+	extract_2d_hist(h2_i, h2_i->GetXaxis()->GetTitle(), h2_i->GetYaxis()->GetTitle(), Form("%s/%s_yield_d2fsi_pm%d_thrq_%d.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, thrq_set));
+	
+      }
+      
+    }//end loop over accp_HList
+    
 
 }
 
