@@ -621,7 +621,6 @@ void analyze_simc_d2fsi(TString basename="", int pm_set=0, int thrq_set=0, TStri
   TH2F *H_hxptar_vs_exptar = new TH2F("H_hxptar_vs_exptar", "HMS vs. SHMS, X'_{tar}", exptar_nbins, exptar_xmin, exptar_xmax, hxptar_nbins, hxptar_xmin, hxptar_xmax);
   TH2F *H_hyptar_vs_eyptar = new TH2F("H_hyptar_vs_eyptar", "HMS vs. SHMS, Y'_{tar}", eyptar_nbins, eyptar_xmin, eyptar_xmax, hyptar_nbins, hyptar_xmin, hyptar_xmax);
   TH2F *H_hdelta_vs_edelta = new TH2F("H_hdelta_vs_edelta", "HMS vs. SHMS, #delta",   edelta_nbins, edelta_xmin, edelta_xmax, hdelta_nbins, hdelta_xmin, hdelta_xmax);
-  TH2F *H_hdelta_vs_edelta_nsc = new TH2F("H_hdelta_vs_edelta_nsc", "HMS vs. SHMS, #delta",   edelta_nbins, edelta_xmin, edelta_xmax, hdelta_nbins, hdelta_xmin, hdelta_xmax);
   
   
 
@@ -669,7 +668,6 @@ void analyze_simc_d2fsi(TString basename="", int pm_set=0, int thrq_set=0, TStri
   accp_HList->Add( H_hxptar_vs_exptar );
   accp_HList->Add( H_hyptar_vs_eyptar );
   accp_HList->Add( H_hdelta_vs_edelta );
-  accp_HList->Add( H_hdelta_vs_edelta_nsc);
   
   //---------------------------------------------------------------------------------------------------------
   
@@ -984,7 +982,7 @@ void analyze_simc_d2fsi(TString basename="", int pm_set=0, int thrq_set=0, TStri
    
   // Charge factor is the total integrated charge assuming a beam current and run time
   Double_t Ib = 80;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
-  Double_t time = 1.0;     //estimated time (in hours) a run takes (start - end) of run
+  Double_t time = 24.0;     //estimated time (in hours) a run takes (start - end) of run
   Double_t charge_factor = Ib * time * 3600. / 1000.;
 
   //target boiling slopes for Hydrofen and Deuterium (during commissioning)
