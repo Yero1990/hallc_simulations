@@ -94,7 +94,10 @@ Eb=14   #list_of_args[1]
 Pr=1    #list_of_args[2]
 thrq=26 #list_of_args[3]
 
-basename='d2_Eb%s_Pr%s_thrq%s_norad_output' %(Eb, Pr, thrq)
+#basename='d2_Eb%s_Pr%s_thrq%s_norad_output' %(Eb, Pr, thrq)
+
+basename='~/worksim/d2_fsi/analyzed/d2_pm800_thrq28_fsi_rad_output'
+
 output_file = basename+'_avgkin.txt'
 
 

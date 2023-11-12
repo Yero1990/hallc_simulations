@@ -264,9 +264,9 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   Double_t Pf_xmin     = stod(split(FindString("Pf_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
   Double_t Pf_xmax     = stod(split(FindString("Pf_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
   	   
-  Double_t thx_nbins   = stod(split(FindString("thx_nbins",  	input_HBinFileName.Data())[0], '=')[1]);  //proton(hadron) angle
-  Double_t thx_xmin    = stod(split(FindString("thx_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
-  Double_t thx_xmax    = stod(split(FindString("thx_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t thp_nbins   = stod(split(FindString("thx_nbins",  	input_HBinFileName.Data())[0], '=')[1]);  //proton(hadron) angle
+  Double_t thp_xmin    = stod(split(FindString("thx_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t thp_xmax    = stod(split(FindString("thx_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
            
   Double_t Em_nbins   = stod(split(FindString("Em_nbins",  	input_HBinFileName.Data())[0], '=')[1]);
   Double_t Em_xmin    = stod(split(FindString("Em_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
@@ -275,7 +275,20 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   Double_t Pm_nbins   = stod(split(FindString("Pm_nbins",  	input_HBinFileName.Data())[0], '=')[1]);
   Double_t Pm_xmin    = stod(split(FindString("Pm_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
   Double_t Pm_xmax    = stod(split(FindString("Pm_xmax",  	input_HBinFileName.Data())[0], '=')[1]);               				                 	       				  	       
-  	   	     		  	       
+
+  Double_t Pmx_nbins   = stod(split(FindString("Pmx_lab_nbins",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t Pmx_xmin    = stod(split(FindString("Pmx_lab_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t Pmx_xmax    = stod(split(FindString("Pmx_lab_xmax",  	input_HBinFileName.Data())[0], '=')[1]);               				                 	       				  	       
+
+  Double_t Pmy_nbins   = stod(split(FindString("Pmy_lab_nbins",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t Pmy_xmin    = stod(split(FindString("Pmy_lab_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t Pmy_xmax    = stod(split(FindString("Pmy_lab_xmax",  	input_HBinFileName.Data())[0], '=')[1]);               				                 	       				  	       
+
+  Double_t Pmz_nbins   = stod(split(FindString("Pmz_lab_nbins",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t Pmz_xmin    = stod(split(FindString("Pmz_lab_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t Pmz_xmax    = stod(split(FindString("Pmz_lab_xmax",  	input_HBinFileName.Data())[0], '=')[1]);               				                 	       				  	       
+
+  
   Double_t MM_nbins   = stod(split(FindString("MM_nbins",  	input_HBinFileName.Data())[0], '=')[1]);
   Double_t MM_xmin    = stod(split(FindString("MM_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
   Double_t MM_xmax    = stod(split(FindString("MM_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
@@ -284,9 +297,9 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   Double_t MM2_xmin   = stod(split(FindString("MM2_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
   Double_t MM2_xmax   = stod(split(FindString("MM2_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
            
-  Double_t thxq_nbins  = stod(split(FindString("thxq_nbins",  input_HBinFileName.Data())[0], '=')[1]);
-  Double_t thxq_xmin   = stod(split(FindString("thxq_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
-  Double_t thxq_xmax   = stod(split(FindString("thxq_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t thpq_nbins  = stod(split(FindString("thxq_nbins",  input_HBinFileName.Data())[0], '=')[1]);
+  Double_t thpq_xmin   = stod(split(FindString("thxq_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
+  Double_t thpq_xmax   = stod(split(FindString("thxq_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
   	       	      	  	       
   Double_t thrq_nbins  = stod(split(FindString("thrq_nbins",  input_HBinFileName.Data())[0], '=')[1]);
   Double_t thrq_xmin   = stod(split(FindString("thrq_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
@@ -436,17 +449,19 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
 
   //Secondary (Hadron) Kinematics (recoil and missing are used interchageably) ()
   TH1F *H_Pf      = new TH1F("H_Pf", "Final Hadron Momentum (detected), p_{f}", Pf_nbins, Pf_xmin, Pf_xmax);
-  TH1F *H_thx     = new TH1F("H_thx", "Hadron Scattering Angle (detected), #theta_{x}", thx_nbins, thx_xmin, thx_xmax);
+  TH1F *H_thp     = new TH1F("H_thp", "Hadron Scattering Angle (detected), #theta_{x}", thp_nbins, thp_xmin, thp_xmax);
   TH1F *H_Em      = new TH1F("H_Em","Nuclear Missing Energy", Em_nbins, Em_xmin, Em_xmax); 
   TH1F *H_Em_nsc      = new TH1F("H_Em_nsc","Nuclear Missing Energy", Em_nbins, Em_xmin, Em_xmax); 
 
-  TH1F *H_Pm      = new TH1F("H_Pm","Missing Momentum, P_{miss}", Pm_nbins, Pm_xmin, Pm_xmax); 
+  TH1F *H_Pm      = new TH1F("H_Pm","Missing Momentum, P_{miss}", Pm_nbins, Pm_xmin, Pm_xmax);
+
   TH1F *H_MM      = new TH1F("H_MM","Missing Mass, M_{miss}", MM_nbins, MM_xmin, MM_xmax);        
   TH1F *H_MM2     = new TH1F("H_MM2","Missing Mass Squared, M^{2}_{miss}", MM2_nbins, MM2_xmin, MM2_xmax); 
-  TH1F *H_thxq    = new TH1F("H_thxq", "In-Plane Angle, #theta_{xq}", thxq_nbins, thxq_xmin, thxq_xmax);
+  TH1F *H_thpq    = new TH1F("H_thpq", "In-Plane Angle, #theta_{xq}", thpq_nbins, thpq_xmin, thpq_xmax);
   TH1F *H_thrq    = new TH1F("H_thrq", "In-Plane Angle, #theta_{rq}", thrq_nbins, thrq_xmin, thrq_xmax);
   TH1F *H_phi_pq  = new TH1F("H_phi_pq", "Out-of-Plane Angle, #phi_{pq}", 200, -190, 190.);
   TH1F *H_cphi_pq  = new TH1F("H_cphi_pq", "Out-of-Plane Angle, cos(#phi_{pq})", 100, -1.2, 1.2);
+
 
   //2D Pm vs. thrq (for cross section calculation)
   TH2F *H_Pm_vs_thrq  = new TH2F("H_Pm_vs_thrq", "Pm vs. #theta_{rq} (yield)", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
@@ -468,11 +483,17 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   TH2F *H_nu_2Davg          = new TH2F("H_nu_2Davg","Energy Transfer, #nu (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax); 
   TH2F *H_xbj_2Davg         = new TH2F("H_xbj_2Davg", "x-Bjorken (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);  
   TH2F *H_theta_pq_2Davg    = new TH2F("H_theta_pq_2Davg", "#theta_{pq} (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
+  TH2F *H_phi_pq_2Davg    = new TH2F("H_phi_pq_2Davg", "#phi_{pq} (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
   TH2F *H_cphi_pq_2Davg     = new TH2F("H_cphi_pq_2Davg", "cos(#phi_{pq}) (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
   TH2F *H_sphi_pq_2Davg     = new TH2F("H_sphi_pq_2Davg", "sin(#phi_{pq}) (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
   TH2F *H_Pm_2Davg     = new TH2F("H_Pm_2Davg","Missing Momentum (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax); 
   TH2F *H_thrq_2Davg   = new TH2F("H_thrq_2Davg", "#theta_{rq} (2D Average)",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
 
+  // SIMC vertex (check calculations for Alternate 2 method)
+  TH1F *H_Pm_v      = new TH1F("H_Pm_v","Missing Momentum, P_{miss}", Pm_nbins, Pm_xmin, Pm_xmax);
+  TH1F *H_thpq_v    = new TH1F("H_thpq_v", "In-Plane Angle, #theta_{xq} (vertex)", thpq_nbins, thpq_xmin, thpq_xmax);
+  TH1F *H_phi_pq_v  = new TH1F("H_phi_pq_v", "Out-of-Plane Angle, #phi_{pq}  (vertex)", 200, -190, 190.);
+  TH1F *H_cphi_pq_v  = new TH1F("H_cphi_pq_v", "Out-of-Plane Angle, cos(#phi_{pq} (vertex))", 100, -1.2, 1.2);
 
   
   //Add Kin Histos to TList
@@ -491,22 +512,31 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
 
   //Add Secondary Kin Histos
   kin_HList->Add( H_Pf       );
-  kin_HList->Add( H_thx      );
+  kin_HList->Add( H_thp      );
   kin_HList->Add( H_Em       );
   kin_HList->Add( H_Em_nsc   );
   kin_HList->Add( H_Pm       );
+
   kin_HList->Add( H_MM       );
   kin_HList->Add( H_MM2      );
-  kin_HList->Add( H_thxq     );
+  kin_HList->Add( H_thpq     );
   kin_HList->Add( H_thrq     );
   kin_HList->Add( H_phi_pq   );
   kin_HList->Add( H_cphi_pq  );
+
+  // Add vertex histos (for checks)
+  kin_HList->Add( H_Pm_v       );
+  kin_HList->Add( H_thpq_v     );
+  kin_HList->Add( H_phi_pq_v   );
+  kin_HList->Add( H_cphi_pq_v  );
+
+
   
   kin_HList->Add( H_Pm_vs_thrq );
   kin_HList->Add( H_Pm_vs_thrq_ps );
-  
   //kin_HList->Add( H_Pm_vs_thrq_xsec );
 
+  
   // Add averaged kin. histos
   kin_HList->Add( H_Pm_vs_thrq_v );
   kin_HList->Add( H_Ein_2Davg    );
@@ -523,6 +553,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   kin_HList->Add( H_nu_2Davg         );
   kin_HList->Add( H_xbj_2Davg        );
   kin_HList->Add( H_theta_pq_2Davg   );
+  kin_HList->Add( H_phi_pq_2Davg     );
   kin_HList->Add( H_cphi_pq_2Davg    );
   kin_HList->Add( H_sphi_pq_2Davg    );
      
@@ -673,6 +704,10 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   Double_t thp;               //to be calculated separately (in data)
   Double_t Em;                     //Standard Missing Energy for H(e,e'p)
   Double_t Pm;                     //Missing Momentum (should be zero for H(e,e'p). Should be neutron momentum for D(e,e'p))
+  Double_t Pmx_lab;                //x-comp. Missing Momentum 
+  Double_t Pmy_lab;                 //y-comp. Missing Momentum 
+  Double_t Pmz_lab;                 //z-comp. Missing Momentum
+
   Double_t MM;                   //Missing Mass (neutron Mass)
   Double_t MM2;                   //Missing Mass Squared
   Double_t th_pq;                  //detected particle in-plane angle w.r.to q-vector
@@ -806,7 +841,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
 
   //Proton / Electron In-Plane Scattering Angles (vertex)
   Double_t the_v;     
-  Double_t thx_v;
+  Double_t thp_v;
 
   //----------Variables Used in Auxiliary Functions--------------------------------------
 
@@ -833,6 +868,10 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   tree->SetBranchAddress("theta_p", &thp);
   tree->SetBranchAddress("Em", &Em);
   tree->SetBranchAddress("Pm", &Pm);
+  tree->SetBranchAddress("Pmx", &Pmx_lab);
+  tree->SetBranchAddress("Pmy", &Pmy_lab);
+  tree->SetBranchAddress("Pmz", &Pmz_lab);
+
   //Missing Mass (MM) and MM2 will be defined in entry loop
   tree->SetBranchAddress("theta_pq", &th_pq); 
   tree->SetBranchAddress("theta_rq", &th_rq);  
@@ -1068,6 +1107,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
       MM2 = MM * MM;
     }
 
+    
     // convert 0->360 to -180 to 180 (for out of plane angle)
     ph_pq = ph_pq / dtr; // convert to deg
 
@@ -1081,6 +1121,8 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
 
     //convert back to radians
     ph_pq = ph_pq * dtr;
+    
+
     
     //SIMC Collimator (definition based on HCANA collimator)
     htarx_corr = tar_x - h_xptar*htar_z*cos(thp_central*dtr);
@@ -1113,9 +1155,10 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
 
     X_v = Q2_v / (2.*MP*nu_v);         //X-Bjorken at the vertex
 
+
     
      // ------ Alternative 1: calculated kinematics at central kin. settings --------
-
+    /*
     the_v = 2. * asin( sqrt( Q2_v/(4.*Ein_v*Ef_v) ) );  // radians
 
     En_v = sqrt(MN*MN + Pm_v*Pm_v);  // neutron energy at vertex
@@ -1140,77 +1183,241 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
     th_rq_v = acos(cthrq_v) ;  //theta_nq [rad]
       
     //thp (proton angle relative to +z (lab))
-    thx_v = thq_v + th_pq_v;  //this is assuming proton is detected in the forward spec. momentum ( < 90 deg)
+    thp_v = thq_v + th_pq_v;  //this is assuming proton is detected in the forward spec. momentum ( < 90 deg)
     
     // How to calculate phi_pq?
 
     // E_removal_neutron - E_removal_proton
-    
+    */
     
 
-    /*
+    
     // ------ Alternative 2: use initial 4-momentum components to calculate everything --------
     //Calculate electron final momentum 3-vector
     SetCentralAngles(the_central, phe_central);
     TransportToLab(kf_v, e_xptar_v, e_yptar_v, kf_vec_v);
+
+    /*
+    // e- vector components (checked, makes sense in lab frame)
+    cout << "ki_v_z" << ki_v <<  endl;
+    cout << "kf_v_x = " << kf_vec_v.X() << endl;
+    cout << "kf_v_y = " << kf_vec_v.Y() << endl;
+    cout << "kf_v_z = " << kf_vec_v.Z() << endl;
+    cout << "kf_v = " << kf_v << endl;
+    cout << "kf = " << kf << endl;
+    cout << "theta_e = " << the << endl;
+    cout << "kf*cos(theta_e) = " << kf * cos(the) << endl;
+    cout << "kf*sin(theta_e) = " << kf * sin(the) << endl;
+    */
+    
+    /*
+    cout << "e_xptar = " << e_xptar << endl;
+    cout << "e_yptar = " << e_yptar << endl;
+   
+    cout << "e_xptar_v = " << e_xptar_v << endl;
+    cout << "e_yptar_v = " << e_yptar_v << endl;
+    */
+    //checked
+    //cout << "kf_v = " << kf_v << endl;
+    //cout << "kf = " << kf << endl;
+    //cout << "kf_vec_v  Mag = " << kf_vec_v.Mag() << endl;
     
     //Calculate 4-Vectors
+    /* --- SNIPPET from event.f in SIMC with coordinate definitions ---
+   ! CALCULATE ANGLE PHI BETWEEN SCATTERING PLANE AND REACTION PLANE.
+   ! Therefore, define a new system with the z axis parallel to q, and
+   ! the x axis inside the q-z-plane: z' = q, y' = q X z, x' = y' X q
+   ! this gives phi the way it is usually defined, i.e. phi=0 for in-plane
+   ! particles closer to the downstream beamline than q.
+   ! phi=90 is above the horizontal plane when q points to the right, and
+   ! below the horizontal plane when q points to the left.
+   ! Also take into account the different definitions of x, y and z in
+   ! replay and SIMC:
+   ! As seen looking downstream:        replay	SIMC	(old_simc)
+   !				x	right	down	(left)
+   !				y	down	left	(up)
+   !				z	all have z pointing downstream
+   !
+   ! SO: x_replay=-y_simc, y_replay=x_simc, z_replay= z_simc
+    */
+								   
     fP0_v.SetXYZM(0.0, 0.0, ki_v, me);  //set initial e- 4-momentum at the vertex
-    fP1_v.SetXYZM(kf_vec_v.X(), kf_vec_v.Y(), kf_vec_v.Z(), me);  //set final e- 4-momentum at the vertex
+    fP1_v.SetXYZM(-kf_vec_v.X(), -kf_vec_v.Y(), kf_vec_v.Z(), me);  //set final e- 4-momentum at the vertex (with X -inverted to match coord. in replay, and y-inverted to match Pmy_lab in SIMC)
+
     fA_v.SetXYZM(0.0, 0.0, 0.0, tgt_mass );  //Set initial target at rest
     fQ_v = fP0_v - fP1_v;
     fA1_v = fA_v + fQ_v;   //final target (sum of final hadron four momenta)
+
+    /*
+    // q vector components (OK, however, qx component sign is inverted, which causes Pmx to come out larger that suppoed to be: pmx = qx - pf_x, and affects overall Pm magnitude)
+    // to fix temporarilt, take absolute values of |qx| - |pfx|, and so on ...
+    cout << "qv_x = " << fQ_v.X() << endl;
+    cout << "qv_y = " << fQ_v.Y() << endl;
+    cout << "qv_z = " << fQ_v.Z() << endl;
+    cout << "qv = " << (fQ_v.Vect()).Mag() << endl;
+    cout << "q = " << q << endl;
+    cout << "theta_q = " << th_q << endl;
+    cout << "q*cos(th_q) = " << q * cos(th_q) << endl;
+    cout << "q*sin(th_q) = " << q * sin(th_q) << endl;
+    */
+
     
-    //Get Detected Particle 4-momentum
+    // checked
+    //cout << "Q2_v = " << Q2_v << endl;
+    //cout << "Q2_v (alt2) = " << -fQ_v.Mag2() << endl;
+
+    // checked
+    //cout << "q_v = " << q_v << endl;
+    //cout << "q_v (alt2) = " << (fQ_v.Vect()).Mag() << endl;
+
+    //checked
+    //cout << "nu_v = " << nu_v << endl;
+    //cout << "nu_v (alt2) = " << fQ_v.E() << endl;
+
+    //checked
+    //cout << " (fA_v.Vect()).Mag() " << (fA_v.Vect()).Mag() << endl;
+    //cout << " fA_v.M() " << fA_v.M() << endl;
+
+    // fA1 checked
+    //cout << " (fA1_v.Vect()).Mag() " << (fA1_v.Vect()).Mag() << endl;
+    //cout << " fA1_v.E() " << fA1_v.E() << endl;
+    
+
+    /*
+    cout << "h_xptar = " << h_xptar << endl;
+    cout << "h_yptar = " << h_yptar << endl;
+   
+    cout << "h_xptar_v = " << h_xptar_v << endl;
+    cout << "h_yptar_v = " << h_yptar_v << endl;
+    */
+    
     SetCentralAngles(thp_central, php_central);
     TransportToLab(Pf_v, h_xptar_v, h_yptar_v, Pf_vec_v);
     fX_v.SetVectM(Pf_vec_v, MP);       //SET FOUR VECTOR OF detected particle
     fB_v = fA1_v - fX_v;                 //4-MOMENTUM OF UNDETECTED PARTICLE 
 
-    Pmx_lab_v = fB_v.X();
-    Pmy_lab_v = fB_v.Y(); 
-    Pmz_lab_v = fB_v.Z(); 
+    /*
+    // proton vector components 
+    cout << "pf_v_x = " << Pf_vec_v.X() << endl;
+    cout << "pf_v_y = " << Pf_vec_v.Y() << endl;
+    cout << "pf_v_z = " << Pf_vec_v.Z() << endl;
+    cout << "pf_v = " << Pf_v << endl;
+    cout << "pf = " << Pf << endl;
+    cout << "theta_p = " << thp << endl;
+    cout << "Pf*cos(theta_p) = " << Pf * cos(thp) << endl;
+    cout << "Pf*sin(theta_p) = " << Pf * sin(thp) << endl;
+
+    
+    cout << "Pmx_v = q_vx - pf_vx = " << fQ_v.X() -  Pf_vec_v.X() << endl;
+    cout << "Pmy_v = q_vy - pf_vy = " << fQ_v.Y() -  Pf_vec_v.Y() << endl;
+    cout << "Pmz_v = q_vz - pf_vz = " << fQ_v.Z() -  Pf_vec_v.Z() << endl;
+
+    cout << "Pmx_lab = " << Pmx_lab << endl;
+    cout << "Pmy_lab = " << Pmy_lab << endl;
+    cout << "Pmz_lab = " << Pmz_lab << endl;
+    */
+    
+    // fX_v checked
+    //cout << "Pf_v = " << Pf_v << endl;
+    //cout << "Ep_v = " << Ep_v/1000. << endl;
+    //cout << "(fX_v.Vect()).Mag() = " << (fX_v.Vect()).Mag() << endl;
+    //cout << "fX_v.E() = " << fX_v.E() << endl;
+
+    //cout << "(fA1_v.Vect() - fX_v.Vect()).Mag() = " << (fA1_v.Vect() - fX_v.Vect()).Mag() << endl;
+
+
+    
+    Pmx_lab_v = fB_v.Px();
+    Pmy_lab_v = fB_v.Py(); 
+    Pmz_lab_v = fB_v.Pz();
+
+    /*
+    // consistent, but should not be this larger (need to check why)
+    cout << "(fB_v.Vect()).Mag() = " << (fB_v.Vect()).Mag() << endl;
+    cout << "fB_v.E()  = " << fB_v.E() << endl;
+    cout << "Pm_lab_v (alt2) = " << sqrt( pow(Pmx_lab_v,2) + pow(Pmy_lab_v,2) + pow(Pmz_lab_v,2) ) << endl;
+    cout << "Pm_v = " << Pm_v << endl;
+    cout << "Pm = " << Pm << endl;
+    */
     
     //Electron / Proton In-Plane angles @ the vertex
     the_v = kf_vec_v.Theta();
-    thx_v = Pf_vec_v.Theta();
-    
-    //Can be checked later against the SIMC pm_v. (It should be identical)
-    //Pm_v = sqrt(Pmx_lab_v*Pmx_lab_v + Pmy_lab_v*Pmy_lab_v + Pmz_lab_v*Pmz_lab_v);
+    thp_v = Pf_vec_v.Theta();
+
+    /*
+    // checked
+    cout << "theta_e = " << the/dtr << endl;
+    cout << "theta_e_v = " << the_v/dtr << endl; 
+
+    // checked
+    cout << "theta_p = " << thp/dtr << endl;
+    cout << "theta_p_v = " << thp_v/dtr << endl; 
+    */
     
     //--------Rotate the recoil system from +z to +q-------
+
     qvec_v = fQ_v.Vect();
     kfvec_v = fP1_v.Vect();
 
-    
     thq_v = qvec_v.Theta();
     phq_v = qvec_v.Phi();
-    
+
+    // checked
+    //cout << "thq = " <<   th_q  << endl;    
+    //cout << "thq_v (alt2) = " <<   thq_v  << endl;
     
     rot_to_q_v.SetZAxis( qvec_v, kfvec_v).Invert();
 
+    // checked
+    //cout << "q_v = " << qvec_v.Mag() << endl;
+    //cout << "kf_v = " << kfvec_v.Mag() << endl;
+   
+    //cout << "qvec_v = " << qvec_v.Mag() << endl;
+    //cout << "kfvec_v = " << kfvec_v.Mag() << endl;
+    
     xq_v = fX_v.Vect();
     bq_v = fB_v.Vect();
+
     
     xq_v *= rot_to_q_v;
     bq_v *= rot_to_q_v;
     
     //Calculate Angles of q relative to x(detected proton) and b(recoil neutron)
+    // sense of roation for phi is: +/- 180 deg
     th_pq_v = xq_v.Theta();   //"thpq"                                       
     ph_pq_v = xq_v.Phi();     //"out-of-plane angle", "phi_pq"                                                                    
     th_rq_v = bq_v.Theta();   // theta_rq                                                                                                     
     ph_rq_v = bq_v.Phi();     //"out-of-plane angle", phi_rq
 
- 
+
+    /*
+    cout << "th_pq = " << th_pq/dtr << endl;
+    cout << "th_pq_v (alt2) = " << th_pq_v/dtr << endl;
+
+    cout << "ph_pq = " << ph_pq/dtr << endl;
+    cout << "ph_pq_v (alt2) = " << ph_pq_v/dtr << endl;
+    */
     
     p_miss_q_v = -bq_v;
+
+    // ---- > NOT OK, Need to figure out why does pmiss_q_v does NOT match with existing pm_v !!!
+    //cout << "pmiss = " << Pm << endl;
+    //cout << "pmiss_v  = " <<  Pm_v << endl;
+    //cout << "p_miss_q_v.Mag()  = " <<  p_miss_q_v.Mag() << endl;
+
 
     //Missing Momentum Components in the q-frame
     Pmz_q_v = p_miss_q_v.Z();   //parallel component to +z (+z is along q)
     Pmx_q_v = p_miss_q_v.X();   //in-plane perpendicular component to +z
     Pmy_q_v = p_miss_q_v.Y();   //out-of-plane component (Oop)
-    */
-    
+
+    // NOT OK
+    //    cout << "Pm_par_v (pm_par) = " << Pm_par_v/1000. << endl;
+
+    //cout << "Pmx_q_v (alt2, pm_perp) = " << Pmx_q_v << endl;
+    //cout << "Pmy_q_v (alt2, pm_oop) = " << Pmy_q_v << endl;
+    //cout << "Pmz_q_v (alt2, pm_par) = " << Pmz_q_v << endl;
+
     //---------Light Cone Variables (at vertex) (C.Y. March 05, 2021)---------
     
     /*
@@ -1221,6 +1428,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
       the struck nucleon which is equal to the -pt_n (transverse momentum component of the recoil system 
       (neutron for D(e,e'p)n case)
     */
+
 
     
     //neutron energy at the vertex
@@ -1305,6 +1513,8 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
      
     if(c_allCuts) {
 
+      
+      
       // ------ This is for calculation of avergaed kinematics ( for now, not usning them at the vertex, since don;t know how to get ph_pq_v
       // will just use the reconstructed kinematics -------
       //H_Pm_vs_thrq_v    ->Fill(th_rq/dtr, Pm, FullWeight);	 
@@ -1322,8 +1532,10 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
       H_nu_2Davg         ->Fill(th_rq/dtr, Pm, nu*FullWeight);
       H_xbj_2Davg        ->Fill(th_rq/dtr, Pm, X*FullWeight);
       H_theta_pq_2Davg   ->Fill(th_rq/dtr, Pm, (th_pq/dtr)*FullWeight);
+      H_phi_pq_2Davg     ->Fill(th_rq/dtr, Pm, (ph_pq/dtr)*FullWeight);
+      H_phi_pq_2Davg     ->Fill(th_rq/dtr, Pm, (ph_pq/dtr)*FullWeight);
       H_cphi_pq_2Davg    ->Fill(th_rq/dtr, Pm, cos(ph_pq)*FullWeight);
-      H_sphi_pq_2Davg    ->Fill(th_rq/dtr, Pm, sin(ph_pq)*FullWeight); //need to fox calculation of ph_pq_v first
+      H_sphi_pq_2Davg    ->Fill(th_rq/dtr, Pm, sin(ph_pq)*FullWeight); //need to fix calculation of ph_pq_v first
 
 
       /*
@@ -1332,7 +1544,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
       cout << Form("thrq_v = %.3f", th_rq_v/dtr) << endl;
 
       cout << Form("the_v = %.3f", the_v) << endl;
-      cout << Form("thp_v = %.3f", thx_v) << endl;
+      cout << Form("thp_v = %.3f", thp_v) << endl;
       cout << Form("thq_v = %.3f", thq_v) << endl;
       cout << Form("thpq_v = %.3f", th_pq_v) << endl;
       */
@@ -1358,16 +1570,26 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
  
       //Secondary (Hadron) Kinematics
       H_Pf->Fill(Pf, FullWeight);
-      H_thx->Fill(thp/dtr, FullWeight);
+      H_thp->Fill(thp/dtr, FullWeight);
       H_Em->Fill(Em, FullWeight);
-      H_Pm->Fill(Pm, FullWeight);     
-      H_thxq->Fill(th_pq/dtr, FullWeight);
+      H_Pm->Fill(Pm, FullWeight);
+
+      H_thpq->Fill(th_pq/dtr, FullWeight);
+	    
       H_thrq->Fill(th_rq/dtr, FullWeight);
       H_phi_pq->Fill(ph_pq/dtr, FullWeight);
       H_cphi_pq->Fill(cos(ph_pq), FullWeight);
+
       H_MM->Fill(MM, FullWeight);
       H_MM2->Fill(MM2, FullWeight);
-   
+
+      //Vertex histos (for checks)
+      H_Pm_v->Fill(Pm_v, FullWeight);     
+      H_thpq_v->Fill(th_pq_v/dtr, FullWeight);
+      H_phi_pq_v->Fill(ph_pq_v/dtr, FullWeight);
+      H_cphi_pq_v->Fill(cos(ph_pq_v), FullWeight);
+
+      
       //Target Reconstruction (Hall Coord. System)
       H_htar_x->Fill(tar_x, FullWeight);
       H_htar_y->Fill(htar_y, FullWeight);
@@ -1427,7 +1649,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
       cout << " (qlab_v, qlab) = " <<  q_v  << ", " << q << endl;
       cout << " (X_v, X) = " <<  X_v  << ", " << X <<  endl;
       cout << "(the_v, th_e) = " << the_v/dtr << ", " << the/dtr << endl;
-      cout << "(thp_v, thp) = " << thx_v/dtr << ", " << thp/dtr << endl;
+      cout << "(thp_v, thp) = " << thp_v/dtr << ", " << thp/dtr << endl;
       cout << Form("(thq_v, thq) = %.3f, %.3f ", thq_v/dtr, th_q/dtr) <<  endl;
       cout << Form("(phq_v) = %.3f ", phq_v/dtr) <<  endl;
       cout << Form("(th_pq_v, thpq) = %.3f, %.3f ", th_pq_v/dtr, th_pq/dtr) << endl;
@@ -1453,9 +1675,10 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
     
     
     
-    cout << "SIMC Events Completed: " << std::setprecision(2) << double(i) / nentries * 100. << "  % " << std::flush << "\r";
+    //cout << "SIMC Events Completed: " << std::setprecision(2) << double(i) / nentries * 100. << "  % " << std::flush << "\r";
     
   } // end entry loop
+
   // cout << "L1463 OK" << endl;
   //Finish Calculating the 2D Average Kinematics (Divide by the sum of the weight)
   H_Ein_2Davg        ->Divide(H_Pm_vs_thrq);
@@ -1472,6 +1695,7 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   H_nu_2Davg         ->Divide(H_Pm_vs_thrq);
   H_xbj_2Davg        ->Divide(H_Pm_vs_thrq);
   H_theta_pq_2Davg   ->Divide(H_Pm_vs_thrq);
+  H_phi_pq_2Davg     ->Divide(H_Pm_vs_thrq);
   H_cphi_pq_2Davg    ->Divide(H_Pm_vs_thrq);
   H_sphi_pq_2Davg    ->Divide(H_Pm_vs_thrq);
 
@@ -1559,8 +1783,8 @@ void analyze_simc_d2fsi(TString basename="",Bool_t heep_check=false){
   //extract_1d_hist(H_Pm, "Missing Momentum, Pm [GeV/c]", Form("yield_Pm_pm%d_noCUTS.txt", pm_set));
   /*
   extract_1d_hist(H_Pf, "Final Proton Momentum, Pf, [GeV]", Form("yield_Pf_pm%d.txt", pm_set));
-  extract_1d_hist(H_thx, "Proton Scattering Angle, th_p, [deg]", Form("yield_thp_pm%d.txt", pm_set));
-  extract_1d_hist(H_thxq, "Proton Angle wrto q-vector, thxq, [deg]", Form("yield_thxq_pm%d.txt", pm_set));
+  extract_1d_hist(H_thp, "Proton Scattering Angle, th_p, [deg]", Form("yield_thp_pm%d.txt", pm_set));
+  extract_1d_hist(H_thpq, "Proton Angle wrto q-vector, thpq, [deg]", Form("yield_thpq_pm%d.txt", pm_set));
   extract_1d_hist(H_thrq, "Neutron Angle wrto q-vector, thrq, [deg]", Form("yield_thrq_pm%d.txt", pm_set));
   */
 
