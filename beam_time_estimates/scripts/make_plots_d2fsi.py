@@ -31,7 +31,7 @@ fig.set_size_inches(14,8, forward=True)
 fig_ratio, ax_ratio = plt.subplots(5, 8, sharex='col', sharey='row')
 fig_ratio.text(0.5, 0.01, r'Recoil Angle $\theta_{rq}$ [deg]', ha='center')
 fig_ratio.text(0.01, 0.5, r'R = FSI / PWIA', va='center', rotation='vertical')
-fig_ratio.set_size_inches(14,8, forward=True)
+fig_ratio. set_size_inches(14,8, forward=True)
 
 # scale counts by hours
 scale = 168.
