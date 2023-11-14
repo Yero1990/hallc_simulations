@@ -243,9 +243,13 @@ def make_ratios_d2fsi(pm_set, thrq_set, plot_flag=''):
             
             ratio = ma.masked_where(ratio_rel_err>rel_err_thrs,     ratio)
             ratio_err = ma.masked_where(ratio_rel_err>rel_err_thrs, ratio_err)
-            
-            for idx, pm_bin in enumerate(pm_bins):
 
+            #print('ratio:', ratio)
+            #print('thrq_bins:', thrq_bins)
+            #print('ratio[thrq=37.5]:', ratio[thrq_bins==37.5])
+
+            for idx, pm_bin in enumerate(pm_bins):
+                
                 if plot_flag=='ratio':
                     
                     # ---- plot ratio fsi/pwia -----
@@ -254,13 +258,13 @@ def make_ratios_d2fsi(pm_set, thrq_set, plot_flag=''):
                     ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=10)
                     plt.axhline(1, linestyle='--', color='gray')
                    
-                        
-
+                    
+                    
    
-    plt.tight_layout()
-    plt.legend()
-    plt.show()
-    plt.savefig('test.png')
+    #plt.tight_layout()
+    #plt.legend()
+    #plt.show()
+    #plt.savefig('test.png')
     
 make_ratios_d2fsi([800], [28, 49, 55, 60, 66, 72, 79], 'ratio')
 # call functions here (can later be passed thru steering code)
