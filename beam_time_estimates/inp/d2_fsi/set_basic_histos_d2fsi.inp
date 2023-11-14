@@ -209,7 +209,7 @@ thx_xmax = 70.
 # In-plane angle between detected particle and q 
 thxq_nbins = 90
 thxq_xmin = 0.
-thxq_xmax = 15.
+thxq_xmax = 50.
 
 # In-plane angle between the recoil system and q 
 # 19, 0, 190 (10 deg bins)

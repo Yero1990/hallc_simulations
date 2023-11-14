@@ -682,10 +682,9 @@ void analyze_simc_d2fsi(TString basename="", Bool_t heep_check=false){
 
   TTree *tree;
   Long64_t nentries;
-  //  cout << "L651 OK" << endl;
   //Read ROOTfile
   inROOT = new TFile(simc_InputFileName.Data(), "READ");
-  //cout << "L654 OK" << endl;
+
   //Get the data tree
   tree = (TTree*)inROOT->Get("SNT");
   nentries = tree->GetEntries();
@@ -987,7 +986,7 @@ void analyze_simc_d2fsi(TString basename="", Bool_t heep_check=false){
    
   // Charge factor is the total integrated charge assuming a beam current and run time
   Double_t Ib = 80;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
-  Double_t time = 24.0;     //estimated time (in hours) a run takes (start - end) of run
+  Double_t time = 168.0;     //estimated time (in hours) a run takes (start - end) of run
   Double_t charge_factor = Ib * time * 3600. / 1000.;
 
   //target boiling slopes for Hydrofen and Deuterium (during commissioning)
