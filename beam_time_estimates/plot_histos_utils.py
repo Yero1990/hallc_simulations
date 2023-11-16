@@ -57,14 +57,10 @@ def make_1d_Xprojections(h2_hist_name, pm_user, thrq_user, model):
                 plt.suptitle(subplot_title, fontsize=15);
                 fig.set_size_inches(12,10, forward=True)
 
-                # store only y-bins that have non-zero content, to use fewer subplots
-                ybc_limited = []
-                for i in ybc:                    
-                    if np.count_nonzero(df.zcont[df.y0==i]) != 0:
-                        ybc_limited.append(i)
+    
 
                 #loop over y-bins (for x-projections)
-                for idx, ybin in enumerate( ybc_limited ):
+                for idx, ybin in enumerate( ybc ):
                     
                     xbins              = df.x0[df.y0==ybin]
                     count_per_ybin     = df.zcont[df.y0==ybin]
