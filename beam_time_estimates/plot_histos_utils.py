@@ -17,11 +17,103 @@ def get_label(label, ifile):
                 label = (line.split(':')[1]).strip()
                 return label
     
+def overlay_d2fsi(pm_set, thrq_set, hist_name, model):
+    '''
+    Brief: generic function to overlay 1d histograms from multiple kin. files for deut fsi
+    pm_set and thrq_set are lists of values representing the different kinematic settings
+    '''
 
+    # loop over central missing momentum setting
+    for ipm in pm_set:
+
+        # loop over central q2 setting
+        for ithrq in thrq_set:
+
+            
+            # set histogram file path
+            #histos_file_path = 'path/to/histogram_data/pm%d_q2%d_%s/histo_name_pm_set_q2_set.txt'%(pm_set, q2_set, model, hist_name)
+
+            hist_file = 'yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s/H_%s_yield_d2fsi_pm%d_thrq%d.txt'%(ipm, ithrq, model, hist_name, ipm, ithrq)
+
+            df = pd.read_csv(hist_file, comment='#')
+
+            # make plot of 1D histogram
+            print("VALID 1D HIST")
+            
+            xlabel = get_label('xlabel', hist_file)
+            ylabel = get_label('ylabel', hist_file) 
+            title  = get_label('title', hist_file) 
+
+            x = df.x0
+            N = df.ycont
+            Nerr = np.sqrt(N)
+            
+            x =   ma.masked_where(N==0, x)
+            N =   ma.masked_where(N==0, N)
+            Nerr = ma.masked_where(N==0, Nerr)
+         
+            plt.hist(df.x0, bins=len(df.x0), weights=df.ycont, alpha=0.5, ec='k', density=False, label=r"$\theta_{rq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
+            #plt.errorbar(x, N, Nerr, linestyle='None', marker='o', mec='k', label=r"$\theta_{rq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
+
+            plt.legend()
+            plt.xlabel(xlabel, fontsize=15)
+            plt.ylabel(ylabel, fontsize=15)
+            plt.title(title, fontsize=15)
+
+    plt.show()
+
+
+def overlay_d2pol(pm_set, Q2_set, hist_name, model):
+    '''
+    Brief: generic function to overlay 1d histograms from multiple kin. files for deut pol. proposal
+    pm_set and Q2_set are lists of values representing the different kinematic settings (needs to be checked if it works)
+    '''
+
+    # loop over central missing momentum setting
+    for ipm in pm_set:
+
+        # loop over central q2 setting
+        for iq2 in Q2_set:
+
+            
+            # set histogram file path
+            #histos_file_path = 'path/to/histogram_data/pm%d_q2%d_%s/histo_name_pm_set_q2_set.txt'%(pm_set, q2_set, model, hist_name)
+
+            hist_file = 'yield_estimates/d2_pol/histogram_data/pm%d_Q2%.1f_%s/H_%s_yield_d2pol_pm%d_Q2%.1f.txt'%(ipm, iq2, model, hist_name, ipm, iq2)
+
+            df = pd.read_csv(hist_file, comment='#')
+
+            # make plot of 1D histogram
+            print("VALID 1D HIST")
+            
+            xlabel = get_label('xlabel', hist_file)
+            ylabel = get_label('ylabel', hist_file) 
+            title  = get_label('title', hist_file) 
+
+            x = df.x0
+            N = df.ycont
+            Nerr = np.sqrt(N)
+            
+            x =   ma.masked_where(N==0, x)
+            N =   ma.masked_where(N==0, N)
+            Nerr = ma.masked_where(N==0, Nerr)
+         
+            plt.hist(df.x0, bins=len(df.x0), weights=df.ycont, alpha=0.5, ec='k', density=False, label=r"$\theta_{rq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
+            #plt.errorbar(x, N, Nerr, linestyle='None', marker='o', mec='k', label=r"$\theta_{rq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
+
+            plt.legend()
+            plt.xlabel(xlabel, fontsize=15)
+            plt.ylabel(ylabel, fontsize=15)
+            plt.title(title, fontsize=15)
+
+    plt.show()    
+            
 def make_1d_Xprojections(h2_hist_name, pm_user, thrq_user, model):
+    
     '''
     Brief: generic function makes 1D projections along x-axis (slicing ybins) for selected 2D histos
     '''
+
     histos_file_path = 'yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s/'%(pm_user, thrq_user, model)
 
     for fname in os.listdir (histos_file_path):
@@ -262,7 +354,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, plot_flag=''):
     #plt.show()
     #plt.savefig('test.png')
     
-make_ratios_d2fsi([800], [28, 49, 55, 60, 66, 72, 79], 'ratio')
 # call functions here (can later be passed thru steering code)
-#make_plots(800, 79, 'pwia')
-#make_1d_Xprojections('H_Pm_vs_thrq_yield', 800, 79, 'pwia')
+# make_plots(800, 79, 'pwia')
+# make_1d_Xprojections('H_Pm_vs_thrq_yield', 800, 79, 'pwia')
+# make_ratios_d2fsi([800], [28, 49, 55, 60, 66, 72, 79], 'ratio')
+overlay_d2fsi([800], [28, 49, 55], 'thrq', 'fsi')
