@@ -82,7 +82,7 @@ void analyze_simc_d2pol_test(TString basename="", Bool_t heep_check=false){
   
   TString model="";
 
-  // e.g. basename: d2_pm400_Q2_4p0_fsi_rad.root (pol. deut)
+  // e.g. basename: d2_pm400_Q2_4.0_fsi_rad.root (pol. deut)
   // e.g. basename: d2_pm800_thrq55_fsi_rad.root
   
   // extract the kinematics setting from the filename

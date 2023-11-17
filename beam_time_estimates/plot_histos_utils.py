@@ -395,6 +395,11 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model):
                 ybinw  = float(get_label('ybin_width', hist_file))
                 xbinw  = float(get_label('xbin_width', hist_file))
 
+                plt.figure()
+                xbins = len(df.xb[df.yb==df.yb[0]])
+                ybins = len(df.yb[df.xb==df.xb[0]])
+                hist2d = plt.hist2d(df.x0 ,df.y0, weights=df.zcont, bins=(xbins, ybins), cmap = 'viridis', norm=mcolors.LogNorm())
+
                 #ybc = (df.y0[df.x0==df.x0[0]]).to_numpy() # y-bin central value
                 xbc = (df.x0[df.y0==df.y0[0]]).to_numpy() # x-bin central value
 
@@ -406,7 +411,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model):
                 
                 # set figure subplots
                 fig, ax = plt.subplots(X, Y, sharex='col', sharey='row')
-                fig.text(0.5, 0.007, xlabel, ha='center', fontsize=12)
+                fig.text(0.5, 0.007, ylabel, ha='center', fontsize=12)
                 fig.text(0.01, 0.5, 'Counts', va='center', rotation='vertical', fontsize=12)
                 
                 #subplot_title = title+': 1d x-projection (%s), setting: (%d MeV, %d deg)'%(model, pm_user, thrq_user)
@@ -416,7 +421,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model):
                 fig.set_size_inches(12,10, forward=True)
 
     
-                '''
+                
                 jdx=0
                 #loop over x-bins (for y-projections)
                 for idx, xbin in enumerate( xbc ):
@@ -439,15 +444,16 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model):
                     if(not np.ma.is_masked(cnts)):
                         jdx = jdx+1
                         ax = plt.subplot(X, Y, jdx+1)
-                        ax.errorbar(ybins, count_per_xbin, count_per_xbin_err, marker='o', markersize=4, linestyle='None') #//, label=r'%d counts'%(cnts))
-                        
-                    plt.title('$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                        #ax.errorbar(ybins, count_per_xbin, count_per_xbin_err, marker='o', markersize=4, linestyle='None') #//, label=r'%d counts'%(cnts))
+                        plt.hist(ybins, bins=len(ybins), weights=count_per_xbin, alpha=0.5, ec='k', density=False, label=r'%d counts'%(cnts))
+
+                    plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                     plt.xlim([ybins.min(), ybins.max()])
                     plt.legend(frameon=False, loc='upper right')
                     
                 plt.tight_layout()
                 plt.show()
-                '''
+                
                 
 # call functions here (can later be passed thru steering code)
 # make_plots(800, 79, 'pwia')
