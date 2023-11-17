@@ -79,7 +79,7 @@ def overlay_d2pol(pm_set, Q2_set, hist_name, model):
             # set histogram file path
             #histos_file_path = 'path/to/histogram_data/pm%d_q2%d_%s/histo_name_pm_set_q2_set.txt'%(pm_set, q2_set, model, hist_name)
 
-            hist_file = 'yield_estimates/d2_pol/histogram_data/pm%d_Q2%.1f_%s/H_%s_yield_d2pol_pm%d_Q2%.1f.txt'%(ipm, iq2, model, hist_name, ipm, iq2)
+            hist_file = 'yield_estimates/d2_pol/histogram_data/pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(ipm, iq2, model, hist_name, ipm, iq2)
 
             df = pd.read_csv(hist_file, comment='#')
 
@@ -98,7 +98,7 @@ def overlay_d2pol(pm_set, Q2_set, hist_name, model):
             N =   ma.masked_where(N==0, N)
             Nerr = ma.masked_where(N==0, Nerr)
          
-            plt.hist(df.x0, bins=len(df.x0), weights=df.ycont, alpha=0.5, ec='k', density=False, label=r"$\theta_{rq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
+            plt.hist(df.x0, bins=len(df.x0), weights=df.ycont, alpha=0.5, ec='k', density=False, label=r"$\Q^{2}=%.1f$ deg"%(iq2)+"\n"+"$P_{m}$=%d MeV"%(ipm))
             #plt.errorbar(x, N, Nerr, linestyle='None', marker='o', mec='k', label=r"$\theta_{rq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
 
             plt.legend()
@@ -140,17 +140,19 @@ def make_1d_Xprojections(h2_hist_name, pm_user, thrq_user, model):
                
                 # count  to decide how many subplots to make
                 X = round( np.sqrt( np.count_nonzero(df.y0[df.x0==df.x0[0]] )) )
-                Y = X-1
+                Y = X+1
+                print('X:', X, 'Y:', Y)
                 # set figure subplots
                 fig, ax = plt.subplots(X, Y, sharex='col', sharey='row')
                 fig.text(0.5, 0.007, xlabel, ha='center', fontsize=12)
                 fig.text(0.01, 0.5, 'Counts', va='center', rotation='vertical', fontsize=12)
                 subplot_title = title+': 1d x-projection (%s), setting: (%d MeV, %d deg)'%(model, pm_user, thrq_user)
                 plt.suptitle(subplot_title, fontsize=15);
-                fig.set_size_inches(12,10, forward=True)
+                fig.set_size_inches(14,10, forward=True)
 
     
 
+                jdx = 0
                 #loop over y-bins (for x-projections)
                 for idx, ybin in enumerate( ybc ):
                     
@@ -162,12 +164,23 @@ def make_1d_Xprojections(h2_hist_name, pm_user, thrq_user, model):
                     count_per_ybin_err = ma.masked_where(count_per_ybin==0, count_per_ybin_err)
 
                     cnts = np.sum(count_per_ybin )
+                    
                     #---------------
-                    ax = plt.subplot(X, Y, idx+1)
-                    ax.errorbar(xbins, count_per_ybin, count_per_ybin_err, marker='o', markersize=4, linestyle='None', label=r'%d counts'%(cnts))
+                    if(np.ma.is_masked(cnts)): continue
+                    #ax = plt.subplot(X, Y, idx+1)
+
+                    # can think of additional conditons for plotting, for example, could put a constraint on the relatie error as well, and reduced
+                    # the number of useless subplots
+                    if(not np.ma.is_masked(cnts)):
+                        jdx = jdx + 1
+                        ax = plt.subplot(X, Y, jdx+1)
+                        ax.errorbar(xbins, count_per_ybin, count_per_ybin_err, marker='o', markersize=4, linestyle='None', label=r'%d counts'%(cnts))
+
                     plt.title('$p_{m}$ = %d $\pm$ %d MeV'%(ybin*1000, ybinw*1000/2.))
                     plt.xlim([xbins.min(), xbins.max()])
                     plt.legend(frameon=False, loc='upper right')
+
+                    
                 plt.tight_layout()
                 plt.show()
 
@@ -345,17 +358,99 @@ def make_ratios_d2fsi(pm_set, thrq_set, plot_flag=''):
                     ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', linestyle='None', ms=5, label=r'$\theta_{rq}=%.1f$ deg'%ithrq)
                     ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=10)
                     plt.axhline(1, linestyle='--', color='gray')
-                   
-                    
-                    
+                                  
    
-    #plt.tight_layout()
-    #plt.legend()
-    #plt.show()
+    plt.tight_layout()
+    plt.legend()
+    plt.show()
     #plt.savefig('test.png')
+
+def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model):
+    # NEED TO FIX THIS FUNCTION, AS IT CURRENTLY DISPLAYS MULTIPLE SUBPLOTS, WHERE ONLY ONE IS NEEDED
+    '''
+    Brief: generic function makes 1D projections along y-axis (slicing xbins) for selected 2D histos
+    '''
+
+    #histos_file_path = 'yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s/'%(pm_user, thrq_user, model)
+
+    histos_file_path = 'yield_estimates/d2_pol/smallFSI/histogram_data/pm%d_Q2_%.1f_%s/'%(pm_user, Q2_user, model)
+
+    for fname in os.listdir (histos_file_path):
+        
+        # check if histo is 2D
+        if ("_vs_" in fname):
+
+            # check if specific yield histo is present
+            if(h2_hist_name in fname):
+           
+                hist_file = histos_file_path + fname
+
+                print('Opening file -----> ', hist_file)
+        
+                df = pd.read_csv(hist_file, comment='#')
+
+                xlabel = get_label('xlabel',     hist_file)
+                ylabel = get_label('ylabel',     hist_file)
+                title  = get_label('title',      hist_file)
+                ybinw  = float(get_label('ybin_width', hist_file))
+                xbinw  = float(get_label('xbin_width', hist_file))
+                
+
+                #ybc = (df.y0[df.x0==df.x0[0]]).to_numpy() # y-bin central value
+                xbc = (df.x0[df.y0==df.y0[0]]).to_numpy() # x-bin central value
+               
+                # count  to decide how many subplots to make
+                Y = round( np.sqrt( np.count_nonzero(df.x0[df.y0==df.y0[0]] )) )
+                X = Y+1
+                print('X:', X, 'Y:', Y)
+                # set figure subplots
+                fig, ax = plt.subplots(X, Y, sharex='col', sharey='row')
+                fig.text(0.5, 0.007, xlabel, ha='center', fontsize=12)
+                fig.text(0.01, 0.5, 'Counts', va='center', rotation='vertical', fontsize=12)
+                #subplot_title = title+': 1d x-projection (%s), setting: (%d MeV, %d deg)'%(model, pm_user, thrq_user)
+                subplot_title = title+': 1d y-projection (%s), setting: (%d MeV, %.1f GeV^{2})'%(model, pm_user, Q2_user)
+
+                plt.suptitle(subplot_title, fontsize=15);
+                fig.set_size_inches(12,10, forward=True)
+
     
+
+                jdx=0
+                #loop over x-bins (for y-projections)
+                for idx, xbin in enumerate( xbc ):
+
+                    print('xbin:', xbin)
+                    ybins              = df.y0[df.x0==xbin]
+                    count_per_xbin     = df.zcont[df.x0==xbin]
+                    count_per_xbin_err = np.sqrt( count_per_xbin )
+                    print('ybins:', ybins)
+
+                    count_per_xbin     = ma.masked_where(count_per_xbin==0, count_per_xbin)
+                    count_per_xbin_err = ma.masked_where(count_per_xbin==0, count_per_xbin_err)
+
+                    cnts = np.sum(count_per_xbin )
+                    
+                    #---------------
+
+                    if(np.ma.is_masked(cnts)): continue
+
+                    if(not np.ma.is_masked(cnts)):
+                        jdx = jdx+1
+                        ax = plt.subplot(X, Y, jdx+1)
+                        ax.errorbar(ybins, count_per_xbin, count_per_xbin_err, marker='o', markersize=4, linestyle='None') #//, label=r'%d counts'%(cnts))
+                        
+                    plt.title('$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                    plt.xlim([ybins.min(), ybins.max()])
+                    plt.legend(frameon=False, loc='upper right')
+                    
+                plt.tight_layout()
+                plt.show()
+
+                
 # call functions here (can later be passed thru steering code)
 # make_plots(800, 79, 'pwia')
 # make_1d_Xprojections('H_Pm_vs_thrq_yield', 800, 79, 'pwia')
 # make_ratios_d2fsi([800], [28, 49, 55, 60, 66, 72, 79], 'ratio')
-overlay_d2fsi([800], [28, 49, 55], 'thrq', 'fsi')
+# overlay_d2fsi([800], [28, 49, 55], 'thrq', 'fsi')
+# overlay_d2pol([200], [4.0], 'Pm', 'fsi')
+make_projY_d2pol('Pm_vs_thrq', 200, 4.0, 'fsi')

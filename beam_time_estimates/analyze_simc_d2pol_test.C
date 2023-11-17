@@ -70,7 +70,7 @@ void analyze_simc_d2pol_test(TString basename="", Bool_t heep_check=false){
   using namespace std;
 
 
-  TString analysis_flag="d2fsi";  // "d2pol" or "d2fsi" 
+  TString analysis_flag="d2pol";  // "d2pol" or "d2fsi" 
   
   int pm_set=0;
   int thrq_set=0;
@@ -106,9 +106,15 @@ void analyze_simc_d2pol_test(TString basename="", Bool_t heep_check=false){
     pm_str =split( split(split(split(split(basename.Data(), '_')[0], '_')[0], '_')[0], '_')[0], '_')[1];
 
     // strip non-numeric characters and conver to int
-    Q2_set = stoi(std::regex_replace(Q2_str.Data(), std::regex(R"([^\d])"), ""));
+    Q2_set = stof(Q2_str.Data());
     pm_set = stoi(std::regex_replace(pm_str.Data(), std::regex(R"([^\d])"), ""));
     model = split(split(basename.Data(), '_')[0], '_')[1];
+
+    cout << "Settings Read: " << endl;
+    cout << Form("Q2_set: %.1f", Q2_set) << endl;
+    cout << Form("Pm_set: %d ", pm_set) << endl;
+    cout << "Model: " << model.Data() << endl;
+    
   }
   
   
@@ -148,21 +154,27 @@ void analyze_simc_d2pol_test(TString basename="", Bool_t heep_check=false){
 
   
     if( analysis_flag == "d2fsi") {
+
       //---Read In File Names with cuts and histogram binning information
       input_CutFileName  = "inp/d2_fsi/set_basic_cuts_d2fsi.inp";
       input_HBinFileName = "inp/d2_fsi/set_basic_histos_d2fsi.inp";
       
       //Define File Name Patterns
-      simc_infile = Form("infiles/deuteron/fsi_deuteron/Q2_4p5/%s.data",         basename.Data());
-      
-      simc_InputFileName = Form("worksim/d2_fsi/raw/%s.root",  basename.Data());
-      
-      simc_OutputFileName = Form("worksim/d2_fsi/analyzed/%s_output.root",  basename.Data());
+      simc_infile         = Form("infiles/deuteron/fsi_deuteron/Q2_4p5/%s.data",    basename.Data());
+      simc_InputFileName  = Form("worksim/d2_fsi/raw/%s.root",                      basename.Data());
+      simc_OutputFileName = Form("worksim/d2_fsi/analyzed/%s_output.root",          basename.Data());
     }
 
     if( analysis_flag == "d2pol") {
 
-      // to be continued . . .
+      //---Read In File Names with cuts and histogram binning information
+      input_CutFileName  = "inp/d2_pol/set_basic_cuts_d2pol.inp";
+      input_HBinFileName = "inp/d2_pol/set_basic_histos_d2pol.inp";
+      
+      //Define File Name Patterns
+      simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/%s.data",    basename.Data());
+      simc_InputFileName  = Form("worksim/d2_pol/smallFSI/raw/%s.root",                      basename.Data());
+      simc_OutputFileName = Form("worksim/d2_pol/smallFSI/analyzed/%s_output.root",          basename.Data());     
 
     }
     
@@ -1642,7 +1654,7 @@ void analyze_simc_d2pol_test(TString basename="", Bool_t heep_check=false){
     cout << " ----------------------------- " << endl; 
 
 
-    output_file = "yield_estimates/d2_pol/output_rates_d2pol.csv";
+    output_file = "yield_estimates/d2_pol/smallFSI/output_rates_d2pol.csv";
     in_file.open(output_file.Data());
 
     if(!in_file.fail()){
@@ -1707,7 +1719,7 @@ void analyze_simc_d2pol_test(TString basename="", Bool_t heep_check=false){
 
      if( analysis_flag == "d2pol") {
        // set directory where histograms are to be stored (assumed specific histo dir. exists)
-       output_hist_data= Form("yield_estimates/d2_pol/histogram_data/pm%d_Q2%.1f_%s", pm_set, Q2_set, model.Data());
+       output_hist_data= Form("yield_estimates/d2_pol/smallFSI/histogram_data/pm%d_Q2_%.1f_%s", pm_set, Q2_set, model.Data());
        cmd = Form("mkdir -p %s", output_hist_data.Data() );
        gSystem->Exec(cmd); // create  histo dir. if it doesn't exist (it will automatically check if it exists, otherwise, will create it_
      }

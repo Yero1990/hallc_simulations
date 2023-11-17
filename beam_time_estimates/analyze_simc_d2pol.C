@@ -1137,7 +1137,7 @@ void analyze_simc_d2pol(TString basename="", int pm_set=0, double Q2_set=0, TStr
       out_file << "# header definitions " << endl;
       out_file << "# pm_set: central missing momentum setting [MeV] " << endl;
       out_file << "# Q2_set: central 4-momentum transfer setting [GeV^2] " << endl;
-      out_file << "# pm_counts: missing momentum counts (yield) with all cuts applied \n#    (not binned in any particular kinematics)" << endl;
+      out_file << "# pm_counts: missing momentum counts (yield) with all cuts applied \n# (not binned in any particular kinematics)" << endl;
       out_file << "# deep_rates: deuteron break-up rates  [Hz] " << endl;
       out_file << "# daq_rates: data acquisition rates (no analysis cuts) [Hz] " << endl;
       out_file << "# current: beam current [nA] " << endl;
