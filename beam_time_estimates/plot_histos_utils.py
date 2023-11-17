@@ -385,7 +385,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model):
            
                 hist_file = histos_file_path + fname
 
-                print('Opening file -----> ', hist_file)
+                print('found file -----> ', hist_file)
         
                 df = pd.read_csv(hist_file, comment='#')
 
@@ -394,19 +394,21 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model):
                 title  = get_label('title',      hist_file)
                 ybinw  = float(get_label('ybin_width', hist_file))
                 xbinw  = float(get_label('xbin_width', hist_file))
-                
 
                 #ybc = (df.y0[df.x0==df.x0[0]]).to_numpy() # y-bin central value
                 xbc = (df.x0[df.y0==df.y0[0]]).to_numpy() # x-bin central value
-               
+
+                #print('xbc:', xbc)
                 # count  to decide how many subplots to make
                 Y = round( np.sqrt( np.count_nonzero(df.x0[df.y0==df.y0[0]] )) )
                 X = Y+1
-                print('X:', X, 'Y:', Y)
+                #print('X:', X, 'Y:', Y)
+                
                 # set figure subplots
                 fig, ax = plt.subplots(X, Y, sharex='col', sharey='row')
                 fig.text(0.5, 0.007, xlabel, ha='center', fontsize=12)
                 fig.text(0.01, 0.5, 'Counts', va='center', rotation='vertical', fontsize=12)
+                
                 #subplot_title = title+': 1d x-projection (%s), setting: (%d MeV, %d deg)'%(model, pm_user, thrq_user)
                 subplot_title = title+': 1d y-projection (%s), setting: (%d MeV, %.1f GeV^{2})'%(model, pm_user, Q2_user)
 
@@ -414,7 +416,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model):
                 fig.set_size_inches(12,10, forward=True)
 
     
-
+                '''
                 jdx=0
                 #loop over x-bins (for y-projections)
                 for idx, xbin in enumerate( xbc ):
@@ -445,7 +447,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model):
                     
                 plt.tight_layout()
                 plt.show()
-
+                '''
                 
 # call functions here (can later be passed thru steering code)
 # make_plots(800, 79, 'pwia')
@@ -453,4 +455,4 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model):
 # make_ratios_d2fsi([800], [28, 49, 55, 60, 66, 72, 79], 'ratio')
 # overlay_d2fsi([800], [28, 49, 55], 'thrq', 'fsi')
 # overlay_d2pol([200], [4.0], 'Pm', 'fsi')
-make_projY_d2pol('Pm_vs_thrq', 200, 4.0, 'fsi')
+make_projY_d2pol('Pm_vs_thrq_yield', 200, 4.0, 'fsi')
