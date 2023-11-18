@@ -59,7 +59,7 @@
   
 
 
-void analyze_simc_d2pol_test(TString basename="", Bool_t heep_check=false){
+void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 
  
   /* 

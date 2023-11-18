@@ -1,0 +1,22 @@
+# SIMC rates estimates (polarized deut studies)
+# 
+# header definitions 
+# pm_set: central missing momentum setting [MeV] 
+# Q2_set: central 4-momentum transfer setting [GeV^2] 
+# model: Laget pwia or fsi (paris NN potential)
+# pm_counts: integrated missing momentum counts (yield) with all cuts applied 
+# (not binned in any particular kinematics)
+# deep_rates: deuteron (e,e'p) rates [Hz] 
+# daq_rates: data acquisition rates (no analysis cuts) [Hz] 
+# current: beam current [nA] 
+# time: beam-on-target time [hrs] 
+# charge: beam charge [mC] 
+#
+pm_set,Q2_set,model,pm_counts,deep_rates,daq_rates,current,time,charge
+200,     3.70,    fsi,     38777.7,       6.412E-02,        0.106,        100.000,      168.000,     60.480 
+200,     4.00,    fsi,     28524.5,       4.716E-02,        0.078,        100.000,      168.000,     60.480 
+200,     4.50,    fsi,     16978.0,       2.807E-02,        0.046,        100.000,      168.000,     60.480 
+300,     3.50,    fsi,     29132.4,       4.817E-02,        0.107,        100.000,      168.000,     60.480 
+300,     4.00,    fsi,     20341.2,       3.363E-02,        0.069,        100.000,      168.000,     60.480 
+300,     4.50,    fsi,     11788.4,       1.949E-02,        0.039,        100.000,      168.000,     60.480 
+400,     3.50,    fsi,     4995.6,       8.260E-03,        0.050,        100.000,      168.000,     60.480 

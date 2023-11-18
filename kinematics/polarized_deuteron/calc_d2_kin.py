@@ -34,7 +34,7 @@ def calc_d2_kin():
     #Q2 = 2.9   #4-momentum transfer ( this can be ignorde for now)
 
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 2.9
+    Q2_min = 2.1
     Q2_step = 0.1    
     Q2_max = 4.5 + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
@@ -42,7 +42,7 @@ def calc_d2_kin():
     #Set Missing Momentum Range to cover [GeV]
     Pr_min = 0.
     Pr_step = 0.1    
-    Pr_max = 0.5 + Pr_step   #include endpoint (+Pr_step)
+    Pr_max = 0.7 + Pr_step   #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
@@ -53,8 +53,9 @@ def calc_d2_kin():
     
     #output file to write kinematics
     #fname = 'polarized_deut_kin_summary_Eb%.2f_phi180.csv' % (Ei)
-    fname = 'polarized_deut_kin_summary_Eb%.2f_phi0_HMSwideOpen.txt' % (Ei)
-
+    #fname = 'polarized_deut_kin_summary_Eb%.2f_phi180_HMSwideOpen_thrq35.txt' % (Ei)
+    fname = 'test.txt'
+    
     ofile = open(fname, 'w')
     ofile.write('# d(e,e\'p)n Central Kinematics Summary\n')
     ofile.write('# Beam Energy (Ei) = %.3f GeV\n' % (Ei))
@@ -139,8 +140,8 @@ def calc_d2_kin():
                 thnq = np.arccos(cthnq) / dtr  #theta_nq [deg]
                 
                 #theta_p (proton angle relative to +z (lab))
-                thp = thq + thpq  # phi = 0?  (q-vector scatters at smaller angles than proton scattering angle)
-                #thp = thq - thpq   # phi = 180 ?  (q-vector scatters at larger  angles than proton scattering angle)
+                #thp = thq + thpq  # phi = 0?  (q-vector scatters at smaller angles than proton scattering angle)
+                thp = thq - thpq   # phi = 180 ?  (q-vector scatters at larger  angles than proton scattering angle)
 
                 if (np.isnan(thp)): continue
 
@@ -149,7 +150,7 @@ def calc_d2_kin():
                 #if(thp>50): continue
 
                 # restrict the neutron recoil angle relative to q-vector, theta_rq
-                if(thnq < 30. or thnq > 40): continue
+                #if(thnq < 34. or thnq > 36): continue
                 
                 if(th_e<6.0): continue
                 
