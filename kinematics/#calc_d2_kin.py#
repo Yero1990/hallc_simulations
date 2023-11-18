@@ -62,7 +62,7 @@ def calc_d2_kin():
     ofile.write('#! Pr[f,0]/ \t  xbj[f,1]/ \t kf[f,2]/ \t th_e[f,3]/ \t Pf[f,4]/ \t th_p[f,5]/ \t q[f,6]/ \t th_q[f,7]/ \t th_nq[f,8]/ \t th_pq[f,9]/ \t Q2[f,10]/\n')
 
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 6.0
+    Q2_min = 4.0
     Q2_step = 0.01    
     Q2_max = 6.0 + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
