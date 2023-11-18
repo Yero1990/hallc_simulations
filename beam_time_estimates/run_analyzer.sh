@@ -1,9 +1,12 @@
 #!/bin/bash
 
 # steering shell script to run multiple file analysis, read from an input file list
-analysis_script="analyze_simc_d2fsi.C"
+#analysis_script="analyze_simc_d2fsi.C"
+#input_file='d2_fsi_basenames.txt'
 
-input_file='d2_fsi_basenames.txt' 
+analysis_script="analyze_simc_d2pol.C"
+input_file='d2_pol_basenames.txt'
+
 for line in $(cat $input_file)
 do
     # check if line is commented out, if so then skip it

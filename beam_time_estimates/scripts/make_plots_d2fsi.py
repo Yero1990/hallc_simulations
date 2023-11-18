@@ -7,12 +7,12 @@ from uncertainties import unumpy
 # This script reads both (pwia, fsi) for a given th_rq setting, and overlays the
 # FSI / PWIA for all the central thrq_c, binned in missing momentum (pm_bin)
 
-plot_flag = 'ratio'
+#plot_flag = 'ratio'
 #plot_flag = 'ratio_rel_err'
-#plot_flag = 'overlay'
+plot_flag = 'overlay'
 
 #thrq_c = [49, 60, 72] #[28, 49, 55, 60, 66, 72, 79 ] #deg
-thrq_c = [28, 49, 55, 60, 66, 72, 79 ] #deg
+thrq_c = [28, 49, 55] #deg
 
 #thrq_c = [60 ] #deg
 
@@ -34,15 +34,15 @@ fig_ratio.text(0.01, 0.5, r'R = FSI / PWIA', va='center', rotation='vertical')
 fig_ratio. set_size_inches(14,8, forward=True)
 
 # scale counts by hours
-scale = 168.
+scale = 1.
 # loop over central recoil angles files for a given central momentum
 for i in thrq_c:
 
     rel_err_thrs = 0.3 # mask >30 % relative error
 
     # read dataframe
-    df_fsi = pd.read_csv('d2_pm800_thrq%i_fsi_rad_yield_80.0uA_1.0hr.csv'%(i), comment='#')
-    df_pwia = pd.read_csv('d2_pm800_thrq%i_pwia_rad_yield_80.0uA_1.0hr.csv'%(i), comment='#')
+    df_fsi = pd.read_csv('yield_estimates/d2_fsi/histogram_data/pm800_thrq%d_fsi/H_Pm_vs_thrq_yield_d2fsi_pm800_thrq%d.txt'%(i,i), comment='#')
+    df_pwia = pd.read_csv('yield_estimates/d2_fsi/histogram_data/pm800_thrq%d_pwia/H_Pm_vs_thrq_yield_d2fsi_pm800_thrq%d.txt'%(i,i), comment='#')
 
     thrq_bin = df_fsi.x0
     pm_bins = df_fsi.y0[thrq_bin==thrq_bin[0]] # only use a set of pm_bins (avoid duplicates)
@@ -116,6 +116,7 @@ for i in thrq_c:
 
                 
         if plot_flag=='overlay':
+            print('pm_c:', pm_c[0], 'ithrq:', i, 'pm_bin:', pm_bin, 'idx:',idx)
             ax = plt.subplot(5, 8, idx+1)
             ax.errorbar(thrq_bin[df_fsi.y0==pm_bin], pwia_N[df_fsi.y0==pm_bin], pwia_Nerr[df_fsi.y0==pm_bin], marker='o', linestyle='None', mfc='None', mec='black', ecolor='black', label=r'$\theta_{rq}=%.1f$'%i)
             ax.errorbar(thrq_bin[df_fsi.y0==pm_bin], fsi_N[df_fsi.y0==pm_bin], fsi_Nerr[df_fsi.y0==pm_bin], marker='^', linestyle='None', mfc='None', mec='red', ecolor='red')

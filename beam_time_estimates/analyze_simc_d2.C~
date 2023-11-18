@@ -103,9 +103,11 @@ void analyze_simc_d2pol_test(TString basename="", Bool_t heep_check=false){
 
     // split base into kin setting values
     Q2_str = split(split(split(basename.Data(), '_')[0], '_')[0], '_')[1];
+      
     pm_str =split( split(split(split(split(basename.Data(), '_')[0], '_')[0], '_')[0], '_')[0], '_')[1];
 
     // strip non-numeric characters and conver to int
+    Q2_str = std::regex_replace(Q2_str.Data(), std::regex(R"([^\d])"), "."); // replace the "p" with decimal point "."
     Q2_set = stof(Q2_str.Data());
     pm_set = stoi(std::regex_replace(pm_str.Data(), std::regex(R"([^\d])"), ""));
     model = split(split(basename.Data(), '_')[0], '_')[1];

@@ -141,9 +141,9 @@ epsilon_xmax = 100.
 # so there is no need to define the cos, sin bins here !
 
 # Missing Energy
-Em_nbins = 40
-Em_xmin = -0.1
-Em_xmax = 0.2
+Em_nbins = 60
+Em_xmin = -0.05
+Em_xmax = 0.1
 
 # Missing (Recoil) Momentum
 # 40, 0, 1.6 (0.04 GeV bins) --> +/- 20 MeV bins for binning th_rq angular dist.

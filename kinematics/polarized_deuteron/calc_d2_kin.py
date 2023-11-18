@@ -53,7 +53,7 @@ def calc_d2_kin():
     
     #output file to write kinematics
     #fname = 'polarized_deut_kin_summary_Eb%.2f_phi180.csv' % (Ei)
-    fname = 'polarized_deut_kin_summary_Eb%.2f_phi180_HMSwideOpen.txt' % (Ei)
+    fname = 'polarized_deut_kin_summary_Eb%.2f_phi0_HMSwideOpen.txt' % (Ei)
 
     ofile = open(fname, 'w')
     ofile.write('# d(e,e\'p)n Central Kinematics Summary\n')
@@ -139,8 +139,8 @@ def calc_d2_kin():
                 thnq = np.arccos(cthnq) / dtr  #theta_nq [deg]
                 
                 #theta_p (proton angle relative to +z (lab))
-                #thp = thq + thpq  # phi = 0?  (q-vector scatters at smaller angles than proton scattering angle)
-                thp = thq - thpq   # phi = 180 ?  (q-vector scatters at larger  angles than proton scattering angle)
+                thp = thq + thpq  # phi = 0?  (q-vector scatters at smaller angles than proton scattering angle)
+                #thp = thq - thpq   # phi = 180 ?  (q-vector scatters at larger  angles than proton scattering angle)
 
                 if (np.isnan(thp)): continue
 
