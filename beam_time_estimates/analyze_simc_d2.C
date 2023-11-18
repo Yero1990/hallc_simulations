@@ -1,6 +1,7 @@
 #include "utils/parse_utils.h"
 #include "utils/hist_utils.h"
 
+
   TRotation       fToLabRot;              //Rotation matrix from TRANSPORT to lab
   Double_t        fThetaGeo;              //In-plane geographic central angle (rad)
   Double_t        fPhiGeo;                //Out-of-plane geographic central angle (rad)
@@ -184,15 +185,15 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       input_HBinFileName = "inp/d2_pol/set_basic_histos_d2pol.inp";
       
       //Define File Name Patterns
-      simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi_0deg/%s.data",    basename.Data());
-      simc_InputFileName  = Form("worksim/d2_pol/smallFSI/raw/phi_0deg/%s.root",                      basename.Data());
-      simc_OutputFileName = Form("worksim/d2_pol/smallFSI/analyzed/phi_0deg/%s_output.root",          basename.Data());
+      simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi_180deg/%s.data",    basename.Data());
+      simc_InputFileName  = Form("worksim/d2_pol/smallFSI/phi_180deg/raw/%s.root",                      basename.Data());
+      simc_OutputFileName = Form("worksim/d2_pol/smallFSI/phi_180deg/analyzed/%s_output.root",          basename.Data());
 
       // define output file to write the rates
-      output_file = "yield_estimates/d2_pol/smallFSI/phi_0deg/output_rates_d2pol.txt";
+      output_file = "yield_estimates/d2_pol/smallFSI/phi_180deg/output_rates_d2pol.txt";
 
       // define output directory where numerical histogram .txt will be placed
-      output_hist_data= Form("yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s", pm_set, Q2_set, model.Data());
+      output_hist_data= Form("yield_estimates/d2_pol/smallFSI/phi_180deg/histogram_data/pm%d_Q2_%.1f_%s", pm_set, Q2_set, model.Data());
 
       
 
@@ -585,6 +586,13 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   TH2F *H_Pm_2Davg     = new TH2F("H_Pm_2Davg","Missing Momentum (2D Average); #theta_{rq} [deg]; P_{m} [GeV/c]",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax); 
   TH2F *H_thrq_2Davg   = new TH2F("H_thrq_2Davg", "#theta_{rq} (2D Average); #theta_{rq} [deg]; P_{m} [GeV/c]",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
 
+  // define some vertex histos for comparing with recon. histos
+  TH1F *H_Pm_v      = new TH1F("H_Pm_v","Missing Momentum, P_{miss} (vertex); missing momentum, P_{m} [GeV/c]; Counts", Pm_nbins, Pm_xmin, Pm_xmax);
+  TH1F *H_Q2_v      = new TH1F("H_Q2_v",    "4-Momentum Transfer, Q^{2} (vertex); 4-momentum transfer, Q^{2} [GeV^{2}]; Counts", Q2_nbins, Q2_xmin, Q2_xmax);
+  TH1F *H_the_v     = new TH1F("H_the_v",   "Electron Scattering Angle, #theta_{e} (vertex); e^{-} scattering angle, #theta_{e}  [deg]; Counts", the_nbins, the_xmin, the_xmax);
+  TH1F *H_thpq_v    = new TH1F("H_thpq_v", "In-Plane Angle, #theta_{pq} (vertex); in-plane angle, #theta_{pq} [deg]; Counts", thpq_nbins, thpq_xmin, thpq_xmax);
+  TH1F *H_thrq_v    = new TH1F("H_thrq_v", "In-Plane Angle, #theta_{rq} (vertex); in-plane angle, #theta_{rq} [deg]; Counts", thrq_nbins, thrq_xmin, thrq_xmax);
+  TH1F *H_phi_pq_v  = new TH1F("H_phi_pq_v", "Out-of-Plane Angle, #phi_{pq} (vertex); out-of-plane angle, #phi_{pq} [deg]; Counts", phpq_nbins, phpq_xmin, phpq_xmax);
 
   
   //Add Kin Histos to TList
@@ -640,7 +648,16 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   kin_HList->Add( H_phi_pq_2Davg     );
   kin_HList->Add( H_cphi_pq_2Davg    );
   kin_HList->Add( H_sphi_pq_2Davg    );
-     
+
+
+  kin_HList->Add( H_Pm_v    );
+  kin_HList->Add( H_Q2_v    );
+  kin_HList->Add( H_the_v   );
+  kin_HList->Add( H_thpq_v  );
+  kin_HList->Add( H_thrq_v  );
+  kin_HList->Add( H_phi_pq_v);
+
+  
   //----------------------------------------------------------------------
   //---------HISTOGRAM CATEGORY: Spectrometer Acceptance  (ACCP)----------
   //----------------------------------------------------------------------
@@ -889,6 +906,12 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   TVector3 Pf_vec_v;              //final proton momentum vector at the vertex
   TVector3 kf_vec_v;              //final electron momentum vector at the vertex
 
+  TVector3 ki_vec_v;
+  TVector3 unit_react_v; // unit vector normal to scattering plane (beam x kf)
+  TVector3 unit_scat_v;  // unit vector normal to reaction plane (q x pf)
+  Double_t cos_phi_calc;  // cosine of the angle phi between the react and scat plane
+  Double_t phi_calc;
+  
   //Declare necessary variables for rotaion from +z to +q
   TVector3 qvec_v;
   TVector3 kfvec_v;
@@ -1193,9 +1216,18 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     // convert 0->360 to -180 to 180 (for out of plane angle)
     ph_pq = ph_pq / dtr; // convert to deg
 
+    cout << "------" << endl;
+    cout << Form("ph_pq_rec[0->360]: %.3f", ph_pq) << endl;
+    cout << "------" << endl;
+    
     if(ph_pq >= 180){
       ph_pq = ph_pq - 360.;
     }
+
+    cout << "------" << endl;
+    cout << Form("ph_pq_rec[-180,180]: %.3f", ph_pq) << endl;
+    cout << "------" << endl;
+    
     //convert back to radians
     ph_pq = ph_pq * dtr;
     
@@ -1254,10 +1286,24 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
    ! SO: x_replay=-y_simc, y_replay=x_simc, z_replay= z_simc
     */
 
-    //Calculate 4-Vectors at the vertex
-							   
+    //C.Y set 3 momentum vector of beam
+    ki_vec_v.SetXYZ(0.,0.,ki_v);
+
+
+
+    
+    //Calculate 4-Vectors at the vertex    
     fP0_v.SetXYZM(0.0, 0.0, ki_v, me);  //set initial e- 4-momentum at the vertex
     fP1_v.SetXYZM(-kf_vec_v.X(), -kf_vec_v.Y(), kf_vec_v.Z(), me);  //set final e- 4-momentum at the vertex (with X -inverted to match coord. in replay, and y-inverted to match Pmy_lab in SIMC)
+    //fP1_v.SetXYZM(kf_vec_v.X(), kf_vec_v.Y(), kf_vec_v.Z(), me);  //set final e- 4-momentum at the vertex 
+
+    // invert the components before taking cross product so it be consistent with the 4-vector aboeve
+    kf_vec_v.SetXYZ(-kf_vec_v.X(), -kf_vec_v.Y(), kf_vec_v.Z());
+
+    // unit vector in the reaction plane
+    unit_react_v =  (ki_vec_v.Cross(kf_vec_v)).Unit() ;
+
+    
     
     fA_v.SetXYZM(0.0, 0.0, 0.0, tgt_mass );  //Set initial target at rest
     fQ_v = fP0_v - fP1_v;
@@ -1276,11 +1322,16 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     the_v = kf_vec_v.Theta();
     thp_v = Pf_vec_v.Theta();
 
+    //cout << "----------------" << endl;
+    //cout << Form("the_v: %.3f ", the_v) << endl;
+    //cout << Form("the: %.3f ", the) << endl;
+    //cout << "----------------" << endl;
+
     //--------Rotate the recoil system from +z to +q-------
 
     qvec_v = fQ_v.Vect();
     kfvec_v = fP1_v.Vect();
-
+    
     thq_v = qvec_v.Theta();
     phq_v = qvec_v.Phi();
 
@@ -1299,13 +1350,28 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     th_rq_v = bq_v.Theta();   // theta_rq                                                                                                     
     ph_rq_v = bq_v.Phi();     //"out-of-plane angle", phi_rq
 
-      
+    
+    // phi calculated and "measured " @ vertex match perfectly if the e- momentum is set properly to (kx, ky, kz) without any sign changes
+    //cout << "------" << endl;
+    //cout << Form("phi_meas: %.3f", ph_pq_v*180./3.14) << endl;
+    //cout << "------" << endl;
+
     p_miss_q_v = -bq_v;
 
     //Missing Momentum Components in the q-frame
     Pmz_q_v = p_miss_q_v.Z();   //parallel component to +z (+z is along q)
     Pmx_q_v = p_miss_q_v.X();   //in-plane perpendicular component to +z
     Pmy_q_v = p_miss_q_v.Y();   //out-of-plane component (Oop)
+
+
+    // C.Y.
+    //unit_scat_v =  (qvec_v.Cross(Pf_vec_v)).Unit() ;
+    //cos_phi_calc = unit_react_v.Dot(unit_scat_v) /(unit_react_v.Mag()*unit_scat_v.Mag()) ;
+    //cout << "-------" << endl;
+    //phi_calc = acos(cos_phi_calc ) * 180./3.14;
+    //cout << Form("phi_calc: %.3f",phi_calc) << endl;
+    //cout << "-------" << endl;
+
 
 
     //---------Light Cone Variables (at vertex) (C.Y. March 05, 2021)---------
@@ -1451,7 +1517,16 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 
       H_MM->Fill(MM, FullWeight);
       H_MM2->Fill(MM2, FullWeight);
-      
+
+
+      // fill vertex quantities (for checks)
+      H_Pm_v     ->Fill(Pm_v, FullWeight);    
+      H_Q2_v     ->Fill(Q2_v, FullWeight);   
+      H_the_v    ->Fill(the/dtr, FullWeight);   
+      H_thpq_v   ->Fill(th_pq_v/dtr, FullWeight);  
+      H_thrq_v   ->Fill(th_rq_v/dtr, FullWeight); 
+      H_phi_pq_v ->Fill(ph_pq_v/dtr, FullWeight);
+	
       //Target Reconstruction (Hall Coord. System)
       H_htar_x->Fill(tar_x, FullWeight);
       H_htar_y->Fill(htar_y, FullWeight);
