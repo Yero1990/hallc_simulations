@@ -154,7 +154,11 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   
   TString temp; //temporary string placeholder
 
-  
+  //Output .txt files
+  TString output_file;
+  TString output_hist_data;
+
+      
     if( analysis_flag == "d2fsi") {
 
       //---Read In File Names with cuts and histogram binning information
@@ -165,6 +169,12 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       simc_infile         = Form("infiles/deuteron/fsi_deuteron/Q2_4p5/%s.data",    basename.Data());
       simc_InputFileName  = Form("worksim/d2_fsi/raw/%s.root",                      basename.Data());
       simc_OutputFileName = Form("worksim/d2_fsi/analyzed/%s_output.root",          basename.Data());
+
+      // define output file to write the rates
+      output_file = "yield_estimates/d2_fsi/output_rates_d2fsi.txt";
+      
+      // define output directory where numerical histogram .txt will be placed
+      output_hist_data= Form("yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s", pm_set, thrq_set, model.Data());
     }
 
     if( analysis_flag == "d2pol") {
@@ -174,9 +184,17 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       input_HBinFileName = "inp/d2_pol/set_basic_histos_d2pol.inp";
       
       //Define File Name Patterns
-      simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/%s.data",    basename.Data());
-      simc_InputFileName  = Form("worksim/d2_pol/smallFSI/raw/%s.root",                      basename.Data());
-      simc_OutputFileName = Form("worksim/d2_pol/smallFSI/analyzed/%s_output.root",          basename.Data());     
+      simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi_0deg/%s.data",    basename.Data());
+      simc_InputFileName  = Form("worksim/d2_pol/smallFSI/raw/phi_0deg/%s.root",                      basename.Data());
+      simc_OutputFileName = Form("worksim/d2_pol/smallFSI/analyzed/phi_0deg/%s_output.root",          basename.Data());
+
+      // define output file to write the rates
+      output_file = "yield_estimates/d2_pol/smallFSI/phi_0deg/output_rates_d2pol.txt";
+
+      // define output directory where numerical histogram .txt will be placed
+      output_hist_data= Form("yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s", pm_set, Q2_set, model.Data());
+
+      
 
     }
     
@@ -1576,8 +1594,6 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   ofstream out_file;
   ifstream in_file;
   
-  //Check if file already exists
-  TString output_file;
 
   // variable integrations for determining total counts, (e,e'p) rates, and daq rats
   float Pmcnts = H_Pm->Integral();
@@ -1604,48 +1620,46 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   cout << Form("DAQ Rates [Hz] = %.3f", daq_rates) << endl;
   cout << " ----------------------------- " << endl; 
 
+  in_file.open(output_file.Data());
 
-    output_file = "yield_estimates/d2_fsi/output_rates_d2fsi.csv";
-    in_file.open(output_file.Data());
+  if(!in_file.fail()){
+    
+    cout << Form(" %s already exists, will append to it . . . ", output_file.Data() ) << endl;
+    
+    //Open Report FIle in append mode
+    out_file.open(output_file, ios::out | ios::app);
+    out_file << Form("%i,     %d,    %s,    %.1f,       %.3E,        %.3f,        %.3f,      %.3f,     %.3f ", pm_set, thrq_set, model.Data(), Pmcnts, rates, daq_rates, Ib, time, charge_factor ) << endl;
 
-    if(!in_file.fail()){
-      
-      cout << Form(" %s already exists, will append to it . . . ", output_file.Data() ) << endl;
-      
-      //Open Report FIle in append mode
-      out_file.open(output_file, ios::out | ios::app);
-      out_file << Form("%i,     %d,    %s,    %.1f,       %.3E,        %.3f,        %.3f,      %.3f,     %.3f ", pm_set, thrq_set, model.Data(), Pmcnts, rates, daq_rates, Ib, time, charge_factor ) << endl;
-
-      
-    }
-
-    // create output file if it does not exist
-    if(in_file.fail()){
-
-      out_file.open(output_file);
-      //set headers
-      out_file << "# SIMC rates estimates (deut FSI studies)" << endl;
-      out_file << "# " << endl;
-      out_file << "# header definitions " << endl;
-      out_file << "# pm_set: central missing momentum setting [MeV] " << endl;
-      out_file << "# thrq_set: central recoil angle setting [deg] " << endl;
-      out_file << "# model: Laget pwia or fsi (paris NN potential)" << endl;      
-      out_file << "# pm_counts: integrated missing momentum counts (yield) with all cuts applied \n# (not binned in any particular kinematics)" << endl;
-      out_file << "# deep_rates: deuteron break-up rates [Hz] " << endl;
-      out_file << "# daq_rates: data acquisition rates (no analysis cuts) [Hz] " << endl;
-      out_file << "# current: beam current [uA] " << endl;
-      out_file << "# time: beam-on-target time [hrs] " << endl;
-      out_file << "# charge: beam charge [mC] " << endl;
-      out_file << "#" << endl;
-      
-      out_file <<"pm_set,thrq_set,model,pm_counts,deep_rates,daq_rates,current,time,charge" << endl;
-      out_file << Form("%i,     %d,    %s,    %.1f,       %.3E,        %.3f,        %.3f,      %.3f,     %.3f ", pm_set, thrq_set, model.Data(), Pmcnts, rates, daq_rates, Ib, time, charge_factor ) << endl;
-
-    }
-
+    
   }
-
-    //  polarized deuteron  studies 
+  
+  // create output file if it does not exist
+  if(in_file.fail()){
+    
+    out_file.open(output_file);
+    //set headers
+    out_file << "# SIMC rates estimates (deut FSI studies)" << endl;
+    out_file << "# " << endl;
+    out_file << "# header definitions " << endl;
+    out_file << "# pm_set: central missing momentum setting [MeV] " << endl;
+    out_file << "# thrq_set: central recoil angle setting [deg] " << endl;
+    out_file << "# model: Laget pwia or fsi (paris NN potential)" << endl;      
+    out_file << "# pm_counts: integrated missing momentum counts (yield) with all cuts applied \n# (not binned in any particular kinematics)" << endl;
+    out_file << "# deep_rates: deuteron break-up rates [Hz] " << endl;
+    out_file << "# daq_rates: data acquisition rates (no analysis cuts) [Hz] " << endl;
+    out_file << "# current: beam current [uA] " << endl;
+    out_file << "# time: beam-on-target time [hrs] " << endl;
+    out_file << "# charge: beam charge [mC] " << endl;
+    out_file << "#" << endl;
+    
+    out_file <<"pm_set,thrq_set,model,pm_counts,deep_rates,daq_rates,current,time,charge" << endl;
+    out_file << Form("%i,     %d,    %s,    %.1f,       %.3E,        %.3f,        %.3f,      %.3f,     %.3f ", pm_set, thrq_set, model.Data(), Pmcnts, rates, daq_rates, Ib, time, charge_factor ) << endl;
+    
+  }
+  
+  }
+  
+  //  polarized deuteron  studies 
   if( analysis_flag == "d2pol") {
     
     cout << " --------------------------------------- " << endl; 
@@ -1662,9 +1676,8 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     cout << Form("d(e,e'p) Rates [Hz] = %.3E ", rates) << endl;  
     cout << Form("DAQ Rates [Hz] = %.3f", daq_rates) << endl;
     cout << " ----------------------------- " << endl; 
-
-
-    output_file = "yield_estimates/d2_pol/smallFSI/output_rates_d2pol.csv";
+    
+    
     in_file.open(output_file.Data());
 
     if(!in_file.fail()){
@@ -1713,14 +1726,9 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     TString cmd = "";
 
 
-  
-    // assumed this directory exists
-    TString output_hist_data;
-
 
      if( analysis_flag == "d2fsi") {
-       // set directory where histograms are to be stored (assumed specific histo dir. exists)
-       output_hist_data= Form("yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s", pm_set, thrq_set, model.Data());
+       
        cmd = Form("mkdir -p %s", output_hist_data.Data() );
        gSystem->Exec(cmd); // create  histo dir. if it doesn't exist (it will automatically check if it exists, otherwise, will create it_
      }
@@ -1728,8 +1736,6 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
      
 
      if( analysis_flag == "d2pol") {
-       // set directory where histograms are to be stored (assumed specific histo dir. exists)
-       output_hist_data= Form("yield_estimates/d2_pol/smallFSI/histogram_data/pm%d_Q2_%.1f_%s", pm_set, Q2_set, model.Data());
        cmd = Form("mkdir -p %s", output_hist_data.Data() );
        gSystem->Exec(cmd); // create  histo dir. if it doesn't exist (it will automatically check if it exists, otherwise, will create it_
      }
