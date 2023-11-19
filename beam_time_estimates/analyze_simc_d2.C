@@ -1982,7 +1982,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 	}
 	
 	if( analysis_flag == "d2pol") {
-	  extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2fsi_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, Q2_set));
+	  extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, Q2_set));
 	}
 	
       }
