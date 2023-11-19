@@ -2,12 +2,12 @@
 d2_pm200_Q2_3p7_fsi_rad
 d2_pm200_Q2_4p0_fsi_rad
 d2_pm200_Q2_4p5_fsi_rad
-d2_pm300_Q2_3p5_fsi_rad
-d2_pm300_Q2_4p0_fsi_rad
-d2_pm300_Q2_4p5_fsi_rad
-d2_pm400_Q2_4p0_fsi_rad
-d2_pm400_Q2_4p5_fsi_rad
-d2_pm500_Q2_4p5_fsi_rad
+#d2_pm300_Q2_3p5_fsi_rad
+#d2_pm300_Q2_4p0_fsi_rad
+#d2_pm300_Q2_4p5_fsi_rad
+#d2_pm400_Q2_4p0_fsi_rad
+#d2_pm400_Q2_4p5_fsi_rad
+#d2_pm500_Q2_4p5_fsi_rad
 #phi = 180 deg
 #d2_pm200_Q2_3p7_fsi_rad
 #d2_pm200_Q2_4p0_fsi_rad

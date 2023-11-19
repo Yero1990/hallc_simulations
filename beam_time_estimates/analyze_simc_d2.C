@@ -188,14 +188,14 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       
       //Define File Name Patterns
       simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi_0deg/%s.data",    basename.Data());
-      simc_InputFileName  = Form("worksim/d2_pol/smallFSI/phi_0deg/raw/%s.root",                      basename.Data());
-      simc_OutputFileName = Form("worksim/d2_pol/smallFSI/phi_0deg/analyzed/%s_output.root",          basename.Data());
+      simc_InputFileName  = Form("worksim/d2_pol/smallFSI/phi_0deg/optimized/raw/%s.root",                      basename.Data());
+      simc_OutputFileName = Form("worksim/d2_pol/smallFSI/phi_0deg/optimized/analyzed/%s_output.root",          basename.Data());
 
       // define output file to write the rates
-      output_file = "yield_estimates/d2_pol/smallFSI/phi_0deg/output_rates_d2pol.txt";
+      output_file = "yield_estimates/d2_pol/smallFSI/phi_0deg/optimized/output_rates_d2pol_optim.txt";
 
       // define output directory where numerical histogram .txt will be placed
-      output_hist_data= Form("yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s", pm_set, Q2_set, model.Data());
+      output_hist_data= Form("yield_estimates/d2_pol/smallFSI/phi_0deg/optimized/histogram_data/pm%d_Q2_%.1f_%s", pm_set, Q2_set, model.Data());
 
       if (debug) {
 	cout << "---- Set Filenames ----" << endl;
@@ -1711,7 +1711,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     
     //Open Report FIle in append mode
     out_file.open(output_file, ios::out | ios::app);
-    out_file << Form("%i,     %d,    %s,    %.1f,       %.3E,        %.3f,        %.3f,      %.3f,     %.3f ", pm_set, thrq_set, model.Data(), Pmcnts, rates, daq_rates, Ib, time, charge_factor ) << endl;
+    out_file << Form("%i,     %d,    %s,    %.1f,       %.3E,        %.3E,        %.3f,      %.3f,     %.3f ", pm_set, thrq_set, model.Data(), Pmcnts, rates, daq_rates, Ib, time, charge_factor ) << endl;
 
     
   }
@@ -1736,7 +1736,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     out_file << "#" << endl;
     
     out_file <<"pm_set,thrq_set,model,pm_counts,deep_rates,daq_rates,current,time,charge" << endl;
-    out_file << Form("%i,     %d,    %s,    %.1f,       %.3E,        %.3f,        %.3f,      %.3f,     %.3f ", pm_set, thrq_set, model.Data(), Pmcnts, rates, daq_rates, Ib, time, charge_factor ) << endl;
+    out_file << Form("%i,     %d,    %s,    %.1f,       %.3E,        %.3E,        %.3f,      %.3f,     %.3f ", pm_set, thrq_set, model.Data(), Pmcnts, rates, daq_rates, Ib, time, charge_factor ) << endl;
     
   }
   
@@ -1769,7 +1769,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       
       //Open Report FIle in append mode
       out_file.open(output_file, ios::out | ios::app);
-      out_file << Form("%i,     %.2f,    %s,     %.1f,       %.3E,        %.3f,        %.3f,      %.3f,     %.3f ", pm_set, Q2_set, model.Data(), Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
+      out_file << Form("%i,     %.2f,    %s,     %.1f,       %.3E,        %.3E,        %.3f,      %.3f,     %.3f ", pm_set, Q2_set, model.Data(), Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
 
       
     }
@@ -1794,7 +1794,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       out_file << "#" << endl;
       
       out_file <<"pm_set,Q2_set,model,pm_counts,deep_rates,daq_rates,current,time,charge" << endl;
-      out_file << Form("%i,     %.2f,    %s,     %.1f,       %.3E,        %.3f,        %.3f,      %.3f,     %.3f ", pm_set, Q2_set, model.Data(), Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
+      out_file << Form("%i,     %.2f,    %s,     %.1f,       %.3E,        %.3E,        %.3f,      %.3f,     %.3f ", pm_set, Q2_set, model.Data(), Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
 
     }
 

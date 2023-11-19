@@ -15,7 +15,7 @@ import bin_info2 as BI
 
 
 #Set proper paths to import ROOT ( I had these paths in ifarm, but am having trouble running the code due to compatibility with ROOT / python)
-sys.path.append('../../../../pyroot/')
+sys.path.append('./pyroot/')
 sys.path.append('/apps/root/PRO/lib/')
 sys.path.append('/apps/root/PRO/')
 
@@ -24,6 +24,10 @@ sys.path.append('/apps/root/PRO/')
 # python 3.43
 # but still unable to use: from ROOT import * for python3
 
+# to run the code on ifarm:
+# 1. source /apps/root/6.18.04/setroot_CUE.csh 
+# 2. set proper basename file to be read
+# 3. python calc_avg_kin_simc.py  
 
 # do the root operations directly here
 import ROOT as R
@@ -38,8 +42,7 @@ dtr = np.pi/180.
 #MeV
 MP = 938.272
 MN = 939.566
-#MD = 1875.6127
-MD = 1875.61
+MD = 1875.6127
 me = 0.51099 
 
 '''
@@ -62,7 +65,7 @@ header = \
 '''
 
 #------------------------------------------------------------
-# header information for the output file (FOR JLAB22 GeV)
+# header information for the output file (FOR JLAB22 GeV / deuteron calculations)
 header = \
 """
 # averaged kinematics results
@@ -90,13 +93,12 @@ header = \
 list_of_args = sys.argv
 
 
-Eb=14   #list_of_args[1]
-Pr=1    #list_of_args[2]
-thrq=26 #list_of_args[3]
-
+#Eb=14   #list_of_args[1]
+#Pr=1    #list_of_args[2]
+#thrq=26 #list_of_args[3]
 #basename='d2_Eb%s_Pr%s_thrq%s_norad_output' %(Eb, Pr, thrq)
 
-basename='~/worksim/d2_fsi/analyzed/d2_pm800_thrq28_fsi_rad_output'
+basename='d2_pm800_thrq49_fsi_rad_output' 
 
 output_file = basename+'_avgkin.txt'
 
@@ -173,7 +175,13 @@ for i,acont in enumerate(all.cont):
       cphi_pq   = bin_info_cphi_pq.cont[i]
       sphi_pq   = bin_info_sphi_pq.cont[i]
 
-
+      print("i = ", i)
+      print("thnq_b = ",thnq_b)
+      print("pm_b = ",  pm_b)
+      print("Ei  = ", Ei)
+      print("kf = ", kf)
+      print("Pm = ", Pm)
+      
       # calculate electron kinematics from measured, averaged quantities
       Ef = np.sqrt(kf*kf + me*me)  
       nu_calc = Ei - Ef
@@ -252,7 +260,7 @@ for i,acont in enumerate(all.cont):
 
       # original
       '''
-      l = "%i %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %i %i %f\n"%( \
+      l = "%i %i %i %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %i %i %/3E\n"%( \
                                                                                                                                   # 0 2d bin number
                                                                                                                                   i_bin, \
                                                                                                                                   # 1 
@@ -387,7 +395,7 @@ for i,acont in enumerate(all.cont):
                                                                                                           # 24
                                                                                                           thnq, \
                                                                                                           # 25
-                                                                                                          theta_nq_calc, \                    
+                                                                                                          theta_nq_calc, \
                                                                                                           # 26
                                                                                                           cphi_pq, \
                                                                                                           # 27
