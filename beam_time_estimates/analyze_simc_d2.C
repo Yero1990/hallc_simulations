@@ -72,6 +72,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 
 
   TString analysis_flag="d2pol";  // "d2pol" or "d2fsi" 
+  Bool_t debug = true;
   
   int pm_set=0;
   int thrq_set=0;
@@ -113,11 +114,12 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     pm_set = stoi(std::regex_replace(pm_str.Data(), std::regex(R"([^\d])"), ""));
     model = split(split(basename.Data(), '_')[0], '_')[1];
 
-    cout << "Settings Read: " << endl;
-    cout << Form("Q2_set: %.1f", Q2_set) << endl;
-    cout << Form("Pm_set: %d ", pm_set) << endl;
-    cout << "Model: " << model.Data() << endl;
-    
+    if(debug) {
+      cout << "Settings Read: " << endl;
+      cout << Form("Q2_set: %.1f", Q2_set) << endl;
+      cout << Form("Pm_set: %d ", pm_set) << endl;
+      cout << "Model: " << model.Data() << endl;
+    }
   }
   
   
@@ -185,17 +187,24 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       input_HBinFileName = "inp/d2_pol/set_basic_histos_d2pol.inp";
       
       //Define File Name Patterns
-      simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi_180deg/%s.data",    basename.Data());
-      simc_InputFileName  = Form("worksim/d2_pol/smallFSI/phi_180deg/raw/%s.root",                      basename.Data());
-      simc_OutputFileName = Form("worksim/d2_pol/smallFSI/phi_180deg/analyzed/%s_output.root",          basename.Data());
+      simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi_0deg/%s.data",    basename.Data());
+      simc_InputFileName  = Form("worksim/d2_pol/smallFSI/phi_0deg/raw/%s.root",                      basename.Data());
+      simc_OutputFileName = Form("worksim/d2_pol/smallFSI/phi_0deg/analyzed/%s_output.root",          basename.Data());
 
       // define output file to write the rates
-      output_file = "yield_estimates/d2_pol/smallFSI/phi_180deg/output_rates_d2pol.txt";
+      output_file = "yield_estimates/d2_pol/smallFSI/phi_0deg/output_rates_d2pol.txt";
 
       // define output directory where numerical histogram .txt will be placed
-      output_hist_data= Form("yield_estimates/d2_pol/smallFSI/phi_180deg/histogram_data/pm%d_Q2_%.1f_%s", pm_set, Q2_set, model.Data());
+      output_hist_data= Form("yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s", pm_set, Q2_set, model.Data());
 
-      
+      if (debug) {
+	cout << "---- Set Filenames ----" << endl;
+	cout << Form("simc_infile: %s", simc_infile.Data()) << endl;
+	cout << Form("raw ROOTfile: %s", simc_InputFileName.Data()) << endl;
+	cout << Form("analyzed ROOTfile: %s", simc_OutputFileName.Data()) << endl;
+	
+	
+      }
 
     }
     
@@ -217,6 +226,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   //p arm angle (deg)
   Double_t thp_central = (stod(split(split(FindString("spec%p%theta", simc_infile.Data())[0], '!')[0], '=')[1])); 
 
+  if(debug) {
   cout << "SIMC KIN" << endl;
   cout << Form("beam_e: %.3f", beam_e) << endl;
   cout << Form("e_Pcen: %.3f", e_Pcen) << endl; 
@@ -224,6 +234,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   cout << Form("the_central: %.3f", the_central) << endl; 
   cout << Form("thp_central: %.3f", thp_central) << endl; 
   cout << "-----------------" << endl;
+  }
   
   // spectrometers are in-plane
   Double_t phe_central=0;  
@@ -1216,18 +1227,13 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     // convert 0->360 to -180 to 180 (for out of plane angle)
     ph_pq = ph_pq / dtr; // convert to deg
 
-    cout << "------" << endl;
-    cout << Form("ph_pq_rec[0->360]: %.3f", ph_pq) << endl;
-    cout << "------" << endl;
+
     
     if(ph_pq >= 180){
       ph_pq = ph_pq - 360.;
     }
 
-    cout << "------" << endl;
-    cout << Form("ph_pq_rec[-180,180]: %.3f", ph_pq) << endl;
-    cout << "------" << endl;
-    
+
     //convert back to radians
     ph_pq = ph_pq * dtr;
     
@@ -1279,7 +1285,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
    ! Also take into account the different definitions of x, y and z in
    ! replay and SIMC:
    ! As seen looking downstream:        replay	SIMC	(old_simc)
-   !				x	right	down	(left)
+   !				x	right	down	(left)  ---> this must not be correct for hallc replay: as lab coord:  +X -> beam left, +Y -> beam up, +z -> downstream
    !				y	down	left	(up)
    !				z	all have z pointing downstream
    !
@@ -1294,12 +1300,20 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     
     //Calculate 4-Vectors at the vertex    
     fP0_v.SetXYZM(0.0, 0.0, ki_v, me);  //set initial e- 4-momentum at the vertex
-    fP1_v.SetXYZM(-kf_vec_v.X(), -kf_vec_v.Y(), kf_vec_v.Z(), me);  //set final e- 4-momentum at the vertex (with X -inverted to match coord. in replay, and y-inverted to match Pmy_lab in SIMC)
-    //fP1_v.SetXYZM(kf_vec_v.X(), kf_vec_v.Y(), kf_vec_v.Z(), me);  //set final e- 4-momentum at the vertex 
-
+    //fP1_v.SetXYZM(-kf_vec_v.Y(), kf_vec_v.X(), kf_vec_v.Z(), me);  //set final e- 4-momentum at the vertex (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
+    //fP1_v.SetXYZM(-kf_vec_v.Y(), -kf_vec_v.X(), kf_vec_v.Z(), me); // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
+    //fP1_v.SetXYZM(kf_vec_v.Y(), -kf_vec_v.X(), kf_vec_v.Z(), me);   // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
+    //fP1_v.SetXYZM(kf_vec_v.Y(), kf_vec_v.X(), kf_vec_v.Z(), me);    // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
+    fP1_v.SetXYZM(-kf_vec_v.X(), kf_vec_v.Y(), kf_vec_v.Z(), me);  // THIS GIVES THE RIGHT PHI_PQ, THETA_PQ @ VERTEX
+    
     // invert the components before taking cross product so it be consistent with the 4-vector aboeve
-    kf_vec_v.SetXYZ(-kf_vec_v.X(), -kf_vec_v.Y(), kf_vec_v.Z());
+    //kf_vec_v.SetXYZ(-kf_vec_v.Y(), kf_vec_v.X(), kf_vec_v.Z());  // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
+    //kf_vec_v.SetXYZ(-kf_vec_v.Y(), -kf_vec_v.X(), kf_vec_v.Z());  // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
+    //kf_vec_v.SetXYZ(kf_vec_v.Y(), -kf_vec_v.X(), kf_vec_v.Z());  //  // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
+    //kf_vec_v.SetXYZ(kf_vec_v.Y(), kf_vec_v.X(), kf_vec_v.Z());    // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
+    kf_vec_v.SetXYZ(-kf_vec_v.X(), kf_vec_v.Y(), kf_vec_v.Z());    //  THIS GIVES THE RIGHT PHI_PQ, THETA_PQ @ VERTEX
 
+    
     // unit vector in the reaction plane
     unit_react_v =  (ki_vec_v.Cross(kf_vec_v)).Unit() ;
 
@@ -1311,7 +1325,15 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 
     SetCentralAngles(thp_central, php_central);
     TransportToLab(Pf_v, h_xptar_v, h_yptar_v, Pf_vec_v);
-    fX_v.SetVectM(Pf_vec_v, MP);       //SET FOUR VECTOR OF detected particle
+    
+    //fX_v.SetVectM(Pf_vec_v, MP);       //original: SET FOUR VECTOR OF detected particle
+    //fX_v.SetXYZM(-Pf_vec_v.Y(), Pf_vec_v.X(), Pf_vec_v.Z(), MP); // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
+    //fX_v.SetXYZM(-Pf_vec_v.Y(), -Pf_vec_v.X(), Pf_vec_v.Z(), MP); // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
+    //fX_v.SetXYZM(Pf_vec_v.Y(), -Pf_vec_v.X(), Pf_vec_v.Z(), MP);  //  // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
+    //fX_v.SetXYZM(Pf_vec_v.Y(), Pf_vec_v.X(), Pf_vec_v.Z(), MP);   // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
+    fX_v.SetXYZM(Pf_vec_v.X(), Pf_vec_v.Y(), Pf_vec_v.Z(), MP);
+    
+    
     fB_v = fA1_v - fX_v;                 //4-MOMENTUM OF UNDETECTED PARTICLE 
     
     Pmx_lab_v = fB_v.Px();
@@ -1321,11 +1343,6 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     //Electron / Proton In-Plane angles @ the vertex
     the_v = kf_vec_v.Theta();
     thp_v = Pf_vec_v.Theta();
-
-    //cout << "----------------" << endl;
-    //cout << Form("the_v: %.3f ", the_v) << endl;
-    //cout << Form("the: %.3f ", the) << endl;
-    //cout << "----------------" << endl;
 
     //--------Rotate the recoil system from +z to +q-------
 
@@ -1350,11 +1367,6 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     th_rq_v = bq_v.Theta();   // theta_rq                                                                                                     
     ph_rq_v = bq_v.Phi();     //"out-of-plane angle", phi_rq
 
-    
-    // phi calculated and "measured " @ vertex match perfectly if the e- momentum is set properly to (kx, ky, kz) without any sign changes
-    //cout << "------" << endl;
-    //cout << Form("phi_meas: %.3f", ph_pq_v*180./3.14) << endl;
-    //cout << "------" << endl;
 
     p_miss_q_v = -bq_v;
 
@@ -1367,11 +1379,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     // C.Y.
     //unit_scat_v =  (qvec_v.Cross(Pf_vec_v)).Unit() ;
     //cos_phi_calc = unit_react_v.Dot(unit_scat_v) /(unit_react_v.Mag()*unit_scat_v.Mag()) ;
-    //cout << "-------" << endl;
-    //phi_calc = acos(cos_phi_calc ) * 180./3.14;
-    //cout << Form("phi_calc: %.3f",phi_calc) << endl;
-    //cout << "-------" << endl;
-
+   
 
 
     //---------Light Cone Variables (at vertex) (C.Y. March 05, 2021)---------
@@ -1522,7 +1530,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       // fill vertex quantities (for checks)
       H_Pm_v     ->Fill(Pm_v, FullWeight);    
       H_Q2_v     ->Fill(Q2_v, FullWeight);   
-      H_the_v    ->Fill(the/dtr, FullWeight);   
+      H_the_v    ->Fill(the_v/dtr, FullWeight);   
       H_thpq_v   ->Fill(th_pq_v/dtr, FullWeight);  
       H_thrq_v   ->Fill(th_rq_v/dtr, FullWeight); 
       H_phi_pq_v ->Fill(ph_pq_v/dtr, FullWeight);
