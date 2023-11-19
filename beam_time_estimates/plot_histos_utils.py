@@ -612,8 +612,8 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
 
 
 #  d2 polarized plots
-pm_set = [200]
-q2_set = [3.7, 4.0, 4.5]
+pm_set = [300]
+q2_set = [3.5, 4.0, 4.5]
 
 
 
