@@ -69,13 +69,19 @@ def overlay_d2pol(pm_set, Q2_set, hist_name, model):
     pm_set and Q2_set are lists of values representing the different kinematic settings (needs to be checked if it works)
     '''
 
+    rel_err_thrs = 0.3   #  relative stat. error threshold for masking
+
+    fig, axs = plt.subplots(2, sharex=True, figsize=(7,9))
+    
     # loop over central missing momentum setting
     for ipm in pm_set:
 
+        offset=0 # for applying to overlayed data for easy visual
         # loop over central q2 setting
         for iq2 in Q2_set:
 
-            
+     
+                
             # set histogram file path
             #histos_file_path = 'path/to/histogram_data/pm%d_q2%d_%s/histo_name_pm_set_q2_set.txt'%(pm_set, q2_set, model, hist_name)
 
@@ -95,28 +101,62 @@ def overlay_d2pol(pm_set, Q2_set, hist_name, model):
             ylabel = get_label('ylabel', hist_file) 
             title  = get_label('title', hist_file) 
             xbins  = get_label('xbins', hist_file) 
+            xbinw  = float(get_label('xbin_width', hist_file))
+            # increment offset for every new Q2 setting
+            if iq2 > Q2_set[0]:
+                offset = offset + 0.1*xbinw
 
-            x = df.x0
+            
+            xbc = df.x0
             N = df.ycont
             Nerr = np.sqrt(N)
-          
-            print('xbins:', xbins)
-            print('len(df.x0):', len(df.x0))
-            print('xlow:',min(df.xlow), 'xup:', max(df.xup))
-            x =   ma.masked_where(N==0, x)
+   
+            xbc =   ma.masked_where(N==0, xbc)
             N =   ma.masked_where(N==0, N)
             Nerr = ma.masked_where(N==0, Nerr)
+            Nerr_rel = Nerr/N
+            y_const = np.zeros(len(N))
+
+            counts = N.sum()
+            # masked data to require rel. error > error threshold
+            xbc        = ma.masked_where(Nerr_rel>rel_err_thrs, xbc)
+            y_const  = ma.masked_where(Nerr_rel>rel_err_thrs, y_const)
+            Nerr_rel = ma.masked_where(Nerr_rel>rel_err_thrs, Nerr_rel)
+            N        = ma.masked_where(N>rel_err_thrs, N)
+            Nerr     = ma.masked_where(N>rel_err_thrs, Nerr)
+
             
+            
+        
+
            
+            # --- plot histogram ---
+            axs[0].set_title(title)
+            axs[0].hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.5, ec='k', density=False, label="$P_{m}$=%d MeV, $Q^{2}$=%.1f GeV$^{2}$ (%d)"%(ipm, iq2, counts))
+            axs[0].set_ylabel(ylabel)
+            #axs[0].set_ylim(0, )  # modify ylim in case legend needs to fit better
+            
+            axs[0].legend()
+            axs[0].xaxis.set_tick_params(labelbottom=True)
+            #plt.xlabel(xlabel, fontsize=15)
+            #plt.ylabel(ylabel, fontsize=15)
+            #plt.title(title, fontsize=15)
 
-            plt.hist(x=df.x0, bins=len(df.x0), range=[min(df.xlow), max(df.xup)], weights=df.ycont, alpha=0.5, ec='k', density=False, label=r"$Q^{2}=%.1f$ GeV$^{2}$"%(iq2)+"\n"+"$P_{m}$=%d MeV"%(ipm))
-            #plt.errorbar(x, N, Nerr, linestyle='None', marker='o', mec='k', label=r"$P_{m}$=%d MeV"%(ipm)+"\n"+"$Q^{2}$=%.1f GeV$^{2}$"%(iq2))
+            # apply offset 
+            xbc_off = xbc + offset
+            axs[1].errorbar(xbc_off, y_const, Nerr_rel, linestyle='None', marker='o', mec='k', label=r"$P_{m}$=%d MeV"%(ipm)+"\n"+"$Q^{2}$=%.1f GeV$^{2}$"%(iq2))
+            axs[1].set_ylabel('Relative Error')
+            axs[1].set_xlabel(xlabel)
 
-            plt.legend()
-            plt.xlabel(xlabel, fontsize=15)
-            plt.ylabel(ylabel, fontsize=15)
-            plt.title(title, fontsize=15)
-
+           
+            plt.setp(axs, xlim=(np.min(xbc)-0.5*np.min(xbc), np.max(xbc)+0.5*np.min(xbc)))
+            plt.axhline(y = 0.20, color = 'r', linestyle = '--')
+            plt.axhline(y = -0.20, color = 'r', linestyle = '--')
+            #plt.legend()
+            #plt.xlabel(xlabel, fontsize=15)
+            #plt.ylabel(ylabel, fontsize=15)
+            #plt.title(title, fontsize=15)
+                
     plt.show()    
             
 def make_1d_Xprojections(h2_hist_name, pm_user, thrq_user, model):
@@ -380,7 +420,12 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag):
     # NEED TO FIX THIS FUNCTION, AS IT CURRENTLY DISPLAYS MULTIPLE SUBPLOTS, WHERE ONLY ONE IS NEEDED
     '''
     Brief: generic function makes 1D projections along y-axis (slicing xbins) for selected 2D histos,
-    plot_flag: "2d" or "proj"
+    
+    h2_hist_name: histogram base name
+    pm_user: central missing momentu setting
+    Q2_user: central Q2 setting
+    model: "pwia" or "fsi"
+    plot_flag: "2d" or "proj" or "proj_err"
     '''
 
     #histos_file_path = 'yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s/'%(pm_user, thrq_user, model)
@@ -389,12 +434,11 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag):
    
     ifig = 1 # counter for 2d histogram figures
 
-
-
     
     # loop over central pm setting
     for ipm in pm_user:
 
+        
         if plot_flag=='proj' or plot_flag=='proj_err':
             # set figure subplots for the 1d projections
             fig, ax = plt.subplots(6, 3, sharex='col', sharey='row', tight_layout=True)
@@ -405,7 +449,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag):
             fig.set_size_inches(12,10, forward=True)
         
 
-        offset=0 # offset for applying projections overlay
+        offset=0 # offset for applying projections overlay 
         # loop over central q2 setting
         for jq2 in Q2_user:
 
@@ -413,15 +457,11 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag):
             if jq2 > Q2_user[0]:
                 offset = offset + 0.003                                
                 
-
-            
             
             # set histo base name and file path
             h2_hist_basename = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(h2_hist_name, ipm, jq2)   # generic histogram name
             hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_180deg/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, jq2, model, h2_hist_basename)
 
-
-    
 
             # check if file exists, else continue reading next file
             if not os.path.isfile(hist_file_path): continue
@@ -507,8 +547,8 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag):
                         ax.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=4, linestyle='None', label=r'%.1f GeV$^{2}$'%(jq2)) #//, label=r'%d counts'%(cnts))
                        
                         plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
-                        plt.legend(frameon=False, loc='upper right')
                         jdx = jdx+1
+            plt.legend(frameon=False, loc='upper right')
 
                   
        
@@ -520,7 +560,11 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag):
 # make_1d_Xprojections('H_Pm_vs_thrq_yield', 800, 79, 'pwia')
 # make_ratios_d2fsi([800], [28, 49, 55, 60, 66, 72, 79], 'ratio')
 # overlay_d2fsi([800], [28, 49, 55], 'thrq', 'fsi')
-# overlay_d2pol([200, 300], [4.5], 'Pm', 'fsi')
 
+
+
+# ---- example of d2 polarized plotting scripts -----
+#overlay_d2pol([300], [3.5, 4.0, 4.5], 'Pm', 'fsi')
 #make_projY_d2pol('Pm_vs_thrq', [300], [3.5, 4.0, 4.5], 'fsi', '2d')
-make_projY_d2pol('Pm_vs_thrq', [300], [3.5, 4.0, 4.5], 'fsi', 'proj_err')
+#make_projY_d2pol('Pm_vs_thrq', [300], [3.5], 'fsi', 'proj')
+#make_projY_d2pol('Pm_vs_thrq', [300], [3.5], 'fsi', 'proj_err')
