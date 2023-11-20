@@ -240,7 +240,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
     if plot_flag=='proj' or plot_flag=='proj_err':
         plt.show()
 
-'''        
+
 def combine_sets(kin_set=[], hist_name='', model=''):
     
     #Brief: function to overlay and combine multiple sets of [pm, Q2] central values
@@ -253,24 +253,24 @@ def combine_sets(kin_set=[], hist_name='', model=''):
         Q2 = ikin[1]
 
         
-        hist_basename    = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(h2_hist_name, pm, Q2)   # generic histogram basename
+        hist_basename    = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(hist_name, pm, Q2)   # generic histogram basename
         hist_file        = 'yield_estimates/d2_pol/smallFSI/phi_0deg/optimized/histogram_data/pm%d_Q2_%.1f_%s/%s'%(pm, Q2, model, hist_basename)
 
         if not os.path.isfile(hist_file): continue
         
         df = pd.read_csv(hist_file, comment='#')
 
-        xlabel = get_label('xlabel',     hist_file_path)
-        ylabel = get_label('ylabel',     hist_file_path)
-        title  = get_label('title',      hist_file_path)
-        ybinw  = float(get_label('ybin_width', hist_file_path))
-        xbinw  = float(get_label('xbin_width', hist_file_path))
+        xlabel = get_label('xlabel',     hist_file)
+        ylabel = get_label('ylabel',     hist_file)
+        title  = get_label('title',      hist_file)
+        ybinw  = float(get_label('ybin_width', hist_file))
+        xbinw  = float(get_label('xbin_width', hist_file))
         nxbins = len(df.xb[df.yb==df.yb[0]])
         nybins = len(df.yb[df.xb==df.xb[0]])
         ybc = (df.y0[df.x0==df.x0[0]]).to_numpy() # y-bin central value
         xbc = (df.x0[df.y0==df.y0[0]]).to_numpy() # x-bin central value
 
-        df.zcont = df.zcont * scale
+        df.zcont = df.zcont * 1 # scale by beam time
         counts = np.sum(df.zcont)
 
 
@@ -297,7 +297,7 @@ def combine_sets(kin_set=[], hist_name='', model=''):
                 ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', density=False, label=r'%d counts (%.1f GeV$^{2}$)'%(cnts, jq2))
 
                 # to be continued . . .
-'''
+    plt.show()
     
 def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=1):
     '''
@@ -924,6 +924,7 @@ pm_set = [300]
 q2_set = [3.5, 4.0, 4.5]
 
 
+combine_sets([[200, 3.7]], 'Pm_vs_thrq', model='fsi')
 
 # ------ Pm vs theta_rq yield projections and errors -----
 
