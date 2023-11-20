@@ -9,6 +9,14 @@ from matplotlib.colors import LogNorm
 
 # Brief: generic histos plotting utility functions script that loops over numerical histo files
 # in a specified directory, and  makes and saves the plots
+def get_label(label, ifile):
+    with open(ifile, "r") as fp:
+        for line in fp:
+            if label in line:
+                label = (line.split(':')[1]).strip()
+                return label
+
+
 
 def plot_rates():
 
@@ -56,12 +64,7 @@ def plot_rates():
         
     
 
-def get_label(label, ifile):
-    with open(ifile, "r") as fp:
-        for line in fp:
-            if label in line:
-                label = (line.split(':')[1]).strip()
-                return label
+
     
 def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=1):
     '''
@@ -137,7 +140,8 @@ def overlay_d2pol(pm_set, Q2_set, hist_name, model, scale=1):
 
     rel_err_thrs = 1000   #  relative stat. error threshold for masking
 
-    fig, axs = plt.subplots(2, sharex=True, figsize=(7,12))
+    #fig, axs = plt.subplots(2, sharex=True, figsize=(5,10))
+    fig, axs = plt.subplots(2, figsize=(6,10))
     
     # loop over central missing momentum setting
     for ipm in pm_set:
@@ -199,9 +203,10 @@ def overlay_d2pol(pm_set, Q2_set, hist_name, model, scale=1):
             print('xbin_center:', xbc)
             print('bins:', len(xbc))
             axs[0].set_title(title)
-            axs[0].hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.5, ec='k', density=False, label="$P_{m}$=%d MeV, $Q^{2}$=%.1f GeV$^{2}$ (%d)"%(ipm, iq2, counts))
+            axs[0].hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.5, ec='k', density=False, label="$P_{m}$=%d MeV"%(ipm)+"\n"+ "$Q^{2}$=%.1f GeV$^{2}$ (%d)"%(iq2, counts))
             axs[0].set_ylabel(ylabel)
-            #axs[0].set_ylim(0, )  # modify ylim in case legend needs to fit better
+            axs[0].set_xlabel(xlabel)
+            #axs[0].set_ylim(0, 300)  # modify ylim in case legend needs to fit better
             
             axs[0].legend()
             axs[0].xaxis.set_tick_params(labelbottom=True)
@@ -520,7 +525,9 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
         
         if plot_flag=='proj' or plot_flag=='proj_err':
             # set figure subplots for the 1d projections
-            fig, ax = plt.subplots(6, 3, sharex='col', sharey='row', tight_layout=True)
+            #fig, ax = plt.subplots(6, 3, sharex='col', sharey='row', tight_layout=True)
+            fig, ax = plt.subplots(6, 3, tight_layout=True)
+
             fig.text(0.5, 0.002, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=12)
             fig.text(0.005, 0.5, 'counts', va='center', rotation='vertical', fontsize=12)
             subplot_title =  r"p$_{m}$ vs. $\theta_{rq}$ 1d projection (%s), central p$_{m}$ setting: %d MeV"%(model, ipm)
@@ -539,8 +546,8 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
             
             # set histo base name and file path
             h2_hist_basename = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(h2_hist_name, ipm, jq2)   # generic histogram name
-            hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, jq2, model, h2_hist_basename)             #original kinematics
-            #hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_0deg/optimized/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, jq2, model, h2_hist_basename)  #optimized kinematics
+            #hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, jq2, model, h2_hist_basename)             #original kinematics
+            hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_0deg/optimized/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, jq2, model, h2_hist_basename)  #optimized kinematics
 
             print('hist_file_path:', hist_file_path)
             # check if file exists, else continue reading next file
@@ -678,16 +685,16 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
 #*************************************
 
 # select the single-valued central momentum setting and multi-value Q2 setting for plotting
-pm_set = [200]
-q2_set = [3.7]
+pm_set = [300]
+q2_set = [3.5, 4.0, 4.5]
 
 
 # ------ Pm vs theta_rq yield projections and errors -----
-'''
-make_projY_d2pol('Pm_vs_thrq', pm_set, q2_set, 'fsi', '2d', 1)
-make_projY_d2pol('Pm_vs_thrq', pm_set, q2_set, 'fsi', 'proj', 1)
-make_projY_d2pol('Pm_vs_thrq', pm_set, q2_set, 'fsi', 'proj_err', 1)
-'''
+
+#make_projY_d2pol('Pm_vs_thrq', pm_set, q2_set, 'fsi', '2d', 1)
+#make_projY_d2pol('Pm_vs_thrq', pm_set, q2_set, 'fsi', 'proj', 1)
+#make_projY_d2pol('Pm_vs_thrq', pm_set, q2_set, 'fsi', 'proj_err', 1)
+
 
 # ----- plot the kinematics variables in which a cut is used (without the self cut, ie nsc or no self cut) -----
 '''
@@ -697,23 +704,25 @@ overlay_d2pol(pm_set, q2_set, 'edelta_nsc', 'fsi')
 overlay_d2pol(pm_set, q2_set, 'hdelta_nsc', 'fsi')
 make_projY_d2pol('hXColl_vs_hYColl_nsc', pm_set, q2_set, 'fsi', '2d')
 make_projY_d2pol('eXColl_vs_eYColl_nsc', pm_set, q2_set, 'fsi', '2d')
-'''
 
+make_projY_d2pol('hXColl_vs_hYColl', pm_set, q2_set, 'fsi', '2d')
+make_projY_d2pol('eXColl_vs_eYColl', pm_set, q2_set, 'fsi', '2d')
+'''
 
 # ------ plot kinematic variables -----
 '''
-overlay_d2pol(pm_set, q2_set, 'Pf', 'fsi')  # proton momentum
+overlay_d2pol(pm_set, q2_set, 'Pf', 'fsi')   # proton momentum
 overlay_d2pol(pm_set, q2_set, 'thp', 'fsi')  # proton angle
-overlay_d2pol(pm_set, q2_set, 'kf', 'fsi')  # e- momentum
+overlay_d2pol(pm_set, q2_set, 'kf', 'fsi')   # e- momentum
 overlay_d2pol(pm_set, q2_set, 'the', 'fsi')  # e- angle
-overlay_d2pol(pm_set, q2_set, 'Pm', 'fsi')  # missing momentum
-overlay_d2pol(pm_set, q2_set, 'nu', 'fsi')  # energy transfer
+overlay_d2pol(pm_set, q2_set, 'Pm', 'fsi')   # missing momentum
+overlay_d2pol(pm_set, q2_set, 'nu', 'fsi')   # energy transfer
 overlay_d2pol(pm_set, q2_set, 'xbj', 'fsi')  # x-bjorken
-overlay_d2pol(pm_set, q2_set, 'q', 'fsi')  # 3-momentum (q) transfer
+overlay_d2pol(pm_set, q2_set, 'q', 'fsi')    # 3-momentum (q) transfer
 overlay_d2pol(pm_set, q2_set, 'thq', 'fsi')  # 3-momentum (q) angle
-overlay_d2pol(pm_set, q2_set, 'thpq', 'fsi')  # in-plane angle between (proton,q)
-overlay_d2pol(pm_set, q2_set, 'thrq', 'fsi')  #in-plane angle between (recoil,q)
-overlay_d2pol(pm_set, q2_set, 'phi_pq', 'fsi') # out-of-plane angle between (proton, q)
+overlay_d2pol(pm_set, q2_set, 'thpq', 'fsi')    # in-plane angle between (proton,q)
+overlay_d2pol(pm_set, q2_set, 'thrq', 'fsi')    # in-plane angle between (recoil,q)
+overlay_d2pol(pm_set, q2_set, 'phi_pq', 'fsi')  # out-of-plane angle between (proton, q)
 overlay_d2pol(pm_set, q2_set, 'cphi_pq', 'fsi')
 '''
 
@@ -729,7 +738,9 @@ overlay_d2pol(pm_set, q2_set, 'hxptar', 'fsi')
 overlay_d2pol(pm_set, q2_set, 'hyptar', 'fsi')
 overlay_d2pol(pm_set, q2_set, 'hytar', 'fsi')
 overlay_d2pol(pm_set, q2_set, 'hdelta', 'fsi')
+'''
 
+'''
 # focal plane
 make_projY_d2pol('hxfp_vs_hyfp', pm_set, q2_set, 'fsi', '2d')
 make_projY_d2pol('exfp_vs_eyfp', pm_set, q2_set, 'fsi', '2d')
@@ -739,8 +750,8 @@ make_projY_d2pol('exfp_vs_eyfp', pm_set, q2_set, 'fsi', '2d')
 make_projY_d2pol('hdelta_vs_edelta', pm_set, q2_set, 'fsi', '2d')
 make_projY_d2pol('hxptar_vs_exptar', pm_set, q2_set, 'fsi', '2d')
 make_projY_d2pol('hyptar_vs_eyptar', pm_set, q2_set, 'fsi', '2d')
-
 '''
+
 
 # ----- plot 2D average kinematics --- 
 #make_projY_d2pol('kf_2Davg', pm_set, q2_set, 'fsi', '2d')
@@ -760,4 +771,4 @@ make_projY_d2pol('hyptar_vs_eyptar', pm_set, q2_set, 'fsi', '2d')
 
 
 # plot rates
-# plot_rates()
+#plot_rates()

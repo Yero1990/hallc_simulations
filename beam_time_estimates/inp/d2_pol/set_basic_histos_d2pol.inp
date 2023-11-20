@@ -299,8 +299,8 @@ expfp_xmin = -0.06
 expfp_xmax = 0.06
   
 eyfp_nbins = 60
-eyfp_xmin = -10.
-eyfp_xmax = 10.
+eyfp_xmin = -15.
+eyfp_xmax = 15.
 
 eypfp_nbins = 60
 eypfp_xmin = -0.06
@@ -337,7 +337,7 @@ hxpfp_xmin = -0.08
 hxpfp_xmax = 0.08
   
 hyfp_nbins = 60
-hyfp_xmin = -15.
+hyfp_xmin = -25.
 hyfp_xmax = 25.
 
 hypfp_nbins = 60
