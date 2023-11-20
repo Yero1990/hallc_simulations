@@ -61,11 +61,63 @@ def plot_rates():
  
 
         
+def combine_sets(kin_set=[], hist_name='', model=''):
+    '''
+    Brief: function to overlay and combine multiple sets of [pm, Q2] central values
+    e.g. combine_sets([ [200,3.7], [300,4.0]] ) which can loop over each set and overlay them
+    '''
+
+    # loop over each [pm, Q2] set
+    for i, ikin in enumerate(kin_set):
+        pm = ikin[0]
+        Q2 = ikin[1]
+
         
-    
+        hist_basename    = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(h2_hist_name, pm, Q2)   # generic histogram basename
+        hist_file        = 'yield_estimates/d2_pol/smallFSI/phi_0deg/optimized/histogram_data/pm%d_Q2_%.1f_%s/%s'%(pm, Q2, model, hist_basename)
+
+        if not os.path.isfile(hist_file): continue
+        
+        df = pd.read_csv(hist_file, comment='#')
+
+        xlabel = get_label('xlabel',     hist_file_path)
+        ylabel = get_label('ylabel',     hist_file_path)
+        title  = get_label('title',      hist_file_path)
+        ybinw  = float(get_label('ybin_width', hist_file_path))
+        xbinw  = float(get_label('xbin_width', hist_file_path))
+        nxbins = len(df.xb[df.yb==df.yb[0]])
+        nybins = len(df.yb[df.xb==df.xb[0]])
+        ybc = (df.y0[df.x0==df.x0[0]]).to_numpy() # y-bin central value
+        xbc = (df.x0[df.y0==df.y0[0]]).to_numpy() # x-bin central value
+
+        df.zcont = df.zcont * scale
+        counts = np.sum(df.zcont)
 
 
-    
+        #loop over x-bins (for y-projections)
+        for idx, xbin in enumerate( xbc ):
+                           
+            count_per_xbin     = df.zcont[df.x0==xbin]
+            count_per_xbin_err = np.sqrt( count_per_xbin )
+            
+            count_per_xbin     = ma.masked_where(count_per_xbin==0, count_per_xbin)
+            count_per_xbin_err = ma.masked_where(count_per_xbin==0, count_per_xbin_err)
+            
+            cnts = np.sum(count_per_xbin )
+
+            # variables for plotting relative error
+            count_per_xbin_rel_err = count_per_xbin_err / count_per_xbin
+            y_const = np.zeros(len(count_per_xbin_rel_err))
+
+            if(np.ma.is_masked(cnts)): continue
+            
+            if(not np.ma.is_masked(cnts)):
+
+                #plot overlay of settings
+                ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', density=False, label=r'%d counts (%.1f GeV$^{2}$)'%(cnts, jq2))
+
+                # to be continued . . .
+        
 def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=1):
     '''
     Brief: generic function to overlay 1d histograms from multiple kin. files for deut fsi
