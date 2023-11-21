@@ -249,6 +249,7 @@ def combine_sets(kin_set=[], hist_name='', model='', plot_flag=''):
     
     rel_err_thrs = 0.5 # mask >30 % relative error
 
+    clr = ['b', 'forestgreen']
 
     if plot_flag=='proj' or plot_flag=='tot_proj':
         # set figure subplots for the 1d projections
@@ -375,7 +376,7 @@ def combine_sets(kin_set=[], hist_name='', model='', plot_flag=''):
                                 
                                 #plot combined settings
                                 ax = plt.subplot(5, 4, jdx+1)
-                                ax.hist(ybc, bins=len(ybc), weights=total_counts, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', density=False, label=r'%d counts'%(cnts))
+                                ax.hist(ybc, bins=len(ybc), weights=total_counts, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', color="gray", density=False, label=r'%d counts'%(cnts))
                                 plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                                 plt.legend(frameon=False, loc='upper right')
                                 jdx = jdx+1
@@ -389,11 +390,11 @@ def combine_sets(kin_set=[], hist_name='', model='', plot_flag=''):
                                 ybc_m = ma.masked_where(total_counts_rel_err>rel_err_thrs, ybc)
 
                                 
-                                ax2.errorbar(ybc_m, y_const_m, total_counts_rel_err_m, marker='o', markersize=4, linestyle='None', label=r'(%d MeV, %.1f GeV$^{2}$)'%(pm, Q2)) #//, label=r'%d counts'%(cnts))
+                                ax2.errorbar(ybc_m, y_const_m, total_counts_rel_err_m, marker='o', mfc='gray', mec='gray', markersize=4, ecolor='gray', linestyle='None', label=r'(%d MeV, %.1f GeV$^{2}$)'%(pm, Q2)) #//, label=r'%d counts'%(cnts))
                                 plt.axhline(y = 0.20, color = 'r', linestyle = '--')
                                 plt.axhline(y = -0.20, color = 'r', linestyle = '--')
                                 plt.ylim(-0.6,0.6)
-                                plt.xlim(0.05, 0.6)
+                                plt.xlim(0.0, 0.5)
                                 plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                                 jdx = jdx+1
                                 
@@ -403,13 +404,13 @@ def combine_sets(kin_set=[], hist_name='', model='', plot_flag=''):
             if(np.ma.is_masked(cnts)): continue
             
             if(not np.ma.is_masked(cnts)):
-
+            
 
                 if plot_flag=='proj':
                     
                     #plot overlay of settings
                     ax = plt.subplot(4, 3, jdx+1)
-                    ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', density=False, label=r'%d counts'%(cnts)+"\n"+r"setting:(%d, %.1f)"%(pm, Q2))
+                    ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], color=clr[i], alpha=0.5, ec='k', density=False, label=r'%d counts'%(cnts)+"\n"+r"setting:(%d MeV, %.1f GeV$^{2}$)"%(pm, Q2))
                     plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                     plt.legend(frameon=False, loc='upper right')
 
@@ -425,10 +426,11 @@ def combine_sets(kin_set=[], hist_name='', model='', plot_flag=''):
                     ybc_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, ybc)
 
                     ybc_m = ybc_m + offset
-                    ax2.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=4, linestyle='None', label=r'(%d MeV, %.1f GeV$^{2}$)'%(pm, Q2)) #//, label=r'%d counts'%(cnts))
+                    ax2.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=4, linestyle='None', color=clr[i], elinewidth=2, label=r'(%d MeV, %.1f GeV$^{2}$)'%(pm, Q2)) #//, label=r'%d counts'%(cnts))
                     plt.axhline(y = 0.20, color = 'r', linestyle = '--')
                     plt.axhline(y = -0.20, color = 'r', linestyle = '--')
                     plt.ylim(-0.6,0.6)
+                    plt.xlim(0.0, 0.5)
                     plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
 
                     #print('------> relative errors for (pm, Q2):', pm, Q2)
@@ -1070,8 +1072,14 @@ pm_set = [300]
 q2_set = [3.5, 4.0, 4.5]
 
 
-#combine_sets([[200, 4.0, 1], [300, 4.0, 3]], 'Pm_vs_thrq', 'fsi', 'tot_proj')
+
+# ----- combine multiple kin. settings --------
+#combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'proj')
+#combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'proj_err')
+
+#combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'tot_proj')
 combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
+
 
 #combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'proj')
 
