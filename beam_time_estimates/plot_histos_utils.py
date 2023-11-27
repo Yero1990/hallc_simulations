@@ -785,7 +785,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, plot_flag=''):
     if plot_flag=='ratio':
         
         # set figure subplots for ratio
-        fig, ax = plt.subplots(5, 8, sharex='col', sharey='row')
+        #fig, ax = plt.subplots(5, 8, sharex='col', sharey='row')
+        fig, ax = plt.subplots(5, 8)
         fig.text(0.5, 0.01, r'Recoil Angle $\theta_{rq}$ [deg]', ha='center', fontsize=12)
         fig.text(0.01, 0.5, r'R = FSI / PWIA', va='center', rotation='vertical', fontsize=12)
         subplot_title ='angular distributions FSI/PWIA ratio'   #setting: (%d MeV, %d deg)'%(pm_set, thrq_set)
@@ -856,7 +857,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, plot_flag=''):
                     ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', linestyle='None', ms=5, label=r'$\theta_{rq}=%.1f$ deg'%ithrq)
                     ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=10)
                     plt.axhline(1, linestyle='--', color='gray')
-                                  
+                    ax.set_xlim(20,90)
+                    ax.set_ylim(0,4.5)
    
     plt.tight_layout()
     plt.legend()
@@ -1086,6 +1088,7 @@ q2_set = [3.5, 4.0, 4.5]
 
 
 
+make_ratios_d2fsi([800], [28, 55, 60, 72], plot_flag='ratio')
 
 # ------ Pm vs theta_rq yield projections and errors -----
 
@@ -1161,8 +1164,8 @@ make_projY_d2pol('hyptar_vs_eyptar', pm_set, q2_set, 'fsi', '2d')
 #make_projY_d2pol('Q2_2Davg', pm_set, q2_set, 'fsi', '2d')
 #make_projY_d2pol('Q2_2Davg', pm_set, q2_set, 'fsi', 'proj')
 
-make_projY_d2pol('phi_pq_2Davg', pm_set, q2_set, 'fsi', '2d')
-make_projY_d2pol('phi_pq_2Davg', pm_set, q2_set, 'fsi', 'proj')
+#make_projY_d2pol('phi_pq_2Davg', pm_set, q2_set, 'fsi', '2d')
+#make_projY_d2pol('phi_pq_2Davg', pm_set, q2_set, 'fsi', 'proj')
 
 #make_projY_d2pol('cphi_pq_2Davg', pm_set, q2_set, 'fsi', '2d')
 #make_projY_d2pol('cphi_pq_2Davg', pm_set, q2_set, 'fsi', 'proj')
