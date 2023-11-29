@@ -808,7 +808,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, plot_flag=''):
             thrq_binw = float(get_label('xbin_width', histos_file_path_pwia))
 
                         
-            rel_err_thrs = 0.3   #  relative stat. error threshold for masking
+            rel_err_thrs = 0.4   #  relative stat. error threshold for masking
 
             # read dataframe
             df_fsi  = pd.read_csv(histos_file_path_fsi,  comment='#')
@@ -1088,7 +1088,7 @@ q2_set = [3.5, 4.0, 4.5]
 
 
 
-make_ratios_d2fsi([800], [28, 55, 60, 72], plot_flag='ratio')
+make_ratios_d2fsi([800], [28, 49, 55, 60, 72, 79], plot_flag='ratio')
 
 # ------ Pm vs theta_rq yield projections and errors -----
 
