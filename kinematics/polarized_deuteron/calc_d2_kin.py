@@ -62,8 +62,8 @@ def calc_d2_kin():
     ofile.write('# 4-Momentum Transfer (Q2) = %.2f - %.2f GeV (step: %.2f) \n' % (Q2_min, Q2_max-Q2_step, Q2_step))
     ofile.write('# x-Bjorken (xbj) = %.2f - %.2f (step: %.2f) \n' % (xbj_min, xbj_max, xbj_step))    
     ofile.write('# Missing Momentum (Pr) = %.2f - %.2f GeV (step: %.2f) \n' % (Pr_min, Pr_max, Pr_step))
-    ofile.write('# Hadron Out-of-Plane Angle (phi) = 0 deg \n')
-    ofile.write('# thp = thq + thpq, phi = 0 ?  (q-vector scatters at larger  angles than proton scattering angle)')
+    ofile.write('# Hadron Out-of-Plane Angle (phi): rotation axis is q-vector \n')
+    ofile.write('# thp = thq + thpq, phi = 180  (q-vector scatters at smaller  angles than proton scattering angle)')
     ofile.write('# \n')
     ofile.write('# ')
     ofile.write('# \n'
@@ -140,8 +140,8 @@ def calc_d2_kin():
                 thnq = np.arccos(cthnq) / dtr  #theta_nq [deg]
                 
                 #theta_p (proton angle relative to +z (lab))
-                thp = thq + thpq  # phi = 0?  (q-vector scatters at smaller angles than proton scattering angle)
-                #thp = thq - thpq   # phi = 180 ?  (q-vector scatters at larger  angles than proton scattering angle)
+                thp = thq + thpq  # phi = 180  (q-vector scatters at smaller angles than proton scattering angle)
+                #thp = thq - thpq   # phi = 0   (q-vector scatters at larger  angles than proton scattering angle)
 
                 if (np.isnan(thp)): continue
 

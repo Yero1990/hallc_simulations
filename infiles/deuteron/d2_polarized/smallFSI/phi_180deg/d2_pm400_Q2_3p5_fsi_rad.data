@@ -1,9 +1,9 @@
 ! Deuteron Experiment D(e,e'p)n : polarized deuteron
 ! Central "missing momentum" (pmiss) setting = 400 MeV
 ! Central Q2: 3.5 GeV^2
-! Pol. Mag. Field direction rotated +20 deg beam-right (towards HMS)
-! Proton Angle Restriction: < 20 + 35 =  55 deg
-! Electron Angle Restriction: < |20 - 35| = 15 deg
+! Pol. Mag. Field direction rotated +22 deg beam-right (towards HMS)
+! Proton Angle Restriction: < 22 + 35 =  57 deg
+! Electron Angle Restriction: < |22 - 35| = 13 deg
 ! Out-of-Plane Angle (phi): 180 deg
 ! FSI | YES radiative effects | YES energy loss | NO energy loss correction 
 ! 'TF' stands for 'this field'
@@ -30,7 +30,7 @@
      spec%e%P  =    9217.                              !  e arm central momentum (MeV/c) 
      spec%e%theta  =  10.89                            !  e arm angle setting (degrees)
      spec%p%P  =    1975.                             !  p arm central momentum (MeV/c) 
-     spec%p%theta  =   42.88                           !  p arm angle setting (degrees)
+     spec%p%theta  =   55.69                           !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 

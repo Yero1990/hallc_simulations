@@ -4,7 +4,7 @@
 ! Pol. Mag. Field direction rotated +20 deg beam-right (towards HMS)
 ! Proton Angle Restriction: < 20 + 35 =  55 deg
 ! Electron Angle Restriction: < |20 - 35| = 15 deg
-! Out-of-Plane Angle (phi): 0 deg
+! Out-of-Plane Angle (phi): 180 deg
 ! FSI | YES radiative effects | YES energy loss | NO energy loss correction 
 ! 'TF' stands for 'this field'
 ! ONE equals TRUE unless specified otherwise
@@ -27,10 +27,10 @@
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
-     spec%e%P  =    8551.0                              !  e arm central momentum (MeV/c) 
+     spec%e%P  =    8551                              !  e arm central momentum (MeV/c) 
      spec%e%theta  =  12.82                            !  e arm angle setting (degrees)
-     spec%p%P  =    2565.                             !  p arm central momentum (MeV/c)  original: 2758 MeV, new: 2758 - 0.07*2758 (shift delta from neg to ~0%)
-     spec%p%theta  =   43.16                           !  p arm angle setting (degrees)
+     spec%p%P  =    2758.                             !  p arm central momentum (MeV/c) 
+     spec%p%theta  =   38.11                           !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
