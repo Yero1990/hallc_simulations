@@ -1,0 +1,7 @@
+The directories have theory calculations
+using the average kinematics at Pm_central = 800 MeV/c
+The chx contains the calculations with charge-exchange corrections
+
+./q4_sig_avkin_thnq_pm
+
+./q4_sig_avkin_thnq_pm_chx
