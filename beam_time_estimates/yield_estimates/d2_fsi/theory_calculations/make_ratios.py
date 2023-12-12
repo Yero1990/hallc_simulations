@@ -40,9 +40,9 @@ GeV2MeV = 1000.  # 1 GeV = 1000 MeV
 # crs0 : PWIA
 # crs12 : PWIA + FSI
 # ratio: crs12 /  crs0 
-model_set = ["2_1_1_0_12", "3_1_1_0_12"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
+#model_set = ["2_1_1_0_12", "3_1_1_0_12"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
 #model_set = ["2_1_1_0_123"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
-#model_set = ["3_1_1_0_12"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
+model_set = ["3_1_1_0_12"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
 
 # central recoil angle
 thrq_set = [28, 49, 55, 60, 66, 72, 79]
@@ -96,15 +96,15 @@ for model in model_set:
         # append the interpolated function array to a total array
         total_f.append(f_ratio(x))
 
-        #plt.plot(x, f_ratio(x), marker='None', linestyle='-', label=r'$\theta_{nq} = %d$'%ithrq)
+        plt.plot(x, f_ratio(x), marker='None', linestyle='-', label=r'$\theta_{nq} = %d$'%ithrq)
 
     # calculate the mean of the concatenated arrays to get an avergaed array
-    total_f_avg = np.mean(total_f, axis=0)
-    total_x_avg = np.mean(total_x, axis=0)
+    #total_f_avg = np.mean(total_f, axis=0)
+    #total_x_avg = np.mean(total_x, axis=0)
 
         
-    total_f_avg_intp = interp1d(total_x_avg, total_f_avg, 'cubic')
+    #total_f_avg_intp = interp1d(total_x_avg, total_f_avg, 'cubic')
  
-    plt.plot(total_x_avg, total_f_avg_intp(total_x_avg), marker='None', linestyle='-', label=r'total; model %s'%model)
+    #plt.plot(total_x_avg, total_f_avg_intp(total_x_avg), marker='None', linestyle='-', label=r'total; model %s'%model)
 plt.legend()
 plt.show()

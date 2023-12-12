@@ -848,10 +848,11 @@ def make_ratios_d2fsi(pm_set, thrq_set, plot_flag=''):
             #print('thrq_bins:', thrq_bins)
             #print('ratio[thrq=37.5]:', ratio[thrq_bins==37.5])
 
+            
             for idx, pm_bin in enumerate(pm_bins):
                 
                 if plot_flag=='ratio':
-                    
+                    print('')
                     # ---- plot ratio fsi/pwia -----
                     ax = plt.subplot(5, 8, idx+1)
                     ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', linestyle='None', ms=5, label=r'$\theta_{rq}=%.1f$ deg'%ithrq)
@@ -863,7 +864,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, plot_flag=''):
     plt.tight_layout()
     plt.legend()
     plt.show()
-    #plt.savefig('test.png')
+    plt.savefig('test.png')
 
 def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
     # NEED TO FIX THIS FUNCTION, AS IT CURRENTLY DISPLAYS MULTIPLE SUBPLOTS, WHERE ONLY ONE IS NEEDED
@@ -1070,8 +1071,8 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
 #*************************************
 
 # select the single-valued central momentum setting and multi-value Q2 setting for plotting
-pm_set = [300]
-q2_set = [3.5, 4.0, 4.5]
+#pm_set = [300]
+#q2_set = [3.5, 4.0, 4.5]
 
 
 
@@ -1087,8 +1088,14 @@ q2_set = [3.5, 4.0, 4.5]
 
 
 
+#*************************************
+#
+# D2 FSI STUDIES PROPOSAL PLOTS  *
+#
+#*************************************
 
-make_ratios_d2fsi([800], [28, 49, 55, 60, 72, 79], plot_flag='ratio')
+#make_ratios_d2fsi([800], [28, 49, 55, 60, 72, 79], plot_flag='ratio')
+make_ratios_d2fsi([800], [28, 49, 60, 72], plot_flag='ratio')
 
 # ------ Pm vs theta_rq yield projections and errors -----
 
