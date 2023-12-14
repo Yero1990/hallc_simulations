@@ -193,8 +193,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     
     //Define File Name Patterns
     simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi_180deg/%s.data",    basename.Data());
-    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s.root",                      basename.Data());
-    simc_OutputFileName = Form("worksim/d2_pol/smallFSI/optimized/analyzed/%s_output.root",          basename.Data());
+    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/phi_180deg/optimized/raw/%s.root",                      basename.Data());
+    simc_OutputFileName = Form("worksim/d2_pol/smallFSI/phi_180deg/optimized/analyzed/%s_output.root",          basename.Data());
     
     // define output file to write the rates
     output_file = "yield_estimates/d2_pol/smallFSI/optimized/output_rates_d2pol_optim.txt";
@@ -822,11 +822,10 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   //Secondary Kinematics (USED BY DATA AND SIMC)
   Double_t Pf;                     //final proton momentum
   Double_t Ep;                      //final proton energy (needs to be calculated)
-  Double_t En;                      //final neutron energy (needs to be calculated)
+  Double_t Erecoil;                      //Total energy of recoil system (GeV)
   Double_t thp;               //to be calculated separately (in data)
   Double_t Em;                     //Standard Missing Energy 
   Double_t Em_nuc;                     //nuclear definition of Missing Energy (nu - det kin E - recoil kin E)
-  Double_t Erecoil;                  // Total energy of recoil system (GeV)
   Double_t Pm;                     //Missing Momentum (should be zero for H(e,e'p). Should be neutron momentum for D(e,e'p))
   Double_t Pmx_lab;                //x-comp. Missing Momentum 
   Double_t Pmy_lab;                 //y-comp. Missing Momentum 
@@ -904,17 +903,23 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   Double_t Q2_v;                //Q2 (vertex)  
   Double_t nu_v;                //energy transfer = Ein_v - Ef_v
   Double_t q_v;             //magintude of 3-vector q
+  Double_t Em_v;                //missing energy at the vertex
+  Double_t Em_nuc_v;             //nuclear missing energy at the vertex
   Double_t Pm_v;                //missing momentum at the vertex
   Double_t Pm_par_v;            //parallel compoent of missing momentum at vertex
   Double_t Pf_v;                //final proton momentum at the vertex
   Double_t Ep_v;                //final proton energy at the vertex
   Double_t Ef_v;                //final electron energy at the vertex
-  Double_t En_v;                //final neutron energy at the vertex
-  
+  Double_t Erecoil_v;                //final neutron energy at the vertex
+  Double_t W_v;
+  Double_t W2_v;
   Double_t ki_v;
   Double_t kf_v;
   Double_t X_v;
-
+  Double_t Tx_v;   // detected particle kinetic energy
+  Double_t Tr_v;   // recoil kinetic energy
+  Double_t MM_v;   // MISSING MASS
+  Double_t MM2_v;
   
   //Vertex X'tar / Y'tar: 
   //Recently added (These are needed to use with hcana methods TransportToLab(Pf, xptar, yptar, p_vec),
@@ -953,7 +958,9 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   TLorentzVector fP0_v;           // Beam 4-momentum
   TLorentzVector fP1_v;           // Scattered electron 4-momentum
   TLorentzVector fA_v;            // Target 4-momentum
+  TLorentzVector fMp_v;           // 4-momentum of target (assuming proton)
   TLorentzVector fA1_v;           // Final system 4-momentum
+  TLorentzVector fMp1_v;
   TLorentzVector fQ_v;            // Momentum transfer 4-vector
   TLorentzVector fX_v;            // Detected secondary particle 4-momentum (GeV)
   TLorentzVector fB_v;            // Recoil system 4-momentum (GeV)
@@ -961,11 +968,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   TVector3 Pf_vec_v;              //final proton momentum vector at the vertex
   TVector3 kf_vec_v;              //final electron momentum vector at the vertex
 
-  TVector3 ki_vec_v;
-  TVector3 unit_react_v; // unit vector normal to scattering plane (beam x kf)
-  TVector3 unit_scat_v;  // unit vector normal to reaction plane (q x pf)
-  Double_t cos_phi_calc;  // cosine of the angle phi between the react and scat plane
-  Double_t phi_calc;
+  Double_t fXangle_v;
   
   //Declare necessary variables for rotaion from +z to +q
   TVector3 qvec_v;
@@ -1025,7 +1028,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   //Secondary Kinematics (hadron kinematics)
   tree->SetBranchAddress("h_pf",    &Pf);
   tree->SetBranchAddress("theta_p", &thp);
-  tree->SetBranchAddress("Em", &Em);
+  tree->SetBranchAddress("Em", &Em_nuc);
   tree->SetBranchAddress("Pm", &Pm);
   tree->SetBranchAddress("Pmx", &Pmx_lab);
   tree->SetBranchAddress("Pmy", &Pmy_lab);
@@ -1247,38 +1250,14 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     ki = sqrt(Ei*Ei - me*me);   // initial e- momentum
 
     Pf = Pf/1000.;  //final proton momentum (GeV/c)
-    Ep = sqrt(MP*MP + Pf*Pf); // final proton energy
 
-    if(debug){
-      
-      cout << Form("Ei(v0): %.3f", Ei) << endl;
-      cout << Form("ki: %.3f", ki) << endl;
-      cout << Form("kf: %.3f", kf) << endl;
-      cout << Form("Pf: %.3f", Pf) << endl;
-      cout << Form("Q2: %.3f", Q2) << endl;
-      cout << Form("q: %.3f", q) << endl;
-      cout << Form("nu: %.3f", nu) << endl;
-      cout << Form("the: %.3f", the) << endl;
-      cout << Form("th_q: %.3f", th_q) << endl;
-      cout << Form("ph_q: %.3f", ph_q) << endl;
-      cout << Form("X: %.3f", X) << endl;
-      
-    }
-
-    
     //Calculate electron final momentum 3-vector
     SetCentralAngles(the_central, phe_central);
     TransportToLab(kf, e_xptar, e_yptar, kf_vec);
 
-    cout << "" << endl;
-    cout << Form("kf_vec.X() = %.3f", kf_vec.X()) << endl;
-    cout << Form("kf_vec.Y() = %.3f", kf_vec.Y()) << endl;
-    cout << Form("kf_vec.Z() = %.3f", kf_vec.Z()) << endl;
-    cout << Form("kf = %.3f", kf) << endl;
-
     
     fP0.SetXYZM( 0.0, 0.0, ki, me );          // e- beam 4-momentum (assumed to be along +Z in LAB)
-    fP1.SetVectM( kf_vec, me );             // e- scattered 4-momentum
+    fP1.SetXYZM( kf_vec.X(),  kf_vec.Y(),  kf_vec.Z(), me );             // e- scattered 4-momentum
     fMp.SetXYZM( 0.0, 0.0, 0.0, MP );       // proton mass (for x_bj calculation)
     fA.SetXYZM( 0.0, 0.0, 0.0, tgt_mass );  // initial target 4-momentum (target at rest assumed)    
     fQ         = fP0 - fP1;    // four-momentum transfer 
@@ -1286,27 +1265,6 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     fMp1       = fMp + fQ;
 
     
-    cout << Form("fA.X() = %.3f", fA.X()) << endl;
-    cout << Form("fA.Y() = %.3f", fA.Y()) << endl;
-    cout << Form("fA.Z() = %.3f", fA.Z()) << endl;
-    cout << Form("fA.E() = %.3f", fA.E()) << endl;
-    cout << Form("fA.M() = %.3f", fA.M()) << endl;
-    cout << "" << endl;
-    cout << Form("fQ.X() = %.3f", fQ.X()) << endl;
-    cout << Form("fQ.Y() = %.3f", fQ.Y()) << endl;
-    cout << Form("fQ.Z() = %.3f", fQ.Z()) << endl;
-    cout << Form("fQ.E() = %.3f", fQ.E()) << endl;
-    cout << Form("fQ.M() = %.3f", fQ.M()) << endl;
-    cout << "" << endl;
-    cout << Form("fA1.X() = %.3f", fA1.X()) << endl;
-    cout << Form("fA1.Y() = %.3f", fA1.Y()) << endl;
-    cout << Form("fA1.Z() = %.3f", fA1.Z()) << endl;
-    cout << Form("fA1.E() = %.3f", fA1.E()) << endl;
-    cout << Form("fA1.M() = %.3f", fA1.M()) << endl;
-    
-        
-    
-    //calculate e- kinematics from the 4-vectors
     Q2        = -fQ.M2();  // 4-momentum transferred squared
     q         = fQ.P();    // 3-momentum trasnfer |q|
     nu        = fQ.E();    // energy transfer, nu
@@ -1317,69 +1275,30 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     ph_q      = fQ.Phi() / dtr;    // out-of-plane angle of q-vector relative to +z (along beam)[deg]
     X         = Q2 / (2.*MP*nu);   //x-bjorken
 
-    if(debug){
-      
-      cout << Form("Ei: %.3f", Ei) << endl;
-      cout << Form("ki: %.3f", ki) << endl;
-      cout << Form("kf: %.3f", kf) << endl;
-      cout << Form("Pf: %.3f", Pf) << endl;
-      cout << Form("Q2: %.3f", Q2) << endl;
-      cout << Form("q: %.3f", q) << endl;
-      cout << Form("nu: %.3f", nu) << endl;
-      cout << Form("the: %.3f", the) << endl;
-      cout << Form("th_q: %.3f", th_q) << endl;
-      cout << Form("ph_q: %.3f", ph_q) << endl;
-      cout << Form("X: %.3f", X) << endl;
-      
-    }
-	
-    //calculate final proton momentum vector
-    SetCentralAngles(thp_central, php_central);
+   
+    // calculate final proton momentum vector
+    // VERY IMPORTANT: IN HCANA, central angle for HMS is set to negative by default,
+    // (therefore, make sure to use the same condition in SIMC)
+    SetCentralAngles(-thp_central, php_central); 
     TransportToLab(Pf, h_xptar, h_yptar, Pf_vec);
 
     // four-momentum of the detected (X) particle (for A(e,e'X), our X = p (proton))
-    fX.SetVectM(Pf_vec, MP);   
+    fX.SetXYZM(Pf_vec.X(), Pf_vec.Y(), Pf_vec.Z(), MP);   
 
-
-    cout << Form("Pf_vec.X() = %.3f", Pf_vec.X()) << endl;
-    cout << Form("Pf_vec.Y() = %.3f", Pf_vec.Y()) << endl;
-    cout << Form("Pf_vec.Z() = %.3f", Pf_vec.Z()) << endl;
-    cout << Form("Pf = %.3f", Pf) << endl;
-    cout << "" << endl;
-    cout << Form("fX.X() = %.3f", fX.X()) << endl;
-    cout << Form("fX.Y() = %.3f", fX.Y()) << endl;
-    cout << Form("fX.Z() = %.3f", fX.Z()) << endl;
-    cout << Form("fX.E() = %.3f", fX.E()) << endl;
-    cout << Form("fX.M() = %.3f", fX.M()) << endl;
-    cout << "" << endl;
-    
     // four-momentum of the undetected, recoil system, B
-    fB = fA1 - fX;      
-
-    cout << Form("fB.X() = %.3f", fB.X()) << endl;
-    cout << Form("fB.Y() = %.3f", fB.Y()) << endl;
-    cout << Form("fB.Z() = %.3f", fB.Z()) << endl;
-    cout << Form("fB.E() = %.3f", fB.E()) << endl;
-    cout << Form("fB.M() = %.3f", fB.M()) << endl;
-    cout << "" << endl;
+    fB = fA1 - fX;
     
     // opening Angle of X with scattered primary (e-) particle
     fXangle = fX.Angle( fP1.Vect()) / dtr; //[deg]
-    cout << Form("theta_p (v0): %.3f", thp/dtr) << endl;
     thp =  fXangle - the; // proton scattering angle [deg]
-    cout << Form("theta_p (v1): %.3f", thp) << endl;
-
-    
+	
     // missing momentum components in LAB frame [GeV]
     Pmx_lab = fB.X();
     Pmy_lab = fB.Y(); 
     Pmz_lab = fB.Z();
 
-    cout << Form("-----> Pm (v0) = %.3f", Pm ) << endl;
-
-    
+    // calculate missing momentum magnitude
     Pm =  sqrt(Pmx_lab*Pmx_lab + Pmy_lab*Pmy_lab + Pmz_lab*Pmz_lab);
-    cout << Form("-----> Pm (v1) = %.3f", Pm ) << endl;
     
     //--------Rotate the recoil system from +z to +q-------
     rot_to_q.SetZAxis( fQ.Vect(), fP1.Vect() ).Invert(); // rotate 
@@ -1397,10 +1316,12 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     th_rq = bq.Theta() / dtr;   // theta_rq  [deg]                                                                                                    
     ph_rq = bq.Phi()   / dtr;     //"out-of-plane angle", phi_rq [deg]
 
-    
+    // convert [0, 360] to [-180, 180] deg
+    if(ph_pq >= 180.){
+      ph_pq = ph_pq - 360.;
+    }
+	
     p_miss_q = -bq;  // missing momentum vector in q-frame
-
-    cout << Form("-----> Pm (v2) = %.3f", p_miss_q.Mag() ) << endl;
 
     //Missing Momentum Components in the q-frame [GeV]
     Pmz_q = p_miss_q.Z();   //parallel component to +z (+z is along q)
@@ -1411,14 +1332,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     MM2 = MM*MM;
 
     // Kinetic energies of detected (X) and recoil (B) in GeV
-    //Tx = fX.E() - MP;  // need to figure out why does this NOT work
-    //Tr = fB.E() - MM;
-
-    // neutron energy
-    En = sqrt(MN*MN + Pm*Pm);
-    
-    Tx = Ep - MP;                                                                    
-    Tr = En - MN;
+    Tx = fX.E() - MP;  // need to figure out why does this NOT work
+    Tr = fB.E() - MM;
     
     // Standard nuclear physics definition of "missing energy":
     // binding energy of X in the target (= removal energy of X).
@@ -1426,29 +1341,19 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     // a significant excitation energy. This excitation is included in Emiss
     // here, as it should, since it results from the binding of X.
     Em_nuc = nu - Tx - Tr;
-    cout << Form("nu: %.3f", nu) << endl;
-    cout << Form("Tx: %.3f", Tx) << endl;
-    cout << Form("Tr: %.3f", Tr) << endl;
-    cout << Form("Em_nuc: %.3f", Em_nuc) << endl;
     
-    
-    // Target Mass + Beam Energy - scatt ele energy - hadron total energy
+    // particle physics missing energy: Target Mass + Beam Energy - scatt ele energy - hadron total energy
     Em = nu + fA.M() - fX.E();
     
     // In production reactions, the "missing energy" is defined 
     // as the total energy of the undetected recoil system.
-    // This is the "missing mass", Mrecoil, plus any kinetic energy.
-    Erecoil = fB.E();
-    
-    
-    //-----Define Additional Kinematic Variables--------
+    // This is the "missing mass", Mrecoil, plus any kinetic energy. (this is different than E_nuc)
+    Erecoil = fB.E();  // final recoil energy
+    Ep = fX.E();       // final proton energy
+      
+    // define difference between HMS/SHMS reconstructed z
     ztar_diff =  htar_z - etar_z;
-    
-    if(ph_pq >= 180.){
-      ph_pq = ph_pq - 360.;
-    }
-    
-    
+
     //SIMC Collimator (definition based on HCANA collimator)
     htarx_corr = tar_x - h_xptar*htar_z*cos(thp_central*dtr);
     etarx_corr = tar_x - e_xptar*etar_z*cos(the_central*dtr);  
@@ -1469,22 +1374,134 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     //Convert from MeV to GeV
     Ein_v = Ein_v / 1000.;
     Ef_v = Ef_v / 1000.;
-    Pf_v = Pf_v / 1000.;
-    Q2_v = Q2_v / 1.e6;
-    nu_v = nu_v / 1000.;
-    Pm_v = Pm_v / 1000.;
-    q_v = q_v / 1000.;
-    
-    ki_v = sqrt(Ein_v*Ein_v - me*me);   //initial electron momentum at vertex
     kf_v = sqrt(Ef_v*Ef_v - me*me);    //final electron momentum at vertex
+    ki_v = sqrt(Ein_v*Ein_v - me*me);   //initial electron momentum at vertex
 
-    X_v = Q2_v / (2.*MP*nu_v);         //X-Bjorken at the vertex
+    Pf_v = Pf_v / 1000.;
 
-    
-    // ------ Alternative 2: use initial 4-momentum components to calculate everything --------
+    //Q2_v = Q2_v / 1.e6;
+    //nu_v = nu_v / 1000.;
+    //Pm_v = Pm_v / 1000.;
+    //q_v = q_v / 1000.;
+
     //Calculate electron final momentum 3-vector
     SetCentralAngles(the_central, phe_central);
     TransportToLab(kf_v, e_xptar_v, e_yptar_v, kf_vec_v);
+    
+    //Calculate 4-Vectors at the vertex    
+    fP0_v.SetXYZM(0.0, 0.0, ki_v, me); 
+    fP1_v.SetXYZM( kf_vec_v.X(), kf_vec_v.Y(), kf_vec_v.Z(), me);
+    fA_v.SetXYZM(0.0, 0.0, 0.0, tgt_mass );
+    fMp_v.SetXYZM( 0.0, 0.0, 0.0, MP );       // proton mass (for x_bj calculation)
+    fQ_v = fP0_v - fP1_v;
+    fA1_v = fA_v + fQ_v;  
+    fMp1_v       = fMp_v + fQ_v;
+
+    Q2_v        = -fQ_v.M2();  // 4-momentum transferred squared
+    q_v         = fQ_v.P();    // 3-momentum trasnfer |q|
+    nu_v        = fQ_v.E();    // energy transfer, nu
+    W2_v        = fMp1_v.M2();  // INVARIANT MASS squared
+    if (W2_v>0) { W_v = TMath::Sqrt(W2_v); } // INVARIANT MASS GeV
+    the_v       = fP0_v.Angle( fP1_v.Vect() ) / dtr ;   // e- scattering angle [deg]
+    thq_v      = fQ_v.Theta() / dtr;  // in-plane angle of q-vector relative to +z (along beam) [deg]
+    phq_v      = fQ_v.Phi() / dtr;    // out-of-plane angle of q-vector relative to +z (along beam)[deg]
+    X_v       = Q2_v / (2.*MP*nu_v);   //x-bjorken
+
+     // calculate final proton momentum vector 
+    // VERY IMPORTANT: IN HCANA, central angle for HMS is set to negative by default,
+    // (therefore, make sure to use the same condition in SIMC)
+    SetCentralAngles(-thp_central, php_central);
+    TransportToLab(Pf_v, h_xptar_v, h_yptar_v, Pf_vec_v);
+
+    // four-momentum of the detected (X) particle (for A(e,e'X), our X = p (proton))
+    fX_v.SetXYZM(Pf_vec_v.X(), Pf_vec_v.Y(), Pf_vec_v.Z(), MP);
+
+    // four-momentum of the undetected, recoil system, B
+    fB_v = fA1_v - fX_v;                 //4-MOMENTUM OF UNDETECTED PARTICLE 
+
+    // opening Angle of X with scattered primary (e-) particle
+    fXangle_v = fX_v.Angle( fP1_v.Vect()) / dtr; //[deg]
+    thp_v =  fXangle_v - the_v; // proton scattering angle [deg]
+
+    // missing momentum components in LAB frame [GeV]
+    Pmx_lab_v = fB_v.X();
+    Pmy_lab_v = fB_v.Y(); 
+    Pmz_lab_v = fB_v.Z();
+
+    // calculate missing momentum magnitude
+    Pm_v =  sqrt(Pmx_lab_v*Pmx_lab_v + Pmy_lab_v*Pmy_lab_v + Pmz_lab_v*Pmz_lab_v);
+    
+    //--------Rotate the recoil system from +z to +q-------
+    rot_to_q_v.SetZAxis( fQ_v.Vect(), fP1_v.Vect() ).Invert();
+
+    xq_v = fX_v.Vect();
+    bq_v = fB_v.Vect();
+    
+    xq_v *= rot_to_q_v;
+    bq_v *= rot_to_q_v;
+
+    //Calculate Angles of q relative to x(detected proton) and b(recoil neutron)
+    // sense of roation for phi is: +/- 180 deg
+    th_pq_v = xq_v.Theta()  / dtr;   //"thpq"                                       
+    ph_pq_v = xq_v.Phi()    / dtr;     //"out-of-plane angle", "phi_pq"                                                                    
+    th_rq_v = bq_v.Theta()  / dtr;   // theta_rq                                                                                                     
+    ph_rq_v = bq_v.Phi()    / dtr;     //"out-of-plane angle", phi_rq
+
+    // convert [0, 360] to [-180, 180] deg
+    if(ph_pq_v >= 180.){
+      ph_pq_v = ph_pq_v - 360.;
+    }
+
+    p_miss_q_v = -bq_v;  // missing momentum vector in q-frame
+
+    //Missing Momentum Components in the q-frame [GeV]
+    Pmz_q_v = p_miss_q_v.Z();   //parallel component to +z (+z is along q)
+    Pmx_q_v = p_miss_q_v.X();   //in-plane perpendicular component to +z
+    Pmy_q_v = p_miss_q_v.Y();   //out-of-plane component (Oop)
+
+    MM_v = fB_v.M(); // INVARIANT MASS of recoil system (aka missing mass) GeV
+    MM2_v = MM_v*MM_v;
+
+    // Kinetic energies of detected (X) and recoil (B) in GeV
+    Tx_v = fX_v.E() - MP;  // need to figure out why does this NOT work
+    Tr_v = fB_v.E() - MM;
+
+
+    Em_nuc_v = nu_v - Tx_v - Tr_v;
+    
+    // particle physics missing energy: Target Mass + Beam Energy - scatt ele energy - hadron total energy
+    Em_v = nu_v + fA_v.M() - fX_v.E();
+    
+    // In production reactions, the "missing energy" is defined 
+    // as the total energy of the undetected recoil system.
+    // This is the "missing mass", Mrecoil, plus any kinetic energy. (this is different than E_nuc)
+    Erecoil_v = fB.E();  // final recoil energy
+    Ep_v = fX.E();       // final proton energy
+      
+    
+    /* --- SNIPPET from event.f in SIMC with coordinate definitions ---
+   ! CALCULATE ANGLE PHI BETWEEN SCATTERING PLANE AND REACTION PLANE.
+   ! Therefore, define a new system with the z axis parallel to q, and
+   ! the x axis inside the q-z-plane: z' = q, y' = q X z, x' = y' X q
+   ! this gives phi the way it is usually defined, i.e. phi=0 for in-plane
+   ! particles closer to the downstream beamline than q.
+   ! phi=90 is above the horizontal plane when q points to the right, and
+   ! below the horizontal plane when q points to the left.
+   ! Also take into account the different definitions of x, y and z in
+   ! replay and SIMC:
+   ! As seen looking downstream:        replay	SIMC	(old_simc)
+   !				x	right	down	(left)  ---> this must not be correct for hallc replay: as lab coord:  +X -> beam left, +Y -> beam up, +z -> downstream
+   !				y	down	left	(up)
+   !				z	all have z pointing downstream
+   !
+   ! SO: x_replay=-y_simc, y_replay=x_simc, z_replay= z_simc
+    */
+
+
+
+
+ 
+
 
 
     /* --- SNIPPET from event.f in SIMC with coordinate definitions ---
@@ -1505,88 +1522,62 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
    ! SO: x_replay=-y_simc, y_replay=x_simc, z_replay= z_simc
     */
 
-    //C.Y set 3 momentum vector of beam
-    ki_vec_v.SetXYZ(0.,0.,ki_v);
 
 
 
-    
-    //Calculate 4-Vectors at the vertex    
-    fP0_v.SetXYZM(0.0, 0.0, ki_v, me);  //set initial e- 4-momentum at the vertex
-    //fP1_v.SetXYZM(-kf_vec_v.Y(), kf_vec_v.X(), kf_vec_v.Z(), me);  //set final e- 4-momentum at the vertex (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
-    //fP1_v.SetXYZM(-kf_vec_v.Y(), -kf_vec_v.X(), kf_vec_v.Z(), me); // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
-    //fP1_v.SetXYZM(kf_vec_v.Y(), -kf_vec_v.X(), kf_vec_v.Z(), me);   // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
-    //fP1_v.SetXYZM(kf_vec_v.Y(), kf_vec_v.X(), kf_vec_v.Z(), me);    // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
-    fP1_v.SetXYZM(-kf_vec_v.X(), kf_vec_v.Y(), kf_vec_v.Z(), me);  // THIS GIVES THE RIGHT PHI_PQ, THETA_PQ @ VERTEX
-    
-    // invert the components before taking cross product so it be consistent with the 4-vector aboeve
-    //kf_vec_v.SetXYZ(-kf_vec_v.Y(), kf_vec_v.X(), kf_vec_v.Z());  // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
-    //kf_vec_v.SetXYZ(-kf_vec_v.Y(), -kf_vec_v.X(), kf_vec_v.Z());  // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
-    //kf_vec_v.SetXYZ(kf_vec_v.Y(), -kf_vec_v.X(), kf_vec_v.Z());  //  // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
-    //kf_vec_v.SetXYZ(kf_vec_v.Y(), kf_vec_v.X(), kf_vec_v.Z());    // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
-    kf_vec_v.SetXYZ(-kf_vec_v.X(), kf_vec_v.Y(), kf_vec_v.Z());    //  THIS GIVES THE RIGHT PHI_PQ, THETA_PQ @ VERTEX
-
-    
-    // unit vector in the reaction plane
-    unit_react_v =  (ki_vec_v.Cross(kf_vec_v)).Unit() ;
-
-    
-    
-    fA_v.SetXYZM(0.0, 0.0, 0.0, tgt_mass );  //Set initial target at rest
-    fQ_v = fP0_v - fP1_v;
-    fA1_v = fA_v + fQ_v;   //final target (sum of final hadron four momenta)
-
-    SetCentralAngles(thp_central, php_central);
-    TransportToLab(Pf_v, h_xptar_v, h_yptar_v, Pf_vec_v);
-    
-    //fX_v.SetVectM(Pf_vec_v, MP);       //original: SET FOUR VECTOR OF detected particle
-    //fX_v.SetXYZM(-Pf_vec_v.Y(), Pf_vec_v.X(), Pf_vec_v.Z(), MP); // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
-    //fX_v.SetXYZM(-Pf_vec_v.Y(), -Pf_vec_v.X(), Pf_vec_v.Z(), MP); // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
-    //fX_v.SetXYZM(Pf_vec_v.Y(), -Pf_vec_v.X(), Pf_vec_v.Z(), MP);  //  // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
-    //fX_v.SetXYZM(Pf_vec_v.Y(), Pf_vec_v.X(), Pf_vec_v.Z(), MP);   // (THIS COORD DONT WORK, PRODUCES INCORRECT THETA_PQ, THETA_RQ @ VERTEX! )
-    fX_v.SetXYZM(Pf_vec_v.X(), Pf_vec_v.Y(), Pf_vec_v.Z(), MP);
-    
-    
-    fB_v = fA1_v - fX_v;                 //4-MOMENTUM OF UNDETECTED PARTICLE 
-    
-    Pmx_lab_v = fB_v.Px();
-    Pmy_lab_v = fB_v.Py(); 
-    Pmz_lab_v = fB_v.Pz();
-
-    //Electron / Proton In-Plane angles @ the vertex
-    the_v = kf_vec_v.Theta();
-    thp_v = Pf_vec_v.Theta();
-
-    //--------Rotate the recoil system from +z to +q-------
-
-    qvec_v = fQ_v.Vect();
-    kfvec_v = fP1_v.Vect();
-    
-    thq_v = qvec_v.Theta();
-    phq_v = qvec_v.Phi();
-
-    rot_to_q_v.SetZAxis( qvec_v, kfvec_v).Invert();
-
-    xq_v = fX_v.Vect();
-    bq_v = fB_v.Vect();
-    
-    xq_v *= rot_to_q_v;
-    bq_v *= rot_to_q_v;
-    
-    //Calculate Angles of q relative to x(detected proton) and b(recoil neutron)
-    // sense of roation for phi is: +/- 180 deg
-    th_pq_v = xq_v.Theta();   //"thpq"                                       
-    ph_pq_v = xq_v.Phi();     //"out-of-plane angle", "phi_pq"                                                                    
-    th_rq_v = bq_v.Theta();   // theta_rq                                                                                                     
-    ph_rq_v = bq_v.Phi();     //"out-of-plane angle", phi_rq
+ 
 
 
-    p_miss_q_v = -bq_v;
 
-    //Missing Momentum Components in the q-frame
-    Pmz_q_v = p_miss_q_v.Z();   //parallel component to +z (+z is along q)
-    Pmx_q_v = p_miss_q_v.X();   //in-plane perpendicular component to +z
-    Pmy_q_v = p_miss_q_v.Y();   //out-of-plane component (Oop)
+    /* --- SNIPPET from event.f in SIMC with coordinate definitions ---
+   ! CALCULATE ANGLE PHI BETWEEN SCATTERING PLANE AND REACTION PLANE.
+   ! Therefore, define a new system with the z axis parallel to q, and
+   ! the x axis inside the q-z-plane: z' = q, y' = q X z, x' = y' X q
+   ! this gives phi the way it is usually defined, i.e. phi=0 for in-plane
+   ! particles closer to the downstream beamline than q.
+   ! phi=90 is above the horizontal plane when q points to the right, and
+   ! below the horizontal plane when q points to the left.
+   ! Also take into account the different definitions of x, y and z in
+   ! replay and SIMC:
+   ! As seen looking downstream:        replay	SIMC	(old_simc)
+   !				x	right	down	(left)  ---> this must not be correct for hallc replay: as lab coord:  +X -> beam left, +Y -> beam up, +z -> downstream
+   !				y	down	left	(up)
+   !				z	all have z pointing downstream
+   !
+   ! SO: x_replay=-y_simc, y_replay=x_simc, z_replay= z_simc
+    */
+
+
+
+
+ 
+
+
+
+    /* --- SNIPPET from event.f in SIMC with coordinate definitions ---
+   ! CALCULATE ANGLE PHI BETWEEN SCATTERING PLANE AND REACTION PLANE.
+   ! Therefore, define a new system with the z axis parallel to q, and
+   ! the x axis inside the q-z-plane: z' = q, y' = q X z, x' = y' X q
+   ! this gives phi the way it is usually defined, i.e. phi=0 for in-plane
+   ! particles closer to the downstream beamline than q.
+   ! phi=90 is above the horizontal plane when q points to the right, and
+   ! below the horizontal plane when q points to the left.
+   ! Also take into account the different definitions of x, y and z in
+   ! replay and SIMC:
+   ! As seen looking downstream:        replay	SIMC	(old_simc)
+   !				x	right	down	(left)  ---> this must not be correct for hallc replay: as lab coord:  +X -> beam left, +Y -> beam up, +z -> downstream
+   !				y	down	left	(up)
+   !				z	all have z pointing downstream
+   !
+   ! SO: x_replay=-y_simc, y_replay=x_simc, z_replay= z_simc
+    */
+
+
+
+
+ 
+
+
 
 
     // C.Y.
@@ -1606,17 +1597,14 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       (neutron for D(e,e'p)n case)
     */
 
-    //neutron energy at the vertex
-    En_v = sqrt(MN*MN + Pm_v*Pm_v);
-    
     //recoil ("missing neutron") momentum component along q-vector
-    PmPar_v = Pm_v * cos(th_rq_v);
+    PmPar_v = Pm_v * cos(th_rq_v * dtr);
     
     //recoil momentum component transverse to q-vector
     PmPerp_v = sqrt(pow(Pm_v,2) - pow(PmPar_v,2));
     
     //light-cone momentum fraction of the recoil neutron
-    alpha_n_v = (En_v - PmPar_v) / (MD/2.);
+    alpha_n_v = (Erecoil_v - PmPar_v) / (MD/2.);
     
     //momentum fraction of struck nucleon (normalized such that: alpha + alpha_n = 2)
     alpha_v = 2. - alpha_n_v;
@@ -1652,9 +1640,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     if(Em_cut_flag){c_Em = Em_nuc>=c_Em_min && Em_nuc<=c_Em_max;}
     else{c_Em=1;}
 
-    cout << Form("Q2: %.3f", Q2) << endl;
-    cout << Form("Em: %.3f", Em) << endl;
-    
+ 
     //----Acceptance Cuts----
     if(hdelta_cut_flag){c_hdelta = h_delta>=c_hdelta_min && h_delta<=c_hdelta_max;} 
     else{c_hdelta=1;}
@@ -1688,9 +1674,6 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     
     if(c_allCuts) {
 
-      cout << "passed all cuts" << endl;
-      cout << Form("Q2 = %.3f", Q2) << endl;
-      
       // ------ This is for calculation of avergaed kinematics ---
       // will just use the vertex  kinematics -------
       H_Pm_vs_thrq_v    ->Fill(th_rq_v/dtr, Pm_v, FullWeight);	 

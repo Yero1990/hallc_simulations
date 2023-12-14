@@ -14,3 +14,4 @@
 #
 pm_set,Q2_set,model,pm_counts,deep_rates,daq_rates,current,time,charge
 400,     3.50,    fsi,     0.0,       0.000E+00,        6.847E-04,        100.000,      168.000,     60.480 
+400,     3.50,    fsi,     233.7,       3.863E-04,        6.847E-04,        100.000,      168.000,     60.480 
