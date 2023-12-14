@@ -401,7 +401,7 @@ def combine_sets(kin_set=[], hist_name='', model='', plot_flag=''):
                                 plt.axhline(y = 0.20, color = 'r', linestyle = '--')
                                 plt.axhline(y = -0.20, color = 'r', linestyle = '--')
                                 plt.ylim(-0.6,0.6)
-                                plt.xlim(0.0, 0.5)
+                                plt.xlim(0., 0.7)
                                 plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                                 jdx = jdx+1
                                 
@@ -437,7 +437,7 @@ def combine_sets(kin_set=[], hist_name='', model='', plot_flag=''):
                     plt.axhline(y = 0.20, color = 'r', linestyle = '--')
                     plt.axhline(y = -0.20, color = 'r', linestyle = '--')
                     plt.ylim(-0.6,0.6)
-                    plt.xlim(0.0, 0.5)
+                    plt.xlim(0.0, 0.7)
                     plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
 
                     #print('------> relative errors for (pm, Q2):', pm, Q2)
@@ -529,7 +529,7 @@ def overlay_d2pol(pm_set, Q2_set, hist_name, model, scale=1):
     rel_err_thrs = 1000   #  relative stat. error threshold for masking
 
     #fig, axs = plt.subplots(2, sharex=True, figsize=(5,10))
-    fig, axs = plt.subplots(2, figsize=(6,10))
+    fig, axs = plt.subplots(2, figsize=(6,7))
     
     # loop over central missing momentum setting
     for ipm in pm_set:
@@ -543,7 +543,7 @@ def overlay_d2pol(pm_set, Q2_set, hist_name, model, scale=1):
             # set histogram file path
             #histos_file_path = 'path/to/histogram_data/pm%d_q2%d_%s/histo_name_pm_set_q2_set.txt'%(pm_set, q2_set, model, hist_name)
 
-            hist_file = 'yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(ipm, iq2, model, hist_name, ipm, iq2)
+            hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(ipm, iq2, model, hist_name, ipm, iq2)
             #hist_file = 'yield_estimates/d2_pol/smallFSI/phi_0deg/optimized/histogram_data/pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(ipm, iq2, model, hist_name, ipm, iq2)
 
             print('Pm:', ipm, 'Q2:', iq2)
@@ -701,7 +701,8 @@ def make_all_plots(pm_user, thrq_user, model):
     # thrq_user :  central recoil angle (e.g. 28)
     # model     : Laget 'pwia' or 'fsi' 
 
-    histos_file_path = 'yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s/'%(pm_user, thrq_user, model)
+    #histos_file_path = 'yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s/'%(pm_user, thrq_user, model)
+    histos_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/pm%d_thrq%d_%s/'%(pm_user, thrq_user, model)
 
     for fname in os.listdir (histos_file_path):
         
@@ -1044,7 +1045,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
                         ax.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=4, linestyle='None', label=r'%.1f GeV$^{2}$'%(jq2)) #//, label=r'%d counts'%(cnts))
                         plt.axhline(y = 0.20, color = 'r', linestyle = '--')
                         plt.axhline(y = -0.20, color = 'r', linestyle = '--')
-            
+                        plt.xlim(0.2, 0.6)
                         plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                         jdx = jdx+1
             plt.legend(frameon=False, loc='upper right')
@@ -1096,9 +1097,9 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
 #
 #*************************************
 
-# select the single-valued central momentum setting and multi-value Q2 setting for plotting
-#pm_set = [400]
-#q2_set = [3.5, 4.0]
+# for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
+pm_set = [400]
+q2_set = [3.5]
 
 
 # plot evenrt rates, daq rates, per setting
@@ -1114,23 +1115,17 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
 
 
 # ----- combine multiple kin. settings --------
-combine_sets([[300, 3.5, 1], [400, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'proj')
-combine_sets([[300, 3.5, 1], [400, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'proj_err')
+#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'Pm_vs_thrq', 'fsi', 'proj')
+#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'Pm_vs_thrq', 'fsi', 'proj_err')
 
-combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'tot_proj')
-combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
-
-
-#combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'proj')
-
-
-
+#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'Pm_vs_thrq', 'fsi', 'tot_proj')
+#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
 
 
 # ----- plot the kinematics variables in which a cut is used (without the self cut, ie nsc or no self cut) -----
 '''
 overlay_d2pol(pm_set, q2_set, 'Q2_nsc', 'fsi')
-overlay_d2pol(pm_set, q2_set, 'Em_nsc', 'fsi')
+overlay_d2pol(pm_set, q2_set, 'Em_nuc_nsc', 'fsi')
 overlay_d2pol(pm_set, q2_set, 'edelta_nsc', 'fsi')
 overlay_d2pol(pm_set, q2_set, 'hdelta_nsc', 'fsi')
 make_projY_d2pol('hXColl_vs_hYColl_nsc', pm_set, q2_set, 'fsi', '2d')
@@ -1141,7 +1136,7 @@ make_projY_d2pol('eXColl_vs_eYColl', pm_set, q2_set, 'fsi', '2d')
 '''
 
 # ------ plot kinematic variables -----
-'''
+
 overlay_d2pol(pm_set, q2_set, 'Pf', 'fsi')   # proton momentum
 overlay_d2pol(pm_set, q2_set, 'thp', 'fsi')  # proton angle
 overlay_d2pol(pm_set, q2_set, 'kf', 'fsi')   # e- momentum
@@ -1155,7 +1150,7 @@ overlay_d2pol(pm_set, q2_set, 'thpq', 'fsi')    # in-plane angle between (proton
 overlay_d2pol(pm_set, q2_set, 'thrq', 'fsi')    # in-plane angle between (recoil,q)
 overlay_d2pol(pm_set, q2_set, 'phi_pq', 'fsi')  # out-of-plane angle between (proton, q)
 overlay_d2pol(pm_set, q2_set, 'cphi_pq', 'fsi')
-'''
+
 
 # ----- plot acceptance variables ----
 '''
