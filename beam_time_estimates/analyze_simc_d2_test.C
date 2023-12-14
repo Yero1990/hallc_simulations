@@ -192,9 +192,9 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     input_HBinFileName = "inp/d2_pol/set_basic_histos_d2pol.inp";
     
     //Define File Name Patterns
-    simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi_180deg/%s.data",    basename.Data());
-    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/phi_180deg/optimized/raw/%s.root",                      basename.Data());
-    simc_OutputFileName = Form("worksim/d2_pol/smallFSI/phi_180deg/optimized/analyzed/%s_output.root",          basename.Data());
+    simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/%s.data",    basename.Data());
+    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s.root",                      basename.Data());
+    simc_OutputFileName = Form("worksim/d2_pol/smallFSI/optimized/analyzed/%s_output.root",          basename.Data());
     
     // define output file to write the rates
     output_file = "yield_estimates/d2_pol/smallFSI/optimized/output_rates_d2pol_optim.txt";
@@ -219,7 +219,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     // READ CENTRAL KIN. SETTINGS
     //----------------------------
   
-    // SET TARGET MASS (and convert amu to GeV)  1 amu = 1 gram/mol = 1 gram x 1 mol / N_avogadro x 5.62e23 GeV / 1 gram
+    // READ TARGET MASS in amu (and convert amu to GeV)  1 amu = 1 gram/mol = 1 gram x 1 mol / N_avogadro x 5.62e23 GeV / 1 gram
     Double_t tgt_mass = ( stod(split(split(FindString("targ%mass_amu", simc_infile.Data())[0], '!')[0], '=')[1]) ) * gram2GeV / N_av;
     //beam energy (GeV)
     Double_t beam_e = (stod(split(split(FindString("Ebeam", simc_infile.Data())[0], '!')[0], '=')[1]))/1000.; 
@@ -568,7 +568,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     TH1F *H_thp     = new TH1F("H_thp", "Hadron Scattering Angle (detected), #theta_{p}; hadron scattering angle, #theta_{p} [deg]; Counts", thp_nbins, thp_xmin, thp_xmax);
     TH1F *H_Em      = new TH1F("H_Em","Missing Energy; missing energy, E_{m} [GeV]; Counts", Em_nbins, Em_xmin, Em_xmax); 
     TH1F *H_Em_nuc      = new TH1F("H_Em_nuc","Nuclear Missing Energy; nuclear missing energy, E_{m, nuc} [GeV]; Counts", Em_nbins, Em_xmin, Em_xmax); 
-    TH1F *H_Em_nsc      = new TH1F("H_Em_nsc","Nuclear Missing Energy; nuclear missing energy, E_{m} [GeV]; Counts", Em_nbins, Em_xmin, Em_xmax); 
+    TH1F *H_Em_nuc_nsc      = new TH1F("H_Em_nuc_nsc","Nuclear Missing Energy; nuclear missing energy, E_{m} [GeV]; Counts", Em_nbins, Em_xmin, Em_xmax); 
     
     TH1F *H_Pm      = new TH1F("H_Pm","Missing Momentum, P_{miss}; missing momentum, P_{m} [GeV/c]; Counts", Pm_nbins, Pm_xmin, Pm_xmax);
     TH1F *H_Pm_noCut      = new TH1F("H_Pm_noCut","Missing Momentum, P_{miss} (no cuts, DAQ rates); missing momentum, P_{m} [GeV/c]; Counts", Pm_nbins, Pm_xmin, Pm_xmax); 
@@ -607,13 +607,15 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     TH2F *H_thrq_2Davg   = new TH2F("H_thrq_2Davg", "#theta_{rq} (2D Average); #theta_{rq} [deg]; P_{m} [GeV/c]",thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
     
     // define some vertex histos for comparing with recon. histos
+    TH1F *H_Em_nuc_v      = new TH1F("H_Em_nuc_v","Nuclear Missing Energy; nuclear missing energy, E_{m, nuc} [GeV]; Counts", Em_nbins, Em_xmin, Em_xmax); 
     TH1F *H_Pm_v      = new TH1F("H_Pm_v","Missing Momentum, P_{miss} (vertex); missing momentum, P_{m} [GeV/c]; Counts", Pm_nbins, Pm_xmin, Pm_xmax);
     TH1F *H_Q2_v      = new TH1F("H_Q2_v",    "4-Momentum Transfer, Q^{2} (vertex); 4-momentum transfer, Q^{2} [GeV^{2}]; Counts", Q2_nbins, Q2_xmin, Q2_xmax);
     TH1F *H_the_v     = new TH1F("H_the_v",   "Electron Scattering Angle, #theta_{e} (vertex); e^{-} scattering angle, #theta_{e}  [deg]; Counts", the_nbins, the_xmin, the_xmax);
     TH1F *H_thpq_v    = new TH1F("H_thpq_v", "In-Plane Angle, #theta_{pq} (vertex); in-plane angle, #theta_{pq} [deg]; Counts", thpq_nbins, thpq_xmin, thpq_xmax);
     TH1F *H_thrq_v    = new TH1F("H_thrq_v", "In-Plane Angle, #theta_{rq} (vertex); in-plane angle, #theta_{rq} [deg]; Counts", thrq_nbins, thrq_xmin, thrq_xmax);
     TH1F *H_phi_pq_v  = new TH1F("H_phi_pq_v", "Out-of-Plane Angle, #phi_{pq} (vertex); out-of-plane angle, #phi_{pq} [deg]; Counts", phpq_nbins, phpq_xmin, phpq_xmax);
-    
+    TH1F *H_cphi_pq_v  = new TH1F("H_cphi_pq_v", "Out-of-Plane Angle, cos(#phi_{pq}); out-of-plane angle, cos(#phi_{pq}); Counts", 100, -1.2, 1.2);
+
     
     //Add Kin Histos to TList
     
@@ -634,50 +636,52 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     kin_HList->Add( H_thp      );
     kin_HList->Add( H_Em       );
     kin_HList->Add( H_Em_nuc       );
-    kin_HList->Add( H_Em_nsc   );
+    kin_HList->Add( H_Em_nuc_nsc   );
     kin_HList->Add( H_Pm       );
     kin_HList->Add( H_Pm_noCut       );
     
     kin_HList->Add( H_MM       );
     kin_HList->Add( H_MM2      );
-  kin_HList->Add( H_thpq     );
-  kin_HList->Add( H_thrq     );
-  kin_HList->Add( H_phi_pq   );
-  kin_HList->Add( H_cphi_pq  );
-  
-  kin_HList->Add( H_Pm_vs_thrq );
-  kin_HList->Add( H_Pm_vs_thrq_ps );
-  kin_HList->Add( H_Pm_vs_thrq_xsec );
+    kin_HList->Add( H_thpq     );
+    kin_HList->Add( H_thrq     );
+    kin_HList->Add( H_phi_pq   );
+    kin_HList->Add( H_cphi_pq  );
+    
+    kin_HList->Add( H_Pm_vs_thrq );
+    kin_HList->Add( H_Pm_vs_thrq_ps );
+    kin_HList->Add( H_Pm_vs_thrq_xsec );
+    
+    
+    // Add averaged kin. histos
+    kin_HList->Add( H_Pm_vs_thrq_v );
+    kin_HList->Add( H_Ein_2Davg    );
+    kin_HList->Add( H_kf_2Davg     );
+    kin_HList->Add( H_the_2Davg    );
+    kin_HList->Add( H_thp_2Davg    );
+    kin_HList->Add( H_Pf_2Davg     );
+    kin_HList->Add( H_Pm_2Davg     );
+    kin_HList->Add( H_thrq_2Davg   );
+    
+    kin_HList->Add( H_q_2Davg          );
+    kin_HList->Add( H_theta_q_2Davg    );
+    kin_HList->Add( H_Q2_2Davg         );
+    kin_HList->Add( H_nu_2Davg         );
+    kin_HList->Add( H_xbj_2Davg        );
+    kin_HList->Add( H_theta_pq_2Davg   );
+    kin_HList->Add( H_phi_pq_2Davg     );
+    kin_HList->Add( H_cphi_pq_2Davg    );
+    kin_HList->Add( H_sphi_pq_2Davg    );
+    
 
-  
-  // Add averaged kin. histos
-  kin_HList->Add( H_Pm_vs_thrq_v );
-  kin_HList->Add( H_Ein_2Davg    );
-  kin_HList->Add( H_kf_2Davg     );
-  kin_HList->Add( H_the_2Davg    );
-  kin_HList->Add( H_thp_2Davg    );
-  kin_HList->Add( H_Pf_2Davg     );
-  kin_HList->Add( H_Pm_2Davg     );
-  kin_HList->Add( H_thrq_2Davg   );
-
-  kin_HList->Add( H_q_2Davg          );
-  kin_HList->Add( H_theta_q_2Davg    );
-  kin_HList->Add( H_Q2_2Davg         );
-  kin_HList->Add( H_nu_2Davg         );
-  kin_HList->Add( H_xbj_2Davg        );
-  kin_HList->Add( H_theta_pq_2Davg   );
-  kin_HList->Add( H_phi_pq_2Davg     );
-  kin_HList->Add( H_cphi_pq_2Davg    );
-  kin_HList->Add( H_sphi_pq_2Davg    );
-
-
-  kin_HList->Add( H_Pm_v    );
-  kin_HList->Add( H_Q2_v    );
-  kin_HList->Add( H_the_v   );
-  kin_HList->Add( H_thpq_v  );
-  kin_HList->Add( H_thrq_v  );
-  kin_HList->Add( H_phi_pq_v);
-
+    kin_HList->Add( H_Em_nuc_v    );
+    kin_HList->Add( H_Pm_v    );
+    kin_HList->Add( H_Q2_v    );
+    kin_HList->Add( H_the_v   );
+    kin_HList->Add( H_thpq_v  );
+    kin_HList->Add( H_thrq_v  );
+    kin_HList->Add( H_phi_pq_v);
+    kin_HList->Add( H_cphi_pq_v);
+    
   
   //----------------------------------------------------------------------
   //---------HISTOGRAM CATEGORY: Spectrometer Acceptance  (ACCP)----------
@@ -803,7 +807,30 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   tree = (TTree*)inROOT->Get("SNT");
   nentries = tree->GetEntries();
 
-  //--- Define Leaf Variable Names ----
+  
+  //--- Define Variables for Calculation ----
+  
+  // 4-vectors 
+  TLorentzVector fP0;
+  TLorentzVector fP1;
+  TLorentzVector fA;
+  TLorentzVector fMp; 
+  TLorentzVector fA1;
+  TLorentzVector fMp1;
+  TLorentzVector fQ;
+  TLorentzVector fX;
+  TLorentzVector fB;
+
+  // 3-vectors
+  TVector3 Pf_vec;             
+  TVector3 kf_vec;             
+  TVector3 bq;   
+  TVector3 xq;   
+  TVector3 p_miss_q;  
+  
+  // rotaion from +z to +q
+  TRotation rot_to_q;
+ 
 
   //Primary Kinematics (electron kinematics) (USED BY DATA AND SIMC)
   Double_t Ei;
@@ -811,31 +838,31 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   Double_t kf;                    //final electron momentum
   Double_t the;               //Central electron arm angle relative to +z (hall coord. system)
   Double_t Q2;                   //Four-momentum trasfer
-  Double_t X;                    //B-jorken X  scaling variable
   Double_t nu;                   //Energy Transfer
-  Double_t q;                  //magnitude of the 3-vector q
+  Double_t q;                  //magnitude of the 3-vector q 
+  Double_t X;                    //B-jorken X  scaling variable
   Double_t th_q;                 //angle between q and +z (hall coord. system)
   Double_t ph_q;                 //out-of-plane angle between q and +z (hall coord. system)
   Double_t W;                    // invariant mass
   Double_t W2;                    // invariant mass squared
   
-  //Secondary Kinematics (USED BY DATA AND SIMC)
-  Double_t Pf;                     //final proton momentum
+  //Secondary Kinematics (detected hadron /  recoil system)
   Double_t Ep;                      //final proton energy (needs to be calculated)
-  Double_t Erecoil;                      //Total energy of recoil system (GeV)
-  Double_t thp;               //to be calculated separately (in data)
+  Double_t Pf;                     //final proton momentum
+  Double_t fXangle;                    // opening angle between HMS/SHMS
+  Double_t thp;                      // proton angle
+  Double_t Erecoil;               //Total energy of recoil system (GeV)
   Double_t Em;                     //Standard Missing Energy 
   Double_t Em_nuc;                     //nuclear definition of Missing Energy (nu - det kin E - recoil kin E)
   Double_t Pm;                     //Missing Momentum (should be zero for H(e,e'p). Should be neutron momentum for D(e,e'p))
   Double_t Pmx_lab;                //x-comp. Missing Momentum 
   Double_t Pmy_lab;                 //y-comp. Missing Momentum 
   Double_t Pmz_lab;                 //z-comp. Missing Momentum
-  Double_t Pmx_q;                //x-comp. Missing Momentum in q-frame
-  Double_t Pmy_q;                 //y-comp. Missing Momentum in q-frame
-  Double_t Pmz_q;                 //z-comp. Missing Momentum in q-frame
+  Double_t Pmx_q;                //x-comp. Missing Momentum in q-frame  (perpendicular)?
+  Double_t Pmy_q;                 //y-comp. Missing Momentum in q-frame (out-of-plane) ?
+  Double_t Pmz_q;                 //z-comp. Missing Momentum in q-frame (parallel)
   Double_t Tx;                     // detected particle X kinetic energy
-  Double_t Tr;                    // recoil system kinetic energy
-  
+  Double_t Tr;                    // recoil system kinetic energy  
   Double_t MM;                   //Missing Mass (neutron Mass)
   Double_t MM2;                   //Missing Mass Squared
   Double_t th_pq;                  //detected particle in-plane angle w.r.to q-vector
@@ -892,69 +919,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   // --- Vertex Quantities ---
   //--------------------------
   
-  //Light-Cone Momentum Variables (at vertex)
-  Double_t PmPar_v;     //parallel component of recoil momentum relative to q-vector
-  Double_t PmPerp_v;    //transverse component of recoil momentum relative to q-vector
-  Double_t alpha_n_v;   //light-cone momentum fraction of the recoil neutron
-  Double_t alpha_v;     //momentum fraction of struck nucleon (normalized such that: alpha + alpha_n = 2)
-  
-  //Standard Kinematic variable (at vertex)
-  Double_t Ein_v;               //incident beam energy at vertex (simulates external rad. has rad. tail) ??? 
-  Double_t Q2_v;                //Q2 (vertex)  
-  Double_t nu_v;                //energy transfer = Ein_v - Ef_v
-  Double_t q_v;             //magintude of 3-vector q
-  Double_t Em_v;                //missing energy at the vertex
-  Double_t Em_nuc_v;             //nuclear missing energy at the vertex
-  Double_t Pm_v;                //missing momentum at the vertex
-  Double_t Pm_par_v;            //parallel compoent of missing momentum at vertex
-  Double_t Pf_v;                //final proton momentum at the vertex
-  Double_t Ep_v;                //final proton energy at the vertex
-  Double_t Ef_v;                //final electron energy at the vertex
-  Double_t Erecoil_v;                //final neutron energy at the vertex
-  Double_t W_v;
-  Double_t W2_v;
-  Double_t ki_v;
-  Double_t kf_v;
-  Double_t X_v;
-  Double_t Tx_v;   // detected particle kinetic energy
-  Double_t Tr_v;   // recoil kinetic energy
-  Double_t MM_v;   // MISSING MASS
-  Double_t MM2_v;
-  
-  //Vertex X'tar / Y'tar: 
-  //Recently added (These are needed to use with hcana methods TransportToLab(Pf, xptar, yptar, p_vec),
-  //which required these quantities as input. Then, the angles at the vertex can be determined)
-
-  Double_t e_xptar_v;           
-  Double_t e_yptar_v;
-  Double_t h_xptar_v;
-  Double_t h_yptar_v;
-
-
-  // --- Declare Neccessary Variables To be used to transport to Lab (non-vertex, but actual reconstructed quantities) ---
-  TLorentzVector fP0;
-  TLorentzVector fP1;
-  TLorentzVector fA;
-  TLorentzVector fMp; // 4-momentum of target (assuming proton)
-  TLorentzVector fA1;
-  TLorentzVector fMp1;
-  TLorentzVector fQ;
-  TLorentzVector fX;
-  TLorentzVector fB;
-  
-  TVector3 Pf_vec;              //final proton momentum vector at the vertex
-  TVector3 kf_vec;              //final electron momentum vector at the vertex
-
-  Double_t fXangle;
-  
-  //Declare necessary variables for rotaion from +z to +q
-  TRotation rot_to_q;
-  TVector3 bq;   //recoil system in lab frame (Pmx, Pmy, Pmz)
-  TVector3 xq;   //detected system in lab frame
-  TVector3 p_miss_q;   //recoil system in q-frame
-
-  
-  //---- Declare Neccessary Variables To be used to transport to Lab (at the vertex). **The '_v' suffix refers to vertex -----
+  // 4-vectors (@ vertex)
   TLorentzVector fP0_v;           // Beam 4-momentum
   TLorentzVector fP1_v;           // Scattered electron 4-momentum
   TLorentzVector fA_v;            // Target 4-momentum
@@ -965,52 +930,69 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   TLorentzVector fX_v;            // Detected secondary particle 4-momentum (GeV)
   TLorentzVector fB_v;            // Recoil system 4-momentum (GeV)
 
-  TVector3 Pf_vec_v;              //final proton momentum vector at the vertex
-  TVector3 kf_vec_v;              //final electron momentum vector at the vertex
-
-  Double_t fXangle_v;
+  // 3-vectors (@ vertex)
+  TVector3 Pf_vec_v;             
+  TVector3 kf_vec_v;             
+  TVector3 bq_v;  
+  TVector3 xq_v;   
+  TVector3 p_miss_q_v;  
   
-  //Declare necessary variables for rotaion from +z to +q
-  TVector3 qvec_v;
-  TVector3 kfvec_v;
+  // rotaion from +z to +q
   TRotation rot_to_q_v;
-  TVector3 bq_v;   //recoil system in lab frame (Pmx, Pmy, Pmz)
-  TVector3 xq_v;   //detected system in lab frame
-  TVector3 p_miss_q_v;   //recoil system in q-frame
 
-  //Additional Vertex Variables
-  //Missing Momentum components in Hall Coord. System (+X beam-left, +Y up, +Z downstream)
+  //Primary (electron) Kinematics (at vertex)
+  Double_t Ein_v;               //incident beam energy at vertex (simulates external rad. has rad. tail) ???
+  Double_t Ef_v;                //final electron energy at the vertex
+  Double_t ki_v;
+  Double_t kf_v;
+  Double_t the_v;
+  Double_t Q2_v;                //Q2 (vertex)  
+  Double_t nu_v;                //energy transfer = Ein_v - Ef_v
+  Double_t q_v;             //magintude of 3-vector q
+  Double_t X_v;
+  Double_t thq_v;
+  Double_t phq_v;
+  Double_t W_v;
+  Double_t W2_v;
+
+  
+  //Secondary Kinematics (detected hadron /  recoil system)
+  Double_t Ep_v;                
+  Double_t Pf_v;               
+  Double_t fXangle_v;
+  Double_t thp_v;
+  Double_t Erecoil_v;          
+  Double_t Em_v;                
+  Double_t Em_nuc_v;            
+  Double_t Pm_v;                
   Double_t Pmx_lab_v;
   Double_t Pmy_lab_v;
   Double_t Pmz_lab_v;
-  //Missing Momentum components in the q-frame
   Double_t Pmx_q_v;
   Double_t Pmy_q_v;
   Double_t Pmz_q_v;
+  Double_t Tx_v;  
+  Double_t Tr_v;   
+  Double_t MM_v;  
+  Double_t MM2_v;
+  Double_t th_pq_v;     
+  Double_t th_rq_v;    
+  Double_t ph_pq_v;     
+  Double_t ph_rq_v;      
 
-  //Vertex q-vector angle relative to beam (+z)
-  Double_t cthq_v;
-  Double_t thq_v;
-  Double_t phq_v;
+ //Electron Arm Focal Plane / Reconstructed Quantities (@ vertex)
+  Double_t e_xptar_v;           
+  Double_t e_yptar_v;
+  Double_t h_xptar_v;
+  Double_t h_yptar_v;
 
-  //Vertex Proton / Neutron angles relative to q
-  Double_t cthpq_v;
-  Double_t th_pq_v;     //thpq_v
-  Double_t ph_pq_v;     //phi_pq_v
-  Double_t cthrq_v;
-  Double_t th_rq_v;     //theta_rq_v
-  Double_t ph_rq_v;      //phi_rq_v
-
-  //Proton / Electron In-Plane Scattering Angles (vertex)
-  Double_t the_v;     
-  Double_t thp_v;
+  //Light-Cone Momentum Variables (at vertex)
+  Double_t PmPar_v;     //parallel component of recoil momentum relative to q-vector
+  Double_t PmPerp_v;    //transverse component of recoil momentum relative to q-vector
+  Double_t alpha_n_v;   //light-cone momentum fraction of the recoil neutron
+  Double_t alpha_v;     //momentum fraction of struck nucleon (normalized such that: alpha + alpha_n = 2)
 
   
-
- 
-  
-  
-
   //----- Set Branch Address ------
 
   //Primary Kinematics (electron kinematics)
@@ -1082,7 +1064,6 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   tree->SetBranchAddress("nu_v", &nu_v);
   tree->SetBranchAddress("q_lab_v", &q_v);
   tree->SetBranchAddress("pm_v", &Pm_v);
-  tree->SetBranchAddress("pm_par_v", &Pm_par_v);
   tree->SetBranchAddress("pf_v", &Pf_v);
   tree->SetBranchAddress("Ep_v", &Ep_v);
   tree->SetBranchAddress("Ef_v", &Ef_v);
@@ -1234,11 +1215,11 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
 
      ----------------------------------------------------------
   */
-
+  
   //---------------------
   //  LOOP OVER ENTRIES
   //---------------------
-
+  
   for (Long64_t i=0; i < nentries; i++) {
 
     //Get the ith entry from the SNT TTree
@@ -1254,7 +1235,6 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     //Calculate electron final momentum 3-vector
     SetCentralAngles(the_central, phe_central);
     TransportToLab(kf, e_xptar, e_yptar, kf_vec);
-
     
     fP0.SetXYZM( 0.0, 0.0, ki, me );          // e- beam 4-momentum (assumed to be along +Z in LAB)
     fP1.SetXYZM( kf_vec.X(),  kf_vec.Y(),  kf_vec.Z(), me );             // e- scattered 4-momentum
@@ -1263,8 +1243,6 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     fQ         = fP0 - fP1;    // four-momentum transfer 
     fA1        = fA + fQ;      // final system 4-momentum (detected hadron + recoil)
     fMp1       = fMp + fQ;
-
-    
     Q2        = -fQ.M2();  // 4-momentum transferred squared
     q         = fQ.P();    // 3-momentum trasnfer |q|
     nu        = fQ.E();    // energy transfer, nu
@@ -1377,12 +1355,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     kf_v = sqrt(Ef_v*Ef_v - me*me);    //final electron momentum at vertex
     ki_v = sqrt(Ein_v*Ein_v - me*me);   //initial electron momentum at vertex
 
-    Pf_v = Pf_v / 1000.;
-
-    //Q2_v = Q2_v / 1.e6;
-    //nu_v = nu_v / 1000.;
-    //Pm_v = Pm_v / 1000.;
-    //q_v = q_v / 1000.;
+    Pf_v = Pf_v / 1000.; // final proton momentum 
 
     //Calculate electron final momentum 3-vector
     SetCentralAngles(the_central, phe_central);
@@ -1497,95 +1470,6 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
    ! SO: x_replay=-y_simc, y_replay=x_simc, z_replay= z_simc
     */
 
-
-
-
- 
-
-
-
-    /* --- SNIPPET from event.f in SIMC with coordinate definitions ---
-   ! CALCULATE ANGLE PHI BETWEEN SCATTERING PLANE AND REACTION PLANE.
-   ! Therefore, define a new system with the z axis parallel to q, and
-   ! the x axis inside the q-z-plane: z' = q, y' = q X z, x' = y' X q
-   ! this gives phi the way it is usually defined, i.e. phi=0 for in-plane
-   ! particles closer to the downstream beamline than q.
-   ! phi=90 is above the horizontal plane when q points to the right, and
-   ! below the horizontal plane when q points to the left.
-   ! Also take into account the different definitions of x, y and z in
-   ! replay and SIMC:
-   ! As seen looking downstream:        replay	SIMC	(old_simc)
-   !				x	right	down	(left)  ---> this must not be correct for hallc replay: as lab coord:  +X -> beam left, +Y -> beam up, +z -> downstream
-   !				y	down	left	(up)
-   !				z	all have z pointing downstream
-   !
-   ! SO: x_replay=-y_simc, y_replay=x_simc, z_replay= z_simc
-    */
-
-
-
-
- 
-
-
-
-    /* --- SNIPPET from event.f in SIMC with coordinate definitions ---
-   ! CALCULATE ANGLE PHI BETWEEN SCATTERING PLANE AND REACTION PLANE.
-   ! Therefore, define a new system with the z axis parallel to q, and
-   ! the x axis inside the q-z-plane: z' = q, y' = q X z, x' = y' X q
-   ! this gives phi the way it is usually defined, i.e. phi=0 for in-plane
-   ! particles closer to the downstream beamline than q.
-   ! phi=90 is above the horizontal plane when q points to the right, and
-   ! below the horizontal plane when q points to the left.
-   ! Also take into account the different definitions of x, y and z in
-   ! replay and SIMC:
-   ! As seen looking downstream:        replay	SIMC	(old_simc)
-   !				x	right	down	(left)  ---> this must not be correct for hallc replay: as lab coord:  +X -> beam left, +Y -> beam up, +z -> downstream
-   !				y	down	left	(up)
-   !				z	all have z pointing downstream
-   !
-   ! SO: x_replay=-y_simc, y_replay=x_simc, z_replay= z_simc
-    */
-
-
-
-
- 
-
-
-
-    /* --- SNIPPET from event.f in SIMC with coordinate definitions ---
-   ! CALCULATE ANGLE PHI BETWEEN SCATTERING PLANE AND REACTION PLANE.
-   ! Therefore, define a new system with the z axis parallel to q, and
-   ! the x axis inside the q-z-plane: z' = q, y' = q X z, x' = y' X q
-   ! this gives phi the way it is usually defined, i.e. phi=0 for in-plane
-   ! particles closer to the downstream beamline than q.
-   ! phi=90 is above the horizontal plane when q points to the right, and
-   ! below the horizontal plane when q points to the left.
-   ! Also take into account the different definitions of x, y and z in
-   ! replay and SIMC:
-   ! As seen looking downstream:        replay	SIMC	(old_simc)
-   !				x	right	down	(left)  ---> this must not be correct for hallc replay: as lab coord:  +X -> beam left, +Y -> beam up, +z -> downstream
-   !				y	down	left	(up)
-   !				z	all have z pointing downstream
-   !
-   ! SO: x_replay=-y_simc, y_replay=x_simc, z_replay= z_simc
-    */
-
-
-
-
- 
-
-
-
-
-    // C.Y.
-    //unit_scat_v =  (qvec_v.Cross(Pf_vec_v)).Unit() ;
-    //cos_phi_calc = unit_react_v.Dot(unit_scat_v) /(unit_react_v.Mag()*unit_scat_v.Mag()) ;
-   
-
-
     //---------Light Cone Variables (at vertex) (C.Y. March 05, 2021)---------
     
     /*
@@ -1610,15 +1494,12 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     alpha_v = 2. - alpha_n_v;
     
     
-	  
-	  //--------------------------------------------------------------------------------
-
-    //==========
-
-
+    
+    //--------------------------------------------------------------------------------
     
 
 
+    
     
     //------Define ANALYSIS CUTS-------
 
@@ -1656,10 +1537,6 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     c_kinCuts = c_Q2 && c_Em;
     c_allCuts =  c_accpCuts && c_kinCuts;
 
-    //if(c_accpCuts)  cout << "passed acceptance cuts" << endl;
-    //if(c_kinCuts)  cout << "passed kin cuts" << endl;
-    //if(c_allCuts)  cout << "passed all cuts" << endl;
-
     //Full Weight
     FullWeight = (Normfac * charge_factor * eff_factor * Weight ) / nentries;
     FullWeight_forRates = (Normfac * charge_factor * Weight ) / nentries;
@@ -1676,24 +1553,24 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
 
       // ------ This is for calculation of avergaed kinematics ---
       // will just use the vertex  kinematics -------
-      H_Pm_vs_thrq_v    ->Fill(th_rq_v/dtr, Pm_v, FullWeight);	 
-      H_Ein_2Davg       ->Fill(th_rq_v/dtr, Pm_v, Ein_v*FullWeight);
-      H_kf_2Davg        ->Fill(th_rq_v/dtr, Pm_v, kf_v*FullWeight);
-      H_the_2Davg       ->Fill(th_rq_v/dtr, Pm_v, (the_v/dtr)*FullWeight);
-      H_thp_2Davg       ->Fill(th_rq_v/dtr, Pm_v, (thp_v/dtr)*FullWeight);
-      H_Pf_2Davg        ->Fill(th_rq_v/dtr, Pm_v, Pf_v*FullWeight);
-      H_Pm_2Davg        ->Fill(th_rq_v/dtr, Pm_v, Pm_v*FullWeight);
-      H_thrq_2Davg      ->Fill(th_rq_v/dtr, Pm_v, (th_rq_v/dtr)*FullWeight);
+      H_Pm_vs_thrq_v    ->Fill(th_rq_v, Pm_v, FullWeight);	 
+      H_Ein_2Davg       ->Fill(th_rq_v, Pm_v, Ein_v*FullWeight);
+      H_kf_2Davg        ->Fill(th_rq_v, Pm_v, kf_v*FullWeight);
+      H_the_2Davg       ->Fill(th_rq_v, Pm_v, (the_v)*FullWeight);
+      H_thp_2Davg       ->Fill(th_rq_v, Pm_v, (thp_v)*FullWeight);
+      H_Pf_2Davg        ->Fill(th_rq_v, Pm_v, Pf_v*FullWeight);
+      H_Pm_2Davg        ->Fill(th_rq_v, Pm_v, Pm_v*FullWeight);
+      H_thrq_2Davg      ->Fill(th_rq_v, Pm_v, (th_rq_v)*FullWeight);
 
-      H_q_2Davg          ->Fill(th_rq_v/dtr, Pm_v, q_v*FullWeight);
-      H_theta_q_2Davg    ->Fill(th_rq_v/dtr, Pm_v, (thq_v/dtr)*FullWeight);
-      H_Q2_2Davg         ->Fill(th_rq_v/dtr, Pm_v, Q2_v*FullWeight);
-      H_nu_2Davg         ->Fill(th_rq_v/dtr, Pm_v, nu_v*FullWeight);
-      H_xbj_2Davg        ->Fill(th_rq_v/dtr, Pm_v, X_v*FullWeight);
-      H_theta_pq_2Davg   ->Fill(th_rq_v/dtr, Pm_v, (th_pq_v/dtr)*FullWeight);
-      H_phi_pq_2Davg     ->Fill(th_rq_v/dtr, Pm_v, (ph_pq_v/dtr)*FullWeight);
-      H_cphi_pq_2Davg    ->Fill(th_rq_v/dtr, Pm_v, cos(ph_pq_v)*FullWeight);
-      H_sphi_pq_2Davg    ->Fill(th_rq_v/dtr, Pm_v, sin(ph_pq_v)*FullWeight);
+      H_q_2Davg         ->Fill(th_rq_v, Pm_v, q_v*FullWeight);
+      H_theta_q_2Davg   ->Fill(th_rq_v, Pm_v, (thq_v)*FullWeight);
+      H_Q2_2Davg        ->Fill(th_rq_v, Pm_v, Q2_v*FullWeight);
+      H_nu_2Davg        ->Fill(th_rq_v, Pm_v, nu_v*FullWeight);
+      H_xbj_2Davg       ->Fill(th_rq_v, Pm_v, X_v*FullWeight);
+      H_theta_pq_2Davg  ->Fill(th_rq_v, Pm_v, (th_pq_v)*FullWeight);
+      H_phi_pq_2Davg    ->Fill(th_rq_v, Pm_v, (ph_pq_v)*FullWeight);
+      H_cphi_pq_2Davg   ->Fill(th_rq_v, Pm_v, cos(ph_pq_v*dtr)*FullWeight);
+      H_sphi_pq_2Davg   ->Fill(th_rq_v, Pm_v, sin(ph_pq_v*dtr)*FullWeight);
 
       //once they are filled, then divide H_[]_2Davg / H_Pm_vs_thrq_v
 	
@@ -1704,22 +1581,22 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       H_Pm_vs_thrq_ps->Fill(th_rq, Pm, PhaseSpace);
       
       //Primary (electron) Kinematics
-      H_kf->Fill(kf, FullWeight);
-      H_the->Fill(the, FullWeight);
-      H_Q2->Fill(Q2, FullWeight);
-      H_xbj->Fill(X, FullWeight);
-      H_nu->Fill(nu, FullWeight);
-      H_q->Fill(q, FullWeight);
-      H_thq->Fill(th_q, FullWeight);
-      H_W->Fill(W, FullWeight);
+      H_kf  ->Fill(kf,   FullWeight);
+      H_the ->Fill(the,  FullWeight);
+      H_Q2  ->Fill(Q2,   FullWeight);
+      H_xbj ->Fill(X,    FullWeight);
+      H_nu  ->Fill(nu,   FullWeight);
+      H_q   ->Fill(q,    FullWeight);
+      H_thq ->Fill(th_q, FullWeight);
+      H_W   ->Fill(W,    FullWeight);
 
  
       //Secondary (Hadron) Kinematics
-      H_Pf->Fill(Pf, FullWeight);
-      H_thp->Fill(thp, FullWeight);
-      H_Em->Fill(Em, FullWeight);
+      H_Pf    ->Fill(Pf, FullWeight);
+      H_thp   ->Fill(thp, FullWeight);
+      H_Em    ->Fill(Em, FullWeight);
       H_Em_nuc->Fill(Em_nuc, FullWeight);
-      H_Pm->Fill(Pm, FullWeight);
+      H_Pm    ->Fill(Pm, FullWeight);
 
       H_thpq->Fill(th_pq, FullWeight);
 	    
@@ -1732,13 +1609,16 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
 
 
       // fill vertex quantities (for checks)
+      H_Em_nuc_v     ->Fill(Em_nuc_v, FullWeight);    
       H_Pm_v     ->Fill(Pm_v, FullWeight);    
       H_Q2_v     ->Fill(Q2_v, FullWeight);   
-      H_the_v    ->Fill(the_v/dtr, FullWeight);   
-      H_thpq_v   ->Fill(th_pq_v/dtr, FullWeight);  
-      H_thrq_v   ->Fill(th_rq_v/dtr, FullWeight); 
-      H_phi_pq_v ->Fill(ph_pq_v/dtr, FullWeight);
-	
+      H_the_v    ->Fill(the_v, FullWeight);   
+      H_thpq_v   ->Fill(th_pq_v, FullWeight);  
+      H_thrq_v   ->Fill(th_rq_v, FullWeight); 
+      H_phi_pq_v ->Fill(ph_pq_v, FullWeight);
+      H_cphi_pq_v ->Fill(cos(ph_pq_v*dtr), FullWeight);
+
+      
       //Target Reconstruction (Hall Coord. System)
       H_htar_x->Fill(tar_x, FullWeight);
       H_htar_y->Fill(htar_y, FullWeight);
@@ -1791,7 +1671,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     }
 
     //No Self Cut Histos
-    if(c_accpCuts &&  c_Q2) { H_Em_nsc->Fill(Em, FullWeight); }
+    if(c_accpCuts &&  c_Q2) { H_Em_nuc_nsc->Fill(Em_nuc, FullWeight); }
     if(c_accpCuts &&  c_Em) { H_Q2_nsc->Fill(Q2, FullWeight); }
 
     if(c_kinCuts && c_hdelta && c_edelta && hmsColl_Cut && shmsColl_Cut) { H_ztar_diff_nsc->Fill(ztar_diff, FullWeight); }

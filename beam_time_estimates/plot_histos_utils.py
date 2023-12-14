@@ -24,34 +24,41 @@ def plot_rates():
     fig.suptitle('polarized d(e,e\'p) rates')
 
 
-    f1 = 'yield_estimates/d2_pol/smallFSI/phi_0deg/output_rates_d2pol.txt'
-    f2 = 'yield_estimates/d2_pol/smallFSI/phi_0deg/optimized/output_rates_d2pol_optim.txt'  # optimized daata (centered hms delta)
+    #f1 = 'yield_estimates/d2_pol/smallFSI/output_rates_d2pol.txt'
+    f2 = 'yield_estimates/d2_pol/smallFSI/optimized/output_rates_d2pol_optim.txt'  # optimized daata (centered hms delta)
     
-    df1 = pd.read_csv(f1, comment='#')
+    #df1 = pd.read_csv(f1, comment='#')
     df2 = pd.read_csv(f2, comment='#')
     
-    Q2_set = list(set(df1.Q2_set))
-
+    Q2_set = list(set(df2.Q2_set))
+    time = list(df2.time) # hrs
+    charge = list(set(df2.charge)) # mC
+    print(time)
+    
     clr = ['b', 'r', 'g', 'm']
     
     for idx, iq2 in enumerate(Q2_set):
         print('idx:',idx)
-        axs[0].plot(df1.pm_set[df1.Q2_set==Q2_set[idx]], df1.deep_rates[df1.Q2_set==Q2_set[idx]]*3600., linestyle='None', marker='o', mfc=clr[idx], ms=6,  mec='k',  label='$Q^{2}$=%.1f'%(Q2_set[idx]))
-        axs[0].plot(df2.pm_set[df2.Q2_set==Q2_set[idx]], df2.deep_rates[df2.Q2_set==Q2_set[idx]]*3600,  linestyle='None', marker='*', mfc=clr[idx], ms=12, mec='k',  label='(optim)')
+        #axs[0].plot(df1.pm_set[df1.Q2_set==Q2_set[idx]], df1.deep_rates[df1.Q2_set==Q2_set[idx]]*3600., linestyle='None', marker='o', mfc=clr[idx], ms=6,  mec='k',  label='$Q^{2}$=%.1f'%(Q2_set[idx]))
+        axs[0].plot(df2.pm_set[df2.Q2_set==Q2_set[idx]], df2.deep_rates[df2.Q2_set==Q2_set[idx]]*3600,  linestyle='None', marker='*', mfc=clr[idx], ms=12, mec='k',  label='$Q^{2}$=%.1f'%(Q2_set[idx]))
         axs[0].set_xlabel('central $p_{m}$ [MeV/c]')
         axs[0].set_ylabel('d(e,e\'p) rates [counts / hr]')
         axs[0].set_title('d(e,e\'p) yield rates')
         axs[0].legend()
         
-        axs[1].plot(df1.pm_set[df1.Q2_set==Q2_set[idx]], df1.daq_rates[df1.Q2_set==Q2_set[idx]]*3600, linestyle='None', marker='o', mfc=clr[idx], ms=6,  mec='k',  label='$Q^{2}$=%.1f'%(Q2_set[idx]))
-        axs[1].plot(df2.pm_set[df2.Q2_set==Q2_set[idx]], df2.daq_rates[df2.Q2_set==Q2_set[idx]]*3600, linestyle='None', marker='*', mfc=clr[idx], ms=12, mec='k',  label='(optim)')
+        #axs[1].plot(df1.pm_set[df1.Q2_set==Q2_set[idx]], df1.daq_rates[df1.Q2_set==Q2_set[idx]]*3600, linestyle='None', marker='o', mfc=clr[idx], ms=6,  mec='k',  label='$Q^{2}$=%.1f'%(Q2_set[idx]))
+        axs[1].plot(df2.pm_set[df2.Q2_set==Q2_set[idx]], df2.daq_rates[df2.Q2_set==Q2_set[idx]]*3600, linestyle='None', marker='*', mfc=clr[idx], ms=12, mec='k',  label='$Q^{2}$=%.1f'%(Q2_set[idx]))
         axs[1].set_xlabel('central $p_{m}$ [MeV/c]')
         axs[1].set_ylabel('DAQ rates [counts / hr]')
         axs[1].set_title('DAQ rates')
         axs[1].legend()
         
-        axs[2].plot(df1.pm_set[df1.Q2_set==Q2_set[idx]], df1.pm_counts[df1.Q2_set==Q2_set[idx]], linestyle='None', marker='o', mfc=clr[idx], ms=6, mec='k',  label='$Q^{2}$=%.1f'%(Q2_set[idx]))
-        axs[2].plot(df2.pm_set[df2.Q2_set==Q2_set[idx]], df2.pm_counts[df2.Q2_set==Q2_set[idx]], linestyle='None', marker='*', mfc=clr[idx], ms=12, mec='k',  label='(optim)')
+        #axs[2].plot(df1.pm_set[df1.Q2_set==Q2_set[idx]], df1.pm_counts[df1.Q2_set==Q2_set[idx]], linestyle='None', marker='o', mfc=clr[idx], ms=6, mec='k',  label='$Q^{2}$=%.1f'%(Q2_set[idx]))
+        axs[2].plot(df2.pm_set[df2.Q2_set==Q2_set[idx]], df2.pm_counts[df2.Q2_set==Q2_set[idx]], linestyle='None', marker='*', mfc=clr[idx], ms=12, mec='k',  label='$Q^{2}$=%.1f, time=%.1f (hrs)'%(Q2_set[idx], time[idx] ))
+
+        if(Q2_set[idx]==3.5):
+            axs[2].plot(df2.pm_set[df2.Q2_set==Q2_set[idx]], 3.*df2.pm_counts[df2.Q2_set==Q2_set[idx]], linestyle='None', marker='*', mfc='g', ms=12, mec='k',  label='$Q^{2}$=%.1f, time=%.1f (hrs)'%(Q2_set[idx], 3.*time[idx] ))
+
         axs[2].set_xlabel('central $p_{m}$ [MeV/c]')
         axs[2].set_ylabel('d(e,e\'p) yield (counts)')
         axs[2].set_title('integrated yield')
@@ -126,7 +133,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
             # set histo base name and file path
             h2_hist_basename = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(h2_hist_name, ipm, jq2)   # generic histogram name
             #hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, jq2, model, h2_hist_basename)             #original kinematics
-            hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_0deg/optimized/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, jq2, model, h2_hist_basename)  #optimized kinematics
+            hist_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, jq2, model, h2_hist_basename)  #optimized kinematics
 
             print('hist_file_path:', hist_file_path)
             # check if file exists, else continue reading next file
@@ -297,7 +304,7 @@ def combine_sets(kin_set=[], hist_name='', model='', plot_flag=''):
             offset = offset + 0.005  
         
         hist_basename    = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(hist_name, pm, Q2)   # generic histogram basename
-        hist_file        = 'yield_estimates/d2_pol/smallFSI/phi_0deg/optimized/histogram_data/pm%d_Q2_%.1f_%s/%s'%(pm, Q2, model, hist_basename)
+        hist_file        = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/pm%d_Q2_%.1f_%s/%s'%(pm, Q2, model, hist_basename)
 
         if not os.path.isfile(hist_file): continue
         
@@ -933,7 +940,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
             # set histo base name and file path
             h2_hist_basename = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(h2_hist_name, ipm, jq2)   # generic histogram name
             #hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, jq2, model, h2_hist_basename)             #original kinematics
-            hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_0deg/optimized/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, jq2, model, h2_hist_basename)  #optimized kinematics
+            hist_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, jq2, model, h2_hist_basename)  #optimized kinematics
 
             print('hist_file_path:', hist_file_path)
             # check if file exists, else continue reading next file
@@ -1070,22 +1077,6 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
 #
 #*************************************
 
-# select the single-valued central momentum setting and multi-value Q2 setting for plotting
-#pm_set = [300]
-#q2_set = [3.5, 4.0, 4.5]
-
-
-
-# ----- combine multiple kin. settings --------
-#combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'proj')
-#combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'proj_err')
-
-#combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'tot_proj')
-#combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
-
-
-#combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'proj')
-
 
 
 #*************************************
@@ -1095,13 +1086,45 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
 #*************************************
 
 #make_ratios_d2fsi([800], [28, 49, 55, 60, 72, 79], plot_flag='ratio')
-make_ratios_d2fsi([800], [28, 49, 60, 72], plot_flag='ratio')
+#make_ratios_d2fsi([800], [28, 49, 60, 72], plot_flag='ratio')
+
+
+
+#*************************************
+#
+# D2 POLARIZED PROPOSAL PLOTS  *
+#
+#*************************************
+
+# select the single-valued central momentum setting and multi-value Q2 setting for plotting
+#pm_set = [400]
+#q2_set = [3.5, 4.0]
+
+
+# plot evenrt rates, daq rates, per setting
+#plot_rates()
+
 
 # ------ Pm vs theta_rq yield projections and errors -----
 
 #make_projY_d2pol('Pm_vs_thrq', pm_set, q2_set, 'fsi', '2d', 1)
 #make_projY_d2pol('Pm_vs_thrq', pm_set, q2_set, 'fsi', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', pm_set, q2_set, 'fsi', 'proj_err', 1)
+
+
+
+# ----- combine multiple kin. settings --------
+combine_sets([[300, 3.5, 1], [400, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'proj')
+combine_sets([[300, 3.5, 1], [400, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'proj_err')
+
+combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'tot_proj')
+combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
+
+
+#combine_sets([[200, 4.0, 1], [300, 4.0, 1]], 'Pm_vs_thrq', 'fsi', 'proj')
+
+
+
 
 
 # ----- plot the kinematics variables in which a cut is used (without the self cut, ie nsc or no self cut) -----

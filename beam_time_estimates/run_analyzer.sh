@@ -4,7 +4,7 @@
 #analysis_script="analyze_simc_d2fsi.C"
 #input_file='d2_fsi_basenames.txt'
 
-analysis_script="analyze_simc_d2.C"
+analysis_script="analyze_simc_d2_test.C"
 input_file='d2_pol_basenames.txt'
 
 for line in $(cat $input_file)

@@ -74,7 +74,7 @@ kf_xmax = 11.0
 
 # invariant mass (assuming proton target mass)
 W_nbins = 100
-W_xmin = 0.5
+W_xmin = -0.2
 W_xmax = 1.5
 
 # invariant mass squared
@@ -201,14 +201,14 @@ MM2_xmin = 0.8
 MM2_xmax = 1.2
 
 # hadron arm central angle
-thx_nbins = 100  
+thx_nbins = 120  
 thx_xmin = 30.
-thx_xmax = 55.
+thx_xmax = 70.
 
 # In-plane angle between detected particle and q 
 thxq_nbins = 80
 thxq_xmin = 0.
-thxq_xmax = 15.
+thxq_xmax = 20.
 
 # In-plane angle between the recoil system and q (+/- 5 deg bins)
 thrq_nbins = 19
