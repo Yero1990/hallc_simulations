@@ -66,7 +66,10 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   /* 
      User Input:
      basename: generic file name used in input and simulated root file
-     
+     e.g. basename: d2_pm400_Q2_4.0_fsi_rad.root (polarized deuteron proposal generic filename)
+     e.g. basename: c12_pm300_Q2_3p5_fsi_rad (polarized deuteron proposal bkg estimates generic filename)
+     e.g. basename: d2_pm800_thrq55_fsi_rad.root (FSI deuteron proposal generic filename
+  
      Instructions:
      1) need to select which analysis to do via 'analysis_flag' option: polarized deuteron ("d2pol") or deuteron fsi studies ("d2fsi")
      2) check the input and output generic filenames to be read have the proper path and structure
@@ -83,14 +86,17 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   int thrq_set=0;
   float Q2_set=0.;
 
+  TString tgt_name;
   TString thrq_str;
   TString pm_str;
   TString Q2_str;
   
   TString model="";
 
-  // e.g. basename: d2_pm400_Q2_4.0_fsi_rad.root (polarized deuteron proposal generic filename)
-  // e.g. basename: d2_pm800_thrq55_fsi_rad.root (FSI deuteron proposal generic filename
+
+  
+
+
   
   // extract the kinematics setting from the filename
   if( analysis_flag == "d2fsi") {
@@ -118,9 +124,11 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     Q2_set = stof(Q2_str.Data());
     pm_set = stoi(std::regex_replace(pm_str.Data(), std::regex(R"([^\d])"), ""));
     model = split(split(basename.Data(), '_')[0], '_')[1];
-    
+    tgt_name = split(split(split(split(split(basename.Data(), '_')[0], '_')[0], '_')[0], '_')[0], '_')[0];
+      
     if(debug) {
       cout << "Settings Read: " << endl;
+      cout << Form("target: %s", tgt_name.Data()) << endl;
       cout << Form("Q2_set: %.1f", Q2_set) << endl;
       cout << Form("Pm_set: %d ", pm_set) << endl;
       cout << "Model: " << model.Data() << endl;
@@ -140,6 +148,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   Double_t MN = 0.939566; //GeV
   Double_t me = 0.000510998; //GeV
 
+
+  
   
   //-------------------
   // READ FILENAMES
@@ -201,7 +211,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     
     // define output directory where numerical histogram .txt will be placed
     output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/pm%d_Q2_%.1f_%s", pm_set, Q2_set, model.Data());
-
+    
+    
     if (debug) {
       cout << "---- Set Filenames ----" << endl;
       cout << Form("simc_infile: %s", simc_infile.Data()) << endl;
@@ -1139,6 +1150,17 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   Double_t FullWeight_forRates; //this is the full weight for true rate estimates (so no inefficiencies accounted for)  
   Double_t PhaseSpace;
 
+  // define additional scaling for carbon-to-nitrogen and carbon-to-he4 (for background estimates)
+
+  // nuclear transparencies
+  // Transparency function: T = c * A ** alpha (Q2), where alpha ~ -0.24 for Q2 >= 2 GeV^2, and c=1, A -> mass number
+  // reference: https://arxiv.org/abs/1211.2826  "Color Transparency: past, present and future"
+  Double_t alpha=-0.24;
+  Double_t T_C12 = pow(12, 
+  Double_t T_N   = pow(14, alpha);  
+  Double_t T_He4 = pow(4, alpha);  
+
+  
 
   if( analysis_flag == "d2fsi") {
     Ib = 80;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
@@ -1169,6 +1191,12 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     proton_abs = 1.;  // 0.95
 
     eff_factor = 1; // e_trk * h_trk * daq_lt * tgt_boil * proton_abs;
+
+
+
+    
+
+    
   }
 
 
