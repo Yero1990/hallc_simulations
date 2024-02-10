@@ -11,7 +11,7 @@
 
  =?
  &EXPERIMENT
-     ngen  =  1000000			!  POS: # of successes
+     ngen  =  1000			!  POS: # of successes
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
@@ -20,6 +20,7 @@
      ctau  =  780.4			!  decay length (cm)
      extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
      set_allow_scat_in_coll=0  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
+     use_sf = T                ! Read spectral function
 / 
  =?
  &KINEMATICS_MAIN
@@ -29,7 +30,7 @@
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      spec%e%P  =    9114.0                              !  e arm central momentum (MeV/c) 
      spec%e%theta  =  10.95                            !  e arm angle setting (degrees)
-     spec%p%P  =    1977.                             !  p arm central momentum (MeV/c) original: 2126 MeV, new: 2126 - 0.07*2126 (shift delta from neg to ~0%)
+     spec%p%P  =    1977.                             !  p arm central momentum (MeV/c) 
      spec%p%theta  =   52.13                           !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
