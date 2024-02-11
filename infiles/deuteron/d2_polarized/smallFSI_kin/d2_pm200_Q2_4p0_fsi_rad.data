@@ -1,9 +1,9 @@
-! Deuteron Experiment D(e,e'p)n : Helium-4 (for background estimates)
-! Central "missing momentum" (pmiss) setting = 300 MeV
-! Central Q2: 3.5 GeV^2
+! Deuteron Experiment D(e,e'p)n : polarized deuteron
+! Central "missing momentum" (pmiss) setting = 200 MeV
+! Central Q2: 4.0 GeV^2
 ! Pol. Mag. Field direction rotated +20 deg beam-right (towards HMS)
-! Proton Angle Restriction: < 22 + 35 =  57 deg
-! Electron Angle Restriction: < |22 - 35| = 13 deg
+! Proton Angle Restriction: < 20 + 35 =  55 deg
+! Electron Angle Restriction: < |20 - 35| = 15 deg
 ! Out-of-Plane Angle (phi): 180 deg
 ! FSI | YES radiative effects | YES energy loss | NO energy loss correction 
 ! 'TF' stands for 'this field'
@@ -20,7 +20,6 @@
      ctau  =  780.4			!  decay length (cm)
      extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
      set_allow_scat_in_coll=0  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
-     use_sf = T                ! Read spectral function
 / 
  =?
  &KINEMATICS_MAIN
@@ -28,10 +27,10 @@
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
-     spec%e%P  =    9114.0                              !  e arm central momentum (MeV/c) 
-     spec%e%theta  =  10.95                            !  e arm angle setting (degrees)
-     spec%p%P  =    1977.                             !  p arm central momentum (MeV/c) 
-     spec%p%theta  =   52.13                           !  p arm angle setting (degrees)
+     spec%e%P  =    8773                              !  e arm central momentum (MeV/c) 
+     spec%e%theta  =  11.93                            !  e arm angle setting (degrees)
+     spec%p%P  =    2523.                             !  p arm central momentum (MeV/c) 
+     spec%p%theta  =   39.84                           !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
@@ -47,14 +46,14 @@
 
  ?=
  &TARGET
-     targ%A  =  4.0			!  target A 
-     targ%Z  =  2.0			!  target Z
-     targ%mass_amu  =  4.0026	        !  target mass in amu;  he4 amu (g/mol)
-     targ%mrec_amu  =  3.	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
-     targ%rho  =  0.1412	       	!  target density (g/cm3)
-     targ%thick  =  423.6		!  target thick 3 cm (mg/cm^2)   0.1412 g/cm3 * 3 cm * 1000 mg / 1 g 
+     targ%A  =  2.0			!  target A 
+     targ%Z  =  1.0			!  target Z
+     targ%mass_amu  =  2.014101	        !  target mass in amu;  deut amu (g/mol)
+     targ%mrec_amu  =  1.008665	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
+     targ%rho  =  0.303		        !  target density (g/cm^3) ;  deut_eff_rho = nd3_rho * (deut_amu * 3 g/mol) / (nd3_amu g/mol) = 1.007 * (2.014101 * 3) / (20.049) =  0.30348 g/cm3
+     targ%thick  =  910.459		!  target thick 3 cm (mg/cm^2)   0.303 g/cm3 * 3 cm * 1000 mg / 1 g 
      targ%angle  =  0.		        !  target angle (for solid target) (degrees)
-     targ%abundancy  =  35.		!  target purity (%)   ; ND3 is 65 % pure ; He4 should be 1 - 0.65, since 100% of the cell should be filled with He4 or ND3
+     targ%abundancy  =  65.		!  target purity (%)   ; ND3 is 65 % pure (packing fraction)
      targ%can  =  2                     !  1=beer can (fpi), 2=pudding can (nucpi) ; ND3 is pudding can
 / 
 
@@ -114,7 +113,7 @@
 
 
  &THEORY_CTRL
-    theory_par%model = ''               ! select a model name
+    theory_par%model = 'LAGET_DEUT'               ! select a model name
     theory_par%data_file = './'         ! directory for the data file
     theory_par%FLAGS = 10*F             ! 10 flags are available
     theory_par%parameter(1) = 1         ! 1 do fsi, 0 do pwia

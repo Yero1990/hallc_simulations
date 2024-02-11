@@ -1,2 +1,4 @@
 c12_pm300_Q2_3p5_fsi_rad.data
 c12_pm400_Q2_3p5_fsi_rad.data
+he4_pm300_Q2_3p5_fsi_rad.data
+he4_pm400_Q2_3p5_fsi_rad.data

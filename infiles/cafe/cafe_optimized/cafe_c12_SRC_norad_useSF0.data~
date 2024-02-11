@@ -1,41 +1,40 @@
-! Deuteron Experiment D(e,e'p)n : Helium-4 (for background estimates)
-! Central "missing momentum" (pmiss) setting = 300 MeV
-! Central Q2: 3.5 GeV^2
-! Pol. Mag. Field direction rotated +20 deg beam-right (towards HMS)
-! Proton Angle Restriction: < 22 + 35 =  57 deg
-! Electron Angle Restriction: < |22 - 35| = 13 deg
-! Out-of-Plane Angle (phi): 180 deg
-! FSI | YES radiative effects | YES energy loss | NO energy loss correction 
+! CaFe Experiment : e12-16-004
+! Central "missing momentum" (pmiss) setting = 150 MeV
+! Model: Laget FSI
+! Radiative Effects NO
+! Energy Loss YES
+! Energy Loss Correction NO
+! New HMS Collimator INSERTED
 ! 'TF' stands for 'this field'
 ! ONE equals TRUE unless specified otherwise
 
  =?
  &EXPERIMENT
-     ngen  =  1000000			!  POS: # of successes
+     ngen  =  10000			!  POS: # of successes
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
      doing_pion  =  F		!  (T = TRUE)
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
-     extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
-     set_allow_scat_in_coll=0  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
-     use_sf = T                ! Read spectral function
+     use_sf = 0     
+     extra_dbase_file = 'extra_cafe_norad.data' !  additional input parameters.
+     set_allow_scat_in_coll=1  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
  &KINEMATICS_MAIN
-     Ebeam  =  10549.                                  !  (MeV)
+     Ebeam  =  10549.35                                  !  (MeV)
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
-     spec%e%P  =    9114.0                              !  e arm central momentum (MeV/c) 
-     spec%e%theta  =  10.95                            !  e arm angle setting (degrees)
-     spec%p%P  =    1977.                             !  p arm central momentum (MeV/c) 
-     spec%p%theta  =   52.13                           !  p arm angle setting (degrees)
-     spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
-     spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
-     spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
-     spec%p%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon pArm 
+     spec%e%P  =  8532                               !  e arm central momentum (MeV/c)  original: 8550.0, 8.55 * 0.9979
+     spec%e%theta  =  8.3                              !  e arm angle setting (degrees)
+     spec%p%P  =  1322.                               !  p arm central momentum (MeV/c)  original: 1325, 1325 * 0.9978
+     spec%p%theta  =   66.4                            !  p arm angle setting (degrees)
+     spec%e%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt. in eArm focal plane          
+     spec%p%sig_musc  = 1.0e-16, 1.0e-16                 ! add extra mult scatt in pArm focal plane           
+     spec%e%sig_smear = 1.0e-18, 1.0e-18, 1.0e-18, 1.0e-18 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
+     spec%p%sig_smear = 1.0e-18, 1.0e-18, 1.0e-18, 1.0e-18 ! add extra smearing in recon pArm 
      spec%e%shift%p_mom  =   0.                        !  shift e-momentum for reconstruction [MeV] (for systematic studies)	
      spec%e%shift%theta  =   0.                        !  shift e-angle for reconstruction [rad]
      spec%e%shift%phi    =   0.                        !  shift e-Oop angle for reconstruction
@@ -47,15 +46,15 @@
 
  ?=
  &TARGET
-     targ%A  =  4.0			!  target A 
-     targ%Z  =  2.0			!  target Z
-     targ%mass_amu  =  4.0026	        !  target mass in amu;  he4 amu (g/mol)
-     targ%mrec_amu  =  3.	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
-     targ%rho  =  0.1412	       	!  target density (g/cm3)
-     targ%thick  =  423.6		!  target thick 3 cm (mg/cm^2)   0.1412 g/cm3 * 3 cm * 1000 mg / 1 g 
-     targ%angle  =  0.		        !  target angle (for solid target) (degrees)
-     targ%abundancy  =  35.		!  target purity (%)   ; ND3 is 65 % pure ; He4 should be 1 - 0.65, since 100% of the cell should be filled with He4 or ND3
-     targ%can  =  2                     !  1=beer can (fpi), 2=pudding can (nucpi) ; ND3 is pudding can
+     targ%A  =  12.0			!  target A
+     targ%Z  =  6.0			!  target Z
+     targ%mass_amu  =  12.0107	        !  target mass in amu
+     targ%mrec_amu  =  11.0	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
+     targ%rho  =  1.8		        !  target density (g/cm^3)
+     targ%thick = 573.84                !  target thick (mg/cm^2)  
+     targ%angle  =  0.		        !  
+     targ%abundancy  =  100.		!  target purity (%)
+     targ%can  =  1                     !  1=beer can (fpi), 2=pudding can (nucpi)
 / 
 
  &DEBUG_PARM
@@ -67,10 +66,10 @@
 / 
 
  &E_ARM_ACCEPT
-     SPedge%e%delta%min  =   -20.0	!  delta min (SPECTROMETER ACCEPTANCE)
-     SPedge%e%delta%max  =    40.0	!  delta max
-     SPedge%e%yptar%min  =   -60.0	!  yptar min = {TF} / 1000 (mrad)
-     SPedge%e%yptar%max  =    60.0	!  yptar max = {TF} / 1000
+     SPedge%e%delta%min  =   -15.0	!  delta min (SPECTROMETER ACCEPTANCE)
+     SPedge%e%delta%max  =    25.0	!  delta max
+     SPedge%e%yptar%min  =   -40.0	!  yptar min = {TF} / 1000 (mrad)
+     SPedge%e%yptar%max  =    40.0	!  yptar max = {TF} / 1000
      SPedge%e%xptar%min  =   -60.0	!  xptar min = {TF} / 1000 (mrad)
      SPedge%e%xptar%max  =    60.0	!  xptar max = {TF} / 1000
 / 
@@ -85,29 +84,29 @@
 / 
 
  &BEAM_AND_TARGET_INFO
-     gen%xwid  =  0.005		!  beam width - one sigma (cm)  (89microns)
-     gen%ywid  =  0.005		!  beam width - one sigma (cm)  (42microns)
+     gen%xwid  =  0.008868		!  beam width - one sigma (cm)  (89microns)
+     gen%ywid  =  0.004235		!  beam width - one sigma (cm)  (42microns)
      targ%fr_pattern  =  3	!  raster pattern: 1=square, 2=circular, 3=real square
      targ%fr1  =  0.1		!  horizontal size OR inner radius(2)
      targ%fr2  =  0.1		!  vertical size OR outer radius(2)
-     targ%xoffset  =  0.0	!  target x-offset (cm): +x = beam right (EPICS)
-     targ%yoffset  =  0.0	!  target y-offset (cm): +y = up
+     targ%xoffset  =  0.032	!  target x-offset (cm): +x = beam right (EPICS)
+     targ%yoffset  = -0.015	!  target y-offset (cm): +y = up
      targ%zoffset  =  0.0	!  target z-offset (cm): +z = downstream
    				!   zreal = znominal + zoffset
 /
 
  &E_ARM_OFFSET
-     spec%e%offset%x  =  0.0		!  x offset (cm) (Xtar offset)
-     spec%e%offset%y  =  0.0		!  y offset (cm) (Ytar offset) Opposite sign to data to get Ytar SIMC/DATA to agree for now.)
+     spec%e%offset%x  =  -0.126		!  x offset (cm) (Xtar offset) Mispointing_x -0.126 
+     spec%e%offset%y  =  -0.06		!  y offset (cm) (Ytar offset) Mispointing_y -0.06 
      spec%e%offset%z  =  0.0		!  z offset (cm) (Ztar offset)
      spec%e%offset%xptar  =  0.	        !  xptar offset (mr) xptar = dx/dz (called 'p(h)phi_offset' in HCANA/PARAM/S(H)MS/GEN/s(h)msflags.param)
-     spec%e%offset%yptar  =  0.	        !  yptar offset (mr) yptar = dy/dz (called 'p(h)theta_offset' in HCANA/PARAM/S(H)MS/GEN/s(h)msflags.param)
+     spec%e%offset%yptar  =  0.2        !  yptar offset (mr) yptar = dy/dz (called 'p(h)theta_offset' in HCANA/PARAM/S(H)MS/GEN/s(h)msflags.param)
 /
 
  &P_ARM_OFFSET
-     spec%p%offset%x  =  0.0		!  x offset (cm)
-     spec%p%offset%y  =  0.0		!  y offset (cm)
-     spec%p%offset%z  =  0.0		!  z offset (cm)
+     spec%p%offset%x  =  0.107	!  x offset (cm)
+     spec%p%offset%y  =  0.324	!  y offset (cm)
+     spec%p%offset%z  =  0.0	!  z offset (cm)
      spec%p%offset%xptar  =  0.	!  xptar offset (mr)
      spec%p%offset%yptar  =  0.	!  yptar offset (mr)
 / 
