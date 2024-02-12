@@ -29,6 +29,7 @@
      extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
      set_allow_scat_in_coll=0  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
      use_sf = T                ! Use spectral function
+     transparency = 0.55       ! need to explicitly put in nuclear transparency if use_sf = T ( T = A**(-0.24) )
 / 
  =?
  &KINEMATICS_MAIN
