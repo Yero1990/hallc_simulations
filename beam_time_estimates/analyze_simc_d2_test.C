@@ -58,6 +58,21 @@ void TransportToLab( Double_t p, Double_t xptar, Double_t yptar, TVector3& pvect
   pvect = fToLabRot * v;
 }
 
+Double_t get_nuclT(int A=0) {
+  
+  // function to calculae nuclear transparencies for a nucleus of mass number (nucleons) A
+  // Transparency function: T = c * A ** alpha (Q2), where alpha ~ -0.24 for Q2 >= 2 GeV^2, and c=1, A -> mass number
+  // reference: https://arxiv.org/abs/1211.2826  "Color Transparency: past, present and future"
+  
+  
+  Double_t c = 1.;
+  Double_t alpha = -0.24;
+  Double_t T = c * ( pow(A,alpha) );
+  
+  return T;
+  
+}
+
 
 
 void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
@@ -92,9 +107,6 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   TString Q2_str;
   
   TString model="";
-
-
-  
 
 
   
@@ -148,8 +160,13 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   Double_t MN = 0.939566; //GeV
   Double_t me = 0.000510998; //GeV
 
-
-  
+  // define additional values for polarized deuteron calculation of effective Nitrogen density and thickness in ND3
+  Double_t tgt_len = 3.;       // pol. deut target length is 3 cm
+  Double_t nd3_rho = 1.007;    // ND3 ammonia density (g/cm^3)
+  Double_t N_amu   = 14.0067 ; // Nitrogen amu (g/mol)
+  Double_t nd3_amu = 20.049;   // ND3 ammonia amu (g/mol)
+  Double_t N_eff_rho = nd3_rho * ( N_amu / nd3_amu );   // effective Nitrogen density in ND3 (g/cm^3)
+  Double_t N_eff_thick =  N_eff_rho * tgt_len * 1000.;   // effective Nitrogen thickness in ND3 (mg/cm^2) (the 1000 converts 1000 mg / 1 g)
   
   //-------------------
   // READ FILENAMES
@@ -210,7 +227,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     output_file = "yield_estimates/d2_pol/smallFSI/optimized/output_rates_d2pol_optim.txt";
     
     // define output directory where numerical histogram .txt will be placed
-    output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/pm%d_Q2_%.1f_%s", pm_set, Q2_set, model.Data());
+    output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s", tgt_name.Data(), pm_set, Q2_set, model.Data());
     
     
     if (debug) {
@@ -232,6 +249,10 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   
     // READ TARGET MASS in amu (and convert amu to GeV)  1 amu = 1 gram/mol = 1 gram x 1 mol / N_avogadro x 5.62e23 GeV / 1 gram
     Double_t tgt_mass = ( stod(split(split(FindString("targ%mass_amu", simc_infile.Data())[0], '!')[0], '=')[1]) ) * gram2GeV / N_av;
+
+    // target thickness (mg/cm**2)
+    Double_t tgt_thick =  ( stod(split(split(FindString("targ%thick", simc_infile.Data())[0], '!')[0], '=')[1]) );
+    
     //beam energy (GeV)
     Double_t beam_e = (stod(split(split(FindString("Ebeam", simc_infile.Data())[0], '!')[0], '=')[1]))/1000.; 
     //e- arm central momentum setting (GeV/c)
@@ -1145,20 +1166,17 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   Double_t proton_abs;
   Double_t eff_factor;
 
-    
+  // scaling by transparency and target thickness
+  Double_t scale_T = 1.;   // default
+  Double_t scale_thick = 1.; // default
+
+  
   Double_t FullWeight;
   Double_t FullWeight_forRates; //this is the full weight for true rate estimates (so no inefficiencies accounted for)  
   Double_t PhaseSpace;
 
-  // define additional scaling for carbon-to-nitrogen and carbon-to-he4 (for background estimates)
 
-  // nuclear transparencies
-  // Transparency function: T = c * A ** alpha (Q2), where alpha ~ -0.24 for Q2 >= 2 GeV^2, and c=1, A -> mass number
-  // reference: https://arxiv.org/abs/1211.2826  "Color Transparency: past, present and future"
-  Double_t alpha=-0.24;
-  Double_t T_C12 = pow(12, 
-  Double_t T_N   = pow(14, alpha);  
-  Double_t T_He4 = pow(4, alpha);  
+
 
   
 
@@ -1193,7 +1211,25 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     eff_factor = 1; // e_trk * h_trk * daq_lt * tgt_boil * proton_abs;
 
 
+    // additional scale factors for scaling C12 to N14
+    /* ----
+       To scale to  Nitrogen (after simulation), we need the effective Nitrogen target density (g/cm^3) in ND3 ;
+       N_eff_rho = nd3_rho * (N_amu  g/mol) / (nd3_amu g/mol) = 1.007 * (14.0067 ) / (20.049) =  0.70351 g/cm3
+       N_eff_thickness = N_eff_rho x (target_len) x (conv_to_mg) = 0.70351 g/cm3 * 3 cm * 1000 mg / 1 g
+       The scale factor should then be:  C12_Yield x ( N_eff_thickness / C12_thickness ) x ( N_nucl_transparency /C12_nucl_transparency )
+     ---- */
 
+    
+    if(tgt_name=="c12") {
+
+      scale_T     = get_nuclT(14) / get_nuclT(12);  // transparency scaling
+      scale_thick = N_eff_thick / tgt_thick; // target thckness (mg/cm2) scaling
+
+      cout << "C12 --> N14 scaling -----" << endl;
+      cout << Form("scale_T = %.3f / %.3f = %.3f", get_nuclT(14), get_nuclT(12),  scale_T ) << endl;
+      cout << Form("scale_thick = N_eff_thick / c12_thick = %.4f / %.4f = %.4f",  N_eff_thick, tgt_thick,  scale_thick) << endl;
+      cout << "-------------------------" << endl;
+    }
     
 
     
@@ -1569,6 +1605,13 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     FullWeight = (Normfac * charge_factor * eff_factor * Weight ) / nentries;
     FullWeight_forRates = (Normfac * charge_factor * Weight ) / nentries;
 
+    // if target is C12, need to scale to Nitrogen-14
+    if(tgt_name=="c12"){
+
+      FullWeight = (Normfac * charge_factor * eff_factor * Weight * scale_T * scale_thick )  / nentries;
+    }
+    
+    
     PhaseSpace =  Normfac * charge_factor * eff_factor * Jacobian_corr  / nentries;    //Phase Space with jacobian corr. factor
 
 

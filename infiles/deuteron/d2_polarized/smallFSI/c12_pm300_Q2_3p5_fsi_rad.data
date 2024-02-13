@@ -61,7 +61,7 @@
      targ%mass_amu  =  12.0107	        !  target mass in amu;  c12 amu (g/mol)
      targ%mrec_amu  =  11.	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
      targ%rho  =  1.8	        	!  target density (g/cm^3) 
-     targ%thick  =  573.84		!  target thickness
+     targ%thick  =  573.84		!  target thickness (mg/cm^2)
      targ%angle  =  0.		        !  target angle (for solid target) (degrees)
      targ%abundancy  =  65.		!  target purity (%)   ; ND3 is 65 % pure (packing fraction)
      targ%can  =  2                     !  1=beer can (fpi), 2=pudding can (nucpi) ; ND3 is pudding can
