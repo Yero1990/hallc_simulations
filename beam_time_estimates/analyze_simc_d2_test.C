@@ -250,6 +250,12 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     // READ TARGET MASS in amu (and convert amu to GeV)  1 amu = 1 gram/mol = 1 gram x 1 mol / N_avogadro x 5.62e23 GeV / 1 gram
     Double_t tgt_mass = ( stod(split(split(FindString("targ%mass_amu", simc_infile.Data())[0], '!')[0], '=')[1]) ) * gram2GeV / N_av;
 
+    if( analysis_flag == "d2pol") {
+    
+      tgt_mass = MD ; //2.014101 * gram2GeV / N_av;; //mass in amu  (always assume deuteron mass, since we want to calculate the background rates assuming we scattered from deut)
+
+    }
+    
     // target thickness (mg/cm**2)
     Double_t tgt_thick =  ( stod(split(split(FindString("targ%thick", simc_infile.Data())[0], '!')[0], '=')[1]) );
     
@@ -1303,7 +1309,11 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     fP0.SetXYZM( 0.0, 0.0, ki, me );          // e- beam 4-momentum (assumed to be along +Z in LAB)
     fP1.SetXYZM( kf_vec.X(),  kf_vec.Y(),  kf_vec.Z(), me );             // e- scattered 4-momentum
     fMp.SetXYZM( 0.0, 0.0, 0.0, MP );       // proton mass (for x_bj calculation)
-    fA.SetXYZM( 0.0, 0.0, 0.0, tgt_mass );  // initial target 4-momentum (target at rest assumed)    
+
+    //C.Y. For C12 and He-4, need to assume tgt_mass is the deuteron mass)
+    fA.SetXYZM( 0.0, 0.0, 0.0, tgt_mass );  // initial target 4-momentum (target at rest assumed)
+
+    
     fQ         = fP0 - fP1;    // four-momentum transfer 
     fA1        = fA + fQ;      // final system 4-momentum (detected hadron + recoil)
     fMp1       = fMp + fQ;
