@@ -221,8 +221,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     
     //Define File Name Patterns
     simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/%s.data",    basename.Data());
-    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/no_jacobian_corr/%s.root",                      basename.Data());
-    //simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s.root",                      basename.Data());
+    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s.root",                      basename.Data());
 
     simc_OutputFileName = Form("worksim/d2_pol/smallFSI/optimized/analyzed/%s_output.root",          basename.Data());
     
@@ -259,7 +258,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       tgt_mass = MD ; //[in GeV] | 2.014101 * gram2GeV / N_av;; //mass in amu  (always assume deuteron mass, since we want to calculate the background rates assuming we scattered from deut)
 
     }
-    x
+    
     
     // target thickness (mg/cm**2)
     Double_t tgt_thick =  ( stod(split(split(FindString("targ%thick", simc_infile.Data())[0], '!')[0], '=')[1]) );
@@ -2025,7 +2024,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       out_file << "# charge: beam charge [mC] " << endl;
       out_file << "#" << endl;
       
-      out_file <<"pm_set,Q2_set,model,pm_counts,deep_rates,daq_rates,current,time,charge" << endl;
+      out_file <<"target,pm_set,Q2_set,model,pm_counts,deep_rates,daq_rates,current,time,charge" << endl;
       out_file << Form("%s,     %i,     %.2f,    %s,     %.1f,       %.3E,        %.3E,        %.3f,      %.3f,     %.3f ", tgt_name.Data(), pm_set, Q2_set, model.Data(), Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
 
     }
