@@ -137,7 +137,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     pm_set = stoi(std::regex_replace(pm_str.Data(), std::regex(R"([^\d])"), ""));
     model = split(split(basename.Data(), '_')[0], '_')[1];
     tgt_name = split(split(split(split(split(basename.Data(), '_')[0], '_')[0], '_')[0], '_')[0], '_')[0];
-      
+   
+    
     if(debug) {
       cout << "Settings Read: " << endl;
       cout << Form("target: %s", tgt_name.Data()) << endl;
@@ -220,7 +221,9 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     
     //Define File Name Patterns
     simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/%s.data",    basename.Data());
-    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s.root",                      basename.Data());
+    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/no_jacobian_corr/%s.root",                      basename.Data());
+    //simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s.root",                      basename.Data());
+
     simc_OutputFileName = Form("worksim/d2_pol/smallFSI/optimized/analyzed/%s_output.root",          basename.Data());
     
     // define output file to write the rates
@@ -246,15 +249,17 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     //----------------------------
     // READ CENTRAL KIN. SETTINGS
     //----------------------------
-  
+
     // READ TARGET MASS in amu (and convert amu to GeV)  1 amu = 1 gram/mol = 1 gram x 1 mol / N_avogadro x 5.62e23 GeV / 1 gram
     Double_t tgt_mass = ( stod(split(split(FindString("targ%mass_amu", simc_infile.Data())[0], '!')[0], '=')[1]) ) * gram2GeV / N_av;
 
+    
     if( analysis_flag == "d2pol") {
     
-      tgt_mass = MD ; //2.014101 * gram2GeV / N_av;; //mass in amu  (always assume deuteron mass, since we want to calculate the background rates assuming we scattered from deut)
+      tgt_mass = MD ; //[in GeV] | 2.014101 * gram2GeV / N_av;; //mass in amu  (always assume deuteron mass, since we want to calculate the background rates assuming we scattered from deut)
 
     }
+    x
     
     // target thickness (mg/cm**2)
     Double_t tgt_thick =  ( stod(split(split(FindString("targ%thick", simc_infile.Data())[0], '!')[0], '=')[1]) );
@@ -618,7 +623,21 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     
     TH1F *H_phi_pq  = new TH1F("H_phi_pq", "Out-of-Plane Angle, #phi_{pq}; out-of-plane angle, #phi_{pq} [deg]; Counts", phpq_nbins, phpq_xmin, phpq_xmax);
     TH1F *H_cphi_pq  = new TH1F("H_cphi_pq", "Out-of-Plane Angle, cos(#phi_{pq}); out-of-plane angle, cos(#phi_{pq}); Counts", 100, -1.2, 1.2);
+
+    //2D kin. Correlation Histos (no cuts at all)
+    TH2F *H_Em_nuc_vs_Pm_noCut     = new TH2F("H_Em_nuc_vs_Pm_noCut",    "Em_nuc vs. Pm", Pm_nbins, Pm_xmin, Pm_xmax, Em_nbins, Em_xmin, Em_xmax);
+    TH2F *H_Q2_vs_xbj_noCut        = new TH2F("H_Q2_vs_xbj_noCut",       "Q2 vs. xbj",    X_nbins,  X_xmin,  X_xmax,  Q2_nbins,     Q2_xmin,     Q2_xmax );
+    TH2F *H_cthrq_vs_Pm_noCut      = new TH2F("H_cthrq_vs_Pm_noCut",     "cos(#theta_{rq}) vs. P_{m}",  Pm_nbins,  Pm_xmin,  Pm_xmax,  100, -1.2,   1.2 ); 
+
+    // with no self-cut (but all other cuts implemented)
+    TH2F *H_Em_nuc_vs_Pm_nsc     = new TH2F("H_Em_nuc_vs_Pm_nsc",    "Em_nuc vs. Pm", Pm_nbins, Pm_xmin, Pm_xmax, Em_nbins, Em_xmin, Em_xmax);
+    TH2F *H_Q2_vs_xbj_nsc        = new TH2F("H_Q2_vs_xbj_nsc",       "Q2 vs. xbj",    X_nbins,  X_xmin,  X_xmax,  Q2_nbins,     Q2_xmin,     Q2_xmax );
+  
     
+    TH2F *H_Em_nuc_vs_Pm     = new TH2F("H_Em_nuc_vs_Pm",    "Em_nuc vs. Pm", Pm_nbins, Pm_xmin, Pm_xmax, Em_nbins, Em_xmin, Em_xmax);
+    TH2F *H_Q2_vs_xbj        = new TH2F("H_Q2_vs_xbj",       "Q2 vs. xbj",    X_nbins,  X_xmin,  X_xmax,  Q2_nbins,     Q2_xmin,     Q2_xmax );
+    TH2F *H_cthrq_vs_Pm      = new TH2F("H_cthrq_vs_Pm",     "cos(#theta_{rq}) vs. P_{m}",  Pm_nbins,  Pm_xmin,  Pm_xmax,  100, -1.2,   1.2 ); 
+  
     
     //2D Pm vs. thrq (for cross section calculation)
     TH2F *H_Pm_vs_thrq       = new TH2F("H_Pm_vs_thrq",      "Pm vs. #theta_{rq} (yield); in-plane angle, #theta_{rq} [deg]; missing momentum, P_{m} [GeV/c]", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
@@ -688,6 +707,18 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     kin_HList->Add( H_Pm_vs_thrq );
     kin_HList->Add( H_Pm_vs_thrq_ps );
     kin_HList->Add( H_Pm_vs_thrq_xsec );
+
+    // Add 2D Correlation Histos
+    kin_HList->Add( H_Em_nuc_vs_Pm_noCut );
+    kin_HList->Add( H_Q2_vs_xbj_noCut );
+    kin_HList->Add( H_cthrq_vs_Pm_noCut );
+
+    kin_HList->Add( H_Em_nuc_vs_Pm_nsc );
+    kin_HList->Add( H_Q2_vs_xbj_nsc );
+    
+    kin_HList->Add( H_Em_nuc_vs_Pm );
+    kin_HList->Add( H_Q2_vs_xbj );
+    kin_HList->Add( H_cthrq_vs_Pm );
     
     
     // Add averaged kin. histos
@@ -1204,7 +1235,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
 
   if( analysis_flag == "d2pol") {
     Ib = 0.1;         // beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC (0.1 uA -> 100 nA)
-    time = 168.0;     //estimated time (in hours) a run takes (start - end) of run
+    time = 168.0;     // estimated time (in hours) a run takes (start - end) of run
     charge_factor = Ib * time * 3600. / 1000.; // in mC
 
     // efficiencies (assume 1 for now)
@@ -1227,9 +1258,15 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
 
     
     if(tgt_name=="c12") {
+      // change naming, since c12 will be scaled to n14
+      tgt_name = "n14";
+      
+      // re-define output directory (as Nitrogen-14) where numerical histogram .txt will be placed
+      output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s", tgt_name.Data(), pm_set, Q2_set, model.Data());
 
+      
       scale_T     = get_nuclT(14) / get_nuclT(12);  // transparency scaling
-      scale_thick = N_eff_thick / tgt_thick; // target thckness (mg/cm2) scaling
+      scale_thick = N_eff_thick / tgt_thick; // target thickness (mg/cm2) scaling
 
       cout << "C12 --> N14 scaling -----" << endl;
       cout << Form("scale_T = %.3f / %.3f = %.3f", get_nuclT(14), get_nuclT(12),  scale_T ) << endl;
@@ -1310,12 +1347,12 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     fP1.SetXYZM( kf_vec.X(),  kf_vec.Y(),  kf_vec.Z(), me );             // e- scattered 4-momentum
     fMp.SetXYZM( 0.0, 0.0, 0.0, MP );       // proton mass (for x_bj calculation)
 
-    //C.Y. For C12 and He-4, need to assume tgt_mass is the deuteron mass)
+    //C.Y. For C12 and He-4, need to assume tgt_mass is the deuteron mass, check tgt_mass definition)
     fA.SetXYZM( 0.0, 0.0, 0.0, tgt_mass );  // initial target 4-momentum (target at rest assumed)
 
     
     fQ         = fP0 - fP1;    // four-momentum transfer 
-    fA1        = fA + fQ;      // final system 4-momentum (detected hadron + recoil)
+    fA1        = fA + fQ;      // final system 4-momentum (detected hadron + recoil system)
     fMp1       = fMp + fQ;
     Q2        = -fQ.M2();  // 4-momentum transferred squared
     q         = fQ.P();    // 3-momentum trasnfer |q|
@@ -1338,7 +1375,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     fX.SetXYZM(Pf_vec.X(), Pf_vec.Y(), Pf_vec.Z(), MP);   
 
     // four-momentum of the undetected, recoil system, B
-    fB = fA1 - fX;
+    fB = fA1 - fX;   //  p4_recoil = (p4_target + q4 - p4_detected)
+    
     
     // opening Angle of X with scattered primary (e-) particle
     fXangle = fX.Angle( fP1.Vect()) / dtr; //[deg]
@@ -1384,8 +1422,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     MM2 = MM*MM;
 
     // Kinetic energies of detected (X) and recoil (B) in GeV
-    Tx = fX.E() - MP;  // need to figure out why does this NOT work
-    Tr = fB.E() - MM;
+    Tx = fX.E() - MP;   // T_detected = E_detected_proton - Mproton
+    Tr = fB.E() - MM;   // T_recoil = E_recoil - Missing_Mass
     
     // Standard nuclear physics definition of "missing energy":
     // binding energy of X in the target (= removal energy of X).
@@ -1510,7 +1548,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     MM2_v = MM_v*MM_v;
 
     // Kinetic energies of detected (X) and recoil (B) in GeV
-    Tx_v = fX_v.E() - MP;  // need to figure out why does this NOT work
+    Tx_v = fX_v.E() - MP;  
     Tr_v = fB_v.E() - MM;
 
 
@@ -1615,12 +1653,21 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     FullWeight = (Normfac * charge_factor * eff_factor * Weight ) / nentries;
     FullWeight_forRates = (Normfac * charge_factor * Weight ) / nentries;
 
+    /*
+    cout << "Normfac: " << Normfac << endl;
+    cout << "charge_factor: " << charge_factor << endl;
+    cout << "eff_factor: " << eff_factor << endl;
+    cout << "Weight: " << Weight << endl;
+    cout << "nentries: " << nentries << endl;
+    cout << "FullWeight: " << FullWeight << endl;
+    */
     // if target is C12, need to scale to Nitrogen-14
+    /*
     if(tgt_name=="c12"){
 
       FullWeight = (Normfac * charge_factor * eff_factor * Weight * scale_T * scale_thick )  / nentries;
     }
-    
+    */
     
     PhaseSpace =  Normfac * charge_factor * eff_factor * Jacobian_corr  / nentries;    //Phase Space with jacobian corr. factor
 
@@ -1629,6 +1676,11 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     H_W_noCut->Fill(W, FullWeight_forRates); // for coin daq rates estimates
     H_Pm_noCut->Fill(Pm, FullWeight_forRates);
 
+    // fill 2D kin. correlation histos
+    H_Em_nuc_vs_Pm_noCut->Fill(Pm, Em_nuc, FullWeight);
+    H_Q2_vs_xbj_noCut->Fill(X, Q2, FullWeight);
+    H_cthrq_vs_Pm_noCut->Fill(Pm, cos(th_rq * dtr), FullWeight);
+      
     
     if(c_allCuts) {
 
@@ -1688,7 +1740,11 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       H_MM->Fill(MM, FullWeight);
       H_MM2->Fill(MM2, FullWeight);
 
-
+      // fill 2D kin. correlation histos
+      H_Em_nuc_vs_Pm->Fill(Pm, Em_nuc, FullWeight);
+      H_Q2_vs_xbj->Fill(X, Q2, FullWeight);
+      H_cthrq_vs_Pm->Fill(Pm, cos(th_rq * dtr), FullWeight);
+      
       // fill vertex quantities (for checks)
       H_Em_nuc_v     ->Fill(Em_nuc_v, FullWeight);    
       H_Pm_v     ->Fill(Pm_v, FullWeight);    
@@ -1752,8 +1808,16 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     }
 
     //No Self Cut Histos
-    if(c_accpCuts &&  c_Q2) { H_Em_nuc_nsc->Fill(Em_nuc, FullWeight); }
-    if(c_accpCuts &&  c_Em) { H_Q2_nsc->Fill(Q2, FullWeight); }
+    if(c_accpCuts &&  c_Q2) {
+      H_Em_nuc_nsc->Fill(Em_nuc, FullWeight);
+      H_Em_nuc_vs_Pm_nsc->Fill(Pm, Em_nuc, FullWeight);
+    }
+
+    if(c_accpCuts &&  c_Em) {
+      H_Q2_nsc->Fill(Q2, FullWeight);
+      H_Q2_vs_xbj_nsc->Fill(X, Q2, FullWeight);
+
+    }
 
     if(c_kinCuts && c_hdelta && c_edelta && hmsColl_Cut && shmsColl_Cut) { H_ztar_diff_nsc->Fill(ztar_diff, FullWeight); }
 
@@ -1915,8 +1979,11 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     cout << " --------------------------------------- " << endl;  
     cout << "" << endl;  
     cout << Form("Pm Setting: %d", pm_set) << endl;
-    cout << Form("Q2 Setting: %.1f", Q2_set) << endl;    
-    cout << Form("Model: Laget %s", model.Data()) << endl;
+    cout << Form("Q2 Setting: %.1f", Q2_set) << endl;
+    
+    cout << Form("Model: Laget %s (only for d2)", model.Data()) << endl;
+    cout << "Model: Benhar SF (for A>2)"  << endl;
+
     cout << Form("Ib [nA]     = %.3f ", Ib*1000) << endl;
     cout << Form("time [hr]   = %.3f ", time) << endl;
     cout << Form("charge [mC] = %.3f ", charge_factor)<< endl;  
@@ -1934,7 +2001,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       
       //Open Report FIle in append mode
       out_file.open(output_file, ios::out | ios::app);
-      out_file << Form("%i,     %.2f,    %s,     %.1f,       %.3E,        %.3E,        %.3f,      %.3f,     %.3f ", pm_set, Q2_set, model.Data(), Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
+      out_file << Form("%s,     %i,     %.2f,    %s,     %.1f,       %.3E,        %.3E,        %.3f,      %.3f,     %.3f ", tgt_name.Data(), pm_set, Q2_set, model.Data(), Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
 
       
     }
@@ -1959,7 +2026,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       out_file << "#" << endl;
       
       out_file <<"pm_set,Q2_set,model,pm_counts,deep_rates,daq_rates,current,time,charge" << endl;
-      out_file << Form("%i,     %.2f,    %s,     %.1f,       %.3E,        %.3E,        %.3f,      %.3f,     %.3f ", pm_set, Q2_set, model.Data(), Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
+      out_file << Form("%s,     %i,     %.2f,    %s,     %.1f,       %.3E,        %.3E,        %.3f,      %.3f,     %.3f ", tgt_name.Data(), pm_set, Q2_set, model.Data(), Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
 
     }
 
