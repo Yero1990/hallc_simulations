@@ -699,6 +699,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, plot_flag=''):
     plt.show()
     plt.savefig('test.png')
 
+# original method (without multiple targets option)
 def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
     # NEED TO FIX THIS FUNCTION, AS IT CURRENTLY DISPLAYS MULTIPLE SUBPLOTS, WHERE ONLY ONE IS NEEDED
     '''
@@ -884,6 +885,189 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
 
 
 
+def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, scale=1):
+    '''
+    Brief: generic function makes 1D projections along y-axis (slicing xbins) for selected 2D histos,
+    (this version of the method takes multiple targets and a single value of Q2)
+    -----------
+    user input
+    -----------
+    h2_hist_name: 2D histogram base name (if unfamiliar, will need to check the name in the histogram directory
+               the generic histogram name has the form: H_[h2_hist_name]_yield_d2pol_pm[pm_set]_Q2_[Q2_set].txt  
+               where the variable in brackets is replaced by user input
+    
+    tgt_set: target nuclei, e.g. tgt_set=['n14', 'd2', 'he4']  provide multiple targets will overlay
+
+    pm_set: central missing momentum, e.g.  pm_set=[200], etc. (ONLY single-value can be used)
+            since the code was structured so that for a single pm_set, loop over all Q2_set
+            (and overlay all Q2 settings) 
+    
+    Q2_set: central Q2 setting, e.g. Q2_set=3.5, (a single valued MUST be provided)
+
+    model: can be "fsi" or "pwia" depending on the simulation done
+
+    plot_flag:  plot_flag="2d"       -> produces a standard 2D histogram (with log or linear z scale, depending on which type of 2D found)
+                plot_flag="proj"     -> produces a sliced set of subplots, where each subplot is the Y-projection of the 2D histogram
+                plot_flag="proj_err" -> produces a sliced set of subplots, where each subplot is the Y-projection relative error (dN/N) of the 2D histogram
+    
+    scale: time scale factor to scale yield by a multiple of the simulated beam-time, for example, if 168 hrs
+    is the standard simulation beam time, and user sets scale = 3, then yield will be scaled to
+    3 * yield, which is esentially triple the beam time for the yield (3 * 168 hrs)
+    
+    '''
+    
+    #histos_file_path = 'yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s/'%(pm_user, thrq_user, model)
+
+    rel_err_thrs = 0.5 # mask >30 % relative error
+   
+    ifig = 1 # counter for 2d histogram figures
+
+    
+    # loop over central pm setting
+    for ipm in pm_user:
+
+        #ipm = ikin_set[0]
+        #jq2 = ikin_set[1]
+        
+        if plot_flag=='proj' or plot_flag=='proj_err':
+            # set figure subplots for the 1d projections
+            #fig, ax = plt.subplots(6, 3, sharex='col', sharey='row', tight_layout=True)
+            fig, ax = plt.subplots(6, 3, tight_layout=True)
+
+            fig.text(0.5, 0.002, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=12)
+            fig.text(0.005, 0.5, 'counts', va='center', rotation='vertical', fontsize=12)
+            subplot_title =  r"p$_{m}$ vs. $\theta_{rq}$ 1d projection (%s), central p$_{m}$ setting: %d MeV"%(model, ipm)
+            plt.suptitle(subplot_title, fontsize=15);
+            fig.set_size_inches(12,10, forward=True)
+        
+
+        offset=0 # offset for applying projections overlay 
+        # loop over central targets
+        for itgt in tgt_set:
+
+            # increment offset for every new Q2 setting
+            if itgt != tgt_set[0]:
+                offset = offset + 0.003                                
+                
+            
+            # set histo base name and file path
+            h2_hist_basename = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(h2_hist_name, ipm, Q2_user)   # generic histogram name
+            #hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, Q2_user, model, h2_hist_basename)             #original kinematics
+            hist_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/looseEmiss_Cut/%s_pm%d_Q2_%.1f_%s/%s'%(itgt, ipm, Q2_user, model, h2_hist_basename)  #optimized kinematics
+
+            print('hist_file_path:', hist_file_path)
+            # check if file exists, else continue reading next file
+            if not os.path.isfile(hist_file_path): continue
+
+                    
+            df = pd.read_csv(hist_file_path, comment='#')
+
+            # get histo parameters from .txt file
+            xlabel = get_label('xlabel',     hist_file_path)
+            ylabel = get_label('ylabel',     hist_file_path)
+            title  = get_label('title',      hist_file_path)
+            ybinw  = float(get_label('ybin_width', hist_file_path))
+            xbinw  = float(get_label('xbin_width', hist_file_path))
+            nxbins = len(df.xb[df.yb==df.yb[0]])
+            nybins = len(df.yb[df.xb==df.xb[0]])
+            ybc = (df.y0[df.x0==df.x0[0]]).to_numpy() # y-bin central value
+            xbc = (df.x0[df.y0==df.y0[0]]).to_numpy() # x-bin central value
+            if "_2Davg" in h2_hist_basename:
+                print('not setting up counts')
+            else:
+                df.zcont = df.zcont * scale
+                counts = np.sum(df.zcont)
+
+      
+
+            if plot_flag=='2d':
+                
+                # plotting the 2d histo
+                fig2d = plt.figure(ifig, figsize=(9,6))
+
+                if "_2Davg" in h2_hist_basename:
+                    plt.hist2d(df.x0 ,df.y0, weights=df.zcont, bins=(nxbins, nybins), range=[ [min(df.xlow), max(df.xup)], [min(df.ylow), max(df.yup)]], cmap = 'viridis')
+                else:
+                    plt.hist2d(df.x0 ,df.y0, weights=df.zcont, bins=(nxbins, nybins), range=[ [min(df.xlow), max(df.xup)], [min(df.ylow), max(df.yup)]], cmap = 'viridis', norm=mcolors.LogNorm())
+                    plt.text(0.6*(df.x0[df.y0==df.y0[0]]).max(), 0.7*(df.y0[df.x0==df.x0[0]]).max(), r"Q$^{2}$=%.1f GeV$^{2}$"%(Q2_user)+"\n"+"$P_{m}$=%d MeV"%(ipm)+"\n"+"(%s counts = %d)"%(itgt, counts), fontsize=12)
+
+
+                plt.xlabel(xlabel, fontsize=12)
+                plt.ylabel(ylabel, fontsize=12)
+                plt.title(title,   fontsize=14)
+
+                
+                plt.colorbar()
+                ifig = ifig+1
+            
+                plt.grid()
+                plt.show() 
+
+            jdx=0 #counter for subplots which have non-zero counts
+            
+            #loop over x-bins (for y-projections)
+            for idx, xbin in enumerate( xbc ):
+                           
+                count_per_xbin     = df.zcont[df.x0==xbin]
+                count_per_xbin_err = np.sqrt( count_per_xbin )
+
+            
+                count_per_xbin     = ma.masked_where(count_per_xbin==0, count_per_xbin)
+                count_per_xbin_err = ma.masked_where(count_per_xbin==0, count_per_xbin_err)
+
+
+                cnts = np.sum(count_per_xbin )
+
+                    
+                # variables for plotting relative error
+                count_per_xbin_rel_err = count_per_xbin_err / count_per_xbin
+                y_const = np.zeros(len(count_per_xbin_rel_err))
+                
+
+                #---------------
+
+                if(np.ma.is_masked(cnts)): continue
+            
+                if(not np.ma.is_masked(cnts)):
+
+                    if plot_flag=='proj':
+                        ax = plt.subplot(6, 3, jdx+1)
+
+                        if "_2Davg" in h2_hist_basename:
+                            ax.errorbar(ybc, count_per_xbin, count_per_xbin_err, marker='o', markersize=4, linestyle='None', label=r'%.1f GeV$^{2}$'%(Q2_user)) #//, label=r'%d counts'%(cnts))
+                            #ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', density=False, label=r'(%.1f GeV$^{2}$)'%(Q2_user))
+                            ax.set_ylim(-20,20)
+                        else:
+                            ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', density=False, label=r'%d counts (%s)'%(cnts, itgt))
+
+                        plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                        plt.legend(frameon=False, loc='upper right')
+                        jdx = jdx+1
+                        
+                    # ---- relative error plots ----
+                    if plot_flag=='proj_err':
+
+                        ax = plt.subplot(6, 3, jdx+1)
+                        count_per_xbin_rel_err_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, count_per_xbin_rel_err)
+
+                        y_const_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, y_const)
+                        ybc_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, ybc)
+
+                        ybc_m = ybc_m + offset
+                        ax.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=4, linestyle='None', label=r'%s'%(itgt)) #//, label=r'%d counts'%(cnts))
+                        plt.axhline(y = 0.20, color = 'r', linestyle = '--')
+                        plt.axhline(y = -0.20, color = 'r', linestyle = '--')
+                        plt.xlim(0.2, 0.6)
+                        plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                        jdx = jdx+1
+            plt.legend(frameon=False, loc='upper right')
+
+                  
+       
+    if plot_flag=='proj' or plot_flag=='proj_err':
+        plt.show()
+
+
 
 
 
@@ -924,7 +1108,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
 
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
 pm_set = [300]
-q2_set = [3.5]
+q2_set = 3.5
 tgt_set = ['n14', 'd2', 'he4']
 
 # plot evenrt rates, daq rates, per setting
@@ -933,9 +1117,9 @@ tgt_set = ['n14', 'd2', 'he4']
 
 # ------ Pm vs theta_rq yield projections and errors -----
 
-#make_projY_d2pol('Pm_vs_thrq', pm_set, q2_set, 'fsi', '2d', 1)
-#make_projY_d2pol('Pm_vs_thrq', pm_set, q2_set, 'fsi', 'proj', 1)
-#make_projY_d2pol('Pm_vs_thrq', pm_set, q2_set, 'fsi', 'proj_err', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', '2d', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', 'proj', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', 'proj_err', 2)
 
 
 
@@ -962,6 +1146,7 @@ make_projY_d2pol('eXColl_vs_eYColl', pm_set, q2_set, 'fsi', '2d')
 
 # ------ plot kinematic variables -----
 
+'''
 overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf', 'fsi')   # proton momentum
 
 overlay_d2pol(tgt_set, pm_set, q2_set, 'thp', 'fsi')  # proton angle
@@ -976,7 +1161,7 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'thpq', 'fsi')    # in-plane angle betwee
 overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq', 'fsi')    # in-plane angle between (recoil,q)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'phi_pq', 'fsi')  # out-of-plane angle between (proton, q)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq', 'fsi')
-
+'''
 
 # ----- plot acceptance variables ----
 '''
