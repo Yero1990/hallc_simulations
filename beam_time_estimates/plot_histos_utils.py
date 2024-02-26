@@ -66,7 +66,8 @@ def plot_rates():
         
     plt.show()
  
-        
+
+# original method
 def combine_sets(kin_set=[], hist_name='', model='', plot_flag=''):
     
     #Brief: function to overlay and combine multiple sets of the form kin_set[pm, Q2, scale] central values
@@ -269,6 +270,215 @@ def combine_sets(kin_set=[], hist_name='', model='', plot_flag=''):
                                 
     plt.show()
 
+
+
+# this alternative version of the method takes an additional input for combining multiple targets
+def combine_sets(kin_set=[], Q2 = 0, hist_name='', model='', plot_flag=''):
+    
+    #Brief: function to overlay and combine multiple sets of the form kin_set[tgt, pm, Q2, scale] central values
+    #e.g. combine_sets([ [300,3.5, 2, 'n14'], [300, 3.5, 2, 'd2'], [ 300, 3.5, 2, 'he4'] ] ) which can loop over each set and overlay them
+    
+    rel_err_thrs = 0.5 # mask >30 % relative error
+
+    clr = ['b', 'forestgreen', 'magenta']  # colors depending on the number of elements in kin_set
+
+    if plot_flag=='proj' or plot_flag=='tot_proj':
+        # set figure subplots for the 1d projections
+        fig, ax = plt.subplots(4, 3, tight_layout=True)
+        
+        fig.text(0.5, 0.002, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=12)
+        #fig.text(0.005, 0.5, 'counts', va='center', rotation='vertical', fontsize=12)
+        subplot_title =  r"Combined $(P_{m}, Q^{2})$ Kin. Settings"
+        plt.suptitle(subplot_title, fontsize=15);
+        fig.set_size_inches(12,10, forward=True)
+
+    if plot_flag=='proj_err' or plot_flag=='tot_proj_err':
+        # set figure subplots for the 1d projections (relative error)
+        fig2, ax2 = plt.subplots(4, 3, tight_layout=True)
+        
+        fig2.text(0.5, 0.002, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=12)
+        fig2.text(0.005, 0.5, 'relative stats. error', va='center', rotation='vertical', fontsize=12)
+        subplot_title2 =  r"Combined $(P_{m}, Q^{2})$ Relative Stats. Error"
+        plt.suptitle(subplot_title2, fontsize=15);
+        fig2.set_size_inches(12,10, forward=True)
+
+        
+        
+    offset=0 # offset for applying projections overlay 
+
+    # sum elemtn by element of mutiple arrays
+    # total = [sum(i) for i in zip(*pm_cnts)]
+    
+    print('len(kin_set):', len(kin_set))
+
+    total_counts_per_xbin = 0
+    
+    # loop over each [pm, Q2] set
+    for i, ikin in enumerate(kin_set):
+
+        
+        pm    = ikin[0]
+        scale = ikin[1]
+        tgt   = ikin[2]
+        
+        # increment offset for every new kin_set setting
+        if i>0:
+            offset = offset + 0.005  
+        
+        hist_basename    = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(hist_name, pm, Q2)   # generic histogram basename
+        hist_file        = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/looseEmiss_Cut/%s_pm%d_Q2_%.1f_%s/%s'%(tgt, pm, Q2, model, hist_basename)
+        #hist_file        = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/tightEmiss_Cut/%s_pm%d_Q2_%.1f_%s/%s'%(tgt, pm, Q2, model, hist_basename)
+
+        if not os.path.isfile(hist_file): continue
+        
+        df = pd.read_csv(hist_file, comment='#')
+
+        xlabel = get_label('xlabel',     hist_file)
+        ylabel = get_label('ylabel',     hist_file)
+        title  = get_label('title',      hist_file)
+        ybinw  = float(get_label('ybin_width', hist_file))
+        xbinw  = float(get_label('xbin_width', hist_file))
+        nxbins = len(df.xb[df.yb==df.yb[0]])
+        nybins = len(df.yb[df.xb==df.xb[0]])
+        ybc = (df.y0[df.x0==df.x0[0]]).to_numpy() # y-bin central value
+        xbc = (df.x0[df.y0==df.y0[0]]).to_numpy() # x-bin central value
+
+        df.zcont = df.zcont * scale    # scale by beam time (in multiples of the standard beamtime)
+        counts = np.sum(df.zcont)
+
+        
+        if i==0:
+            print('initializing counter')
+            print('xbc, ybc', len(xbc), len(ybc))
+            total_counts_per_xbin = np.zeros((len(xbc), len(ybc)))  # create a 2D zero array of length (xbins, ybins) to initialize counter
+
+        
+        jdx=0 #counter for subplots which have non-zero counts
+        
+        #loop over x-bins (for y-projections)
+        for idx, xbin in enumerate( xbc ):
+                           
+            count_per_xbin     = df.zcont[df.x0==xbin]
+            count_per_xbin_err = np.sqrt( count_per_xbin )
+            
+            count_per_xbin     = ma.masked_where(count_per_xbin==0, count_per_xbin)
+            count_per_xbin_err = ma.masked_where(count_per_xbin==0, count_per_xbin_err)
+            
+            cnts = np.sum(count_per_xbin ) 
+
+
+            # count sum  bin content for corresponding bins of a given idx
+            total_counts_per_xbin[idx] = total_counts_per_xbin[idx] + np.array([count_per_xbin])
+
+                
+            # variables for plotting relative error
+            count_per_xbin_rel_err = count_per_xbin_err / count_per_xbin
+            y_const = np.zeros(len(count_per_xbin_rel_err))
+
+
+            #------------------------------------------------------------------------
+            # CALCULATE / PLOT COMBINE KINEMATICS (ONLY IF HAS REACHED END OF LOOP
+            #------------------------------------------------------------------------
+            # check if this is the last in both the kin_set and xbin loops
+            if (i == len(kin_set) - 1) and (idx == (len(xbc) - 1)):
+
+                if plot_flag=='tot_proj' or plot_flag=='tot_proj_err':
+                    
+                    jdx = 0
+
+                    #loop over x-bins (for y-projections) -- again
+                    for idx, xbin in enumerate( xbc ):
+                    
+                        # calculate the absolute and relative total errors
+                        total_counts      = np.array(total_counts_per_xbin[idx])
+                        total_counts_err  = np.sqrt(total_counts)
+                        total_counts_rel_err  = 1. / np.sqrt(total_counts)
+                        y_const               = np.zeros(len(total_counts_rel_err))
+                        
+                        # sum all counts of a particular xbin
+                        cnts = np.sum(total_counts)
+                        
+                        if(np.ma.is_masked(cnts)): continue
+                        
+                        if(not np.ma.is_masked(cnts)):
+                            
+                            if plot_flag=='tot_proj' :
+                                
+                                #plot combined settings
+                                ax = plt.subplot(5, 4, jdx+1)
+                                ax.hist(ybc, bins=len(ybc), weights=total_counts, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', color="gray", density=False, label=r'%d counts'%(cnts))
+                                plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                                plt.legend(frameon=False, loc='upper right')
+                                jdx = jdx+1
+
+                            if plot_flag=='tot_proj_err' :
+
+                                #plot combined settings relative error
+                                ax2 = plt.subplot(5, 4, jdx+1)
+                                total_counts_rel_err_m = ma.masked_where(total_counts_rel_err>rel_err_thrs, total_counts_rel_err)
+                                y_const_m = ma.masked_where(total_counts_rel_err>rel_err_thrs, y_const)
+                                ybc_m = ma.masked_where(total_counts_rel_err>rel_err_thrs, ybc)
+
+                                
+                                ax2.errorbar(ybc_m, y_const_m, total_counts_rel_err_m, marker='o', mfc='gray', mec='gray', markersize=4, ecolor='gray', linestyle='None', label=r'(%d MeV, %.1f GeV$^{2}$)'%(pm, Q2)) #//, label=r'%d counts'%(cnts))
+                                plt.axhline(y = 0.20, color = 'r', linestyle = '--')
+                                plt.axhline(y = -0.20, color = 'r', linestyle = '--')
+                                plt.ylim(-0.6,0.6)
+                                plt.xlim(0., 0.7)
+                                plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                                jdx = jdx+1
+                                
+                    plt.show()
+
+                    
+            if(np.ma.is_masked(cnts)): continue
+            
+            if(not np.ma.is_masked(cnts)):
+            
+
+                if plot_flag=='proj':
+                    
+                    #plot overlay of settings
+                    ax = plt.subplot(4, 3, jdx+1)
+                    ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], color=clr[i], alpha=0.5, ec='k', density=False, label=r'%d counts'%(cnts)+"\n"+r"setting:(%s, %d MeV, %.1f GeV$^{2}$)"%(tgt, pm, Q2))
+                    plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                    plt.legend(frameon=False, loc='upper right')
+
+                    jdx = jdx+1
+
+
+                if plot_flag=='proj_err':
+                    
+                    #plot overlay of settings relative error
+                    ax2 = plt.subplot(4, 3, jdx+1)
+                    count_per_xbin_rel_err_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, count_per_xbin_rel_err)
+                    y_const_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, y_const)
+                    ybc_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, ybc)
+
+                    ybc_m = ybc_m + offset
+                    ax2.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=4, linestyle='None', color=clr[i], elinewidth=2, label=r'(%s, %d MeV, %.1f GeV$^{2}$)'%(tgt, pm, Q2)) #//, label=r'%d counts'%(cnts))
+                    plt.axhline(y = 0.20, color = 'r', linestyle = '--')
+                    plt.axhline(y = -0.20, color = 'r', linestyle = '--')
+                    plt.ylim(-0.6,0.6)
+                    plt.xlim(0.0, 0.7)
+                    plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+
+                    #print('------> relative errors for (pm, Q2):', pm, Q2)
+                    #print('rel_err:',  count_per_xbin_rel_err_m,)
+
+                    jdx = jdx+1
+
+
+
+              
+                    
+        plt.legend(frameon=False, loc='upper right')
+                                
+    plt.show()
+
+
+
+    
     
 def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=1):
     '''
@@ -919,7 +1129,9 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
     #histos_file_path = 'yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s/'%(pm_user, thrq_user, model)
 
     rel_err_thrs = 0.5 # mask >30 % relative error
-   
+
+    clr = ['b', 'forestgreen', 'magenta']
+    
     ifig = 1 # counter for 2d histogram figures
 
     
@@ -941,10 +1153,13 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
             fig.set_size_inches(12,10, forward=True)
         
 
-        offset=0 # offset for applying projections overlay 
+        offset=0 # offset for applying projections overlay
+        i = -1 # color index counter
         # loop over central targets
         for itgt in tgt_set:
 
+            i = i+1
+            
             # increment offset for every new Q2 setting
             if itgt != tgt_set[0]:
                 offset = offset + 0.003                                
@@ -1038,7 +1253,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
                             #ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', density=False, label=r'(%.1f GeV$^{2}$)'%(Q2_user))
                             ax.set_ylim(-20,20)
                         else:
-                            ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', density=False, label=r'%d counts (%s)'%(cnts, itgt))
+                            ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5,  color=clr[i], ec='k', density=False, label=r'%d counts (%s)'%(cnts, itgt))
 
                         plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                         plt.legend(frameon=False, loc='upper right')
@@ -1054,7 +1269,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
                         ybc_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, ybc)
 
                         ybc_m = ybc_m + offset
-                        ax.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=4, linestyle='None', label=r'%s'%(itgt)) #//, label=r'%d counts'%(cnts))
+                        ax.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=4,  color=clr[i], linestyle='None', label=r'%s'%(itgt)) #//, label=r'%d counts'%(cnts))
                         plt.axhline(y = 0.20, color = 'r', linestyle = '--')
                         plt.axhline(y = -0.20, color = 'r', linestyle = '--')
                         plt.xlim(0.2, 0.6)
@@ -1118,17 +1333,22 @@ tgt_set = ['n14', 'd2', 'he4']
 # ------ Pm vs theta_rq yield projections and errors -----
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', '2d', 1)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', 'proj', 1)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', 'proj_err', 2)
 
 
 
-# ----- combine multiple kin. settings --------
-#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'Pm_vs_thrq', 'fsi', 'proj')
-#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'Pm_vs_thrq', 'fsi', 'proj_err')
+# ----- combine multiple kin. settings (of the same target) --------
+#combine_sets([[300, 3.5, 1, 'd2'], [400, 3.5, 3, 'd2']], 'Pm_vs_thrq', 'fsi', 'proj')
+#combine_sets([[300, 3.5, 1, 'd2'], [400, 3.5, 3, 'd2']], 'Pm_vs_thrq', 'fsi', 'proj_err')
 
-#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'Pm_vs_thrq', 'fsi', 'tot_proj')
-#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
+#combine_sets([[300, 3.5, 1, 'd2'], [400, 3.5, 3, 'd2']], 'Pm_vs_thrq', 'fsi', 'tot_proj')
+#combine_sets([[300, 3.5, 1, 'd2'], [400, 3.5, 3, 'd2']], 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
+
+
+#  ----- combine multiple kin. settings (of multiple targets)
+#combine_sets([[300, 1, 'n14'], [300, 1, 'd2'], [300, 1, 'he4']], q2_set, 'Pm_vs_thrq', 'fsi', 'proj')
+#combine_sets([[300, 1, 'n14'], [300, 1, 'd2'], [300, 1, 'he4']], q2_set, 'Pm_vs_thrq', 'fsi', 'proj_err')
 
 
 # ----- plot the kinematics variables in which a cut is used (without the self cut, ie nsc or no self cut) -----
