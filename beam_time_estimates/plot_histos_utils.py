@@ -363,8 +363,8 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, scale=1):
                 # set histogram file path
                 #histos_file_path = 'path/to/histogram_data/pm%d_q2%d_%s/histo_name_pm_set_q2_set.txt'%(pm_set, q2_set, model, hist_name)
                 
-                hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, hist_name, ipm, iq2)
-                #hist_file = 'yield_estimates/d2_pol/smallFSI/phi_0deg/optimized/histogram_data/pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(ipm, iq2, model, hist_name, ipm, iq2)
+                hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/looseEmiss_Cut/%s_pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, hist_name, ipm, iq2)
+                #hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/tightEmiss_Cut/%s_pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, hist_name, ipm, iq2)
                 
                 print('tgt_set:', itgt, 'Pm:', ipm, 'Q2:', iq2)
                 
