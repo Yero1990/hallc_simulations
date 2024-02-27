@@ -558,11 +558,13 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, scale=1):
     #fig, axs = plt.subplots(2, sharex=True, figsize=(5,10))
     fig, axs = plt.subplots(2, figsize=(6,7))
 
-
+    clr = ['b', 'forestgreen', 'magenta']  # colors depending on the number of elements in kin_set
+    i=-1 # index for color counting
+    
     offset=0 # for applying to overlayed data for easy visual
     # loop over the different target nuclei
     for itgt in tgt_set:
-
+        i = i+1
         # loop over central missing momentum setting
         for ipm in pm_set:
 
@@ -626,7 +628,7 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, scale=1):
                 print('xbin_center:', xbc)
                 print('bins:', len(xbc))
                 axs[0].set_title(title)
-                axs[0].hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.5, ec='k', density=False, label="$P_{m}$=%d MeV"%(ipm)+"\n"+ "$Q^{2}$=%.1f GeV$^{2}$ (%d)"%(iq2, counts)+"\n"+"%s"%(itgt))
+                axs[0].hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.5, ec='k',  color=clr[i], density=False, label="$P_{m}$=%d MeV"%(ipm)+"\n"+ "$Q^{2}$=%.1f GeV$^{2}$ (%d)"%(iq2, counts)+"\n"+"%s"%(itgt))
                 axs[0].set_ylabel(ylabel)
                 axs[0].set_xlabel(xlabel)
                 #axs[0].set_ylim(0, 300)  # modify ylim in case legend needs to fit better
@@ -637,7 +639,7 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, scale=1):
                 
                 # apply offset and plot relative error
                 xbc_off = xbc + offset
-                axs[1].errorbar(xbc_off, y_const, Nerr_rel, linestyle='None', marker='o', mec='k', label=r"$P_{m}$=%d MeV"%(ipm)+"\n"+"$Q^{2}$=%.1f GeV$^{2}$"%(iq2)+"\n"+"%s"%(itgt))
+                axs[1].errorbar(xbc_off, y_const, Nerr_rel, linestyle='None', marker='o', mec='k', mfc=clr[i], ecolor=clr[i], label=r"$P_{m}$=%d MeV"%(ipm)+"\n"+"$Q^{2}$=%.1f GeV$^{2}$"%(iq2)+"\n"+"%s"%(itgt))
                 axs[1].set_ylabel('Relative Error')
                 axs[1].set_xlabel(xlabel)
                 
@@ -1204,7 +1206,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
                     plt.hist2d(df.x0 ,df.y0, weights=df.zcont, bins=(nxbins, nybins), range=[ [min(df.xlow), max(df.xup)], [min(df.ylow), max(df.yup)]], cmap = 'viridis')
                 else:
                     plt.hist2d(df.x0 ,df.y0, weights=df.zcont, bins=(nxbins, nybins), range=[ [min(df.xlow), max(df.xup)], [min(df.ylow), max(df.yup)]], cmap = 'viridis', norm=mcolors.LogNorm())
-                    plt.text(0.6*(df.x0[df.y0==df.y0[0]]).max(), 0.7*(df.y0[df.x0==df.x0[0]]).max(), r"Q$^{2}$=%.1f GeV$^{2}$"%(Q2_user)+"\n"+"$P_{m}$=%d MeV"%(ipm)+"\n"+"(%s counts = %d)"%(itgt, counts), fontsize=12)
+                    plt.text(0.6*(df.x0[df.y0==df.y0[0]]).max(), 0.7*(df.y0[df.x0==df.x0[0]]).max(), r"Q$^{2}$=%.1f GeV$^{2}$"%(Q2_user)+"\n"+"$P_{m}$=%d MeV"%(ipm)+"\n"+"(counts = %d)"%(counts)+"\n"+"target: %s"%(itgt), fontsize=12)
 
 
                 plt.xlabel(xlabel, fontsize=12)
@@ -1322,8 +1324,8 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
 #*************************************
 
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
-pm_set = [300, 400]
-q2_set = 3.5
+pm_set = [300]
+q2_set = [3.5]
 tgt_set = ['n14', 'd2', 'he4']
 
 # plot evenrt rates, daq rates, per setting
@@ -1333,7 +1335,7 @@ tgt_set = ['n14', 'd2', 'he4']
 # ------ Pm vs theta_rq yield projections and errors -----
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', '2d', 1)
-make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', 'proj', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', 'proj_err', 2)
 
 
@@ -1352,23 +1354,25 @@ make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', 'proj', 1)
 
 
 # ----- plot the kinematics variables in which a cut is used (without the self cut, ie nsc or no self cut) -----
-'''
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc', 'fsi')
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi')
-overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi')
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi')
-make_projY_d2pol('hXColl_vs_hYColl_nsc', pm_set, q2_set, 'fsi', '2d')
-make_projY_d2pol('eXColl_vs_eYColl_nsc', pm_set, q2_set, 'fsi', '2d')
 
-make_projY_d2pol('hXColl_vs_hYColl', pm_set, q2_set, 'fsi', '2d')
-make_projY_d2pol('eXColl_vs_eYColl', pm_set, q2_set, 'fsi', '2d')
-'''
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc', 'fsi')
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi')
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi')
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi')
+
+#make_projY_d2pol('hXColl_vs_hYColl_nsc', tgt_set, pm_set, 3.5, 'fsi', '2d')
+#make_projY_d2pol('eXColl_vs_eYColl_nsc', tgt_set, pm_set, 3.5, 'fsi', '2d')
+#make_projY_d2pol('Em_nuc_vs_Pm_nsc', tgt_set, pm_set, 3.5, 'fsi', '2d')
+
+#make_projY_d2pol('hXColl_vs_hYColl', pm_set, q2_set, 'fsi', '2d')
+#make_projY_d2pol('eXColl_vs_eYColl', pm_set, q2_set, 'fsi', '2d')
+
 
 # ------ plot kinematic variables -----
 
-'''
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf', 'fsi')   # proton momentum
 
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf', 'fsi')   # proton momentum
+'''
 overlay_d2pol(tgt_set, pm_set, q2_set, 'thp', 'fsi')  # proton angle
 overlay_d2pol(tgt_set, pm_set, q2_set, 'kf', 'fsi')   # e- momentum
 overlay_d2pol(tgt_set, pm_set, q2_set, 'the', 'fsi')  # e- angle
