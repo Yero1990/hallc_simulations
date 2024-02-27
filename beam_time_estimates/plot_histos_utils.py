@@ -1322,7 +1322,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
 #*************************************
 
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
-pm_set = [300]
+pm_set = [300, 400]
 q2_set = 3.5
 tgt_set = ['n14', 'd2', 'he4']
 
