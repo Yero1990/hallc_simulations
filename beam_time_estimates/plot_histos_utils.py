@@ -68,14 +68,14 @@ def plot_rates():
  
 
 # original method
-def combine_sets(kin_set=[], hist_name='', model='', plot_flag=''):
+def combine_sets(kin_set=[], tgt='', hist_name='', model='', plot_flag=''):
     
     #Brief: function to overlay and combine multiple sets of the form kin_set[pm, Q2, scale] central values
     #e.g. combine_sets([ [200,3.7, 3], [300,4.0, 1]] ) which can loop over each set and overlay them
     
     rel_err_thrs = 0.5 # mask >30 % relative error
 
-    clr = ['b', 'forestgreen']  # colors depending on the number of elements in kin_set
+    clr = ['b', 'orange']  # colors depending on the number of elements in kin_set
 
     if plot_flag=='proj' or plot_flag=='tot_proj':
         # set figure subplots for the 1d projections
@@ -121,8 +121,9 @@ def combine_sets(kin_set=[], hist_name='', model='', plot_flag=''):
             offset = offset + 0.005  
         
         hist_basename    = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(hist_name, pm, Q2)   # generic histogram basename
-        hist_file        = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/pm%d_Q2_%.1f_%s/%s'%(pm, Q2, model, hist_basename)
+        hist_file        = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/looseEmiss_Cut/%s_pm%d_Q2_%.1f_%s/%s'%(tgt, pm, Q2, model, hist_basename)
 
+        
         if not os.path.isfile(hist_file): continue
         
         df = pd.read_csv(hist_file, comment='#')
@@ -273,14 +274,14 @@ def combine_sets(kin_set=[], hist_name='', model='', plot_flag=''):
 
 
 # this alternative version of the method takes an additional input for combining multiple targets
-def combine_sets(kin_set=[], Q2 = 0, hist_name='', model='', plot_flag=''):
+def combine_sets_alt(kin_set=[], Q2 = 0, hist_name='', model='', plot_flag=''):
     
     #Brief: function to overlay and combine multiple sets of the form kin_set[tgt, pm, Q2, scale] central values
     #e.g. combine_sets([ [300,3.5, 2, 'n14'], [300, 3.5, 2, 'd2'], [ 300, 3.5, 2, 'he4'] ] ) which can loop over each set and overlay them
     
     rel_err_thrs = 0.5 # mask >30 % relative error
 
-    clr = ['b', 'forestgreen', 'magenta']  # colors depending on the number of elements in kin_set
+    clr = ['b', 'orange', 'magenta']  # colors depending on the number of elements in kin_set
 
     if plot_flag=='proj' or plot_flag=='tot_proj':
         # set figure subplots for the 1d projections
@@ -558,7 +559,7 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, scale=1):
     #fig, axs = plt.subplots(2, sharex=True, figsize=(5,10))
     fig, axs = plt.subplots(2, figsize=(6,7))
 
-    clr = ['b', 'forestgreen', 'magenta']  # colors depending on the number of elements in kin_set
+    clr = ['b', 'orange', 'magenta']  # colors depending on the number of elements in kin_set
     i=-1 # index for color counting
     
     offset=0 # for applying to overlayed data for easy visual
@@ -1132,7 +1133,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
 
     rel_err_thrs = 0.5 # mask >30 % relative error
 
-    clr = ['b', 'forestgreen', 'magenta']
+    clr = ['b', 'gold', 'magenta']
     
     ifig = 1 # counter for 2d histogram figures
 
@@ -1324,94 +1325,115 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
 #*************************************
 
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
-pm_set = [300]
+pm_set = [400]
 q2_set = [3.5]
 tgt_set = ['n14', 'd2', 'he4']
+#tgt_set = ['n14']
 
 # plot evenrt rates, daq rates, per setting
 #plot_rates()
 
 
-# ------ Pm vs theta_rq yield projections and errors -----
-
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', '2d', 1)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', 'proj', 1)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, q2_set, 'fsi', 'proj_err', 2)
 
 
 
-# ----- combine multiple kin. settings (of the same target) --------
+# ----- combine multiple kin. settings (of the same target) -------- (NEED TO BE FIXED)
 #combine_sets([[300, 3.5, 1, 'd2'], [400, 3.5, 3, 'd2']], 'Pm_vs_thrq', 'fsi', 'proj')
 #combine_sets([[300, 3.5, 1, 'd2'], [400, 3.5, 3, 'd2']], 'Pm_vs_thrq', 'fsi', 'proj_err')
 
-#combine_sets([[300, 3.5, 1, 'd2'], [400, 3.5, 3, 'd2']], 'Pm_vs_thrq', 'fsi', 'tot_proj')
-#combine_sets([[300, 3.5, 1, 'd2'], [400, 3.5, 3, 'd2']], 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
+#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'd2', 'Pm_vs_thrq', 'fsi', 'tot_proj')
+#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'd2', 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
 
 
-#  ----- combine multiple kin. settings (of multiple targets)
-#combine_sets([[300, 1, 'n14'], [300, 1, 'd2'], [300, 1, 'he4']], q2_set, 'Pm_vs_thrq', 'fsi', 'proj')
-#combine_sets([[300, 1, 'n14'], [300, 1, 'd2'], [300, 1, 'he4']], q2_set, 'Pm_vs_thrq', 'fsi', 'proj_err')
+#  ----- combine multiple kin. settings (of multiple targets or same target) (NEEDS TO BE FIXED)
+#combine_sets_alt([[300, 1, 'd2'], [400, 3, 'd2']], 3.5, 'Pm_vs_thrq', 'fsi', 'proj')   # same target
+#combine_sets_alt([[300, 1, 'd2'], [400, 3, 'd2']], 3.5, 'Pm_vs_thrq', 'fsi', 'proj_err')   # same target
+
+#combine_sets_alt([[300, 1, 'd2'], [400, 3, 'd2']], 3.5, 'Pm_vs_thrq', 'fsi', 'tot_proj')
+#combine_sets_alt([[300, 1, 'd2'], [400, 3, 'd2']], 3.5, 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
+
+
+
+#combine_sets_alt([[300, 1, 'n14'], [300, 1, 'd2'], [300, 1, 'he4']], 3.5, 'Pm_vs_thrq', 'fsi', 'proj')
+
+#combine_sets([[300, 1, 'n14'], [300, 1, 'd2'], [300, 1, 'he4']], 3.5, 'Pm_vs_thrq', 'fsi', 'proj_err')
+
+#combine_sets([[300, 1, 'n14'], [400, 1, 'n14']], 3.5, 'Pm_vs_thrq', 'fsi', 'proj')
 
 
 # ----- plot the kinematics variables in which a cut is used (without the self cut, ie nsc or no self cut) -----
-
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc', 'fsi')
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi')
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi')
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi')
-
-#make_projY_d2pol('hXColl_vs_hYColl_nsc', tgt_set, pm_set, 3.5, 'fsi', '2d')
-#make_projY_d2pol('eXColl_vs_eYColl_nsc', tgt_set, pm_set, 3.5, 'fsi', '2d')
-#make_projY_d2pol('Em_nuc_vs_Pm_nsc', tgt_set, pm_set, 3.5, 'fsi', '2d')
-
-#make_projY_d2pol('hXColl_vs_hYColl', pm_set, q2_set, 'fsi', '2d')
-#make_projY_d2pol('eXColl_vs_eYColl', pm_set, q2_set, 'fsi', '2d')
-
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc', 'fsi', 3)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', 3)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi', 3)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', 3)
+'''
+make_projY_d2pol('hXColl_vs_hYColl_nsc', tgt_set, pm_set, 3.5, 'fsi', '2d')
+make_projY_d2pol('eXColl_vs_eYColl_nsc', tgt_set, pm_set, 3.5, 'fsi', '2d')
+make_projY_d2pol('Em_nuc_vs_Pm_nsc', tgt_set, pm_set, 3.5, 'fsi', '2d')
+make_projY_d2pol('hXColl_vs_hYColl', tgt_set, pm_set, 3.5, 'fsi', '2d')
+make_projY_d2pol('eXColl_vs_eYColl', tgt_set, pm_set, 3.5, 'fsi', '2d')
+'''
 
 # ------ plot kinematic variables -----
 
-
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf', 'fsi')   # proton momentum
+scale = 3 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 -> 2 weeks, . . . )
 '''
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thp', 'fsi')  # proton angle
-overlay_d2pol(tgt_set, pm_set, q2_set, 'kf', 'fsi')   # e- momentum
-overlay_d2pol(tgt_set, pm_set, q2_set, 'the', 'fsi')  # e- angle
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Pm', 'fsi')   # missing momentum
-overlay_d2pol(tgt_set, pm_set, q2_set, 'nu', 'fsi')   # energy transfer
-overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj', 'fsi')  # x-bjorken
-overlay_d2pol(tgt_set, pm_set, q2_set, 'q', 'fsi')    # 3-momentum (q) transfer
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thq', 'fsi')  # 3-momentum (q) angle
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thpq', 'fsi')    # in-plane angle between (proton,q)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq', 'fsi')    # in-plane angle between (recoil,q)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'phi_pq', 'fsi')  # out-of-plane angle between (proton, q)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq', 'fsi')
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf', 'fsi', scale)   # proton momentum
+overlay_d2pol(tgt_set, pm_set, q2_set, 'thp', 'fsi', scale)  # proton angle
+overlay_d2pol(tgt_set, pm_set, q2_set, 'kf', 'fsi', scale)   # e- momentum
+overlay_d2pol(tgt_set, pm_set, q2_set, 'the', 'fsi', scale)  # e- angle
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Pm', 'fsi', scale)   # missing momentum
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc', 'fsi', scale)   # missing energy
+overlay_d2pol(tgt_set, pm_set, q2_set, 'nu', 'fsi', scale)   # energy transfer
+overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj', 'fsi', scale)  # x-bjorken
+overlay_d2pol(tgt_set, pm_set, q2_set, 'q', 'fsi', scale)    # 3-momentum (q) transfer
+overlay_d2pol(tgt_set, pm_set, q2_set, 'thq', 'fsi', scale)  # 3-momentum (q) angle
+overlay_d2pol(tgt_set, pm_set, q2_set, 'thpq', 'fsi', scale)    # in-plane angle between (proton,q)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq', 'fsi', scale)    # in-plane angle between (recoil,q)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'phi_pq', 'fsi', scale)  # out-of-plane angle between (proton, q)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq', 'fsi', scale)
 '''
 
 # ----- plot acceptance variables ----
-'''
-# reconstructed variables
-overlay_d2pol(tgt_set, pm_set, q2_set, 'exptar', 'fsi')
-overlay_d2pol(tgt_set, pm_set, q2_set, 'eyptar', 'fsi')
-overlay_d2pol(tgt_set, pm_set, q2_set, 'eytar', 'fsi')
-overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta', 'fsi')
 
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hxptar', 'fsi')
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hyptar', 'fsi')
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hytar', 'fsi')
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta', 'fsi')
+# reconstructed variables
+'''
+overlay_d2pol(tgt_set, pm_set, q2_set, 'exptar', 'fsi', scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'eyptar', 'fsi', scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'eytar', 'fsi', scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta', 'fsi', scale)
+
+overlay_d2pol(tgt_set, pm_set, q2_set, 'hxptar', 'fsi', scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'hyptar', 'fsi', scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'hytar', 'fsi', scale)
+
+overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta', 'fsi', scale)
 '''
 
 '''
 # focal plane
-make_projY_d2pol('hxfp_vs_hyfp', pm_set, q2_set, 'fsi', '2d')
-make_projY_d2pol('exfp_vs_eyfp', pm_set, q2_set, 'fsi', '2d')
+make_projY_d2pol('hxfp_vs_hyfp', tgt_set, pm_set, 3.5, 'fsi', '2d')
+make_projY_d2pol('exfp_vs_eyfp', tgt_set, pm_set, 3.5, 'fsi', '2d')
 
 
 # hms/shms correlated variables
-make_projY_d2pol('hdelta_vs_edelta', pm_set, q2_set, 'fsi', '2d')
-make_projY_d2pol('hxptar_vs_exptar', pm_set, q2_set, 'fsi', '2d')
-make_projY_d2pol('hyptar_vs_eyptar', pm_set, q2_set, 'fsi', '2d')
+make_projY_d2pol('hdelta_vs_edelta', tgt_set, pm_set, 3.5, 'fsi', '2d')
+make_projY_d2pol('hxptar_vs_exptar', tgt_set, pm_set, 3.5, 'fsi', '2d')
+make_projY_d2pol('hyptar_vs_eyptar', tgt_set, pm_set, 3.5, 'fsi', '2d')
 '''
+#other correlations
+#make_projY_d2pol('Em_nuc_vs_Pm_nsc',  tgt_set, pm_set, 3.5, 'fsi', '2d', 3)
+
+
+# ------ Pm vs theta_rq yield projections and errors -----
+
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', '2d', 3)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', 'proj', 3)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', 'proj_err', 3)
+
+
+
+
 
 
 # ----- plot 2D average kinematics --- 
