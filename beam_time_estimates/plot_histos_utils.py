@@ -1334,15 +1334,14 @@ tgt_set = ['n14', 'd2', 'he4']
 #plot_rates()
 
 
+# ----- combine multiple kin. settings (of the same target) -------- 
+#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'proj')
+#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'proj_err')
+
+#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'tot_proj')
+#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
 
 
-
-# ----- combine multiple kin. settings (of the same target) -------- (NEED TO BE FIXED)
-#combine_sets([[300, 3.5, 1, 'd2'], [400, 3.5, 3, 'd2']], 'Pm_vs_thrq', 'fsi', 'proj')
-#combine_sets([[300, 3.5, 1, 'd2'], [400, 3.5, 3, 'd2']], 'Pm_vs_thrq', 'fsi', 'proj_err')
-
-#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'd2', 'Pm_vs_thrq', 'fsi', 'tot_proj')
-#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'd2', 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
 
 
 #  ----- combine multiple kin. settings (of multiple targets or same target) (NEEDS TO BE FIXED)
@@ -1375,9 +1374,9 @@ make_projY_d2pol('eXColl_vs_eYColl', tgt_set, pm_set, 3.5, 'fsi', '2d')
 '''
 
 # ------ plot kinematic variables -----
-
-scale = 3 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 -> 2 weeks, . . . )
 '''
+scale = 3 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 -> 2 weeks, . . . )
+
 overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf', 'fsi', scale)   # proton momentum
 overlay_d2pol(tgt_set, pm_set, q2_set, 'thp', 'fsi', scale)  # proton angle
 overlay_d2pol(tgt_set, pm_set, q2_set, 'kf', 'fsi', scale)   # e- momentum
