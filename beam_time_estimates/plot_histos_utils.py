@@ -70,7 +70,7 @@ def plot_rates():
 # original method
 def combine_sets(kin_set=[], tgt='', hist_name='', model='', plot_flag=''):
     
-    #Brief: function to overlay and combine multiple sets of the form kin_set[pm, Q2, scale] central values
+    #Brief: function to overlay and combine multiple sets of the form kin_set[pm, Q2, scale] central values for a given target 'tgt'
     #e.g. combine_sets([ [200,3.7, 3], [300,4.0, 1]] ) which can loop over each set and overlay them
     
     rel_err_thrs = 0.5 # mask >30 % relative error
@@ -108,7 +108,7 @@ def combine_sets(kin_set=[], tgt='', hist_name='', model='', plot_flag=''):
 
     total_counts_per_xbin = 0
     
-    # loop over each [pm, Q2] set
+    # loop over each [pm, Q2, scale] set
     for i, ikin in enumerate(kin_set):
         
         pm = ikin[0]
