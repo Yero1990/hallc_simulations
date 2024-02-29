@@ -1338,7 +1338,10 @@ tgt_set = ['n14', 'd2', 'he4']
 #combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'proj')
 #combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'proj_err')
 
+combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'd2', 'Pm_vs_thrq', 'fsi', 'tot_proj')
+#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'he4', 'Pm_vs_thrq', 'fsi', 'tot_proj')
 #combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'tot_proj')
+
 #combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
 
 
@@ -1350,8 +1353,6 @@ tgt_set = ['n14', 'd2', 'he4']
 
 #combine_sets_alt([[300, 1, 'd2'], [400, 3, 'd2']], 3.5, 'Pm_vs_thrq', 'fsi', 'tot_proj')
 #combine_sets_alt([[300, 1, 'd2'], [400, 3, 'd2']], 3.5, 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
-
-
 
 #combine_sets_alt([[300, 1, 'n14'], [300, 1, 'd2'], [300, 1, 'he4']], 3.5, 'Pm_vs_thrq', 'fsi', 'proj')
 
