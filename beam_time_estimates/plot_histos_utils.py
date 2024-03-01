@@ -121,7 +121,7 @@ def combine_sets(kin_set=[], tgt='', hist_name='', model='', plot_flag=''):
             offset = offset + 0.005  
         
         hist_basename    = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(hist_name, pm, Q2)   # generic histogram basename
-        hist_file        = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/looseEmiss_Cut/%s_pm%d_Q2_%.1f_%s/%s'%(tgt, pm, Q2, model, hist_basename)
+        hist_file        = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/tightEmiss_Cut/%s_pm%d_Q2_%.1f_%s/%s'%(tgt, pm, Q2, model, hist_basename)
 
         
         if not os.path.isfile(hist_file): continue
@@ -327,7 +327,7 @@ def combine_sets_alt(kin_set=[], Q2 = 0, hist_name='', model='', plot_flag=''):
             offset = offset + 0.005  
         
         hist_basename    = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(hist_name, pm, Q2)   # generic histogram basename
-        hist_file        = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/looseEmiss_Cut/%s_pm%d_Q2_%.1f_%s/%s'%(tgt, pm, Q2, model, hist_basename)
+        hist_file        = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/tightEmiss_Cut/%s_pm%d_Q2_%.1f_%s/%s'%(tgt, pm, Q2, model, hist_basename)
         #hist_file        = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/tightEmiss_Cut/%s_pm%d_Q2_%.1f_%s/%s'%(tgt, pm, Q2, model, hist_basename)
 
         if not os.path.isfile(hist_file): continue
@@ -576,7 +576,7 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, scale=1):
                 # set histogram file path
                 #histos_file_path = 'path/to/histogram_data/pm%d_q2%d_%s/histo_name_pm_set_q2_set.txt'%(pm_set, q2_set, model, hist_name)
                 
-                hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/looseEmiss_Cut/%s_pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, hist_name, ipm, iq2)
+                hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/tightEmiss_Cut/%s_pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, hist_name, ipm, iq2)
                 #hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/tightEmiss_Cut/%s_pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, hist_name, ipm, iq2)
                 
                 print('tgt_set:', itgt, 'Pm:', ipm, 'Q2:', iq2)
@@ -1171,7 +1171,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
             # set histo base name and file path
             h2_hist_basename = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(h2_hist_name, ipm, Q2_user)   # generic histogram name
             #hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, Q2_user, model, h2_hist_basename)             #original kinematics
-            hist_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/looseEmiss_Cut/%s_pm%d_Q2_%.1f_%s/%s'%(itgt, ipm, Q2_user, model, h2_hist_basename)  #optimized kinematics
+            hist_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/tightEmiss_Cut/%s_pm%d_Q2_%.1f_%s/%s'%(itgt, ipm, Q2_user, model, h2_hist_basename)  #optimized kinematics
 
             print('hist_file_path:', hist_file_path)
             # check if file exists, else continue reading next file
@@ -1325,7 +1325,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
 #*************************************
 
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
-pm_set = [400]
+pm_set = [300]
 q2_set = [3.5]
 tgt_set = ['n14', 'd2', 'he4']
 #tgt_set = ['n14']
@@ -1338,10 +1338,7 @@ tgt_set = ['n14', 'd2', 'he4']
 #combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'proj')
 #combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'proj_err')
 
-combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'd2', 'Pm_vs_thrq', 'fsi', 'tot_proj')
-#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'he4', 'Pm_vs_thrq', 'fsi', 'tot_proj')
 #combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'tot_proj')
-
 #combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
 
 
@@ -1353,6 +1350,8 @@ combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'd2', 'Pm_vs_thrq', 'fsi', 'tot_pro
 
 #combine_sets_alt([[300, 1, 'd2'], [400, 3, 'd2']], 3.5, 'Pm_vs_thrq', 'fsi', 'tot_proj')
 #combine_sets_alt([[300, 1, 'd2'], [400, 3, 'd2']], 3.5, 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
+
+
 
 #combine_sets_alt([[300, 1, 'n14'], [300, 1, 'd2'], [300, 1, 'he4']], 3.5, 'Pm_vs_thrq', 'fsi', 'proj')
 
@@ -1377,6 +1376,7 @@ make_projY_d2pol('eXColl_vs_eYColl', tgt_set, pm_set, 3.5, 'fsi', '2d')
 # ------ plot kinematic variables -----
 '''
 scale = 3 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 -> 2 weeks, . . . )
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc', 'fsi', scale)   # missing energy
 
 overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf', 'fsi', scale)   # proton momentum
 overlay_d2pol(tgt_set, pm_set, q2_set, 'thp', 'fsi', scale)  # proton angle
@@ -1427,9 +1427,9 @@ make_projY_d2pol('hyptar_vs_eyptar', tgt_set, pm_set, 3.5, 'fsi', '2d')
 
 # ------ Pm vs theta_rq yield projections and errors -----
 
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', '2d', 3)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', 'proj', 3)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', 'proj_err', 3)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', '2d', 1)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', 'proj', 1)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', 'proj_err', 1)
 
 
 
