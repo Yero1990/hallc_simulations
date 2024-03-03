@@ -21,7 +21,7 @@
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5=shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5=shms
-     spec%e%P  = 8550.0 			       ! e arm central momentum (MeV/c)
+     spec%e%P  = 8532 			       ! e arm central momentum (MeV/c)
      spec%e%theta  = 8.3                               ! e arm angle setting (degrees)
      spec%p%P  = 1820.0                              ! p arm central momentum (MeV/c)
      spec%p%theta  = 48.3                            ! p arm angle setting (degrees)     Add yptar offsets in angle rather than below
