@@ -98,7 +98,11 @@ list_of_args = sys.argv
 #thrq=26 #list_of_args[3]
 #basename='d2_Eb%s_Pr%s_thrq%s_norad_output' %(Eb, Pr, thrq)
 
-basename='d2_pm800_thrq49_fsi_rad_output' 
+# deuteron FSI proposal files
+#basename='d2_pm800_thrq49_fsi_rad_output' 
+
+# deuteron polarized proposal files
+basename='d2_pm350_Q2_3p5_fsi_rad_output'
 
 output_file = basename+'_avgkin.txt'
 
