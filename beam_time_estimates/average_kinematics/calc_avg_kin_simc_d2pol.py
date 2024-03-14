@@ -263,7 +263,7 @@ for i,acont in enumerate(all.cont):
 
 
       # for JLab 22 GeV calculation
-      l = "%i,%i,%i,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3E\n"%(
+      l = "%i,%i,%i,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3E\n"%(
                                                                                                           # 0 2d bin number
                                                                                                           i_bin, \
                                                                                                           # 1 
@@ -281,44 +281,44 @@ for i,acont in enumerate(all.cont):
                                                                                                           # 7 avg. e- angle
                                                                                                           the, \
                                                                                                           # 8 avg. energy transfer
-                                                                                                          nu,                                                          
-                                                                                                          # 8 calc.  energy transfer
+                                                                                                          nu,  \
+                                                                                                          # 9 calc.  energy transfer
                                                                                                           nu_calc, \
-                                                                                                          # 9 calc. average 4-Momentum transfer
+                                                                                                          # 10 calc. average 4-Momentum transfer
                                                                                                           Q2_calc, \
-                                                                                                          # 10 calc. average |q| 3-momentum transfer
+                                                                                                          # 11 calc. average |q| 3-momentum transfer
                                                                                                           q_calc, \
-                                                                                                          # 11 calc. average final proton energy (assume proton mass)
+                                                                                                          # 12 calc. average final proton energy (assume proton mass)
                                                                                                           Ep_calc, \
-                                                                                                          # 12  avg. final proton momentum
+                                                                                                          # 13  avg. final proton momentum
                                                                                                           Pf, \
-                                                                                                          # 13  avg. missing momentum
+                                                                                                          # 14  avg. missing momentum
                                                                                                           Pm, \
-                                                                                                          # 14 calc. average Missing momentum  (assume deuteron mass)
+                                                                                                          # 15 calc. average Missing momentum  (assume deuteron mass)
                                                                                                           Pm_calc, \
-                                                                                                          # 15 calc. final neutron energy 
+                                                                                                          # 16 calc. final neutron energy 
                                                                                                           En_calc, \
-                                                                                                          # 16 calc. Pf component (q-frame) parallel to q
+                                                                                                          # 17 calc. Pf component (q-frame) parallel to q
                                                                                                           Pf_Par_q, \
-                                                                                                          # 17 calc. Pf component (q-frame) perpendicular to q
+                                                                                                          # 18 calc. Pf component (q-frame) perpendicular to q
                                                                                                           Pf_Perp_q, \
-                                                                                                          # 18
-                                                                                                          thpq, \
                                                                                                           # 19
-                                                                                                          thpq_calc, \
+                                                                                                          thpq, \
                                                                                                           # 20
-                                                                                                          thpq_cm, \
+                                                                                                          thpq_calc, \
                                                                                                           # 21
-                                                                                                          thnq, \
+                                                                                                          thpq_cm, \
                                                                                                           # 22
-                                                                                                          thnq_calc, \
+                                                                                                          thnq, \
                                                                                                           # 23
-                                                                                                          cphi_pq, \
+                                                                                                          thnq_calc, \
                                                                                                           # 24
-                                                                                                          sphi_pq, \
+                                                                                                          cphi_pq, \
                                                                                                           # 25
-                                                                                                          alpha_calc, \
+                                                                                                          sphi_pq, \
                                                                                                           # 26
+                                                                                                          alpha_calc, \
+                                                                                                          # 27
                                                                                                           all.cont[i])
        
                                                                          
