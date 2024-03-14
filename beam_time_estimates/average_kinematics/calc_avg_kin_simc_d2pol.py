@@ -51,20 +51,42 @@ me = 0.51099
 # header information for the output file (FOR JLAB22 GeV / deuteron calculations)
 header = \
 """
-# averaged kinematics
-# i_bin : 2d bin number
-# i_xbin: xbin number
-# i_ybin: ybin number
-# thnq_c: central theta_nq value (e.g., 5, 15, 25, 35, . . . deg)
-# pm_c  : central missing momentum value (80, 120, 160, . . . MeV)
-# Ei    : avergae beam energy [MeV]
-# kf    : average final e- momentum
-# the   : average final e- angle
-# nu_calc
-# alpha is the spectatror (neutron) alpha
-
-# current header line:
-#! i_bin[i,0]/ i_xbin[i,1]/ i_ybin[i,2]/ thnq_c[f,3]/ pm_c[f,4]/ Ei[f,5]/ kf[f,6]/ th_e[f,7]/ nu_calc[f,8]/ Q2_calc[f,9]/ q_calc[f,10]/ Ep_calc[f,11]/ pf[f,12]/ pm[f,13]/ pm_calc[f,14]/ En_calc[f,15]/ beta_cm[f,16]/ gamma_cm[f,17]/ PfPar_q[f,18]/ PfPerp_q[f,19]/ theta_pq[f,20]/ theta_pq_calc[f,21]/ PfPar_cm[f,22]/ th_pq_cm[f,23]/ th_nq[f,24]/ th_nq_calc[f,25]/  cos_phi_pq[f,26]/  sin_phi_pq[f,27]/  alpha_c[f,28]/  nx[i,29]/ ny[i,30]/ cont[f,31]/        
+# Averaged Kinematics Numerical File
+#
+# NOTE: averaged quantities are determined from SIMC @ the vertex
+# calculated quantities are calculated external to SIMC assuming
+# (using averged quantities as input, if needed)
+#
+# id_bin     : 2d bin number
+# id_xbin    : xbin number
+# id_ybin    : ybin number
+# thnq_b     : central theta_nq value (e.g., 5, 15, 25, 35, . . . deg)
+# pm_b       : central missing momentum value (80, 120, 160, . . . MeV)
+# Ei         : average beam energy [MeV]
+# kf         : average final e- momentum [MeV]
+# the        : average final e- angle [deg]
+# nu         : average energy transfer [MeV]
+# nu_calc    : calculated energy transfer [MeV]
+# Q2_calc    : calculated 4-momentum transfer [MeV^2]
+# q_calc     : calculated 3-momentum transfer [MeV]
+# Ep_calc    : calculated final proton energy [MeV]
+# Pf         : average final proton momentum [MeV]
+# Pm         : average missing momentum [MeV]
+# Pm_calc    : calculated missing momentum [MeV]
+# En_calc    : calculated recoil neutron energy [MeV]
+# Pf_Par_q   : calculated Pf component (q-frame) parallel to q
+# Pf_Perp_q  : calculated Pf component (q-frame) perpendicular to q
+# thpq       : avergaed angle between proton and q [deg]
+# thpq_calc  : calculated angle between proton and q [deg]
+# thpq_cm    : calculated angle between proton and q in c.m. [deg]
+# thnq       : averaged angle between recoil neutron and q [deg]
+# thnq_calc  : calculated angle between recoil neutron and q [deg]
+# cphi_pq    : averaged cos(angle) betweeen proton and q [deg]
+# sphi_pq    : averaged sin(angle) betweeen proton and q [deg] 
+# alpha_calc : calculated spectatror (neutron) light-cone momentum fraction 
+# contz      : bin content for the specified (Pm, thnq) bin
+# 
+id_bin,id_xbin,id_ybin,thnq_b,pm_b,Ei,kf,the,nu,nu_calc,Q2_calc,q_calc,Ep_calc,Pf,Pm,Pm_calc,En_calc,Pf_Par_q,Pf_Perp_q,thpq,thpq_calc,thpq_cm,thnq,thnq_calc,cphi_pq,sphi_pq,alpha_calc,contz
 """
 #------------------------------------------------------------
 
@@ -99,15 +121,16 @@ print('root_fil',root_file)
 rf = R.TFile(root_file)
 
 # start with 2D yield histo, Fill(Pm, thnq, FullWeight)
-all = BI.get_histo_data_arrays(rf.H_Pm_vs_thrq_v) 
+all = BI.get_histo_data_arrays(rf.H_Pm_vs_thrq_v)
+
 # write the necessary header parameters
 o.write('# histogram parameters \n')
-o.write('#\ dx = {0:}\n'.format(repr(all.dx)))
-o.write('#\ dy = {0:}\n'.format(repr(all.dy)))
-o.write('#\ nx = {0:}\n'.format(repr(all.nx)))
-o.write('#\ ny = {0:}\n'.format(repr(all.ny)))
-o.write('#\ xmin = {0:}\n'.format(repr(all.xmin)))
-o.write('#\ ymin = {0:}\n'.format(repr(all.ymin)))
+o.write('# dx = {0:}\n'.format(repr(all.dx)))
+o.write('# dy = {0:}\n'.format(repr(all.dy)))
+o.write('# nx = {0:}\n'.format(repr(all.nx)))
+o.write('# ny = {0:}\n'.format(repr(all.ny)))
+o.write('# xmin = {0:}\n'.format(repr(all.xmin)))
+o.write('# ymin = {0:}\n'.format(repr(all.ymin)))
 # write header
 o.write(header)
 
@@ -122,9 +145,9 @@ bin_info_thq       = BI.get_histo_data_arrays(rf.H_theta_q_2Davg)      # q-angle
 bin_info_Q2        = BI.get_histo_data_arrays(rf.H_Q2_2Davg)           # Q2 4-momentum transfer
 bin_info_nu        = BI.get_histo_data_arrays(rf.H_nu_2Davg)           # omega, energy transfer
 bin_info_xbj       = BI.get_histo_data_arrays(rf.H_xbj_2Davg)          # Xbj, Bjorken
-bin_info_Pm         = BI.get_histo_data_arrays(rf.H_Pm_2Davg)          # Missing Momentum
+bin_info_Pm        = BI.get_histo_data_arrays(rf.H_Pm_2Davg)           # Missing Momentum
 bin_info_thpq      = BI.get_histo_data_arrays(rf.H_theta_pq_2Davg)     # theta_pq [deg]
-bin_info_thrq       = BI.get_histo_data_arrays(rf.H_thrq_2Davg)        # theta_nq [deg]
+bin_info_thrq      = BI.get_histo_data_arrays(rf.H_thrq_2Davg)         # theta_nq [deg]
 bin_info_cphi_pq   = BI.get_histo_data_arrays(rf.H_cphi_pq_2Davg)      # cos(phi_pq) (-1,1)
 bin_info_sphi_pq   = BI.get_histo_data_arrays(rf.H_sphi_pq_2Davg)      # sin(phi_pq) (-1,1)
 
@@ -133,7 +156,7 @@ bin_info_sphi_pq   = BI.get_histo_data_arrays(rf.H_sphi_pq_2Davg)      # sin(phi
 for i,acont in enumerate(all.cont):
    
    # get bin values
-   i_bin = all.i[i]
+   i_bin = all.i[i]     
    i_xbin = all.ix[i]
    i_ybin = all.iy[i]
    thnq_b = all.xb[i]
@@ -180,7 +203,7 @@ for i,acont in enumerate(all.cont):
          continue
       
       # calculate hadron kinematics
-      Ep_calc = np.sqrt( MP**2 + Pf**2)       # calculatede final proton energy
+      Ep_calc = np.sqrt( MP**2 + Pf**2)       # calculated final proton energy
 
       # calculated missing momentum (assuming deuteron mass)
       Pm_calc2 = (nu_calc+MD-Ep_calc)**2 - MN**2
@@ -198,49 +221,49 @@ for i,acont in enumerate(all.cont):
       gamma_cm = 1./np.sqrt(1. - beta_cm**2)
 
       # Momentum Components for Proton (in q-frame)
-      Pf_par = ( Pf**2 + q_calc**2 - Pm_calc**2)/ (2.*q_calc)
-      Pf_perp2 = Pf**2 - Pf_par**2
-      if (Pf_perp2 < 0.):
-         Pf_perp = Pf*np.sin(dtr*thpq)
-         th_pq_calc = thpq
+      Pf_Par_q = ( Pf**2 + q_calc**2 - Pm_calc**2)/ (2.*q_calc)
+      Pf_Perp_q2 = Pf**2 - Pf_Par_q**2
+      if (Pf_Perp_q2 < 0.):
+         Pf_Perp_q = Pf*np.sin(dtr*thpq)
+         thpq_calc = thpq
       else:
-         Pf_perp = np.sqrt(Pf_perp2)
-         cthpq = Pf_par/Pf     #Cos(theta_pq)
-         th_pq_calc = np.arccos(cthpq)/dtr             
-      Pf_par_cm = gamma_cm*Pf_par - gamma_cm*beta_cm*Ep_calc   #parallel component of proton in cm
+         Pf_Perp_q = np.sqrt(Pf_Perp_q2)
+         cthpq = Pf_Par_q/Pf     #Cos(theta_pq)
+         thpq_calc = np.arccos(cthpq)/dtr             
+      Pf_Par_q_cm = gamma_cm*Pf_Par_q - gamma_cm*beta_cm*Ep_calc   #parallel component of proton in cm
 
       # proton angle in the cm
       thp_calc_cm = 0.
 
-      if Pf_par_cm == 0. :
+      if Pf_Par_q_cm == 0. :
          thp_calc_cm = np.pi
-      if Pf_par_cm > 0. :
-         thp_calc_cm = np.arctan(Pf_perp/Pf_par_cm)
-      if Pf_par_cm < 0. :
-         thp_calc_cm = np.pi+np.arctan(Pf_perp/Pf_par_cm)
+      if Pf_Par_q_cm > 0. :
+         thp_calc_cm = np.arctan(Pf_Perp_q/Pf_Par_q_cm)
+      if Pf_Par_q_cm < 0. :
+         thp_calc_cm = np.pi+np.arctan(Pf_Perp_q/Pf_Par_q_cm)
 
-      theta_pq_cm = thp_calc_cm/dtr
+      thpq_cm = thp_calc_cm/dtr
 
       # calculate angles using calculated Pmiss
       denom = q_calc**2 + Pm_calc**2 - Pf**2
       num = (2.*q_calc*Pm_calc)
 
       cth_nq = -2.    #Cos(theta_nq)
-      theta_nq_calc = -1.
+      thnq_calc = -1.
       if num > 0. : 
          cth_nq = denom/num
-         theta_nq_calc = 0.
+         thnq_calc = 0.
       if abs(cth_nq) <=1.:
-         theta_nq_calc = np.arccos(cth_nq)/dtr;
+         thnq_calc = np.arccos(cth_nq)/dtr;
       # calculate alpha
-      pz_n = Pm_calc*np.cos(theta_nq_calc*dtr)
+      pz_n = Pm_calc*np.cos(thnq_calc*dtr)
       p_n_minus = En_calc - pz_n
       alpha_calc = p_n_minus/MN
 
 
 
       # for JLab 22 GeV calculation
-      l = "%i %i %i %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %i %i %.3E\n"%( \
+      l = "%i,%i,%i,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3E\n"%(
                                                                                                           # 0 2d bin number
                                                                                                           i_bin, \
                                                                                                           # 1 
@@ -256,8 +279,10 @@ for i,acont in enumerate(all.cont):
                                                                                                           # 6 avg. e- momentum
                                                                                                           kf, \
                                                                                                           # 7 avg. e- angle
-                                                                                                          the,                
-                                                                                                          # 8 calc. average energy transfer
+                                                                                                          the, \
+                                                                                                          # 8 avg. energy transfer
+                                                                                                          nu,                                                          
+                                                                                                          # 8 calc.  energy transfer
                                                                                                           nu_calc, \
                                                                                                           # 9 calc. average 4-Momentum transfer
                                                                                                           Q2_calc, \
@@ -271,39 +296,29 @@ for i,acont in enumerate(all.cont):
                                                                                                           Pm, \
                                                                                                           # 14 calc. average Missing momentum  (assume deuteron mass)
                                                                                                           Pm_calc, \
-                                                                                                          # 15
+                                                                                                          # 15 calc. final neutron energy 
                                                                                                           En_calc, \
-                                                                                                          # 16
-                                                                                                          beta_cm, \
-                                                                                                          # 17
-                                                                                                          gamma_cm, \
+                                                                                                          # 16 calc. Pf component (q-frame) parallel to q
+                                                                                                          Pf_Par_q, \
+                                                                                                          # 17 calc. Pf component (q-frame) perpendicular to q
+                                                                                                          Pf_Perp_q, \
                                                                                                           # 18
-                                                                                                          Pf_par, \
-                                                                                                          # 19
-                                                                                                          Pf_perp, \
-                                                                                                          # 20
                                                                                                           thpq, \
+                                                                                                          # 19
+                                                                                                          thpq_calc, \
+                                                                                                          # 20
+                                                                                                          thpq_cm, \
                                                                                                           # 21
-                                                                                                          th_pq_calc, \
-                                                                                                          # 22
-                                                                                                          Pf_par_cm, \
-                                                                                                          # 23
-                                                                                                          theta_pq_cm, \
-                                                                                                          # 24
                                                                                                           thnq, \
-                                                                                                          # 25
-                                                                                                          theta_nq_calc, \
-                                                                                                          # 26
+                                                                                                          # 22
+                                                                                                          thnq_calc, \
+                                                                                                          # 23
                                                                                                           cphi_pq, \
-                                                                                                          # 27
+                                                                                                          # 24
                                                                                                           sphi_pq, \
-                                                                                                          # 28
-                                                                                                          alpha_calc,                                          
-                                                                                                          # 29
-                                                                                                          all.nx, \
-                                                                                                          # 30
-                                                                                                          all.ny, \
-                                                                                                          # 31
+                                                                                                          # 25
+                                                                                                          alpha_calc, \
+                                                                                                          # 26
                                                                                                           all.cont[i])
        
                                                                          
