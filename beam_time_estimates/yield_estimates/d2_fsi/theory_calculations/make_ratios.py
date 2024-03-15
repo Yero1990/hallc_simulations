@@ -41,8 +41,8 @@ GeV2MeV = 1000.  # 1 GeV = 1000 MeV
 # crs12 : PWIA + FSI
 # ratio: crs12 /  crs0 
 #model_set = ["2_1_1_0_12", "3_1_1_0_12"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
-#model_set = ["2_1_1_0_123"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
-model_set = ["3_1_1_0_12"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
+model_set = ["2_1_1_0_123"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
+#model_set = ["3_1_1_0_12"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
 
 # central recoil angle
 thrq_set = [28, 49, 55, 60, 66, 72, 79]
@@ -74,7 +74,7 @@ for model in model_set:
     # loop over central recoil angle kin. setting
     for ithrq in thrq_set: 
         print('ithrq: ', ithrq)
-        basename = 'q4_sig_avkin_thnq_pm/csv/csec_calc_thrq%d_%s.data' % (ithrq, model)
+        basename = 'q4_sig_avkin_thnq_pm_chx/csv/csec_calc_thrq%d_%s.data' % (ithrq, model)
 
         df = pd.read_csv(basename, comment='#')
 
