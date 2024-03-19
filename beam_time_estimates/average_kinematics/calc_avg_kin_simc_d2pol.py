@@ -60,8 +60,8 @@ header = \
 # id_bin     : 2d bin number
 # id_xbin    : xbin number
 # id_ybin    : ybin number
-# thnq_b     : central theta_nq value (e.g., 5, 15, 25, 35, . . . deg)
-# pm_b       : central missing momentum value (80, 120, 160, . . . MeV)
+# thnq_b     : central theta_nq value (e.g. 5 15 25 35 . . . deg)
+# pm_b       : central missing momentum value (80 120 160 . . . MeV)
 # Ei         : average beam energy [MeV]
 # kf         : average final e- momentum [MeV]
 # the        : average final e- angle [deg]
@@ -84,7 +84,7 @@ header = \
 # cphi_pq    : averaged cos(angle) betweeen proton and q [deg]
 # sphi_pq    : averaged sin(angle) betweeen proton and q [deg] 
 # alpha_calc : calculated spectatror (neutron) light-cone momentum fraction 
-# contz      : bin content for the specified (Pm, thnq) bin
+# contz      : bin content for the specified (Pm thnq) bin
 # 
 id_bin,id_xbin,id_ybin,thnq_b,pm_b,Ei,kf,the,nu,nu_calc,Q2_calc,q_calc,Ep_calc,Pf,Pm,Pm_calc,En_calc,Pf_Par_q,Pf_Perp_q,thpq,thpq_calc,thpq_cm,thnq,thnq_calc,cphi_pq,sphi_pq,alpha_calc,contz
 """
@@ -106,7 +106,9 @@ list_of_args = sys.argv
 #basename='d2_pm800_thrq49_fsi_rad_output' 
 
 # deuteron polarized proposal files
-basename='d2_pm350_Q2_3p5_fsi_rad_output'
+#basename='d2_pm350_Q2_3p5_fsi_rad_output'
+#basename='c12_pm350_Q2_3p5_fsi_rad_output'
+basename='he4_pm350_Q2_3p5_fsi_rad_output'
 
 output_file = basename+'_avgkin.txt'
 
