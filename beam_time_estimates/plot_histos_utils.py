@@ -1325,7 +1325,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
 #*************************************
 
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
-pm_set = [400]
+pm_set = [350]
 q2_set = [3.5]
 tgt_set = ['n14', 'd2', 'he4']
 #tgt_set = ['n14']
@@ -1339,9 +1339,14 @@ tgt_set = ['n14', 'd2', 'he4']
 #combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'proj_err')
 
 #combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'd2', 'Pm_vs_thrq', 'fsi', 'tot_proj')
-combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'd2', 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
+#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'd2', 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
 
 
+# ------ Pm vs theta_rq yield projections and errors -----
+
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', '2d', 4)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', 'proj', 4)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', 'proj_err', 4)
 
 
 #  ----- combine multiple kin. settings (of multiple targets or same target) (NEEDS TO BE FIXED)
@@ -1425,11 +1430,6 @@ make_projY_d2pol('hyptar_vs_eyptar', tgt_set, pm_set, 3.5, 'fsi', '2d')
 #make_projY_d2pol('Em_nuc_vs_Pm_nsc',  tgt_set, pm_set, 3.5, 'fsi', '2d', 3)
 
 
-# ------ Pm vs theta_rq yield projections and errors -----
-
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', '2d', 3)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', 'proj', 3)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', 'proj_err', 3)
 
 
 
