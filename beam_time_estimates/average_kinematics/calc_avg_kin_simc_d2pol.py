@@ -106,11 +106,11 @@ list_of_args = sys.argv
 #basename='d2_pm800_thrq49_fsi_rad_output' 
 
 # deuteron polarized proposal files
-#basename='d2_pm350_Q2_3p5_fsi_rad_output'
+basename='d2_pm350_Q2_3p5_fsi_rad_output'
 #basename='c12_pm350_Q2_3p5_fsi_rad_output'
-basename='he4_pm350_Q2_3p5_fsi_rad_output'
+#basename='he4_pm350_Q2_3p5_fsi_rad_output'
 
-output_file = basename+'_avgkin.txt'
+output_file = basename+'_avgkin_largeBins.txt'
 
 
 o = open(output_file,'w')

@@ -1,9 +1,11 @@
 ! Deuteron Experiment D(e,e'p)n : polarized deuteron
 ! Central "missing momentum" (pmiss) setting = 350 MeV
 ! Central Q2: 2.5 GeV^2
-! Pol. Mag. Field direction rotated +20 deg beam-right (towards HMS)
-! Proton Angle Restriction: < 22 + 35 =  57 deg
-! Electron Angle Restriction: < |22 - 35| = 13 deg
+! theta_rq: 20 deg
+! target magnetic field: ON
+! Pol. Mag. Field direction rotated +26 deg beam-right (towards HMS)
+! Proton Angle Restriction: < 26 + 35 =  61 deg
+! Electron Angle Restriction: < |26 - 35| = 9 deg
 ! Out-of-Plane Angle (phi): 180 deg
 ! FSI | YES radiative effects | YES energy loss | NO energy loss correction 
 ! 'TF' stands for 'this field'
@@ -11,26 +13,26 @@
 
  =?
  &EXPERIMENT
-     ngen  =  100000			!  POS: # of successes
+     ngen  =  1000000			!  POS: # of successes
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
      doing_pion  =  F		!  (T = TRUE)
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
-     extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
+     extra_dbase_file = 'extra_hydrogen_rad_fieldON.data' !  additional input parameters.
      set_allow_scat_in_coll=0  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
  &KINEMATICS_MAIN
-     Ebeam  =  10549.                                  !  (MeV)
+     Ebeam  =  11000.                                  !  (MeV)
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
-     spec%e%P  =    9577.0                              !  e arm central momentum (MeV/c) 
-     spec%e%theta  =  9.02                            !  e arm angle setting (degrees)
-     spec%p%P  =    1593.                             !  p arm central momentum (MeV/c) 
-     spec%p%theta  =   61.18                           !  p arm angle setting (degrees)
+     spec%e%P  =    10112.0                              !  e arm central momentum (MeV/c) 
+     spec%e%theta  =  8.0                            !  e arm angle setting (degrees) original: 8.6 
+     spec%p%P  =    1490.                             !  p arm central momentum (MeV/c) 1490. + 0.03*1490
+     spec%p%theta  =   60.                           !  p arm angle setting (degrees) 61.2
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
@@ -41,7 +43,6 @@
      spec%p%shift%p_mom  =   0.                        !  shift p-momentum for reconstruction (for systematic studies)	
      spec%p%shift%theta  =   0.                        !  shift p-angle for reconstruction
      spec%p%shift%phi    =   0.                        !  shift p-Oop angle for reconstruction
-
 / 
 
  ?=

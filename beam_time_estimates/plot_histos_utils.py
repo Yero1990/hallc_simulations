@@ -576,7 +576,7 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, scale=1):
                 # set histogram file path
                 #histos_file_path = 'path/to/histogram_data/pm%d_q2%d_%s/histo_name_pm_set_q2_set.txt'%(pm_set, q2_set, model, hist_name)
                 
-                hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/tightEmiss_Cut/%s_pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, hist_name, ipm, iq2)
+                hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, hist_name, ipm, iq2)
                 #hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/tightEmiss_Cut/%s_pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, hist_name, ipm, iq2)
                 
                 print('tgt_set:', itgt, 'Pm:', ipm, 'Q2:', iq2)
@@ -1171,7 +1171,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
             # set histo base name and file path
             h2_hist_basename = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(h2_hist_name, ipm, Q2_user)   # generic histogram name
             #hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, Q2_user, model, h2_hist_basename)             #original kinematics
-            hist_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/tightEmiss_Cut/%s_pm%d_Q2_%.1f_%s/%s'%(itgt, ipm, Q2_user, model, h2_hist_basename)  #optimized kinematics
+            hist_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s/%s'%(itgt, ipm, Q2_user, model, h2_hist_basename)  #optimized kinematics
 
             print('hist_file_path:', hist_file_path)
             # check if file exists, else continue reading next file
@@ -1326,9 +1326,9 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
 
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
 pm_set = [350]
-q2_set = [3.5]
-tgt_set = ['n14', 'd2', 'he4']
-#tgt_set = ['n14']
+q2_set = [2.9]
+#tgt_set = ['n14', 'd2', 'he4']
+tgt_set = ['d2']
 
 # plot evenrt rates, daq rates, per setting
 #plot_rates()
@@ -1345,8 +1345,8 @@ tgt_set = ['n14', 'd2', 'he4']
 # ------ Pm vs theta_rq yield projections and errors -----
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', '2d', 4)
-make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', 'proj', 4)
-make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', 'proj_err', 4)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.9, 'fsi', 'proj', 1)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.9, 'fsi', 'proj_err', 1)
 
 
 #  ----- combine multiple kin. settings (of multiple targets or same target) (NEEDS TO BE FIXED)
@@ -1366,8 +1366,8 @@ make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', 'proj_err', 4)
 
 
 # ----- plot the kinematics variables in which a cut is used (without the self cut, ie nsc or no self cut) -----
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc', 'fsi', 3)
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', 3)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc', 'fsi', 1)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', 1)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi', 3)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', 3)
 '''
@@ -1379,8 +1379,8 @@ make_projY_d2pol('eXColl_vs_eYColl', tgt_set, pm_set, 3.5, 'fsi', '2d')
 '''
 
 # ------ plot kinematic variables -----
-'''
-scale = 3 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 -> 2 weeks, . . . )
+
+scale = 1 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 -> 2 weeks, . . . )
 overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc', 'fsi', scale)   # missing energy
 
 overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf', 'fsi', scale)   # proton momentum
@@ -1397,12 +1397,12 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'thpq', 'fsi', scale)    # in-plane angle
 overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq', 'fsi', scale)    # in-plane angle between (recoil,q)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'phi_pq', 'fsi', scale)  # out-of-plane angle between (proton, q)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq', 'fsi', scale)
-'''
+
 
 # ----- plot acceptance variables ----
 
 # reconstructed variables
-'''
+
 overlay_d2pol(tgt_set, pm_set, q2_set, 'exptar', 'fsi', scale)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'eyptar', 'fsi', scale)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'eytar', 'fsi', scale)
@@ -1413,7 +1413,7 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'hyptar', 'fsi', scale)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'hytar', 'fsi', scale)
 
 overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta', 'fsi', scale)
-'''
+
 
 '''
 # focal plane

@@ -29,7 +29,7 @@
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      spec%e%P  =    9374.0                              !  e arm central momentum (MeV/c) 
      spec%e%theta  =  10.                            !  e arm angle setting (degrees)
-     spec%p%P  =    1675.                             !  p arm central momentum (MeV/c) original: 1821 MeV, new: 1821 - 0.08*1821 is (shift delta from neg to 0%)
+     spec%p%P  =    1730.                             !  p arm central momentum (MeV/c) original: 1821 MeV, new: 1821 - 0.05*1821 is (shift delta from neg to -3%)
      spec%p%theta  =   57.4                           !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
