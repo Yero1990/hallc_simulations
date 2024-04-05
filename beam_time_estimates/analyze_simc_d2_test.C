@@ -127,9 +127,11 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   if( analysis_flag == "d2pol") {
 
     // split base into kin setting values
-    Q2_str = split(split(split(basename.Data(), '_')[0], '_')[0], '_')[1];
-    
-    pm_str =split( split(split(split(split(basename.Data(), '_')[0], '_')[0], '_')[0], '_')[0], '_')[1];
+    //Q2_str = split(split(split(basename.Data(), '_')[0], '_')[0], '_')[1];   // for generic name: d2_pm350_Q2_2p5_fsi_rad
+    //pm_str =split( split(split(split(split(basename.Data(), '_')[0], '_')[0], '_')[0], '_')[0], '_')[1];
+
+    Q2_str = split(split(split(split(basename.Data(), '_')[0], '_')[0], '_')[0], '_')[1];  // d2_pm350_Q2_2p5_fsi_rad_fieldON
+    pm_str = split(split( split(split(split(split(basename.Data(), '_')[0], '_')[0], '_')[0], '_')[0], '_')[0], '_')[1];
     
     // strip non-numeric characters and conver to int
     Q2_str = std::regex_replace(Q2_str.Data(), std::regex(R"([^\d])"), "."); // replace the "p" with decimal point "."
@@ -230,7 +232,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     
     // define output directory where numerical histogram .txt will be placed
     output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s", tgt_name.Data(), pm_set, Q2_set, model.Data());
-    
+   
     
     if (debug) {
       cout << "---- Set Filenames ----" << endl;
@@ -244,7 +246,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   }
     
   //---------------------------------------------------------------------------------------------------------
-  
+  cout << "OK" << endl;
     //----------------------------
     // READ CENTRAL KIN. SETTINGS
     //----------------------------
