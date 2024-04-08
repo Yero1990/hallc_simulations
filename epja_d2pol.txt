@@ -1,0 +1,17 @@
+epja
+------
+
+introduction
+
+
+experimental setup
+
+
+simulation
+Eb = 11 GeV, Q2 = 3.5,  Q2 = 2.5, phi = 180 deg, field 
+
+
+expected results
+
+
+conclusion
