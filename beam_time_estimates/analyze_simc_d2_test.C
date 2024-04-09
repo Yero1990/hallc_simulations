@@ -137,8 +137,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     Q2_str = std::regex_replace(Q2_str.Data(), std::regex(R"([^\d])"), "."); // replace the "p" with decimal point "."
     Q2_set = stof(Q2_str.Data());
     pm_set = stoi(std::regex_replace(pm_str.Data(), std::regex(R"([^\d])"), ""));
-    model = split(split(basename.Data(), '_')[0], '_')[1];
-    tgt_name = split(split(split(split(split(basename.Data(), '_')[0], '_')[0], '_')[0], '_')[0], '_')[0];
+    model = split(split(split(basename.Data(), '_')[0], '_')[0], '_')[1];
+    tgt_name = split(split(split(split(split(split(basename.Data(), '_')[0], '_')[0], '_')[0], '_')[0], '_')[0], '_')[0];
    
     
     if(debug) {
@@ -223,7 +223,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     
     //Define File Name Patterns
     simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/%s.data",    basename.Data());
-    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s.root",                      basename.Data());
+    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/original_acceptance/%s.root",                      basename.Data());
 
     simc_OutputFileName = Form("worksim/d2_pol/smallFSI/optimized/analyzed/%s_output.root",          basename.Data());
     

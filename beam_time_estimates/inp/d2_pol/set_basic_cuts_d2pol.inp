@@ -11,7 +11,7 @@
 
 #-----Kinematics Cuts-----
 # 4-Momentum Transfers [GeV^2]
-Q2_cut_flag = 1
+Q2_cut_flag = 0
 c_Q2_min = 2.0
 c_Q2_max = 6
 
@@ -48,8 +48,8 @@ c_ztarDiff_min = -2.
 c_ztarDiff_max = 2.
 
 # collimator cut
-hmsCollCut_flag = 1
+hmsCollCut_flag = 0
 hms_scale = 1.
 
-shmsCollCut_flag = 1
+shmsCollCut_flag = 0
 shms_scale = 1.
