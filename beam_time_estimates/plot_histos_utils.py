@@ -959,7 +959,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
         if plot_flag=='proj' or plot_flag=='proj_err':
             # set figure subplots for the 1d projections
             #fig, ax = plt.subplots(6, 3, sharex='col', sharey='row', tight_layout=True)
-            fig, ax = plt.subplots(6, 3, tight_layout=True)
+            fig, ax = plt.subplots(3, 2, tight_layout=True)
 
             fig.text(0.5, 0.002, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=12)
             fig.text(0.005, 0.5, 'counts', va='center', rotation='vertical', fontsize=12)
@@ -1058,7 +1058,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
                 if(not np.ma.is_masked(cnts)):
 
                     if plot_flag=='proj':
-                        ax = plt.subplot(6, 3, jdx+1)
+                        ax = plt.subplot(3, 2, jdx+1)
 
                         if "_2Davg" in h2_hist_basename:
                             ax.errorbar(ybc, count_per_xbin, count_per_xbin_err, marker='o', markersize=4, linestyle='None', label=r'%.1f GeV$^{2}$'%(jq2)) #//, label=r'%d counts'%(cnts))
@@ -1074,7 +1074,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
                     # ---- relative error plots ----
                     if plot_flag=='proj_err':
 
-                        ax = plt.subplot(6, 3, jdx+1)
+                        ax = plt.subplot(3, 2, jdx+1)
                         count_per_xbin_rel_err_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, count_per_xbin_rel_err)
 
                         y_const_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, y_const)
@@ -1097,8 +1097,184 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
 
 
 
+def calc_dilution(pm_user, Q2_user, model, field, scale=1):
+    '''
+    Brief: function to calculate the d2pol dilution factor: dilution = d2 / (d2 + he4 + n14)
+    '''
 
-def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, scale=1):
+    # create file to write dilution factors
+    ofname = 'd2pol_dilution_factors_pm%d_Q2_%.1f_%s.csv' %(pm_user, Q2_user, field)
+    ofile = open(ofname, 'w+')
+    ofile.write('# d2pol dilution factors (%s) \n'%(field))
+    ofile.write('# \n'
+                '# Header Definitions: \n'
+                '#        \n'
+                '# pm_bin      : missing momentum bin (GeV/c)\n'
+                '# thrq_bin    : neutron recoil angle bin (deg)'
+                '# d2          : d(e ep) counts  \n'
+                '# d2_err       : d(e ep) counts absolute error  \n'
+                '# he4          : he4(e ep) counts  \n'
+                '# he4_err       : he4(e ep) counts absolute error  \n'
+                '# n14          : n14(e ep) counts  \n'
+                '# n14_err       : n14(e ep) counts absolute error  \n'
+                '# dilution       : dilution factor defined as N_D / (N_D + N_14 + N_He)\n'
+                '# dilution_err   : absolute error on dilution factor\n'
+        
+                )
+    ofile.write('thrq_bin,pm_bin,d2,d2_err,he4,he4_err,n14,n14_err,dilution,dilution_err\n') 
+
+
+
+     
+    fig, ax = plt.subplots(2, 3)
+    fig.set_size_inches(10,6, forward=True)
+    fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)
+    fig.text(0.01, 0.5, 'dilution', va='center', rotation='vertical', fontsize=14)
+    subplot_title =  r"dilution factor, central p$_{m,cent}$ = %d MeV, $Q^{2}$ = %.1f GeV$^{2}$"%(pm_user, Q2_user)
+    plt.suptitle(subplot_title, fontsize=15);
+    plt.tight_layout()
+    
+    # h2 -> 2d histo (not related to hydrogrn)
+    h2_hist_basename = 'H_Pm_vs_thrq_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name
+
+    d2_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/d2_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
+    he4_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/he4_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
+    n14_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/n14_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
+
+    df_d2  = pd.read_csv(d2_file_path, comment='#')
+    df_he4 = pd.read_csv(he4_file_path, comment='#')
+    df_n14 = pd.read_csv(n14_file_path, comment='#')
+
+    # get histo parameters from .txt file (general params)
+    xlabel = get_label('xlabel',     d2_file_path)
+    ylabel = get_label('ylabel',     d2_file_path)
+    title  = get_label('title',      d2_file_path)
+    ybinw  = float(get_label('ybin_width', d2_file_path))
+    xbinw  = float(get_label('xbin_width', d2_file_path))
+    nxbins = len(df_d2.xb[df_d2.yb==df_d2.yb[0]])
+    nybins = len(df_d2.yb[df_d2.xb==df_d2.xb[0]])
+    ybc = (df_d2.y0[df_d2.x0==df_d2.x0[0]]).to_numpy() # y-bin central value
+    xbc = (df_d2.x0[df_d2.y0==df_d2.y0[0]]).to_numpy() # x-bin central value
+
+    # scale the counts per bin (default scale = 1)
+    df_d2.zcont  = df_d2.zcont * scale
+    df_he4.zcont = df_he4.zcont * scale
+    df_n14.zcont = df_n14.zcont * scale
+    
+
+    jdx=0 #counter for subplots which have non-zero counts
+
+    #loop over x-bins i.e., thrq bins (for y-projections)
+    for idx, xbin in enumerate( xbc ):
+        
+        ax = plt.subplot(2, 3, jdx+1)
+
+        
+        d2_count_per_xbin     = df_d2.zcont[df_d2.x0==xbin]
+        d2_count_per_xbin_err = np.sqrt( d2_count_per_xbin )
+        
+        
+        d2_count_per_xbin     = ma.masked_where(d2_count_per_xbin==0, d2_count_per_xbin)
+        d2_count_per_xbin_err = ma.masked_where(d2_count_per_xbin==0, d2_count_per_xbin_err)
+
+
+        he4_count_per_xbin     = df_he4.zcont[df_he4.x0==xbin]
+        he4_count_per_xbin_err = np.sqrt( he4_count_per_xbin )
+        
+        
+        he4_count_per_xbin     = ma.masked_where(he4_count_per_xbin==0, he4_count_per_xbin)
+        he4_count_per_xbin_err = ma.masked_where(he4_count_per_xbin==0, he4_count_per_xbin_err)
+
+        n14_count_per_xbin     = df_n14.zcont[df_n14.x0==xbin]
+        n14_count_per_xbin_err = np.sqrt( n14_count_per_xbin )
+        
+        
+        n14_count_per_xbin     = ma.masked_where(n14_count_per_xbin==0, n14_count_per_xbin)
+        n14_count_per_xbin_err = ma.masked_where(n14_count_per_xbin==0, n14_count_per_xbin_err)
+
+        
+        # rename variables for simplicity
+        x     = d2_count_per_xbin
+        sigx  = d2_count_per_xbin_err
+        y     = he4_count_per_xbin
+        sigy  = he4_count_per_xbin_err
+        z     = n14_count_per_xbin
+        sigz  = n14_count_per_xbin_err
+        
+        dilution     =  x / ( x + y + z)
+        dilution_err =  np.sqrt( ((sigx**2 * (y+z)**2 ) + (x**2 * (sigy**2 + sigz**2))) / (x + y + z)**4 )
+
+        dsum = np.sum( dilution )
+
+    
+            
+        if(np.ma.is_masked(dsum)): continue
+
+        if(not np.ma.is_masked(dsum)):
+             
+            print('xbin: ', xbin)
+            print('ybc: ', ybc)
+            print('dilution: ', dilution, '+/-', dilution_err)
+
+            # loop over y-bins (pm_bins) to write to file
+            for ipm, ybin in enumerate( ybc ):
+
+                print(idx, xbin, ipm, ybin, x[ipm], sigx[ipm] )
+                ofile.write("%.1f, %.3f, %.1f, %.3f, %.1f, %.3f, %.1f, %.3f, %.3f, %.3f\n" % (xbin, ybin, x[ipm], sigx[ipm], y[ipm], sigy[ipm], z[ipm], sigz[ipm], dilution[ipm], dilution_err[ipm] ))
+            
+            ax.errorbar(ybc, dilution, dilution_err, marker='o', markersize=6, linestyle='None', color='r', label=r'%.1f GeV$^{2}$'%(Q2_user))
+            plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+            jdx = jdx+1
+            
+    ofile.close()
+    plt.show()
+
+def overlay_dilution():
+
+    print('overlay_dilution')
+    fig, ax = plt.subplots(2, 3)
+    fig.set_size_inches(10,6, forward=True)
+    fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)   
+    fig.text(0.01, 0.5, 'dilution factor', va='center', rotation='vertical', fontsize=14)
+    subplot_title =  r"dilution factor"
+    plt.suptitle(subplot_title, fontsize=15);
+    plt.tight_layout()
+            
+    df_fieldON = pd.read_csv('d2pol_dilution_factors_pm350_Q2_2.5_fieldON.csv', comment='#')
+    df_fieldOFF = pd.read_csv('d2pol_dilution_factors_pm350_Q2_2.5_fieldOFF.csv', comment='#')
+
+    
+    
+    pm_bin   = (df_fieldON.pm_bin[df_fieldON.thrq_bin==df_fieldON.thrq_bin[0]])
+    thrq_bin = (df_fieldON.thrq_bin[df_fieldON.pm_bin==df_fieldON.pm_bin[0]])
+
+    jdx = 0
+    #loop over x-bins (thrq) 
+    for idx, xbin in enumerate( thrq_bin ):
+
+        
+        ax = plt.subplot(2, 3, jdx+1)
+        
+        dilution_per_xbin_fieldON     = df_fieldON.dilution[df_fieldON.thrq_bin==xbin]
+        dilution_per_xbin_err_fieldON = df_fieldON.dilution_err[df_fieldON.thrq_bin==xbin]
+        
+        dilution_per_xbin_fieldOFF     = df_fieldOFF.dilution[df_fieldOFF.thrq_bin==xbin]
+        dilution_per_xbin_err_fieldOFF = df_fieldOFF.dilution_err[df_fieldOFF.thrq_bin==xbin]
+       
+        
+        print('pm_bin:',pm_bin, 'dilution (field ON):', dilution_per_xbin_fieldON, 'dilution_err (field ON):', dilution_per_xbin_err_fieldON, )
+                   
+        ax.errorbar(pm_bin, dilution_per_xbin_fieldON , dilution_per_xbin_err_fieldON)
+        #ax.errorbar(pm_bin, dilution_per_xbin_fieldOFF , dilution_per_xbin_err_fieldOFF, marker='^', markersize=6, linestyle='None', color='b', label=r'field OFF')
+
+        
+        #plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(thrq_bin, 10))
+        jdx = jdx+1
+
+    plt.show()
+        
+    
+def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot_flag, scale=1):
     '''
     Brief: generic function makes 1D projections along y-axis (slicing xbins) for selected 2D histos,
     (this version of the method takes multiple targets and a single value of Q2)
@@ -1118,6 +1294,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
     Q2_set: central Q2 setting, e.g. Q2_set=3.5, (a single valued MUST be provided)
 
     model: can be "fsi" or "pwia" depending on the simulation done
+    field: "fieldON" or "fieldOFF" (target magnetic field)
 
     plot_flag:  plot_flag="2d"       -> produces a standard 2D histogram (with log or linear z scale, depending on which type of 2D found)
                 plot_flag="proj"     -> produces a sliced set of subplots, where each subplot is the Y-projection of the 2D histogram
@@ -1147,15 +1324,18 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
         if plot_flag=='proj' or plot_flag=='proj_err':
             # set figure subplots for the 1d projections
             #fig, ax = plt.subplots(6, 3, sharex='col', sharey='row', tight_layout=True)
-            fig, ax = plt.subplots(6, 3, tight_layout=True)
+            fig, ax = plt.subplots(2, 3)
+            fig.set_size_inches(10,6, forward=True)
+            fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)
+            if plot_flag=='proj':
+                fig.text(0.01, 0.5, 'counts', va='center', rotation='vertical', fontsize=14)
+            elif plot_flag=='proj_err':
+                fig.text(0.01, 0.5, 'relative error', va='center', rotation='vertical', fontsize=14)
 
-            fig.text(0.5, 0.002, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=12)
-            fig.text(0.005, 0.5, 'counts', va='center', rotation='vertical', fontsize=12)
             subplot_title =  r"p$_{m}$ vs. $\theta_{rq}$ 1d projection (%s), central p$_{m}$ setting: %d MeV"%(model, ipm)
             plt.suptitle(subplot_title, fontsize=15);
-            fig.set_size_inches(12,10, forward=True)
-        
-
+            plt.tight_layout()
+            
         offset=0 # offset for applying projections overlay
         i = -1 # color index counter
         # loop over central targets
@@ -1171,7 +1351,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
             # set histo base name and file path
             h2_hist_basename = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(h2_hist_name, ipm, Q2_user)   # generic histogram name
             #hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, Q2_user, model, h2_hist_basename)             #original kinematics
-            hist_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s/%s'%(itgt, ipm, Q2_user, model, h2_hist_basename)  #optimized kinematics
+            hist_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s_%s/%s'%(itgt, ipm, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
 
             print('hist_file_path:', hist_file_path)
             # check if file exists, else continue reading next file
@@ -1249,7 +1429,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
                 if(not np.ma.is_masked(cnts)):
 
                     if plot_flag=='proj':
-                        ax = plt.subplot(6, 3, jdx+1)
+                        ax = plt.subplot(2, 3, jdx+1)
 
                         if "_2Davg" in h2_hist_basename:
                             ax.errorbar(ybc, count_per_xbin, count_per_xbin_err, marker='o', markersize=4, linestyle='None', label=r'%.1f GeV$^{2}$'%(Q2_user)) #//, label=r'%d counts'%(cnts))
@@ -1265,7 +1445,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
                     # ---- relative error plots ----
                     if plot_flag=='proj_err':
 
-                        ax = plt.subplot(6, 3, jdx+1)
+                        ax = plt.subplot(2, 3, jdx+1)
                         count_per_xbin_rel_err_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, count_per_xbin_rel_err)
 
                         y_const_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, y_const)
@@ -1326,9 +1506,9 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, plot_flag, 
 
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
 pm_set = [350]
-q2_set = [2.9]
+q2_set = [2.5]
 #tgt_set = ['n14', 'd2', 'he4']
-tgt_set = ['d2']
+tgt_set = ['n14', 'd2', 'he4' ]
 
 # plot evenrt rates, daq rates, per setting
 #plot_rates()
@@ -1345,9 +1525,13 @@ tgt_set = ['d2']
 # ------ Pm vs theta_rq yield projections and errors -----
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', '2d', 4)
-make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.9, 'fsi', 'proj', 1)
-make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.9, 'fsi', 'proj_err', 1)
+#make_projY_d2pol('Pm_vs_thrq', ['n14', 'd2', 'he4'], [350], 2.5, 'fsi', 'fieldOFF', 'proj', 1)
+#make_projY_d2pol('Pm_vs_thrq', ['n14','d2','he4'], [350], 2.5, 'fsi', 'fieldOFF', 'proj_err', 1)
 
+#calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=1)
+#calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=1)
+
+overlay_dilution()
 
 #  ----- combine multiple kin. settings (of multiple targets or same target) (NEEDS TO BE FIXED)
 #combine_sets_alt([[300, 1, 'd2'], [400, 3, 'd2']], 3.5, 'Pm_vs_thrq', 'fsi', 'proj')   # same target
@@ -1366,7 +1550,7 @@ make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.9, 'fsi', 'proj_err', 1)
 
 
 # ----- plot the kinematics variables in which a cut is used (without the self cut, ie nsc or no self cut) -----
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc', 'fsi', 1)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc', 'fsi', 1)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', 1)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi', 3)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', 3)
@@ -1381,8 +1565,8 @@ make_projY_d2pol('eXColl_vs_eYColl', tgt_set, pm_set, 3.5, 'fsi', '2d')
 # ------ plot kinematic variables -----
 
 scale = 1 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 -> 2 weeks, . . . )
+'''
 overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc', 'fsi', scale)   # missing energy
-
 overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf', 'fsi', scale)   # proton momentum
 overlay_d2pol(tgt_set, pm_set, q2_set, 'thp', 'fsi', scale)  # proton angle
 overlay_d2pol(tgt_set, pm_set, q2_set, 'kf', 'fsi', scale)   # e- momentum
@@ -1397,12 +1581,12 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'thpq', 'fsi', scale)    # in-plane angle
 overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq', 'fsi', scale)    # in-plane angle between (recoil,q)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'phi_pq', 'fsi', scale)  # out-of-plane angle between (proton, q)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq', 'fsi', scale)
-
+'''
 
 # ----- plot acceptance variables ----
 
 # reconstructed variables
-
+'''
 overlay_d2pol(tgt_set, pm_set, q2_set, 'exptar', 'fsi', scale)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'eyptar', 'fsi', scale)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'eytar', 'fsi', scale)
@@ -1413,7 +1597,7 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'hyptar', 'fsi', scale)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'hytar', 'fsi', scale)
 
 overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta', 'fsi', scale)
-
+'''
 
 '''
 # focal plane

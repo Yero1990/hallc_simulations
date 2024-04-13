@@ -13,14 +13,14 @@
 
  =?
  &EXPERIMENT
-     ngen  =  100000			!  POS: # of successes
+     ngen  =  1000000			!  POS: # of successes
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
      doing_pion  =  F		!  (T = TRUE)
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
-     extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
+     extra_dbase_file = 'extra_hydrogen_rad_fieldOFF.data' !  additional input parameters.
      set_allow_scat_in_coll=0  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
@@ -33,7 +33,7 @@
      spec%e%theta  =  8.0                            !  e arm angle setting (degrees) original: 8.6 
      spec%p%P  =    1490.                             !  p arm central momentum (MeV/c) 1490. + 0.03*1490
      spec%p%theta  =   60.                           !  p arm angle setting (degrees) 61.2
-     spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
+     spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane  
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
      spec%p%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon pArm 
@@ -43,7 +43,6 @@
      spec%p%shift%p_mom  =   0.                        !  shift p-momentum for reconstruction (for systematic studies)	
      spec%p%shift%theta  =   0.                        !  shift p-angle for reconstruction
      spec%p%shift%phi    =   0.                        !  shift p-Oop angle for reconstruction
-
 / 
 
  ?=
@@ -70,19 +69,19 @@
  &E_ARM_ACCEPT
      SPedge%e%delta%min  =   -20.0	!  delta min (SPECTROMETER ACCEPTANCE)
      SPedge%e%delta%max  =    40.0	!  delta max
-     SPedge%e%yptar%min  =   -120       ! -60.  yptar min = {TF} / 1000 (mrad)
-     SPedge%e%yptar%max  =    120.0	!  60. yptar max = {TF} / 1000
-     SPedge%e%xptar%min  =   -120.0	!  60 xptar min = {TF} / 1000 (mrad)
-     SPedge%e%xptar%max  =    120.0	!  60 xptar max = {TF} / 1000
+     SPedge%e%yptar%min  =   -60.0	!  yptar min = {TF} / 1000 (mrad)
+     SPedge%e%yptar%max  =    60.0	!  yptar max = {TF} / 1000
+     SPedge%e%xptar%min  =   -60.0	!  xptar min = {TF} / 1000 (mrad)
+     SPedge%e%xptar%max  =    60.0	!  xptar max = {TF} / 1000
 / 
 
  &P_ARM_ACCEPT
      SPedge%p%delta%min  =   -15.0	!  delta min (SPECTROMETER ACCEPTANC
      SPedge%p%delta%max  =    15.0	!  delta max
-     SPedge%p%yptar%min  =   -100.0	!  -50. yptar min = {TF} / 1000 (mrad)
-     SPedge%p%yptar%max  =    100.0	!   50. yptar max = {TF} / 1000
-     SPedge%p%xptar%min  =   -200.0	! -100 xptar min = {TF} / 1000 (mrad)
-     SPedge%p%xptar%max  =    200.0	! 100  xptar max = {TF} / 1000
+     SPedge%p%yptar%min  =   -50.0	!  yptar min = {TF} / 1000 (mrad)
+     SPedge%p%yptar%max  =    50.0	!  yptar max = {TF} / 1000
+     SPedge%p%xptar%min  =   -200.0	!  xptar min = {TF} / 1000 (mrad)
+     SPedge%p%xptar%max  =    100.0	!  xptar max = {TF} / 1000
 / 
 
  &BEAM_AND_TARGET_INFO

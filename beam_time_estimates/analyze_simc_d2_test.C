@@ -105,6 +105,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   TString thrq_str;
   TString pm_str;
   TString Q2_str;
+  TString field_config;
   
   TString model="";
 
@@ -139,7 +140,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     pm_set = stoi(std::regex_replace(pm_str.Data(), std::regex(R"([^\d])"), ""));
     model = split(split(split(basename.Data(), '_')[0], '_')[0], '_')[1];
     tgt_name = split(split(split(split(split(split(basename.Data(), '_')[0], '_')[0], '_')[0], '_')[0], '_')[0], '_')[0];
-   
+    field_config = split(basename.Data(), '_')[1];
+
     
     if(debug) {
       cout << "Settings Read: " << endl;
@@ -147,6 +149,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       cout << Form("Q2_set: %.1f", Q2_set) << endl;
       cout << Form("Pm_set: %d ", pm_set) << endl;
       cout << "Model: " << model.Data() << endl;
+      cout << "Target Field Config: " << field_config.Data() << endl;
+
     }
   }
   
@@ -223,7 +227,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     
     //Define File Name Patterns
     simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/%s.data",    basename.Data());
-    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/original_acceptance/%s.root",                      basename.Data());
+    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s/%s.root",  field_config.Data(),                    basename.Data());
 
     simc_OutputFileName = Form("worksim/d2_pol/smallFSI/optimized/analyzed/%s_output.root",          basename.Data());
     
@@ -231,7 +235,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     output_file = "yield_estimates/d2_pol/smallFSI/optimized/output_rates_d2pol_optim.txt";
     
     // define output directory where numerical histogram .txt will be placed
-    output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s", tgt_name.Data(), pm_set, Q2_set, model.Data());
+    output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s_%s", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data());
    
     
     if (debug) {
@@ -1263,7 +1267,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       tgt_name = "n14";
       
       // re-define output directory (as Nitrogen-14) where numerical histogram .txt will be placed
-      output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s", tgt_name.Data(), pm_set, Q2_set, model.Data());
+      output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s_%s", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data());
 
       
       scale_T     = get_nuclT(14) / get_nuclT(12);  // transparency scaling
@@ -2002,7 +2006,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       
       //Open Report FIle in append mode
       out_file.open(output_file, ios::out | ios::app);
-      out_file << Form("%s,     %i,     %.2f,    %s,     %.1f,       %.3E,        %.3E,        %.3f,      %.3f,     %.3f ", tgt_name.Data(), pm_set, Q2_set, model.Data(), Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
+      out_file << Form("%s,     %i,     %.2f,    %s,     %s,      %.1f,       %.3E,        %.3E,        %.3f,      %.3f,     %.3f ", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data(), Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
 
       
     }
@@ -2017,7 +2021,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       out_file << "# header definitions " << endl;
       out_file << "# pm_set: central missing momentum setting [MeV] " << endl;
       out_file << "# Q2_set: central 4-momentum transfer setting [GeV^2] " << endl;
-      out_file << "# model: Laget pwia or fsi (paris NN potential)" << endl;      
+      out_file << "# model: Laget pwia or fsi (paris NN potential)" << endl;
+      out_file << "# field_config:  target magnetic field  (ON or OFF)" << endl;
       out_file << "# pm_counts: integrated missing momentum counts (yield) with all cuts applied \n# (not binned in any particular kinematics)" << endl;
       out_file << "# deep_rates: deuteron (e,e'p) rates [Hz] " << endl;
       out_file << "# daq_rates: data acquisition rates (no analysis cuts) [Hz] " << endl;
@@ -2026,8 +2031,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       out_file << "# charge: beam charge [mC] " << endl;
       out_file << "#" << endl;
       
-      out_file <<"target,pm_set,Q2_set,model,pm_counts,deep_rates,daq_rates,current,time,charge" << endl;
-      out_file << Form("%s,     %i,     %.2f,    %s,     %.1f,       %.3E,        %.3E,        %.3f,      %.3f,     %.3f ", tgt_name.Data(), pm_set, Q2_set, model.Data(), Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
+      out_file <<"target,pm_set,Q2_set,model,field_config,pm_counts,deep_rates,daq_rates,current,time,charge" << endl;
+      out_file << Form("%s,     %i,     %.2f,    %s,     %s,     %.1f,       %.3E,        %.3E,        %.3f,      %.3f,     %.3f ", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data(),Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
 
     }
 
