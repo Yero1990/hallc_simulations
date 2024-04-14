@@ -1219,8 +1219,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
             # loop over y-bins (pm_bins) to write to file
             for ipm, ybin in enumerate( ybc ):
 
-                print(idx, xbin, ipm, ybin, x[ipm], sigx[ipm] )
-                ofile.write("%.1f, %.3f, %.1f, %.3f, %.1f, %.3f, %.1f, %.3f, %.3f, %.3f\n" % (xbin, ybin, x[ipm], sigx[ipm], y[ipm], sigy[ipm], z[ipm], sigz[ipm], dilution[ipm], dilution_err[ipm] ))
+                ofile.write("%.1f,%.3f,%.1f,%.3f,%.1f,%.3f,%.1f,%.3f,%.3f,%.3f\n" % (xbin, ybin, x[ipm], sigx[ipm], y[ipm], sigy[ipm], z[ipm], sigz[ipm], dilution[ipm], dilution_err[ipm] ))
             
             ax.errorbar(ybc, dilution, dilution_err, marker='o', markersize=6, linestyle='None', color='r', label=r'%.1f GeV$^{2}$'%(Q2_user))
             plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
@@ -1244,9 +1243,8 @@ def overlay_dilution():
     df_fieldOFF = pd.read_csv('d2pol_dilution_factors_pm350_Q2_2.5_fieldOFF.csv', comment='#')
 
     
-    
-    pm_bin   = (df_fieldON.pm_bin[df_fieldON.thrq_bin==df_fieldON.thrq_bin[0]])
-    thrq_bin = (df_fieldON.thrq_bin[df_fieldON.pm_bin==df_fieldON.pm_bin[0]])
+    pm_bin   = df_fieldON.pm_bin[df_fieldON.thrq_bin==df_fieldON.thrq_bin[0]]
+    thrq_bin = df_fieldON.thrq_bin[df_fieldON.pm_bin==df_fieldON.pm_bin[0]]
 
     jdx = 0
     #loop over x-bins (thrq) 
@@ -1263,14 +1261,14 @@ def overlay_dilution():
        
         
         print('pm_bin:',pm_bin, 'dilution (field ON):', dilution_per_xbin_fieldON, 'dilution_err (field ON):', dilution_per_xbin_err_fieldON, )
-                   
-        ax.errorbar(pm_bin, dilution_per_xbin_fieldON , dilution_per_xbin_err_fieldON)
-        #ax.errorbar(pm_bin, dilution_per_xbin_fieldOFF , dilution_per_xbin_err_fieldOFF, marker='^', markersize=6, linestyle='None', color='b', label=r'field OFF')
+        ax.errorbar(pm_bin, dilution_per_xbin_fieldON , dilution_per_xbin_err_fieldON, marker='o', markersize=6, linestyle='None', color='g', label=r'field ON')                   
+        ax.errorbar(pm_bin, dilution_per_xbin_fieldOFF , dilution_per_xbin_err_fieldOFF, marker='^', markersize=6, linestyle='None', color='b', label=r'field OFF')
 
         
-        #plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(thrq_bin, 10))
+        
+        plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, 10))
         jdx = jdx+1
-
+    plt.legend()
     plt.show()
         
     
@@ -1529,7 +1527,7 @@ tgt_set = ['n14', 'd2', 'he4' ]
 #make_projY_d2pol('Pm_vs_thrq', ['n14','d2','he4'], [350], 2.5, 'fsi', 'fieldOFF', 'proj_err', 1)
 
 #calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=1)
-#calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=1)
+#calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 
 overlay_dilution()
 
