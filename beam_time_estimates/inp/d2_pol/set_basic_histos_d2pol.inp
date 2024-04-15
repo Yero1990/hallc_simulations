@@ -64,12 +64,12 @@ paero_xmax = 100.
 
 # electron arm central angle
 the_nbins = 80
-the_xmin = 8.0
-the_xmax = 18.0
+the_xmin = 5.0
+the_xmax = 10.0
 
 # final electron arm momentum [GeV/c]
 kf_nbins = 60
-kf_xmin = 7.0
+kf_xmin = 9.5
 kf_xmax = 11.0
 
 # invariant mass (assuming proton target mass)
@@ -83,9 +83,9 @@ W2_xmin = 0.1
 W2_xmax = 3.0;
 
 # 4-momentum transfer
-Q2_nbins = 100
-Q2_xmin = 0
-Q2_xmax = 6.0
+Q2_nbins = 80
+Q2_xmin = 0.5
+Q2_xmax = 3.0
 
 # Bjorken-X
 X_nbins = 60
@@ -95,12 +95,12 @@ X_xmax = 1.8
 # energy transfer
 nu_nbins = 80
 nu_xmin = 0.
-nu_xmax = 4.
+nu_xmax = 2.
 
 # 3-momentum transfer
 q_nbins = 100
 q_xmin = 0
-q_xmax = 6
+q_xmax = 3
 
 # 3-momentum transfer (x-component)
 qx_nbins = 100
@@ -207,14 +207,14 @@ MM2_xmin = 0.8
 MM2_xmax = 1.2
 
 # hadron arm central angle
-thx_nbins = 120  
-thx_xmin = 30.
-thx_xmax = 70.
+thx_nbins = 80  
+thx_xmin = 55.
+thx_xmax = 65.
 
 # In-plane angle between detected particle and q 
 thxq_nbins = 80
-thxq_xmin = 0.
-thxq_xmax = 20.
+thxq_xmin = 50.
+thxq_xmax = 65.
 
 # In-plane angle between the recoil system and q (+/- 5 deg bins)
 #thrq nbins = 19
@@ -304,7 +304,7 @@ MandelU_xmax = 10.
 #---------------------------------
 exfp_nbins = 60
 exfp_xmin = -15.
-exfp_xmax = 15.
+exfp_xmax = 35.
 
 expfp_nbins = 60
 expfp_xmin = -0.06
@@ -334,7 +334,7 @@ exptar_xmin  = -0.06
 exptar_xmax = 0.06
   
 edelta_nbins = 60
-edelta_xmin = -10.  
+edelta_xmin = 5.  
 edelta_xmax =  22.  
 
 #-------------------------------  
@@ -363,13 +363,13 @@ hytar_nbins = 60
 hytar_xmin = -7.
 hytar_xmax = 7.
 
-hyptar_nbins = 60
-hyptar_xmin = -0.1
-hyptar_xmax = 0.1
+hyptar_nbins = 80
+hyptar_xmin = -0.15
+hyptar_xmax = 0.15
   
 hxptar_nbins = 100
-hxptar_xmin  = -0.1
-hxptar_xmax = 0.1
+hxptar_xmin  = -0.35
+hxptar_xmax = 0.15
   
 hdelta_nbins = 60
 hdelta_xmin = -15.
@@ -399,7 +399,7 @@ ztar_diff_xmax = 10.
 #----Collimator Quantities----
 #-----------------------------
 hXColl_nbins = 100
-hXColl_xmin =  -15.
+hXColl_xmin =  -35.
 hXColl_xmax =   15. 
   
 hYColl_nbins =  100                                          

@@ -529,7 +529,7 @@ def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=1):
     plt.show()
 
 
-def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, scale=1):
+def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
     '''
     Brief: generic function to overlay 1d histograms from multiple kin. files for deut pol. proposal
 
@@ -576,7 +576,7 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, scale=1):
                 # set histogram file path
                 #histos_file_path = 'path/to/histogram_data/pm%d_q2%d_%s/histo_name_pm_set_q2_set.txt'%(pm_set, q2_set, model, hist_name)
                 
-                hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, hist_name, ipm, iq2)
+                hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, field, hist_name, ipm, iq2)
                 #hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/tightEmiss_Cut/%s_pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, hist_name, ipm, iq2)
                 
                 print('tgt_set:', itgt, 'Pm:', ipm, 'Q2:', iq2)
@@ -1126,7 +1126,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
 
 
      
-    fig, ax = plt.subplots(2, 3)
+    fig, ax = plt.subplots(3, 3)
     fig.set_size_inches(10,6, forward=True)
     fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)
     fig.text(0.01, 0.5, 'dilution', va='center', rotation='vertical', fontsize=14)
@@ -1167,7 +1167,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     #loop over x-bins i.e., thrq bins (for y-projections)
     for idx, xbin in enumerate( xbc ):
         
-        ax = plt.subplot(2, 3, jdx+1)
+        ax = plt.subplot(3, 3, jdx+1)
 
         
         d2_count_per_xbin     = df_d2.zcont[df_d2.x0==xbin]
@@ -1231,7 +1231,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
 def overlay_dilution():
 
     print('overlay_dilution')
-    fig, ax = plt.subplots(2, 3)
+    fig, ax = plt.subplots(3, 3)
     fig.set_size_inches(10,6, forward=True)
     fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)   
     fig.text(0.01, 0.5, 'dilution factor', va='center', rotation='vertical', fontsize=14)
@@ -1251,7 +1251,7 @@ def overlay_dilution():
     for idx, xbin in enumerate( thrq_bin ):
 
         
-        ax = plt.subplot(2, 3, jdx+1)
+        ax = plt.subplot(3, 3, jdx+1)
         
         dilution_per_xbin_fieldON     = df_fieldON.dilution[df_fieldON.thrq_bin==xbin]
         dilution_per_xbin_err_fieldON = df_fieldON.dilution_err[df_fieldON.thrq_bin==xbin]
@@ -1322,7 +1322,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
         if plot_flag=='proj' or plot_flag=='proj_err':
             # set figure subplots for the 1d projections
             #fig, ax = plt.subplots(6, 3, sharex='col', sharey='row', tight_layout=True)
-            fig, ax = plt.subplots(2, 3)
+            fig, ax = plt.subplots(4, 3)
             fig.set_size_inches(10,6, forward=True)
             fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)
             if plot_flag=='proj':
@@ -1427,15 +1427,16 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                 if(not np.ma.is_masked(cnts)):
 
                     if plot_flag=='proj':
-                        ax = plt.subplot(2, 3, jdx+1)
-
+                        ax = plt.subplot(4, 3, jdx+1)
+                        
                         if "_2Davg" in h2_hist_basename:
                             ax.errorbar(ybc, count_per_xbin, count_per_xbin_err, marker='o', markersize=4, linestyle='None', label=r'%.1f GeV$^{2}$'%(Q2_user)) #//, label=r'%d counts'%(cnts))
                             #ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', density=False, label=r'(%.1f GeV$^{2}$)'%(Q2_user))
                             ax.set_ylim(-20,20)
                         else:
                             ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5,  color=clr[i], ec='k', density=False, label=r'%d counts (%s)'%(cnts, itgt))
-
+                            plt.axhline(y = 1000, color = 'r', linestyle = '--')
+                            ax.set_yscale('log')
                         plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                         plt.legend(frameon=False, loc='upper right')
                         jdx = jdx+1
@@ -1443,7 +1444,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                     # ---- relative error plots ----
                     if plot_flag=='proj_err':
 
-                        ax = plt.subplot(2, 3, jdx+1)
+                        ax = plt.subplot(4, 3, jdx+1)
                         count_per_xbin_rel_err_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, count_per_xbin_rel_err)
 
                         y_const_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, y_const)
@@ -1505,8 +1506,10 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
 pm_set = [350]
 q2_set = [2.5]
-#tgt_set = ['n14', 'd2', 'he4']
-tgt_set = ['n14', 'd2', 'he4' ]
+tgt_set = ['d2', 'n14', 'he4' ]
+tgt_set = ['d2']
+
+field = 'fieldON'
 
 # plot evenrt rates, daq rates, per setting
 #plot_rates()
@@ -1523,13 +1526,13 @@ tgt_set = ['n14', 'd2', 'he4' ]
 # ------ Pm vs theta_rq yield projections and errors -----
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', '2d', 4)
-#make_projY_d2pol('Pm_vs_thrq', ['n14', 'd2', 'he4'], [350], 2.5, 'fsi', 'fieldOFF', 'proj', 1)
+#make_projY_d2pol('Pm_vs_thrq', ['d2'], [350], 2.5, 'fsi', 'fieldON', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', ['n14','d2','he4'], [350], 2.5, 'fsi', 'fieldOFF', 'proj_err', 1)
 
 #calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=1)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 
-overlay_dilution()
+#overlay_dilution()
 
 #  ----- combine multiple kin. settings (of multiple targets or same target) (NEEDS TO BE FIXED)
 #combine_sets_alt([[300, 1, 'd2'], [400, 3, 'd2']], 3.5, 'Pm_vs_thrq', 'fsi', 'proj')   # same target
@@ -1548,65 +1551,64 @@ overlay_dilution()
 
 
 # ----- plot the kinematics variables in which a cut is used (without the self cut, ie nsc or no self cut) -----
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc', 'fsi', 1)
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', 1)
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi', 3)
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', 3)
 '''
-make_projY_d2pol('hXColl_vs_hYColl_nsc', tgt_set, pm_set, 3.5, 'fsi', '2d')
-make_projY_d2pol('eXColl_vs_eYColl_nsc', tgt_set, pm_set, 3.5, 'fsi', '2d')
-make_projY_d2pol('Em_nuc_vs_Pm_nsc', tgt_set, pm_set, 3.5, 'fsi', '2d')
-make_projY_d2pol('hXColl_vs_hYColl', tgt_set, pm_set, 3.5, 'fsi', '2d')
-make_projY_d2pol('eXColl_vs_eYColl', tgt_set, pm_set, 3.5, 'fsi', '2d')
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, 1)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', field, 1)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi', field, 1)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, 1)
+
+make_projY_d2pol('hXColl_vs_hYColl_nsc', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+make_projY_d2pol('eXColl_vs_eYColl_nsc', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+make_projY_d2pol('Em_nuc_vs_Pm_nsc',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('hXColl_vs_hYColl',     tgt_set, pm_set, 3.5, 'fsi', field, '2d')
+#make_projY_d2pol('eXColl_vs_eYColl',     tgt_set, pm_set, 3.5, 'fsi', field, '2d')
 '''
 
 # ------ plot kinematic variables -----
 
 scale = 1 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 -> 2 weeks, . . . )
 '''
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc', 'fsi', scale)   # missing energy
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf', 'fsi', scale)   # proton momentum
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thp', 'fsi', scale)  # proton angle
-overlay_d2pol(tgt_set, pm_set, q2_set, 'kf', 'fsi', scale)   # e- momentum
-overlay_d2pol(tgt_set, pm_set, q2_set, 'the', 'fsi', scale)  # e- angle
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Pm', 'fsi', scale)   # missing momentum
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc', 'fsi', scale)   # missing energy
-overlay_d2pol(tgt_set, pm_set, q2_set, 'nu', 'fsi', scale)   # energy transfer
-overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj', 'fsi', scale)  # x-bjorken
-overlay_d2pol(tgt_set, pm_set, q2_set, 'q', 'fsi', scale)    # 3-momentum (q) transfer
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thq', 'fsi', scale)  # 3-momentum (q) angle
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thpq', 'fsi', scale)    # in-plane angle between (proton,q)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq', 'fsi', scale)    # in-plane angle between (recoil,q)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'phi_pq', 'fsi', scale)  # out-of-plane angle between (proton, q)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq', 'fsi', scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proton momentum
+overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
+overlay_d2pol(tgt_set, pm_set, q2_set, 'kf',     'fsi', field,  scale)   # e- momentum
+overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- angle
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Pm',     'fsi', field,  scale)   # missing momentum
+overlay_d2pol(tgt_set, pm_set, q2_set, 'nu',     'fsi', field,  scale)   # energy transfer
+overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj',    'fsi', field,  scale)  # x-bjorken
+overlay_d2pol(tgt_set, pm_set, q2_set, 'q',      'fsi', field,  scale)    # 3-momentum (q) transfer
+overlay_d2pol(tgt_set, pm_set, q2_set, 'thq',    'fsi', field,  scale)  # 3-momentum (q) angle
+overlay_d2pol(tgt_set, pm_set, q2_set, 'thpq',   'fsi', field,  scale)    # in-plane angle between (proton,q)
 '''
+overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq',   'fsi', field,  scale)    # in-plane angle between (recoil,q)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'phi_pq', 'fsi', field,  scale)  # out-of-plane angle between (proton, q)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq' 'fsi', field,  scale)
+
 
 # ----- plot acceptance variables ----
 
 # reconstructed variables
-'''
-overlay_d2pol(tgt_set, pm_set, q2_set, 'exptar', 'fsi', scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'eyptar', 'fsi', scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'eytar', 'fsi', scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta', 'fsi', scale)
 
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hxptar', 'fsi', scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hyptar', 'fsi', scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hytar', 'fsi', scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'exptar', 'fsi', field, scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'eyptar', 'fsi', field, scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'eytar',  'fsi', field, scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta', 'fsi', field, scale)
 
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta', 'fsi', scale)
-'''
+overlay_d2pol(tgt_set, pm_set, q2_set, 'hxptar', 'fsi', field, scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'hyptar', 'fsi', field, scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'hytar',  'fsi', field, scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta', 'fsi', field, scale)
+
 
 '''
 # focal plane
-make_projY_d2pol('hxfp_vs_hyfp', tgt_set, pm_set, 3.5, 'fsi', '2d')
-make_projY_d2pol('exfp_vs_eyfp', tgt_set, pm_set, 3.5, 'fsi', '2d')
+make_projY_d2pol('hxfp_vs_hyfp', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+make_projY_d2pol('exfp_vs_eyfp', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
 
 
 # hms/shms correlated variables
-make_projY_d2pol('hdelta_vs_edelta', tgt_set, pm_set, 3.5, 'fsi', '2d')
-make_projY_d2pol('hxptar_vs_exptar', tgt_set, pm_set, 3.5, 'fsi', '2d')
-make_projY_d2pol('hyptar_vs_eyptar', tgt_set, pm_set, 3.5, 'fsi', '2d')
+make_projY_d2pol('hdelta_vs_edelta', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+make_projY_d2pol('hxptar_vs_exptar', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+make_projY_d2pol('hyptar_vs_eyptar', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
 '''
 #other correlations
 #make_projY_d2pol('Em_nuc_vs_Pm_nsc',  tgt_set, pm_set, 3.5, 'fsi', '2d', 3)
