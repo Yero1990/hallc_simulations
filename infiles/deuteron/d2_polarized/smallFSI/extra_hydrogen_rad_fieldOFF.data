@@ -26,6 +26,7 @@
      dE_edge_test  =  0.	!  (move around energy edges)
      use_offshell_rad  =  T	!  (ONE = TRUE)
      Egamma_gen_max  =  0.	!  Set >0 to hardwire the Egamma limits.
+     using_tgt_field = F        !  flag to turn ON target field map for pol. exp
 /
 
  &MISC2INT
