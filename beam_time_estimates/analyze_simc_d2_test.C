@@ -1985,10 +1985,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     cout << "" << endl;  
     cout << Form("Pm Setting: %d", pm_set) << endl;
     cout << Form("Q2 Setting: %.1f", Q2_set) << endl;
-    
     cout << Form("Model: Laget %s (only for d2)", model.Data()) << endl;
     cout << "Model: Benhar SF (for A>2)"  << endl;
-
     cout << Form("Ib [nA]     = %.3f ", Ib*1000) << endl;
     cout << Form("time [hr]   = %.3f ", time) << endl;
     cout << Form("charge [mC] = %.3f ", charge_factor)<< endl;  

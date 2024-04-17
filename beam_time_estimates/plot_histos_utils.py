@@ -561,7 +561,7 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
 
     #fig, axs = plt.subplots(2, sharex=True, figsize=(5,10))
     #fig, axs = plt.subplots(2, figsize=(6,7))
-    fig, axs = plt.subplots(1, figsize=(9,7))
+    fig, axs = plt.subplots(1, figsize=(6,5))
 
     #clr = ['orange', 'b', 'magenta']
     clr = ['orange', 'b', 'magenta']
@@ -635,7 +635,7 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 print('xbin_center:', xbc)
                 print('bins:', len(xbc))
                 axs.set_title(title)
-                axs.hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.5, ec='k',  color=clr[i], density=False, label="$P_{m}$=%d MeV"%(ipm)+"\n"+ "$Q^{2}$=%.1f GeV$^{2}$ (%d)"%(iq2, counts)+"\n"+"%s"%(itgt))
+                axs.hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.4, ec='k',  color=clr[i], density=False, label="$P_{m}$=%d MeV"%(ipm)+"\n"+ "$Q^{2}$=%.1f GeV$^{2}$ (%d)"%(iq2, counts)+"\n"+"%s"%(itgt))
                 #axs.set_ylabel(ylabel)
                 #axs.set_xlabel(xlabel)
 
@@ -645,10 +645,10 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 axs.xaxis.set_tick_params(labelbottom=True)
                 plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0), useMathText=True)
                 axs.yaxis.offsetText.set_fontsize(18)
-                plt.xticks(fontsize = 18)
-                plt.yticks(fontsize = 18)
-                #plt.axvline(x = -10, color = 'r', linestyle = '--')
-                #plt.axvline(x = 10, color = 'r', linestyle = '--')
+                plt.xticks(fontsize = 22)
+                plt.yticks(fontsize = 22)
+                #plt.axvline(x = -0.005, color = 'r', linestyle = '--', linewidth=2)
+                #plt.axvline(x = 0.03, color = 'r', linestyle = '--', linewidth=2)
 
 
                 '''
@@ -1036,6 +1036,8 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
                 plt.xlabel(xlabel, fontsize=12)
                 plt.ylabel(ylabel, fontsize=12)
                 plt.title(title,   fontsize=14)
+                plt.xticks(fontsize = 22)
+                plt.yticks(fontsize = 22)
 
                 
                 plt.colorbar()
@@ -1246,11 +1248,11 @@ def overlay_dilution():
 
     print('overlay_dilution')
     fig, ax = plt.subplots(3, 3)
-    fig.set_size_inches(10,6, forward=True)
-    fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)   
-    fig.text(0.01, 0.5, 'dilution factor', va='center', rotation='vertical', fontsize=14)
-    subplot_title =  r"dilution factor"
-    plt.suptitle(subplot_title, fontsize=15);
+    fig.set_size_inches(10,9, forward=True)
+    #fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)   
+    #fig.text(0.01, 0.5, 'dilution factor', va='center', rotation='vertical', fontsize=14)
+    #subplot_title =  r"dilution factor"
+    #plt.suptitle(subplot_title, fontsize=15);
     plt.tight_layout()
             
     df_fieldON = pd.read_csv('d2pol_dilution_factors_pm350_Q2_2.5_fieldON.csv', comment='#')
@@ -1275,11 +1277,13 @@ def overlay_dilution():
        
         
         print('pm_bin:',pm_bin, 'dilution (field ON):', dilution_per_xbin_fieldON, 'dilution_err (field ON):', dilution_per_xbin_err_fieldON, )
-        ax.errorbar(pm_bin, dilution_per_xbin_fieldON , dilution_per_xbin_err_fieldON, marker='o', markersize=6, linestyle='None', color='g', label=r'field ON')                   
-        ax.errorbar(pm_bin, dilution_per_xbin_fieldOFF , dilution_per_xbin_err_fieldOFF, marker='^', markersize=6, linestyle='None', color='b', label=r'field OFF')
-
-        
-        
+        ax.errorbar(pm_bin, dilution_per_xbin_fieldON , dilution_per_xbin_err_fieldON, alpha=0.8, marker='o', markersize=8, linestyle='None', color='r', label=r'field ON')                   
+        ax.errorbar(pm_bin, dilution_per_xbin_fieldOFF , dilution_per_xbin_err_fieldOFF, alpha=0.6, marker='s', markersize=8, linestyle='None', color='k', label=r'field OFF')
+       
+        plt.ylim(0.3,1.2)
+        plt.xlim(0.0,1.08)
+        plt.xticks(fontsize = 18)
+        plt.yticks(fontsize = 18)
         plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, 10))
         jdx = jdx+1
     plt.legend()
@@ -1336,17 +1340,18 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
         if plot_flag=='proj' or plot_flag=='proj_err':
             # set figure subplots for the 1d projections
             #fig, ax = plt.subplots(6, 3, sharex='col', sharey='row', tight_layout=True)
-            fig, ax = plt.subplots(4, 3)
-            fig.set_size_inches(10,6, forward=True)
-            fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)
-            if plot_flag=='proj':
-                fig.text(0.01, 0.5, 'counts', va='center', rotation='vertical', fontsize=14)
-            elif plot_flag=='proj_err':
-                fig.text(0.01, 0.5, 'relative error', va='center', rotation='vertical', fontsize=14)
+            fig, ax = plt.subplots(3, 3)
+            fig.set_size_inches(12,10, forward=True)
+           
+            #fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)
+            #if plot_flag=='proj':
+            #    fig.text(0.01, 0.5, 'counts', va='center', rotation='vertical', fontsize=14)
+            #elif plot_flag=='proj_err':
+            #    fig.text(0.01, 0.5, 'relative error', va='center', rotation='vertical', fontsize=14)
 
             subplot_title =  r"p$_{m}$ vs. $\theta_{rq}$ 1d projection (%s), central p$_{m}$ setting: %d MeV"%(model, ipm)
-            plt.suptitle(subplot_title, fontsize=15);
-            plt.tight_layout()
+            #plt.suptitle(subplot_title, fontsize=15);
+            #plt.tight_layout()
             
         offset=0 # offset for applying projections overlay
         i = -1 # color index counter
@@ -1357,7 +1362,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
             
             # increment offset for every new Q2 setting
             if itgt != tgt_set[0]:
-                offset = offset + 0.003                                
+                offset = offset + 0.008                                
                 
             
             # set histo base name and file path
@@ -1399,15 +1404,17 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                     plt.hist2d(df.x0 ,df.y0, weights=df.zcont, bins=(nxbins, nybins), range=[ [min(df.xlow), max(df.xup)], [min(df.ylow), max(df.yup)]], cmap = 'viridis')
                 else:
                     plt.hist2d(df.x0 ,df.y0, weights=df.zcont, bins=(nxbins, nybins), range=[ [min(df.xlow), max(df.xup)], [min(df.ylow), max(df.yup)]], cmap = 'viridis', norm=mcolors.LogNorm())
-                    plt.text(0.6*(df.x0[df.y0==df.y0[0]]).max(), 0.7*(df.y0[df.x0==df.x0[0]]).max(), r"Q$^{2}$=%.1f GeV$^{2}$"%(Q2_user)+"\n"+"$P_{m}$=%d MeV"%(ipm)+"\n"+"(counts = %d)"%(counts)+"\n"+"target: %s"%(itgt), fontsize=12)
+                    #plt.text(0.6*(df.x0[df.y0==df.y0[0]]).max(), 0.7*(df.y0[df.x0==df.x0[0]]).max(), r"Q$^{2}$=%.1f GeV$^{2}$"%(Q2_user)+"\n"+"$P_{m}$=%d MeV"%(ipm)+"\n"+"(counts = %d)"%(counts)+"\n"+"target: %s"%(itgt), fontsize=12)
 
 
                 plt.xlabel(xlabel, fontsize=12)
                 plt.ylabel(ylabel, fontsize=12)
                 plt.title(title,   fontsize=14)
-
+                plt.xticks(fontsize = 22)
+                plt.yticks(fontsize = 22)
+                cbar = plt.colorbar()
+                cbar.ax.tick_params(labelsize=22)
                 
-                plt.colorbar()
                 ifig = ifig+1
             
                 plt.grid()
@@ -1441,7 +1448,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                 if(not np.ma.is_masked(cnts)):
 
                     if plot_flag=='proj':
-                        ax = plt.subplot(4, 3, jdx+1)
+                        ax = plt.subplot(3, 3, jdx+1)
                         
                         if "_2Davg" in h2_hist_basename:
                             ax.errorbar(ybc, count_per_xbin, count_per_xbin_err, marker='o', markersize=4, linestyle='None', label=r'%.1f GeV$^{2}$'%(Q2_user)) #//, label=r'%d counts'%(cnts))
@@ -1451,6 +1458,9 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                             ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5,  color=clr[i], ec='k', density=False, label=r'%d counts (%s)'%(cnts, itgt))
                             plt.axhline(y = 1000, color = 'r', linestyle = '--')
                             ax.set_yscale('log')
+                            plt.ylim(0.1, 2e5)
+                            plt.xticks(fontsize = 14)
+                            plt.yticks(fontsize = 14)
                         plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                         plt.legend(frameon=False, loc='upper right')
                         jdx = jdx+1
@@ -1458,7 +1468,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                     # ---- relative error plots ----
                     if plot_flag=='proj_err':
 
-                        ax = plt.subplot(4, 3, jdx+1)
+                        ax = plt.subplot(3, 3, jdx+1)
                         count_per_xbin_rel_err_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, count_per_xbin_rel_err)
 
                         y_const_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, y_const)
@@ -1466,9 +1476,11 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 
                         ybc_m = ybc_m + offset
                         ax.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=4,  color=clr[i], linestyle='None', label=r'%s'%(itgt)) #//, label=r'%d counts'%(cnts))
-                        plt.axhline(y = 0.20, color = 'r', linestyle = '--')
-                        plt.axhline(y = -0.20, color = 'r', linestyle = '--')
+                        plt.axhline(y = 0.10, color = 'r', linestyle = '--')
+                        plt.axhline(y = -0.10, color = 'r', linestyle = '--')
                         plt.xlim(0.2, 0.6)
+                        plt.xticks(fontsize = 14)
+                        plt.yticks(fontsize = 14)
                         plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                         jdx = jdx+1
             plt.legend(frameon=False, loc='upper right')
@@ -1560,30 +1572,32 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 ->
 
 # ----- plot the kinematics variables in which a cut is used (without the self cut, ie nsc or no self cut) -----
 
-'''
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
 
-make_projY_d2pol('hXColl_vs_hYColl_nsc', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
-make_projY_d2pol('eXColl_vs_eYColl_nsc', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
-make_projY_d2pol('Em_nuc_vs_Pm_nsc',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
-make_projY_d2pol('hXColl_vs_hYColl',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
-make_projY_d2pol('eXColl_vs_eYColl',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
-'''
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
+
+#make_projY_d2pol('hXColl_vs_hYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('eXColl_vs_eYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('Em_nuc_vs_Pm_nsc',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('hXColl_vs_hYColl',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('eXColl_vs_eYColl',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+
 
 # ------ plot kinematic variables -----
 
-make_projY_d2pol('hxptar_vs_exptar',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
-make_projY_d2pol('hyptar_vs_eyptar',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
-make_projY_d2pol('hdelta_vs_edelta',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+'''
+make_projY_d2pol('hxptar_vs_exptar',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+make_projY_d2pol('hyptar_vs_eyptar',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+make_projY_d2pol('hdelta_vs_edelta',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
 
 overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proton momentum
 overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
 overlay_d2pol(tgt_set, pm_set, q2_set, 'kf',     'fsi', field,  scale)   # e- momentum
 overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- angle
 overlay_d2pol(tgt_set, pm_set, q2_set, 'Pm',     'fsi', field,  scale)   # missing momentum
+
 overlay_d2pol(tgt_set, pm_set, q2_set, 'nu',     'fsi', field,  scale)   # energy transfer
 overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj',    'fsi', field,  scale)  # x-bjorken
 overlay_d2pol(tgt_set, pm_set, q2_set, 'q',      'fsi', field,  scale)    # 3-momentum (q) transfer
@@ -1592,48 +1606,45 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'thpq',   'fsi', field,  scale)    # in-p
 overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq',   'fsi', field,  scale)    # in-plane angle between (recoil,q)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'phi_pq', 'fsi', field,  scale)  # out-of-plane angle between (proton, q)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq' 'fsi', field,  scale)
-
+'''
 
 # ----- plot acceptance variables ----
 
 # reconstructed variables
-'''
-overlay_d2pol(tgt_set, pm_set, q2_set, 'exptar', 'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'eyptar', 'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'eytar',  'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta', 'fsi', field, scale)
 
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hxptar', 'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hyptar', 'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hytar',  'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'exptar', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'eyptar', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'eytar',  'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta', 'fsi', field, scale)
+
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'hxptar', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'hyptar', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'hytar',  'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
 
 
 
 # focal plane
-make_projY_d2pol('hxfp_vs_hyfp', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
-make_projY_d2pol('exfp_vs_eyfp', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('hxfp_vs_hyfp', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('exfp_vs_eyfp', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
 
 
 # hms/shms correlated variables
-make_projY_d2pol('hdelta_vs_edelta', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
-make_projY_d2pol('hxptar_vs_exptar', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
-make_projY_d2pol('hyptar_vs_eyptar', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
-'''
+#make_projY_d2pol('hdelta_vs_edelta', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('hxptar_vs_exptar', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('hyptar_vs_eyptar', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
 
-#other correlations
-#make_projY_d2pol('Em_nuc_vs_Pm_nsc',  tgt_set, pm_set, 3.5, 'fsi', '2d', 3)
 
 # ------ Pm vs theta_rq yield projections and errors -----
 
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 3.5, 'fsi', '2d', 1)
-#make_projY_d2pol('Pm_vs_thrq', ['d2'], [350], 2.5, 'fsi', 'fieldON', 'proj', 1)
-#make_projY_d2pol('Pm_vs_thrq', ['n14','d2','he4'], [350], 2.5, 'fsi', 'fieldOFF', 'proj_err', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', '2d', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 1)
 
 #calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=1)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 
-#overlay_dilution()
+overlay_dilution()
 
 
 
