@@ -1569,12 +1569,15 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
 make_projY_d2pol('hXColl_vs_hYColl_nsc', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
 make_projY_d2pol('eXColl_vs_eYColl_nsc', tgt_set, pm_set, 2.5, 'fsi', field, '2d')
 make_projY_d2pol('Em_nuc_vs_Pm_nsc',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
-make_projY_d2pol('hXColl_vs_hYColl',     tgt_set, pm_set, 3.5, 'fsi', field, '2d')
-make_projY_d2pol('eXColl_vs_eYColl',     tgt_set, pm_set, 3.5, 'fsi', field, '2d')
+make_projY_d2pol('hXColl_vs_hYColl',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+make_projY_d2pol('eXColl_vs_eYColl',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
 '''
 
 # ------ plot kinematic variables -----
 
+make_projY_d2pol('hxptar_vs_exptar',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+make_projY_d2pol('hyptar_vs_eyptar',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+make_projY_d2pol('hdelta_vs_edelta',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
 
 overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proton momentum
 overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
