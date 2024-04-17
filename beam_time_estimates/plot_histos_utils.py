@@ -1277,14 +1277,14 @@ def overlay_dilution():
        
         
         print('pm_bin:',pm_bin, 'dilution (field ON):', dilution_per_xbin_fieldON, 'dilution_err (field ON):', dilution_per_xbin_err_fieldON, )
-        ax.errorbar(pm_bin, dilution_per_xbin_fieldON , dilution_per_xbin_err_fieldON, alpha=0.8, marker='o', markersize=8, linestyle='None', color='r', label=r'field ON')                   
         ax.errorbar(pm_bin, dilution_per_xbin_fieldOFF , dilution_per_xbin_err_fieldOFF, alpha=0.6, marker='s', markersize=8, linestyle='None', color='k', label=r'field OFF')
+        ax.errorbar(pm_bin, dilution_per_xbin_fieldON , dilution_per_xbin_err_fieldON, alpha=0.6, marker='o', markersize=8, linestyle='None', color='r', label=r'field ON')                   
        
         plt.ylim(0.3,1.2)
         plt.xlim(0.0,1.08)
         plt.xticks(fontsize = 18)
         plt.yticks(fontsize = 18)
-        plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, 10))
+        plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, 10), fontsize=14)
         jdx = jdx+1
     plt.legend()
     plt.show()
