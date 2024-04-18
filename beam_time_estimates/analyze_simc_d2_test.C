@@ -1244,7 +1244,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
 
   if( analysis_flag == "d2pol") {
     Ib = 0.1;         // beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC (0.1 uA -> 100 nA)
-    time = 168.0*4;     // estimated time (in hours) a run takes (start - end) of run (4 weeks)
+    time = 168.0*2;     // estimated time (in hours) a run takes (start - end) of run (2 weeks)
     charge_factor = Ib * time * 3600. / 1000.; // in mC
 
     // efficiencies (assume 1 for now)
@@ -1676,13 +1676,16 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     cout << "nentries: " << nentries << endl;
     cout << "FullWeight: " << FullWeight << endl;
     */
-    // if target is C12, need to scale to Nitrogen-14
-    /*
-    if(tgt_name=="c12"){
 
+    
+    // if target is C12, need to scale to Nitrogen-14
+    
+    if(tgt_name=="c12"){
       FullWeight = (Normfac * charge_factor * eff_factor * Weight * scale_T * scale_thick )  / nentries;
+      FullWeight_forRates = (Normfac * charge_factor * Weight * scale_T * scale_thick ) / nentries;
+    
     }
-    */
+   
     
     PhaseSpace =  Normfac * charge_factor * eff_factor * Jacobian_corr  / nentries;    //Phase Space with jacobian corr. factor
 

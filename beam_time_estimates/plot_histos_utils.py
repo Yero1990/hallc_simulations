@@ -1237,7 +1237,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
 
                 ofile.write("%.1f,%.3f,%.1f,%.3f,%.1f,%.3f,%.1f,%.3f,%.3f,%.3f\n" % (xbin, ybin, x[ipm], sigx[ipm], y[ipm], sigy[ipm], z[ipm], sigz[ipm], dilution[ipm], dilution_err[ipm] ))
             
-            ax.errorbar(ybc, dilution, dilution_err, marker='o', markersize=6, linestyle='None', color='r', label=r'%.1f GeV$^{2}$'%(Q2_user))
+            ax.errorbar(ybc, dilution, dilution_err, marker='o', markersize=8, alpha=0.4, linestyle='None', color='r', label=r'%.1f GeV$^{2}$'%(Q2_user))
             plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
             jdx = jdx+1
             
@@ -1326,7 +1326,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 
     rel_err_thrs = 0.5 # mask >30 % relative error
 
-    clr = ['orange', 'b', 'magenta']
+    clr = ['orange', 'deepskyblue', 'magenta']
     
     ifig = 1 # counter for 2d histogram figures
 
@@ -1455,7 +1455,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                             #ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', density=False, label=r'(%.1f GeV$^{2}$)'%(Q2_user))
                             ax.set_ylim(-20,20)
                         else:
-                            ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5,  color=clr[i], ec='k', density=False, label=r'%d counts (%s)'%(cnts, itgt))
+                            ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.15,  color=clr[i], ec='k', density=False, label=r'%d counts (%s)'%(cnts, itgt))
                             plt.axhline(y = 1000, color = 'r', linestyle = '--')
                             ax.set_yscale('log')
                             plt.ylim(0.1, 2e5)
@@ -1475,7 +1475,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                         ybc_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, ybc)
 
                         ybc_m = ybc_m + offset
-                        ax.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=4,  color=clr[i], linestyle='None', label=r'%s'%(itgt)) #//, label=r'%d counts'%(cnts))
+                        ax.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=4,  alpha=0.4, color=clr[i], linestyle='None', label=r'%s'%(itgt)) #//, label=r'%d counts'%(cnts))
                         plt.axhline(y = 0.10, color = 'r', linestyle = '--')
                         plt.axhline(y = -0.10, color = 'r', linestyle = '--')
                         plt.xlim(0.2, 0.6)
@@ -1639,12 +1639,12 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq' 'fsi', field,  scale)
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', '2d', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj', 1)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 1)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 1)
 
 #calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=1)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 
-overlay_dilution()
+#overlay_dilution()
 
 
 

@@ -21,7 +21,7 @@
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
      extra_dbase_file = 'extra_hydrogen_rad_fieldON.data' !  additional input parameters.
-     set_allow_scat_in_coll=0  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
+     set_allow_scat_in_coll=1  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
  &KINEMATICS_MAIN
@@ -31,7 +31,7 @@
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      spec%e%P  =    9100.0                              !  e arm central momentum (MeV/c) 10112.0  
      spec%e%theta  =  7.0                            !  e arm angle setting (degrees) original: 8.6 
-     spec%p%P  =    1341.                             !  p arm central momentum (MeV/c) 1490 - 0.1*1490 (shift delta from neg closer to 0%)
+     spec%p%P  =    1207.                             !  p arm central momentum (MeV/c) 1490 - 0.19*1490 (shift delta from neg closer to 0%)
      spec%p%theta  =   59.                           !  p arm angle setting (degrees) 61
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           

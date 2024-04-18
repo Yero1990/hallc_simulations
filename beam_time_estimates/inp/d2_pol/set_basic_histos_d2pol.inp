@@ -228,12 +228,12 @@ thrq_xmax = 200.
 
 
 # Out-of-plane angle between detected particle and q
-phxq_nbins = 200
+phxq_nbins = 100
 phxq_xmin = -190.
 phxq_xmax = 190.
 
 # Out-of-plane angle between recoil system and q 
-phrq_nbins = 200
+phrq_nbins = 100
 phrq_xmin = -190.
 phrq_xmax = 190.
 
@@ -399,7 +399,7 @@ ztar_diff_xmax = 10.
 #----Collimator Quantities----
 #-----------------------------
 hXColl_nbins = 100
-hXColl_xmin =  -35.
+hXColl_xmin =  -15.
 hXColl_xmax =   15. 
   
 hYColl_nbins =  100                                          
