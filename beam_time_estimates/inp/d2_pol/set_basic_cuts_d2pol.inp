@@ -48,7 +48,7 @@ c_ztarDiff_min = -2.
 c_ztarDiff_max = 2.
 
 # collimator cut
-hmsCollCut_flag = 0
+hmsCollCut_flag = 1
 hms_scale = 1.
 
 shmsCollCut_flag = 0

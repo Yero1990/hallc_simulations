@@ -1130,7 +1130,11 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   tree->SetBranchAddress("Weight",   &Weight);
   tree->SetBranchAddress("Jacobian_corr", &Jacobian_corr);
   tree->SetBranchAddress("probabs", &prob_abs);
-
+  
+  //Collimators
+  tree->SetBranchAddress("xcoll",  &hXColl);
+  tree->SetBranchAddress("ycoll",  &hYColl);
+ 
   // ---- SIMC Variables at the vertex (used for calcualting averaged kinematics) ----
 
   tree->SetBranchAddress("Ein_v", &Ein_v);
@@ -1453,14 +1457,20 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     htarx_corr = tar_x - h_xptar*htar_z*cos(thp_central*dtr);
     etarx_corr = tar_x - e_xptar*etar_z*cos(the_central*dtr);  
     
-    
-    //Define Collimator (same as in HCANA)
-    hXColl = htarx_corr + h_xptar*168.;   //in cm
-    hYColl = h_ytar + h_yptar*168.;
+
+    // only use for d2fsi, since for d2pol, we want to use the HMS
+    // xcoll, ycoll variables defined in SIMC which account for target field
+    if( analysis_flag == "d2fsi" ) {
+
+      //Define Collimator (same as in HCANA) 
+      hXColl = htarx_corr + h_xptar*168.;   //in cm
+      hYColl = h_ytar + h_yptar*168.;
+     	  
+    }
+
+    // will need to learn how to add ecoll to SIMC, but for now calculate the same way is done in HCANA
     eXColl = etarx_corr + e_xptar*253.;
-    eYColl = e_ytar + e_yptar*253.-(0.019+40.*.01*0.052)*e_delta+(0.00019+40*.01*.00052)*e_delta*e_delta; //correct for HB horizontal bend	  
-    
-    
+    eYColl = e_ytar + e_yptar*253.-(0.019+40.*.01*0.052)*e_delta+(0.00019+40*.01*.00052)*e_delta*e_delta; //correct for HB horizontal bend	
     
     //=====================================================================================
     
