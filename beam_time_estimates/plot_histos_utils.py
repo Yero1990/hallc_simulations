@@ -666,8 +666,8 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 #plt.axvline(x = -0.005, color = 'r', linestyle = '--', linewidth=2)
                 #plt.axvline(x = 0.03, color = 'r', linestyle = '--', linewidth=2)
 
-                #plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
-                #plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
+                plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
+                plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
 
 
                 '''
@@ -1623,30 +1623,36 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 ->
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
 
 
-'''
+
 # spectrometer kinematics
+'''
 overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proton momentum
 overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
 overlay_d2pol(tgt_set, pm_set, q2_set, 'kf',     'fsi', field,  scale)   # e- momentum
 overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- angle
 
+'''
+
 # electron kinematics
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
+'''
 overlay_d2pol(tgt_set, pm_set, q2_set, 'nu',     'fsi', field,  scale)   # energy transfer
 overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj',    'fsi', field,  scale)  # x-bjorken
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'q',      'fsi', field,  scale)    # 3-momentum (q) transfer
+'''
+
 
 # missing variables
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Pm',     'fsi', field,  scale)   # missing momentum
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Pm',     'fsi', field,  scale)   # missing momentum
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', field, scale)
 
 # angle distributions
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thq',    'fsi', field,  scale)  # 3-momentum (q) angle
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thpq',   'fsi', field,  scale)    # in-plane angle between (proton,q)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq',   'fsi', field,  scale)    # in-plane angle between (recoil,q)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'phi_pq', 'fsi', field,  scale)  # out-of-plane angle between (proton, q)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq' 'fsi', field,  scale)
-'''
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'thq',    'fsi', field,  scale)  # 3-momentum (q) angle
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'thpq',   'fsi', field,  scale)    # in-plane angle between (proton,q)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq',   'fsi', field,  scale)    # in-plane angle between (recoil,q)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'phi_pq', 'fsi', field,  scale)  # out-of-plane angle between (proton, q)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq' 'fsi', field,  scale)
+
 
 # ----- plot acceptance variables ----
 
@@ -1660,8 +1666,9 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta', 'fsi', field, scale)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'hxptar', 'fsi', field, scale)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'hyptar', 'fsi', field, scale)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'hytar',  'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
 '''
+overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
+
 
 # acceptance correlations
 '''
