@@ -484,7 +484,7 @@ def combine_sets_alt(kin_set=[], Q2 = 0, hist_name='', model='', plot_flag=''):
 
     
     
-def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=1):
+def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=[1,1,1]):
     '''
     Brief: generic function to overlay 1d histograms from multiple kin. files for deut fsi
     pm_set and thrq_set are lists of values representing the different kinematic settings
@@ -496,9 +496,11 @@ def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=1):
     scale: default set to 1; scale counts by a multiple of beam_time (need to know what the beam time was during simulation)
     '''
 
+    idx = 0  # counter for scale index 
     # loop over central missing momentum setting
     for ipm in pm_set:
 
+    
         # loop over central q2 setting
         for ithrq in thrq_set:
 
@@ -518,14 +520,16 @@ def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=1):
             title  = get_label('title', hist_file) 
 
             x = df.x0
-            df.ycont = df.ycont * scale
+            df.ycont = df.ycont * scale[idx]
             N = df.ycont
             Nerr = np.sqrt(N)
             
             x =   ma.masked_where(N==0, x)
             N =   ma.masked_where(N==0, N)
             Nerr = ma.masked_where(N==0, Nerr)
-         
+
+            idx = idx + 1
+            
             plt.hist(df.x0, bins=len(df.x0), weights=df.ycont, alpha=0.5, ec='k', density=False, label=r"$\theta_{rq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
             #plt.errorbar(x, N, Nerr, linestyle='None', marker='o', mec='k', label=r"$\theta_{rq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
 
@@ -533,6 +537,8 @@ def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=1):
             plt.xlabel(xlabel, fontsize=15)
             plt.ylabel(ylabel, fontsize=15)
             plt.title(title, fontsize=15)
+
+            
 
     plt.show()
 
@@ -1524,13 +1530,14 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 #*************************************
 
 
-overlay_d2fsi([800], [72, 60, 49], 'Q2_nsc', 'fsi', scale=1)
-overlay_d2fsi([800], [72, 60, 49], 'Em_nuc_nsc', 'fsi', scale=1)
-overlay_d2fsi([800], [72, 60, 49], 'edelta_nsc', 'fsi',  scale=1)
-overlay_d2fsi([800], [72, 60, 49], 'hdelta_nsc', 'fsi', scale=1)
+#overlay_d2fsi([800], [72, 60, 49], 'Q2_nsc', 'fsi', scale=[0.5,1,1.5])
+#overlay_d2fsi([800], [72, 60, 49], 'Em_nuc_nsc', 'fsi', scale=1)
+#overlay_d2fsi([800], [72, 60, 49], 'edelta_nsc', 'fsi',  scale=1)
+#overlay_d2fsi([800], [72, 60, 49], 'hdelta_nsc', 'fsi', scale=1)
+#overlay_d2fsi([800], [72, 60, 49], 'Pm', 'fsi', scale=[0.5,1,1.5])
 
-make_1d_Xprojections('hXColl_vs_hYColl_nsc', 800, 60, 'fsi')
-make_1d_Xprojections('eXColl_vs_eYColl_nsc', 800, 60, 'fsi')
+#make_1d_Xprojections('hXColl_vs_hYColl_nsc', 800, 60, 'fsi')
+#make_1d_Xprojections('eXColl_vs_eYColl_nsc', 800, 60, 'fsi')
 
 #make_projY_d2pol('hXColl_vs_hYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')
 #make_projY_d2pol('eXColl_vs_eYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')
@@ -1551,8 +1558,8 @@ make_1d_Xprojections('eXColl_vs_eYColl_nsc', 800, 60, 'fsi')
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
 pm_set = [350]
 q2_set = [2.5]
-tgt_set = ['d2', 'n14', 'he4' ]
-#tgt_set = ['d2']
+#tgt_set = ['d2', 'n14', 'he4' ]
+tgt_set = ['d2']
 
 field = 'fieldON'
 
@@ -1587,7 +1594,7 @@ field = 'fieldON'
 
 
 
-#scale = 1 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 -> 2 weeks, . . . )
+scale = 1 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 -> 2 weeks, . . . )
 
 # ----- plot the kinematics variables in which a cut is used (without the self cut, ie nsc or no self cut) -----
 
@@ -1595,7 +1602,7 @@ field = 'fieldON'
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', field, scale)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi', field, scale)
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
 
 #make_projY_d2pol('hXColl_vs_hYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')
 #make_projY_d2pol('eXColl_vs_eYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')

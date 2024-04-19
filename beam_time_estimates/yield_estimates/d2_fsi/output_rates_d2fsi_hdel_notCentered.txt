@@ -1,0 +1,21 @@
+# SIMC rates estimates (deut FSI studies)
+# 
+# header definitions 
+# pm_set: central missing momentum setting [MeV] 
+# thrq_set: central recoil angle setting [deg] 
+# model: Laget pwia or fsi (paris NN potential)
+# pm_counts: integrated missing momentum counts (yield) with all cuts applied 
+# (not binned in any particular kinematics)
+# deep_rates: deuteron break-up rates [Hz] 
+# daq_rates: data acquisition rates (no analysis cuts) [Hz] 
+# current: beam current [uA] 
+# time: beam-on-target time [hrs] 
+# charge: beam charge [mC] 
+#
+pm_set,thrq_set,model,pm_counts,deep_rates,daq_rates,current,time,charge
+800,     49,    pwia,    5309.8,       8.779E-03,        3.370E-02,        80.000,      168.000,     48384.000 
+800,     49,    fsi,    7422.5,       1.227E-02,        5.503E-02,        80.000,      168.000,     48384.000 
+800,     60,    pwia,    9684.7,       1.601E-02,        5.066E-02,        80.000,      168.000,     48384.000 
+800,     60,    fsi,    19110.4,       3.160E-02,        9.601E-02,        80.000,      168.000,     48384.000 
+800,     72,    pwia,    13493.4,       2.231E-02,        7.384E-02,        80.000,      168.000,     48384.000 
+800,     72,    fsi,    21372.8,       3.534E-02,        1.028E-01,        80.000,      168.000,     48384.000 

@@ -93,8 +93,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   
   using namespace std;
   
-  //TString analysis_flag="d2pol";  // "d2pol" or "d2fsi" 
-  TString analysis_flag="d2fsi";  // "d2pol" or "d2fsi" 
+  TString analysis_flag="d2pol";  // "d2pol" or "d2fsi" 
+  //TString analysis_flag="d2fsi";  // "d2pol" or "d2fsi" 
   
   Bool_t debug = true;
   
