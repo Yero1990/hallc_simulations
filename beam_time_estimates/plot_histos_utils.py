@@ -489,6 +489,11 @@ def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=1):
     Brief: generic function to overlay 1d histograms from multiple kin. files for deut fsi
     pm_set and thrq_set are lists of values representing the different kinematic settings
     scale: scale factor by beam time
+    pm_set: central missing momentum setting, e.g. pm_set = [800]
+    thrq_set : recoin neutron angle setting, e.g. thrq_set = [49, 60, 72]
+    hist_name: histogram base name
+    model: 'pwia', 'fsi'
+    scale: default set to 1; scale counts by a multiple of beam_time (need to know what the beam time was during simulation)
     '''
 
     # loop over central missing momentum setting
@@ -1475,7 +1480,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                         ybc_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, ybc)
 
                         ybc_m = ybc_m + offset
-                        ax.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=4,  alpha=0.4, color=clr[i], linestyle='None', label=r'%s'%(itgt)) #//, label=r'%d counts'%(cnts))
+                        ax.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=5,  alpha=0.4, color=clr[i], linestyle='None', label=r'%s'%(itgt)) #//, label=r'%d counts'%(cnts))
                         plt.axhline(y = 0.10, color = 'r', linestyle = '--')
                         plt.axhline(y = -0.10, color = 'r', linestyle = '--')
                         plt.xlim(0.2, 0.6)
@@ -1518,8 +1523,22 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 #
 #*************************************
 
+
+overlay_d2fsi([800], [72, 60, 49], 'Q2_nsc', 'fsi', scale=1)
+overlay_d2fsi([800], [72, 60, 49], 'Em_nuc_nsc', 'fsi', scale=1)
+overlay_d2fsi([800], [72, 60, 49], 'edelta_nsc', 'fsi',  scale=1)
+overlay_d2fsi([800], [72, 60, 49], 'hdelta_nsc', 'fsi', scale=1)
+
+make_1d_Xprojections('hXColl_vs_hYColl_nsc', 800, 60, 'fsi')
+make_1d_Xprojections('eXColl_vs_eYColl_nsc', 800, 60, 'fsi')
+
+#make_projY_d2pol('hXColl_vs_hYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('eXColl_vs_eYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+
+
 #make_ratios_d2fsi([800], [28, 49, 55, 60, 72, 79], plot_flag='ratio')
-#make_ratios_d2fsi([800], [28, 49, 60, 72], plot_flag='ratio')
+#make_ratios_d2fsi([800], [49, 60, 72], plot_flag='ratio')
+
 
 
 
@@ -1568,7 +1587,7 @@ field = 'fieldON'
 
 
 
-scale = 1 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 -> 2 weeks, . . . )
+#scale = 1 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 -> 2 weeks, . . . )
 
 # ----- plot the kinematics variables in which a cut is used (without the self cut, ie nsc or no self cut) -----
 
@@ -1639,7 +1658,7 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq' 'fsi', field,  scale)
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', '2d', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj', 1)
-make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 1)
 
 #calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=1)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)

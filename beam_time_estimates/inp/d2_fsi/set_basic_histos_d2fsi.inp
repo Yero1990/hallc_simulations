@@ -63,12 +63,12 @@ paero_xmax = 100.
 # Units | spec. angle: deg,  energy: GeV
 
 # electron arm central angle
-the_nbins = 80
+the_nbins = 60
 the_xmin = 10.0
 the_xmax = 25.0
 
 # final electron arm momentum [GeV/c]
-kf_nbins = 90
+kf_nbins = 60
 kf_xmin = 4.
 kf_xmax = 12.
 
@@ -83,17 +83,17 @@ W2_xmin = 0.1
 W2_xmax = 3.0;
 
 # 4-momentum transfer
-Q2_nbins = 100
+Q2_nbins = 60
 Q2_xmin = 0
 Q2_xmax = 12
 
 # Bjorken-X
-X_nbins = 90
+X_nbins = 60
 X_xmin = 0.3
 X_xmax = 2.
 
 # energy transfer
-nu_nbins = 90
+nu_nbins = 60
 nu_xmin = 1.
 nu_xmax = 10
 
@@ -118,7 +118,7 @@ qz_xmin = 0.
 qz_xmax = 10.
 
 # in-plane angle between q-vector and +z (beam)
-thq_nbins = 100
+thq_nbins = 80
 thq_xmin = 10.
 thq_xmax = 70.
 
@@ -143,7 +143,7 @@ epsilon_xmax = 100.
 # Missing Energy
 Em_nbins = 60
 Em_xmin = -0.05
-Em_xmax = 0.1
+Em_xmax = 0.2
 
 # Missing (Recoil) Momentum
 # 40, 0, 1.6 (0.04 GeV bins) --> +/- 20 MeV bins for binning th_rq angular dist.
@@ -202,12 +202,12 @@ MM2_xmin = 0.8
 MM2_xmax = 1.2
 
 # hadron arm central angle
-thx_nbins = 90  
+thx_nbins = 70  
 thx_xmin = 15.
 thx_xmax = 70.
 
 # In-plane angle between detected particle and q 
-thxq_nbins = 90
+thxq_nbins = 70
 thxq_xmin = 0.
 thxq_xmax = 50.
 
@@ -219,12 +219,12 @@ thrq_xmin = 0.
 thrq_xmax = 190.
 
 # Out-of-plane angle between detected particle and q
-phxq_nbins = 200
+phxq_nbins = 100
 phxq_xmin = -190.
 phxq_xmax = 190.
 
 # Out-of-plane angle between recoil system and q 
-phrq_nbins = 200
+phrq_nbins = 100
 phrq_xmin = -190.
 phrq_xmax = 190.
 
@@ -244,7 +244,7 @@ thxq_cm_xmin = 0.
 thxq_cm_xmax = 360.
 
 # final hadron arm momentum [GeV/c]
-Pf_nbins = 100
+Pf_nbins = 60
 Pf_xmin = 1.
 Pf_xmax = 10.
 
@@ -358,7 +358,7 @@ hyptar_nbins = 60
 hyptar_xmin = -0.1
 hyptar_xmax = 0.1
   
-hxptar_nbins = 100
+hxptar_nbins = 60
 hxptar_xmin  = -0.1
 hxptar_xmax = 0.1
   

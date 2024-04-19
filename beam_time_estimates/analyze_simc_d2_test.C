@@ -93,7 +93,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   
   using namespace std;
   
-  TString analysis_flag="d2pol";  // "d2pol" or "d2fsi" 
+  //TString analysis_flag="d2pol";  // "d2pol" or "d2fsi" 
+  TString analysis_flag="d2fsi";  // "d2pol" or "d2fsi" 
   
   Bool_t debug = true;
   
@@ -1232,13 +1233,13 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     charge_factor = Ib * time * 3600. / 1000.; // in mC
 
     // efficiencies (assume 1 for now)
-    e_trk      = 1.;   //0.964;
-    h_trk      = 1.;  //0.988;
-    daq_lt     = 1.;  //0.98;
-    tgt_boil   = 1.;  // boiling factor correction (assume 1 for now)
-    proton_abs = 1.;  // 0.95
+    e_trk      = 0.96;   //0.964;
+    h_trk      = 0.97;  //0.988;
+    daq_lt     = 0.99;  //0.98;
+    tgt_boil   = 0.95;  // boiling factor correction (assume 1 for now)
+    proton_abs = 0.95;  // 0.95
 
-    eff_factor = 1; // e_trk * h_trk * daq_lt * tgt_boil * proton_abs;
+    eff_factor =  e_trk * h_trk * daq_lt * tgt_boil * proton_abs;
 
   }
 
