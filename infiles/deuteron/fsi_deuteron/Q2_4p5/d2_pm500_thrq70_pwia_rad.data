@@ -1,49 +1,34 @@
-! Deuteron Experiment C12(e,e'p)n : Carbon 12 for scaling to Nitrogen (for background estimates)
-! Central "missing momentum" (pmiss) setting = 350 MeV
-! Central Q2: 2.5 GeV^2
-! theta_rq: 20 deg
-! target magnetic field: ON
-! Pol. Mag. Field direction rotated +26 deg beam-right (towards HMS)
-! Proton Angle Restriction: < 26 + 35 =  61 deg
-! Electron Angle Restriction: < |26 - 35| = 9 deg
-! Out-of-Plane Angle (phi): 180 deg
+! Deuteron Experiment D(e,e'p)n :  deuteron angular fsi proposal 
+! Central "missing momentum" (pmiss) setting = 500 MeV
+! Central 4-Momentum Transfer (Q2) = 4.25 GeV^2
+! Out-of-Plane Angle (phi): 0 deg 
 ! FSI | YES radiative effects | YES energy loss | NO energy loss correction 
 ! 'TF' stands for 'this field'
 ! ONE equals TRUE unless specified otherwise
-!======= NOTE ON Nitrogen Scaling ========
-! NOTE: Need to first do simulation using C12 (to then  be able to scale it to Nitrogen)
-! For C12, the target density/thickness used is same as that for CaFe
-! To scale to  Nitrogen (after simulation), we need the effective Nitrogen target density (g/cm^3) in ND3 ;
-! N_eff_rho = nd3_rho * (N_amu  g/mol) / (nd3_amu g/mol) = 1.007 * (14.0067 ) / (20.049) =  0.70351 g/cm3
-! N_eff_thickness = N_eff_rho x (target_len) x (conv_to_mg) = 0.70351 g/cm3 * 3 cm * 1000 mg / 1 g
-! The scale factor should then be:  C12_Yield x ( N_eff_thickness / C12_thickness ) x ( N_nucl_transparency /C12_nucl_transparency )
-!=======
 
  =?
  &EXPERIMENT
-     ngen  =  1000000			!  POS: # of successes
+     ngen  =  500000			!  POS: # of successes
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
      doing_pion  =  F		!  (T = TRUE)
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
-     extra_dbase_file = 'extra_hydrogen_rad_fieldON.data' !  additional input parameters.
-     set_allow_scat_in_coll=1  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
-     use_sf = T                ! Use spectral function
-     transparency = 0.55       ! need to explicitly put in nuclear transparency if use_sf = T ( T = A**(-0.24) )
+     extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
+     set_allow_scat_in_coll=0  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
  &KINEMATICS_MAIN
-     Ebeam  =  11000.                                  !  (MeV)
+     Ebeam  =  10549.                                  !  (MeV)
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
-     spec%e%P  =    9100.0                              !  e arm central momentum (MeV/c) 10112.0 - 0.1*10112.0   
-     spec%e%theta  =  7.0                            !  e arm angle setting (degrees) 8.6
-     spec%p%P  =    1267.                             !  p arm central momentum (MeV/c) 1490 - 0.15*1490 (shift delta from neg closer to 0%) 
-     spec%p%theta  =   59.                           !  p arm angle setting (degrees) 61
-     spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane  
+     spec%e%P  =    8151.                              !  e arm central momentum (MeV/c) 
+     spec%e%theta  =  13.14                            !  e arm angle setting (degrees)
+     spec%p%P  =    2639.                             !  p arm central momentum (MeV/c) 3069.-0.14*3069.=2639
+     spec%p%theta  =   44.17                           !  p arm angle setting (degrees)
+     spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
      spec%p%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon pArm 
@@ -58,15 +43,16 @@
 
  ?=
  &TARGET
-     targ%A  =  12.0			!  target A 
-     targ%Z  =  6.0			!  target Z
-     targ%mass_amu  =  12.0107	        !  target mass in amu;  c12 amu (g/mol)
-     targ%mrec_amu  =  11.	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
-     targ%rho  =  1.8	        	!  target density (g/cm^3) 
-     targ%thick  =  573.84		!  target thickness (mg/cm^2)
+     targ%A  =  2.0			!  target A
+     targ%Z  =  1.0			!  target Z
+     targ%mass_amu  =  2.014101	        !  target mass in amu
+     targ%mrec_amu  =  1.008665	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
+     targ%rho  =  0.167		        !  target density (g/cm^3)
+     ! targ%thick  =  2505.		!  target thick 15cm (mg/cm^2) 
+     targ%thick  =  1670.		!  target thick 10cm (mg/cm^2)
      targ%angle  =  0.		        !  target angle (for solid target) (degrees)
-     targ%abundancy  =  65.		!  target purity (%)   ; ND3 is 65 % pure (packing fraction)
-     targ%can  =  2                     !  1=beer can (fpi), 2=pudding can (nucpi) ; ND3 is pudding can
+     targ%abundancy  =  100.		!  target purity (%)
+     targ%can  =  1                     !  1=beer can (fpi), 2=pudding can (nucpi)
 / 
 
  &DEBUG_PARM
@@ -91,7 +77,7 @@
      SPedge%p%delta%max  =    15.0	!  delta max
      SPedge%p%yptar%min  =   -50.0	!  yptar min = {TF} / 1000 (mrad)
      SPedge%p%yptar%max  =    50.0	!  yptar max = {TF} / 1000
-     SPedge%p%xptar%min  =   -200.0	!  xptar min = {TF} / 1000 (mrad)
+     SPedge%p%xptar%min  =   -100.0	!  xptar min = {TF} / 1000 (mrad)
      SPedge%p%xptar%max  =    100.0	!  xptar max = {TF} / 1000
 / 
 
@@ -125,10 +111,10 @@
 
 
  &THEORY_CTRL
-    theory_par%model = ''               ! select a model name
+    theory_par%model = 'LAGET_DEUT'               ! select a model name
     theory_par%data_file = './'         ! directory for the data file
     theory_par%FLAGS = 10*F             ! 10 flags are available
-    theory_par%parameter(1) = 1         ! 1 do fsi, 0 do pwia
+    theory_par%parameter(1) = 0         ! 1 do fsi, 0 do pwia
     theory_par%parameter(2) = 1         ! 1 do linear inter, 2 for log
     theory_par%parameter(3) = 1         ! 1 use binary files (fast), 0 ascii (slow)
 / 
