@@ -579,8 +579,9 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
     fig, axs = plt.subplots(1, figsize=(6,5))
 
     #clr = ['orange', 'b', 'magenta']
-    clr = ['orange', 'b', 'magenta']
-         
+    #clr = ['orange', 'b', 'magenta']
+    clr = ['orange', 'deepskyblue', 'magenta']
+ 
     i=-1 # index for color counting
     
     offset=0 # for applying to overlayed data for easy visual
@@ -650,7 +651,7 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 print('xbin_center:', xbc)
                 print('bins:', len(xbc))
                 axs.set_title(title)
-                axs.hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.4, ec='k',  color=clr[i], density=False, label="$P_{m}$=%d MeV"%(ipm)+"\n"+ "$Q^{2}$=%.1f GeV$^{2}$ (%d)"%(iq2, counts)+"\n"+"%s"%(itgt))
+                axs.hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.15, ec='k',  color=clr[i], density=False, label="$P_{m}$=%d MeV"%(ipm)+"\n"+ "$Q^{2}$=%.1f GeV$^{2}$ (%d)"%(iq2, counts)+"\n"+"%s"%(itgt))
                 #axs.set_ylabel(ylabel)
                 #axs.set_xlabel(xlabel)
 
@@ -666,8 +667,8 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 #plt.axvline(x = -0.005, color = 'r', linestyle = '--', linewidth=2)
                 #plt.axvline(x = 0.03, color = 'r', linestyle = '--', linewidth=2)
 
-                plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
-                plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
+                #plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
+                #plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
 
 
                 '''
@@ -1635,7 +1636,6 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proto
 overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
 overlay_d2pol(tgt_set, pm_set, q2_set, 'kf',     'fsi', field,  scale)   # e- momentum
 overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- angle
-
 '''
 
 # electron kinematics
@@ -1694,7 +1694,7 @@ make_projY_d2pol('hdelta_vs_edelta',     ['d2'], pm_set, 2.5, 'fsi', field, '2d'
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', '2d', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj', 1)
-make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 1)
 
 #calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=1)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
