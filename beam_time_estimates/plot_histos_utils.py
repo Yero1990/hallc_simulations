@@ -1100,7 +1100,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
                             #ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', density=False, label=r'(%.1f GeV$^{2}$)'%(jq2))
                             ax.set_ylim(-20,20)
                         else:
-                            ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', density=False, label=r'%d counts (%.1f GeV$^{2}$)'%(cnts, jq2))
+                            ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], ec='k', density=False, label=r'%d counts (%.1f GeV$^{2}$)'%(cnts, jq2))
 
                         plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                         plt.legend(frameon=False, loc='upper right')
@@ -1162,7 +1162,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
 
      
     fig, ax = plt.subplots(3, 3)
-    fig.set_size_inches(10,6, forward=True)
+    fig.set_size_inches(10,10, forward=True)
     fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)
     fig.text(0.01, 0.5, 'dilution', va='center', rotation='vertical', fontsize=14)
     subplot_title =  r"dilution factor, central p$_{m,cent}$ = %d MeV, $Q^{2}$ = %.1f GeV$^{2}$"%(pm_user, Q2_user)
@@ -1255,11 +1255,16 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
             for ipm, ybin in enumerate( ybc ):
 
                 ofile.write("%.1f,%.3f,%.1f,%.3f,%.1f,%.3f,%.1f,%.3f,%.3f,%.3f\n" % (xbin, ybin, x[ipm], sigx[ipm], y[ipm], sigy[ipm], z[ipm], sigz[ipm], dilution[ipm], dilution_err[ipm] ))
-            
+
+                plt.xticks(fontsize = 18)
+                plt.yticks(fontsize = 18)    
             ax.errorbar(ybc, dilution, dilution_err, marker='o', markersize=8, alpha=0.4, linestyle='None', color='r', label=r'%.1f GeV$^{2}$'%(Q2_user))
-            plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
-            jdx = jdx+1
+            plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
+            plt.xlim(0,0.7)
+             
             
+            jdx = jdx+1
+       
     ofile.close()
     plt.show()
 
@@ -1370,7 +1375,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 
             subplot_title =  r"p$_{m}$ vs. $\theta_{rq}$ 1d projection (%s), central p$_{m}$ setting: %d MeV"%(model, ipm)
             #plt.suptitle(subplot_title, fontsize=15);
-            #plt.tight_layout()
+            plt.tight_layout()
             
         offset=0 # offset for applying projections overlay
         i = -1 # color index counter
@@ -1474,13 +1479,13 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                             #ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', density=False, label=r'(%.1f GeV$^{2}$)'%(Q2_user))
                             ax.set_ylim(-20,20)
                         else:
-                            ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.15,  color=clr[i], ec='k', density=False, label=r'%d counts (%s)'%(cnts, itgt))
-                            plt.axhline(y = 1000, color = 'r', linestyle = '--')
+                            ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.2,  color=clr[i], ec='k', density=False, label=r'%d counts (%s)'%(cnts, itgt))
+                            plt.axhline(y = 500, color = 'r', linestyle = '--')
                             ax.set_yscale('log')
                             plt.ylim(0.1, 2e5)
                             plt.xticks(fontsize = 14)
                             plt.yticks(fontsize = 14)
-                        plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                        plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
                         plt.legend(frameon=False, loc='upper right')
                         jdx = jdx+1
                         
@@ -1494,13 +1499,13 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                         ybc_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, ybc)
 
                         ybc_m = ybc_m + offset
-                        ax.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=5,  alpha=0.4, color=clr[i], linestyle='None', label=r'%s'%(itgt)) #//, label=r'%d counts'%(cnts))
-                        plt.axhline(y = 0.10, color = 'r', linestyle = '--')
-                        plt.axhline(y = -0.10, color = 'r', linestyle = '--')
+                        ax.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=8,  alpha=0.4, elinewidth=2, color=clr[i], linestyle='None', label=r'%s'%(itgt)) #//, label=r'%d counts'%(cnts))
+                        plt.axhline(y = 0.20, color = 'r', linestyle = '--')
+                        plt.axhline(y = -0.20, color = 'r', linestyle = '--')
                         plt.xlim(0.2, 0.6)
                         plt.xticks(fontsize = 14)
                         plt.yticks(fontsize = 14)
-                        plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                        plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
                         jdx = jdx+1
             plt.legend(frameon=False, loc='upper right')
 
@@ -1666,9 +1671,8 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta', 'fsi', field, scale)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'hxptar', 'fsi', field, scale)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'hyptar', 'fsi', field, scale)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'hytar',  'fsi', field, scale)
-'''
 overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
-
+'''
 
 # acceptance correlations
 '''
@@ -1690,7 +1694,7 @@ make_projY_d2pol('hdelta_vs_edelta',     ['d2'], pm_set, 2.5, 'fsi', field, '2d'
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', '2d', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj', 1)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 1)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 1)
 
 #calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=1)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
