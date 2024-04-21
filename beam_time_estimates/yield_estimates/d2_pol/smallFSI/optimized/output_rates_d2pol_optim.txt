@@ -13,7 +13,13 @@
 # time: beam-on-target time [hrs] 
 # charge: beam charge [mC] 
 #
-target,pm_set,Q2_set,model,field_config,pm_counts,deep_rates,daq_rates,current,time,charge
-d2,     350,     2.50,    fsi,     fieldON,     528757.3,       4.371E-01,        7.674E-01,        85.000,      336.000,     102.816 
+target, pm_set,   Q2_set,  model,   field_config, pm_counts,    deep_rates,       daq_rates,        current,     time,        charge
+d2,      350,     2.50,    fsi,     fieldON,      528757.3,     4.371E-01,        7.674E-01,        85.000,      336.000,     102.816 
+he4,     350,     2.50,    fsi,     fieldON,      1400.1,       1.157E-03,        7.052E-03,        85.000,      336.000,     102.816 
+n14,     350,     2.50,    fsi,     fieldON,      71575.4,      5.917E-02,        1.368E-01,        85.000,      336.000,     102.816 
+d2,     350,     2.50,    fsi,     fieldON,      528756.9,       4.371E-01,        7.674E-01,        85.000,      336.000,     102.816 
 he4,     350,     2.50,    fsi,     fieldON,      1400.1,       1.157E-03,        7.052E-03,        85.000,      336.000,     102.816 
 n14,     350,     2.50,    fsi,     fieldON,      71575.4,       5.917E-02,        1.368E-01,        85.000,      336.000,     102.816 
+d2,     350,     2.50,    fsi,     fieldON,      528757.3,       4.371E-01,        7.674E-01,        85.000,      336.000,     102.816 
+n14,     350,     2.50,    fsi,     fieldON,      71575.4,       5.917E-02,        1.368E-01,        85.000,      336.000,     102.816 
+he4,     350,     2.50,    fsi,     fieldON,      1400.1,       1.157E-03,        7.052E-03,        85.000,      336.000,     102.816 

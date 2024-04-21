@@ -6,6 +6,7 @@ import numpy.ma as ma
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
+from scipy.interpolate import interp1d
 
 plt.rcParams["font.family"] = "Times New Roman"
 
@@ -1161,7 +1162,8 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
 
 
 
-     
+
+    # plotting dilution factor into subplots binned in thrq 
     fig, ax = plt.subplots(3, 3)
     fig.set_size_inches(10,10, forward=True)
     fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)
@@ -1169,7 +1171,8 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     subplot_title =  r"dilution factor, central p$_{m,cent}$ = %d MeV, $Q^{2}$ = %.1f GeV$^{2}$"%(pm_user, Q2_user)
     plt.suptitle(subplot_title, fontsize=15);
     plt.tight_layout()
-    
+    #------------------------------------------------------
+   
     # h2 -> 2d histo (not related to hydrogrn)
     h2_hist_basename = 'H_Pm_vs_thrq_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name
 
@@ -1189,8 +1192,8 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     xbinw  = float(get_label('xbin_width', d2_file_path))
     nxbins = len(df_d2.xb[df_d2.yb==df_d2.yb[0]])
     nybins = len(df_d2.yb[df_d2.xb==df_d2.xb[0]])
-    ybc = (df_d2.y0[df_d2.x0==df_d2.x0[0]]).to_numpy() # y-bin central value
-    xbc = (df_d2.x0[df_d2.y0==df_d2.y0[0]]).to_numpy() # x-bin central value
+    ybc = (df_d2.y0[df_d2.x0==df_d2.x0[0]]).to_numpy() # y-bin central value (pm)
+    xbc = (df_d2.x0[df_d2.y0==df_d2.y0[0]]).to_numpy() # x-bin central value (thrq)
 
     # scale the counts per bin (default scale = 1)
     df_d2.zcont  = df_d2.zcont * scale
@@ -1202,7 +1205,8 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
 
     #loop over x-bins i.e., thrq bins (for y-projections)
     for idx, xbin in enumerate( xbc ):
-        
+
+        # plotting dilution factor into subplots binned in thrq 
         ax = plt.subplot(3, 3, jdx+1)
 
         
@@ -1217,7 +1221,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
         he4_count_per_xbin     = df_he4.zcont[df_he4.x0==xbin]
         he4_count_per_xbin_err = np.sqrt( he4_count_per_xbin )
         
-        
+        # mask values
         he4_count_per_xbin     = ma.masked_where(he4_count_per_xbin==0, he4_count_per_xbin)
         he4_count_per_xbin_err = ma.masked_where(he4_count_per_xbin==0, he4_count_per_xbin_err)
 
@@ -1228,6 +1232,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
         n14_count_per_xbin     = ma.masked_where(n14_count_per_xbin==0, n14_count_per_xbin)
         n14_count_per_xbin_err = ma.masked_where(n14_count_per_xbin==0, n14_count_per_xbin_err)
 
+        
         
         # rename variables for simplicity
         x     = d2_count_per_xbin
@@ -1241,28 +1246,58 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
         dilution_err =  np.sqrt( ((sigx**2 * (y+z)**2 ) + (x**2 * (sigy**2 + sigz**2))) / (x + y + z)**4 )
 
         dsum = np.sum( dilution )
-
-    
             
         if(np.ma.is_masked(dsum)): continue
 
         if(not np.ma.is_masked(dsum)):
-             
-            print('xbin: ', xbin)
-            print('ybc: ', ybc)
-            print('dilution: ', dilution, '+/-', dilution_err)
 
+
+            # get min/max values (ignoring pm values correponding to masked dilution) -- for interpolation purpose
+            pm_min = ma.min(ma.masked_where(ma.getmask(dilution), ybc) )
+            pm_max = ma.max(ma.masked_where(ma.getmask(dilution), ybc) )
+            
+            
+            # do interpolation
+            #x_interp = np.linspace(min(ybc), max(ybc), num=100)
+            #y_interp = np.interp(x_interp, ybc, dilution, right=-999)
+            
+            f = interp1d(ybc, dilution, kind='linear', bounds_error=True)
+            x_interp = np.linspace(pm_min, pm_max, num=100)
+            y_interp = f(x_interp)
+            
+            
+            '''
+            # -- plotting option: overlay dilution factors for all thrq_bins ---
+            fig = plt.subplot()
+            
+            plt.plot(x_interp,  y_interp, marker='None', linestyle='--', label=r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.) )
+            plt.xticks(fontsize = 22)
+            plt.yticks(fontsize = 22)
+            plt.ylim(0, 1.0)
+            plt.xlim(0, 0.65)
+            plt.legend(fontsize=12, loc='lower right')
+            #--------------------------------------------------------------------
+            '''
+            
             # loop over y-bins (pm_bins) to write to file
             for ipm, ybin in enumerate( ybc ):
-
+            
                 ofile.write("%.1f,%.3f,%.1f,%.3f,%.1f,%.3f,%.1f,%.3f,%.3f,%.3f\n" % (xbin, ybin, x[ipm], sigx[ipm], y[ipm], sigy[ipm], z[ipm], sigz[ipm], dilution[ipm], dilution_err[ipm] ))
 
-                plt.xticks(fontsize = 18)
-                plt.yticks(fontsize = 18)    
+
+            
+            # plot interpolated function
+            ax.plot(x_interp,  y_interp, marker='None', alpha=0.9, linestyle='--', color='r')
+
+            # plot data
             ax.errorbar(ybc, dilution, dilution_err, marker='o', markersize=8, alpha=0.4, linestyle='None', color='r', label=r'%.1f GeV$^{2}$'%(Q2_user))
+
+            
             plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
-            plt.xlim(0,0.7)
-             
+            plt.xticks(fontsize = 18)
+            plt.yticks(fontsize = 18)
+            plt.ylim(0.,1.0)
+            plt.xlim(0, 0.65)
             
             jdx = jdx+1
        
@@ -1696,7 +1731,7 @@ make_projY_d2pol('hdelta_vs_edelta',     ['d2'], pm_set, 2.5, 'fsi', field, '2d'
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 1)
 
-#calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=1)
+#calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=4)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 
 #overlay_dilution()
