@@ -858,7 +858,7 @@ Brief: Plotting histos utilities specialized for
 d(e,e'p) fsi studies proposal
 '''
 
-def make_ratios_d2fsi(pm_set, thrq_set, plot_flag=''):
+def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
 
     
@@ -873,10 +873,13 @@ def make_ratios_d2fsi(pm_set, thrq_set, plot_flag=''):
         subplot_title ='angular distributions FSI/PWIA ratio'   #setting: (%d MeV, %d deg)'%(pm_set, thrq_set)
         plt.suptitle(subplot_title, fontsize=15);
         fig.set_size_inches(14,10, forward=True)
-        
+
+    
     # loop over central missing momentum kin. setting 
     for ipm in pm_set:
 
+        scl_idx = 0  # scale index
+        
         # loop over central recoil angle kin. setting for a given central momentum
         for ithrq in thrq_set: 
             print('ithrq: ', ithrq)
@@ -901,14 +904,14 @@ def make_ratios_d2fsi(pm_set, thrq_set, plot_flag=''):
 
             
             # get bin content / bin content error
-            fsi_N       = df_fsi.zcont 
+            fsi_N       = df_fsi.zcont * scale[scl_idx]
             fsi_Nerr    = np.sqrt(fsi_N) 
             fsi_rel_err = fsi_Nerr / fsi_N
 
             fsi_N    = ma.masked_where(fsi_N==0, fsi_N)
             fsi_Nerr = ma.masked_where(fsi_N==0, fsi_Nerr)
 
-            pwia_N       = df_pwia.zcont
+            pwia_N       = df_pwia.zcont * scale[scl_idx]
             pwia_Nerr    = np.sqrt(pwia_N)
             pwia_rel_err = pwia_Nerr / pwia_N
             
@@ -925,6 +928,9 @@ def make_ratios_d2fsi(pm_set, thrq_set, plot_flag=''):
             ratio = ma.masked_where(ratio_rel_err>rel_err_thrs,     ratio)
             ratio_err = ma.masked_where(ratio_rel_err>rel_err_thrs, ratio_err)
 
+            scl_idx = scl_idx + 1  # increment index for every increment in ipm
+
+            
             #print('ratio:', ratio)
             #print('thrq_bins:', thrq_bins)
             #print('ratio[thrq=37.5]:', ratio[thrq_bins==37.5])
@@ -1578,12 +1584,53 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 #
 #*************************************
 
+#thrq_set = [49, 60, 72]
+#scale_set = [200, 144, 160]
+
+thrq_set =  [72,  60,  49]
+scale_set = [160, 144, 200]
+
+# spectrometer kinematics
+'''
+overlay_d2fsi([800], thrq_set, 'Pf',  'fsi', scale_set)
+overlay_d2fsi([800], thrq_set, 'thp', 'fsi', scale_set)
+overlay_d2fsi([800], thrq_set, 'kf',  'fsi', scale_set)
+overlay_d2fsi([800], thrq_set, 'the', 'fsi', scale_set)
+'''
+
+# electron kinematics
+'''
+overlay_d2fsi([800], thrq_set, 'nu',      'fsi', scale_set)
+overlay_d2fsi([800], thrq_set, 'xbj',     'fsi', scale_set)
+overlay_d2fsi([800], thrq_set, 'Q2_nsc',  'fsi', scale_set)
+overlay_d2fsi([800], thrq_set, 'q',       'fsi', scale_set)
+'''
+
+# missing variables
+'''
+overlay_d2fsi([800], thrq_set, 'Pm',             'fsi', scale_set)
+overlay_d2fsi([800], thrq_set, 'Em_nuc_nsc',     'fsi', scale_set)
+'''
+
+# angle distributions
+'''
+overlay_d2fsi([800], thrq_set, 'thq',    'fsi', scale_set)
+overlay_d2fsi([800], thrq_set, 'thpq',   'fsi', scale_set)
+overlay_d2fsi([800], thrq_set, 'thrq',   'fsi', scale_set)
+overlay_d2fsi([800], thrq_set, 'phi_pq', 'fsi', scale_set)
+'''
+
+# plot yield ratio
+#make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  # scale represent hrs
+
+
 
 #overlay_d2fsi([800], [72, 60, 49], 'Q2_nsc', 'fsi', scale=[1,1,1])
 #overlay_d2fsi([800], [72, 60, 49], 'Em_nuc_nsc', 'fsi', scale=[1,1,1])
 #overlay_d2fsi([800], [72, 60, 49], 'edelta_nsc', 'fsi',  scale=1)
 #overlay_d2fsi([800], [72, 60, 49], 'hdelta_nsc', 'fsi', scale=[1,1,1])
-#overlay_d2fsi([800], [72, 60, 49], 'Pm', 'fsi', scale=[0.5,1,1.5])
+#overlay_d2fsi([500], [70], 'Pm', 'fsi', scale=[12])
+#overlay_d2fsi([800], [72, 60, 49], 'Pm', 'fsi', scale=[120,132,240])
 
 #make_1d_Xprojections('hXColl_vs_hYColl_nsc', 800, 60, 'fsi')
 #make_1d_Xprojections('eXColl_vs_eYColl_nsc', 800, 60, 'fsi')
@@ -1592,8 +1639,9 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 #make_projY_d2pol('eXColl_vs_eYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')
 
 
-#make_ratios_d2fsi([800], [28, 49, 55, 60, 72, 79], plot_flag='ratio')
-#make_ratios_d2fsi([800], [49, 60, 72], plot_flag='ratio')
+#overlay_d2fsi([800], [49, 60, 72], 'Q2_nsc', 'fsi', scale=[200,132,160])
+
+# plot kinematics
 
 
 

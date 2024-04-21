@@ -47,14 +47,14 @@ def calc_d2_kin():
     
     #Set x-Bjorken Range to cover
     xbj_min = 1.0
-    xbj_step = 0.005
+    xbj_step = 0.05
     xbj_max = 2. + xbj_step
     xbj_range = np.arange(xbj_min, xbj_max, xbj_step)
     
     #output file to write kinematics
     #fname = 'polarized_deut_kin_summary_Eb%.2f_phi180.csv' % (Ei)
     #fname = 'polarized_deut_kin_summary_Eb%.2f_phi180_HMSwideOpen_thrq35.txt' % (Ei)
-    fname = 'd2pol_Eb11_Q2_2p5_pm400_phi180.txt'
+    fname = 'd2pol_Eb11_Q2_2p5_pm350_phi180_April.txt'
     
     ofile = open(fname, 'w')
     ofile.write('# d(e,e\'p)n Central Kinematics Summary\n')
@@ -146,14 +146,14 @@ def calc_d2_kin():
                 if (np.isnan(thp)): continue
 
                 # restrict the proton angle to < 35 deg (allowed by magnet used in polarization)
-                if(thp>=75): continue
+                if(thp>=61): continue
                 #if(thp>50): continue
 
                 # restrict the neutron recoil angle relative to q-vector, theta_rq
-                if(thnq < 5. or thnq > 36): continue
+                if(thnq < 10. or thnq > 36): continue
                 
-                if(th_e<6.0): continue
-                if(th_e>=38.0): continue
+                if(th_e<7.5): continue
+                if(th_e>=9.0): continue
                 
                 ofile.write("  %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )
                 #ofile.write("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )

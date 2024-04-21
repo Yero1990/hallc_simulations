@@ -1,0 +1,32 @@
+# SIMC rates estimates (deut FSI studies)
+# 
+# header definitions 
+# pm_set: central missing momentum setting [MeV] 
+# thrq_set: central recoil angle setting [deg] 
+# model: Laget pwia or fsi (paris NN potential)
+# pm_counts: integrated missing momentum counts (yield) with all cuts applied 
+# (not binned in any particular kinematics)
+# deep_rates: deuteron break-up rates [Hz] 
+# daq_rates: data acquisition rates (no analysis cuts) [Hz] 
+# current: beam current [uA] 
+# time: beam-on-target time [hrs] 
+# charge: beam charge [mC] 
+#
+pm_set,thrq_set,model,pm_counts,deep_rates,daq_rates,current,time,charge
+500,     70,    pwia,    320509.6,       5.299E-01,        2.367E+00,        80.000,      168.000,     48384.000 
+500,     70,    fsi,    303081.9,       5.011E-01,        2.263E+00,        80.000,      168.000,     48384.000 
+800,     49,    pwia,    9723.5,       1.608E-02,        5.813E-02,        80.000,      168.000,     48384.000 
+800,     49,    fsi,    10685.6,       1.767E-02,        7.836E-02,        80.000,      168.000,     48384.000 
+800,     60,    pwia,    36859.9,       6.095E-02,        1.680E-01,        80.000,      168.000,     48384.000 
+800,     60,    fsi,    46300.3,       7.655E-02,        2.205E-01,        80.000,      168.000,     48384.000 
+800,     72,    pwia,    713939.3,       1.180E+00,        3.172E+00,        80.000,      168.000,     48384.000 
+800,     72,    fsi,    606721.4,       1.003E+00,        2.759E+00,        80.000,      168.000,     48384.000
+
+
+
+# total request time:  504 hrs (3 weeks) 21 days
+
+500,     70,    fsi,    303081.9 / 168 hrs  = 1804   counts / hr  * 8 hrs   ~ 14,000
+800,     49,    fsi,    10685.6  / 168 hrs  = 63.6   counts / hr  * 323 hrs ~ 20,000
+800,     60,    fsi,    46300.3  / 168 hrs  = 275.6  counts / hr  * 145 hrs ~ 40,000
+800,     72,    fsi,    606721.4 / 168 hrs  = 3611.4 counts / hr  * 28 hrs  ~ 100,000

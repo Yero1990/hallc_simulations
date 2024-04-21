@@ -65,7 +65,7 @@ def calc_d2_fsi_kin():
     for Eb in Eb_range:
 
         #output file to write kinematics
-        fname = 'kin_summary_Eb%.3f.txt' % (Eb)
+        fname = 'kin_summary_Eb%.3f_phi180.txt' % (Eb)
         ofile = open(fname, 'w')
         ofile.write('# D(e,e\'p)n Central Kinematics Summary\n')
         ofile.write('# Beam Energy (Ei) = %.3f GeV\n' % (Eb))
@@ -147,8 +147,8 @@ def calc_d2_fsi_kin():
                     thnq = np.arccos(cthnq) / dtr  #theta_nq [deg]
                     
                     #theta_p (proton angle relative to +z (lab))
-                    #thp = thq + thpq   # phi = 0?  (q-vector scatters at smaller angles than proton scattering angle)
-                    thp = thq - thpq   # phi = 180 ?  (q-vector scatters at larger  angles than proton scattering angle)
+                    thp = thq + thpq   # phi = 180?  (q-vector scatters at smaller angles than proton scattering angle)
+                    #thp = thq - thpq   # phi = 0 ?  (q-vector scatters at larger  angles than proton scattering angle)
                      
                     # spectrometer constraint requirements (based on physical limits)
                     if kf<2. or kf>11.0 or th_e<5.5 or th_e>40. or Pf<0.4 or Pf>7.3 or thp<10.5 or thp>80:

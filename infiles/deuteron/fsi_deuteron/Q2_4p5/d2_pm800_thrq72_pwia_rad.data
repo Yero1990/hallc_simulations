@@ -1,7 +1,7 @@
 ! Deuteron Experiment D(e,e'p)n :  deuteron angular fsi proposal 
 ! Central "missing momentum" (pmiss) setting = 800 MeV
 ! Central 4-Momentum Transfer (Q2) = 4.25 GeV^2
-! Out-of-Plane Angle (phi): 0 deg 
+! Out-of-Plane Angle (phi): 180 deg 
 ! FSI | YES radiative effects | YES energy loss | NO energy loss correction 
 ! 'TF' stands for 'this field'
 ! ONE equals TRUE unless specified otherwise
@@ -16,7 +16,7 @@
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
      extra_dbase_file = 'extra_hydrogen_rad.data' !  additional input parameters.
-     set_allow_scat_in_coll=0  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
+     set_allow_scat_in_coll=1  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
 / 
  =?
  &KINEMATICS_MAIN
@@ -26,7 +26,7 @@
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      spec%e%P  =    7552.                              !  e arm central momentum (MeV/c) 
      spec%e%theta  =  13.65                            !  e arm angle setting (degrees)
-     spec%p%P  =    2883.                             !  p arm central momentum (MeV/c) 3516.-0.18*3516.=2883 
+     spec%p%P  =    3516.                             !  p arm central momentum (MeV/c) 
      spec%p%theta  =   41.57                           !  p arm angle setting (degrees)
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           

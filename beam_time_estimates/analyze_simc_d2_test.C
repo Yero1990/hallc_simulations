@@ -93,8 +93,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   
   using namespace std;
   
-  TString analysis_flag="d2pol";  // "d2pol" or "d2fsi" 
-  //TString analysis_flag="d2fsi";  // "d2pol" or "d2fsi" 
+  //TString analysis_flag="d2pol";  // "d2pol" or "d2fsi" 
+  TString analysis_flag="d2fsi";  // "d2pol" or "d2fsi" 
   
   Bool_t debug = true;
   
@@ -1229,7 +1229,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
 
   if( analysis_flag == "d2fsi") {
     Ib = 80;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
-    time = 168.0;     //estimated time (in hours) a run takes (start - end) of run
+    time = 1.0;     //estimated time (in hours) a run takes (start - end) of run
     charge_factor = Ib * time * 3600. / 1000.; // in mC
 
     // efficiencies (assume 1 for now)
