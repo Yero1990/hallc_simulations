@@ -656,9 +656,10 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 #axs.set_ylabel(ylabel)
                 #axs.set_xlabel(xlabel)
 
-                #axs.set_yscale('log')
+                
 
                 #axs.legend(fontsize=12)
+                #axs.set_yscale('log')
                 axs.xaxis.set_tick_params(labelbottom=True)
                 plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0), useMathText=True)
                 axs.yaxis.offsetText.set_fontsize(18)
@@ -668,8 +669,8 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 #plt.axvline(x = -0.005, color = 'r', linestyle = '--', linewidth=2)
                 #plt.axvline(x = 0.03, color = 'r', linestyle = '--', linewidth=2)
 
-                #plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
-                #plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
+                plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
+                plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
 
 
                 '''
@@ -1127,7 +1128,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
                         ax.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=4, linestyle='None', label=r'%.1f GeV$^{2}$'%(jq2)) #//, label=r'%d counts'%(cnts))
                         plt.axhline(y = 0.20, color = 'r', linestyle = '--')
                         plt.axhline(y = -0.20, color = 'r', linestyle = '--')
-                        plt.xlim(0.2, 0.6)
+                        plt.xlim(0.15, 0.72)
                         plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                         jdx = jdx+1
             plt.legend(frameon=False, loc='upper right')
@@ -1168,7 +1169,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
 
 
 
-
+    '''
     # plotting dilution factor into subplots binned in thrq 
     fig, ax = plt.subplots(3, 3)
     fig.set_size_inches(10,10, forward=True)
@@ -1178,9 +1179,9 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     plt.suptitle(subplot_title, fontsize=15);
     plt.tight_layout()
     #------------------------------------------------------
-   
+    '''
     # h2 -> 2d histo (not related to hydrogrn)
-    h2_hist_basename = 'H_Pm_vs_thrq_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name
+    h2_hist_basename = 'H_Pm_vs_thrq_dil_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name
 
     d2_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/d2_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
     he4_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/he4_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
@@ -1213,7 +1214,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     for idx, xbin in enumerate( xbc ):
 
         # plotting dilution factor into subplots binned in thrq 
-        ax = plt.subplot(3, 3, jdx+1)
+        #ax = plt.subplot(3, 3, jdx+1)
 
         
         d2_count_per_xbin     = df_d2.zcont[df_d2.x0==xbin]
@@ -1263,16 +1264,13 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
             pm_max = ma.max(ma.masked_where(ma.getmask(dilution), ybc) )
             
             
-            # do interpolation
-            #x_interp = np.linspace(min(ybc), max(ybc), num=100)
-            #y_interp = np.interp(x_interp, ybc, dilution, right=-999)
-            
+            # do interpolation        
             f = interp1d(ybc, dilution, kind='linear', bounds_error=True)
             x_interp = np.linspace(pm_min, pm_max, num=100)
             y_interp = f(x_interp)
             
             
-            '''
+            
             # -- plotting option: overlay dilution factors for all thrq_bins ---
             fig = plt.subplot()
             
@@ -1283,7 +1281,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
             plt.xlim(0, 0.65)
             plt.legend(fontsize=12, loc='lower right')
             #--------------------------------------------------------------------
-            '''
+            
             
             # loop over y-bins (pm_bins) to write to file
             for ipm, ybin in enumerate( ybc ):
@@ -1291,7 +1289,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
                 ofile.write("%.1f,%.3f,%.1f,%.3f,%.1f,%.3f,%.1f,%.3f,%.3f,%.3f\n" % (xbin, ybin, x[ipm], sigx[ipm], y[ipm], sigy[ipm], z[ipm], sigz[ipm], dilution[ipm], dilution_err[ipm] ))
 
 
-            
+            '''
             # plot interpolated function
             ax.plot(x_interp,  y_interp, marker='None', alpha=0.9, linestyle='--', color='r')
 
@@ -1304,7 +1302,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
             plt.yticks(fontsize = 18)
             plt.ylim(0.,1.0)
             plt.xlim(0, 0.65)
-            
+            '''
             jdx = jdx+1
        
     ofile.close()
@@ -1544,7 +1542,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                         ax.errorbar(ybc_m, y_const_m, count_per_xbin_rel_err_m, marker='o', markersize=8,  alpha=0.4, elinewidth=2, color=clr[i], linestyle='None', label=r'%s'%(itgt)) #//, label=r'%d counts'%(cnts))
                         plt.axhline(y = 0.20, color = 'r', linestyle = '--')
                         plt.axhline(y = -0.20, color = 'r', linestyle = '--')
-                        plt.xlim(0.2, 0.6)
+                        plt.xlim(0.15, 0.65)
                         plt.xticks(fontsize = 14)
                         plt.yticks(fontsize = 14)
                         plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
@@ -1721,11 +1719,10 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 
 # electron kinematics
-
-overlay_d2pol(tgt_set, pm_set, q2_set, 'nu',     'fsi', field,  scale)   # energy transfer
-overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj',    'fsi', field,  scale)  # x-bjorken
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'q',      'fsi', field,  scale)    # 3-momentum (q) transfer
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'nu',     'fsi', field,  scale)   # energy transfer
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj',    'fsi', field,  scale)  # x-bjorken
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'q',      'fsi', field,  scale)    # 3-momentum (q) transfer
 
 
 
@@ -1744,27 +1741,26 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'q',      'fsi', field,  scale)    # 3-mo
 # ----- plot acceptance variables ----
 
 # reconstructed variables
-'''
-overlay_d2pol(tgt_set, pm_set, q2_set, 'exptar', 'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'eyptar', 'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'eytar',  'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta', 'fsi', field, scale)
 
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hxptar', 'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hyptar', 'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hytar',  'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
-'''
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'exptar', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'eyptar', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'eytar',  'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta', 'fsi', field, scale)
+
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'hxptar', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'hyptar', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'hytar',  'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
 
 # acceptance correlations
-'''
-make_projY_d2pol('hXColl_vs_hYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')
-make_projY_d2pol('eXColl_vs_eYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')
 
-make_projY_d2pol('hxptar_vs_exptar',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
-make_projY_d2pol('hyptar_vs_eyptar',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
-make_projY_d2pol('hdelta_vs_edelta',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
-'''
+#make_projY_d2pol('hXColl_vs_hYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('eXColl_vs_eYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+
+#make_projY_d2pol('hxptar_vs_exptar',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('hyptar_vs_eyptar',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('hdelta_vs_edelta',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+
 
 
 # focal plane
@@ -1778,7 +1774,7 @@ make_projY_d2pol('hdelta_vs_edelta',     ['d2'], pm_set, 2.5, 'fsi', field, '2d'
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 1)
 
-#calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=4)
+calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=4)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 
 #overlay_dilution()
