@@ -1691,7 +1691,7 @@ field = 'fieldON'
 
 
 
-scale = 1 # in multiple of weeks ( defaults to scale=1 - 1 week, if scale = 2 -> 2 weeks, . . . )
+scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 -> 4 weeks, . . . )
 
 # ----- plot the kinematics variables in which a cut is used (without the self cut, ie nsc or no self cut) -----
 
@@ -1722,12 +1722,12 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- ang
 '''
 
 # electron kinematics
-'''
+
 overlay_d2pol(tgt_set, pm_set, q2_set, 'nu',     'fsi', field,  scale)   # energy transfer
 overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj',    'fsi', field,  scale)  # x-bjorken
 overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
 overlay_d2pol(tgt_set, pm_set, q2_set, 'q',      'fsi', field,  scale)    # 3-momentum (q) transfer
-'''
+
 
 
 # missing variables
@@ -1779,7 +1779,7 @@ make_projY_d2pol('hdelta_vs_edelta',     ['d2'], pm_set, 2.5, 'fsi', field, '2d'
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 1)
 
-#calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=4)
+calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=4)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 
 #overlay_dilution()

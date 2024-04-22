@@ -93,8 +93,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   
   using namespace std;
   
-  //TString analysis_flag="d2pol";  // "d2pol" or "d2fsi" 
-  TString analysis_flag="d2fsi";  // "d2pol" or "d2fsi" 
+  TString analysis_flag="d2pol";  // "d2pol" or "d2fsi" 
+  //TString analysis_flag="d2fsi";  // "d2pol" or "d2fsi" 
   
   Bool_t debug = true;
   
@@ -647,6 +647,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     
     //2D Pm vs. thrq (for cross section calculation)
     TH2F *H_Pm_vs_thrq       = new TH2F("H_Pm_vs_thrq",      "Pm vs. #theta_{rq} (yield); in-plane angle, #theta_{rq} [deg]; missing momentum, P_{m} [GeV/c]", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
+    TH2F *H_Pm_vs_thrq_dil   = new TH2F("H_Pm_vs_thrq_dil",      "Pm vs. #theta_{rq} (yield); in-plane angle, #theta_{rq} [deg]; missing momentum, P_{m} [GeV/c]", thrq_nbins, thrq_xmin, thrq_xmax, 60, Pm_xmin, Pm_xmax); // finer bins for d2pol dilution calc.
+
     TH2F *H_Pm_vs_thrq_ps    = new TH2F("H_Pm_vs_thrq_ps",   "Pm vs. #theta_{rq} (phase space); in-plane angle, #theta_{rq} [deg]; missing momentum, P_{m} [GeV/c]", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
     TH2F *H_Pm_vs_thrq_xsec  = new TH2F("H_Pm_vs_thrq_xsec", "Pm vs. #theta_{rq} (xsec); in-plane angle, #theta_{rq} [deg]; missing momentum, P_{m} [GeV/c]", thrq_nbins, thrq_xmin, thrq_xmax, Pm_nbins, Pm_xmin, Pm_xmax);
     
@@ -711,6 +713,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     kin_HList->Add( H_cphi_pq  );
     
     kin_HList->Add( H_Pm_vs_thrq );
+    kin_HList->Add( H_Pm_vs_thrq_dil );
     kin_HList->Add( H_Pm_vs_thrq_ps );
     kin_HList->Add( H_Pm_vs_thrq_xsec );
 
@@ -1727,7 +1730,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       //once they are filled, then divide H_[]_2Davg / H_Pm_vs_thrq_v
 	
       //--------------------------------------------------------------
-      
+      H_Pm_vs_thrq_dil->Fill(th_rq, Pm, FullWeight);
+
       // This is for the 2D cross section Pm vs. thrq binned in thrq 
       H_Pm_vs_thrq->Fill(th_rq, Pm, FullWeight);
       H_Pm_vs_thrq_ps->Fill(th_rq, Pm, PhaseSpace);
