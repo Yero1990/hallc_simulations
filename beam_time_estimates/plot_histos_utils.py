@@ -1272,8 +1272,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
             
             
             # -- plotting option: overlay dilution factors for all thrq_bins ---
-            fig = plt.subplot()
-            
+            fig= plt.subplot()
             plt.plot(x_interp,  y_interp, marker='None', linestyle='--', label=r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.) )
             plt.xticks(fontsize = 22)
             plt.yticks(fontsize = 22)
