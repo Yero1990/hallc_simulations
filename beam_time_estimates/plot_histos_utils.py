@@ -1385,7 +1385,6 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
     
     '''
     
-    #histos_file_path = 'yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s/'%(pm_user, thrq_user, model)
 
     rel_err_thrs = 0.5 # mask >30 % relative error
 
@@ -1393,6 +1392,42 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
     
     ifig = 1 # counter for 2d histogram figures
 
+
+    # define collimator polygon shape (for plotting contour lines) 
+    shms_hsize = 8.5
+    shms_vsize = 12.5
+    
+    hms_hsize = 4.575
+    hms_vsize = 11.646
+    
+    
+    coord_shms = [[  shms_hsize,     shms_vsize/2.],
+                  [  shms_hsize/2.,  shms_vsize   ],
+                  [ -shms_hsize/2.,  shms_vsize   ],
+                  [ -shms_hsize,     shms_vsize/2.],
+                  [ -shms_hsize,    -shms_vsize/2.],
+                  [ -shms_hsize/2., -shms_vsize   ],
+                  [  shms_hsize/2., -shms_vsize   ],
+                  [  shms_hsize,    -shms_vsize/2.],
+                  [  shms_hsize,     shms_vsize/2.]]
+    
+    
+    
+    coord_hms = [[  hms_hsize,     hms_vsize/2.],
+                 [  hms_hsize/2.,  hms_vsize   ],
+                 [ -hms_hsize/2.,  hms_vsize   ],
+                 [ -hms_hsize,     hms_vsize/2.],
+                 [ -hms_hsize,    -hms_vsize/2.],
+                 [ -hms_hsize/2., -hms_vsize   ],
+                 [  hms_hsize/2., -hms_vsize   ],
+                 [  hms_hsize,    -hms_vsize/2.],
+                 [  hms_hsize,     hms_vsize/2.]]
+
+
+    coord_shms.append(coord_shms[0])
+    coord_hms.append(coord_hms[0])
+    x_shms, y_shms = zip(*coord_shms)
+    x_hms, y_hms = zip(*coord_hms)
     
     # loop over central pm setting
     for ipm in pm_user:
@@ -1467,9 +1502,14 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                     plt.hist2d(df.x0 ,df.y0, weights=df.zcont, bins=(nxbins, nybins), range=[ [min(df.xlow), max(df.xup)], [min(df.ylow), max(df.yup)]], cmap = 'viridis')
                 else:
                     plt.hist2d(df.x0 ,df.y0, weights=df.zcont, bins=(nxbins, nybins), range=[ [min(df.xlow), max(df.xup)], [min(df.ylow), max(df.yup)]], cmap = 'viridis', norm=mcolors.LogNorm())
+
+                    plt.plot(x_shms,y_shms, color='r', linewidth=2)  # plot shms collimator geometry contour line
+                    # plt.plot(x_hms,y_hms, color='r', linewidth=2)  # plot hms collimator geometry contour line
                     #plt.text(0.6*(df.x0[df.y0==df.y0[0]]).max(), 0.7*(df.y0[df.x0==df.x0[0]]).max(), r"Q$^{2}$=%.1f GeV$^{2}$"%(Q2_user)+"\n"+"$P_{m}$=%d MeV"%(ipm)+"\n"+"(counts = %d)"%(counts)+"\n"+"target: %s"%(itgt), fontsize=12)
 
 
+
+                
                 plt.xlabel(xlabel, fontsize=12)
                 plt.ylabel(ylabel, fontsize=12)
                 plt.title(title,   fontsize=14)
@@ -1759,6 +1799,8 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 #make_projY_d2pol('hxptar_vs_exptar',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
 #make_projY_d2pol('hyptar_vs_eyptar',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
 #make_projY_d2pol('hdelta_vs_edelta',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('Q2_vs_xbj',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('Em_nuc_vs_Pm_nsc',  ['d2'], pm_set, 2.5, 'fsi', field, '2d')
 
 
 
@@ -1773,7 +1815,7 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 1)
 
-calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=4)
+#calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=4)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 
 #overlay_dilution()
