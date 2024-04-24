@@ -65,11 +65,11 @@ paero_xmax = 100.
 # electron arm central angle
 the_nbins = 40
 the_xmin = 5.0
-the_xmax = 10.0
+the_xmax = 15.0
 
 # final electron arm momentum [GeV/c]
 kf_nbins = 40
-kf_xmin = 9.8
+kf_xmin = 9.0
 kf_xmax = 10.8
 
 # invariant mass (assuming proton target mass)
@@ -85,7 +85,7 @@ W2_xmax = 3.0;
 # 4-momentum transfer
 Q2_nbins = 40
 Q2_xmin = 1.
-Q2_xmax = 2.5
+Q2_xmax = 3.5
 
 # Bjorken-X
 X_nbins = 40
@@ -95,7 +95,7 @@ X_xmax = 1.8
 # energy transfer
 nu_nbins = 40
 nu_xmin = 0.5
-nu_xmax = 1.2
+nu_xmax = 1.6
 
 # 3-momentum transfer
 q_nbins = 50
@@ -213,7 +213,7 @@ MM2_xmax = 1.2
 
 # hadron arm central angle
 thx_nbins = 50  
-thx_xmin = 55.
+thx_xmin = 40.
 thx_xmax = 65.
 
 # In-plane angle between detected particle and q 
@@ -260,7 +260,7 @@ thxq_cm_xmax = 360.
 # final hadron arm momentum [GeV/c]
 Pf_nbins = 50
 Pf_xmin = 0.5
-Pf_xmax = 2.0
+Pf_xmax = 2.5
 
 # In-plane angle between the recoil system and q in CM frame
 thrq_cm_nbins = 100

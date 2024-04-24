@@ -34,15 +34,15 @@ def calc_d2_kin():
     #Q2 = 2.9   #4-momentum transfer ( this can be ignorde for now)
 
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 2.5 #2.9
-    Q2_step = 0.01    
-    Q2_max = 2.6 #4.5 + Q2_step   #include endpoint (+Pr_step)
+    Q2_min = 2.0 #2.9
+    Q2_step = 0.005    
+    Q2_max = 3.0 #4.5 + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
-    Pr_min = 0.35
-    Pr_step = 0.01    
-    Pr_max = 0.4 + Pr_step   #include endpoint (+Pr_step)
+    Pr_min = 0.3
+    Pr_step = 0.005    
+    Pr_max = 0.5 + Pr_step   #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
@@ -146,14 +146,14 @@ def calc_d2_kin():
                 if (np.isnan(thp)): continue
 
                 # restrict the proton angle to < 35 deg (allowed by magnet used in polarization)
-                if(thp>=61): continue
-                #if(thp>50): continue
+                if(thp>=55): continue
+                
 
                 # restrict the neutron recoil angle relative to q-vector, theta_rq
-                if(thnq < 10. or thnq > 36): continue
+                if(thnq < 10. or thnq > 40): continue
                 
                 if(th_e<7.5): continue
-                if(th_e>=9.0): continue
+                if(th_e>=15): continue
                 
                 ofile.write("  %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )
                 #ofile.write("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )

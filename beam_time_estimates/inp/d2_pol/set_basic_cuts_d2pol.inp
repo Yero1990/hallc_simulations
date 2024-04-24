@@ -17,8 +17,8 @@ c_Q2_max = 6
 
 # Missing Energy [GeV]
 Em_cut_flag = 1
-c_Em_min = -0.005
-c_Em_max = 0.03
+c_Em_min = -0.01
+c_Em_max = 0.04
 
 
 #------Acceptance Cuts------

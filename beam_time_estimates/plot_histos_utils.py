@@ -1181,7 +1181,8 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     #------------------------------------------------------
     '''
     # h2 -> 2d histo (not related to hydrogrn)
-    h2_hist_basename = 'H_Pm_vs_thrq_dil_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name
+    #h2_hist_basename = 'H_Pm_vs_thrq_dil_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name
+    h2_hist_basename = 'H_Pm_vs_thrq_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name
 
     d2_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/d2_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
     he4_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/he4_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
@@ -1503,7 +1504,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                 else:
                     plt.hist2d(df.x0 ,df.y0, weights=df.zcont, bins=(nxbins, nybins), range=[ [min(df.xlow), max(df.xup)], [min(df.ylow), max(df.yup)]], cmap = 'viridis', norm=mcolors.LogNorm())
 
-                    plt.plot(x_shms,y_shms, color='r', linewidth=2)  # plot shms collimator geometry contour line
+                    #plt.plot(x_shms,y_shms, color='r', linewidth=2)  # plot shms collimator geometry contour line
                     # plt.plot(x_hms,y_hms, color='r', linewidth=2)  # plot hms collimator geometry contour line
                     #plt.text(0.6*(df.x0[df.y0==df.y0[0]]).max(), 0.7*(df.y0[df.x0==df.x0[0]]).max(), r"Q$^{2}$=%.1f GeV$^{2}$"%(Q2_user)+"\n"+"$P_{m}$=%d MeV"%(ipm)+"\n"+"(counts = %d)"%(counts)+"\n"+"target: %s"%(itgt), fontsize=12)
 
@@ -1690,8 +1691,8 @@ overlay_d2fsi([800], thrq_set, 'phi_pq', 'fsi', scale_set)
 #*************************************
 
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
-pm_set = [350]
-q2_set = [2.5]
+pm_set = [300]
+q2_set = [2.9]
 tgt_set = ['d2', 'n14', 'he4' ]
 #tgt_set = ['d2']
 
@@ -1812,10 +1813,10 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 # ------ Pm vs theta_rq yield projections and errors -----
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', '2d', 1)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj', 1)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.9, 'fsi', 'fieldON', 'proj', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.9, 'fsi', 'fieldON', 'proj_err', 1)
 
-#calc_dilution(350, 2.5, 'fsi', 'fieldON', scale=4)
+calc_dilution(300, 2.9, 'fsi', 'fieldON', scale=4)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 
 #overlay_dilution()
