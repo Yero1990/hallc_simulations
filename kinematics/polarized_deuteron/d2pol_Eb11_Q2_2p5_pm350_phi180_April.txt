@@ -1,8 +1,8 @@
 # d(e,e'p)n Central Kinematics Summary
 # Beam Energy (Ei) = 11.000 GeV
-# 4-Momentum Transfer (Q2) = 2.00 - 3.00 GeV (step: 0.01) 
+# 4-Momentum Transfer (Q2) = 1.00 - 3.00 GeV (step: 0.01) 
 # x-Bjorken (xbj) = 1.00 - 2.05 (step: 0.05) 
-# Missing Momentum (Pr) = 0.30 - 0.51 GeV (step: 0.01) 
+# Missing Momentum (Pr) = 0.20 - 0.51 GeV (step: 0.01) 
 # Hadron Out-of-Plane Angle (phi): rotation axis is q-vector 
 # thp = thq + thpq, phi = 180  (q-vector scatters at smaller  angles than proton scattering angle)# 
 # # 
@@ -22,7 +22,3 @@
 # Q2   : 4-Momentum Transfer [GeV^2]  
 # 
 #! Pr[f,0]/ 	  xbj[f,1]/ 	 kf[f,2]/ 	 th_e[f,3]/ 	 Pf[f,4]/ 	 th_p[f,5]/ 	 q[f,6]/ 	 th_q[f,7]/ 	 th_nq[f,8]/ 	 th_pq[f,9]/ 	 Q2[f,10]/
-  0.3000 	 1.4500 	 9.9213 	 9.4066 	 1.7299 	 54.9614 	 2.0245 	 53.2228 	 10.0753 	 1.7385 	 2.9350  <-----
-  0.3050 	 1.4500 	 9.9030 	 9.4954 	 1.7490 	 54.9934 	 2.0466 	 52.9632 	 11.7213 	 2.0302 	 2.9850
-  0.3050 	 1.4500 	 9.9011 	 9.5042 	 1.7511 	 54.9489 	 2.0488 	 52.9374 	 11.6262 	 2.0115 	 2.9900
-  0.3050 	 1.4500 	 9.8993 	 9.5131 	 1.7532 	 54.9045 	 2.0510 	 52.9116 	 11.5305 	 1.9928 	 2.9950
