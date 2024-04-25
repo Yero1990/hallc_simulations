@@ -597,10 +597,15 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
             for iq2 in Q2_set:
                 
                 # set histogram file path
-                #histos_file_path = 'path/to/histogram_data/pm%d_q2%d_%s/histo_name_pm_set_q2_set.txt'%(pm_set, q2_set, model, hist_name)
                 
-                hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, field, hist_name, ipm, iq2)
-                #hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/tightEmiss_Cut/%s_pm%d_Q2_%.1f_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, hist_name, ipm, iq2)
+                #hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, field, hist_name, ipm, iq2)
+
+                # phi = 0 config
+                hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, field, hist_name, ipm, iq2)
+
+
+
+
                 
                 print('tgt_set:', itgt, 'Pm:', ipm, 'Q2:', iq2)
                 
@@ -651,7 +656,7 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 print('min(df.xlow), max(df.xup) --> ', min(df.xlow), max(df.xup))
                 print('xbin_center:', xbc)
                 print('bins:', len(xbc))
-                #axs.set_title(title)
+                axs.set_title(title)
                 axs.hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.15, ec='k',  color=clr[i], density=False, label="$P_{m}$=%d MeV"%(ipm)+"\n"+ "$Q^{2}$=%.1f GeV$^{2}$ (%d)"%(iq2, counts)+"\n"+"%s"%(itgt))
                 #axs.set_ylabel(ylabel)
                 #axs.set_xlabel(xlabel)
@@ -669,8 +674,8 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 #plt.axvline(x = -0.005, color = 'r', linestyle = '--', linewidth=2)
                 #plt.axvline(x = 0.03, color = 'r', linestyle = '--', linewidth=2)
 
-                plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
-                plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
+                #plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
+                #plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
 
 
                 '''
@@ -1466,9 +1471,12 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
             
             # set histo base name and file path
             h2_hist_basename = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(h2_hist_name, ipm, Q2_user)   # generic histogram name
-            #hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, Q2_user, model, h2_hist_basename)             #original kinematics
-            hist_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s_%s/%s'%(itgt, ipm, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
+            #hist_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s_%s/%s'%(itgt, ipm, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
 
+            # phi = 0 config
+            hist_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/%s_pm%d_Q2_%.1f_%s_%s/%s'%(itgt, ipm, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
+
+            
             print('hist_file_path:', hist_file_path)
             # check if file exists, else continue reading next file
             if not os.path.isfile(hist_file_path): continue
@@ -1691,42 +1699,12 @@ overlay_d2fsi([800], thrq_set, 'phi_pq', 'fsi', scale_set)
 #*************************************
 
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
-pm_set = [300]
-q2_set = [2.9]
-tgt_set = ['d2', 'n14', 'he4' ]
-#tgt_set = ['d2']
+pm_set = [400]
+q2_set = [2.0]
+#tgt_set = ['d2', 'n14', 'he4' ]
+tgt_set = ['d2']
 
 field = 'fieldON'
-
-# plot evenrt rates, daq rates, per setting
-#plot_rates()
-
-
-# ----- combine multiple kin. settings (of the same target) -------- 
-#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'proj')
-#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'n14', 'Pm_vs_thrq', 'fsi', 'proj_err')
-
-#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'd2', 'Pm_vs_thrq', 'fsi', 'tot_proj')
-#combine_sets([[300, 3.5, 1], [400, 3.5, 3]], 'd2', 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
-
-
-
-
-#  ----- combine multiple kin. settings (of multiple targets or same target) (NEEDS TO BE FIXED)
-#combine_sets_alt([[300, 1, 'd2'], [400, 3, 'd2']], 3.5, 'Pm_vs_thrq', 'fsi', 'proj')   # same target
-#combine_sets_alt([[300, 1, 'd2'], [400, 3, 'd2']], 3.5, 'Pm_vs_thrq', 'fsi', 'proj_err')   # same target
-
-#combine_sets_alt([[300, 1, 'd2'], [400, 3, 'd2']], 3.5, 'Pm_vs_thrq', 'fsi', 'tot_proj')
-#combine_sets_alt([[300, 1, 'd2'], [400, 3, 'd2']], 3.5, 'Pm_vs_thrq', 'fsi', 'tot_proj_err')
-
-
-
-#combine_sets_alt([[300, 1, 'n14'], [300, 1, 'd2'], [300, 1, 'he4']], 3.5, 'Pm_vs_thrq', 'fsi', 'proj')
-
-#combine_sets([[300, 1, 'n14'], [300, 1, 'd2'], [300, 1, 'he4']], 3.5, 'Pm_vs_thrq', 'fsi', 'proj_err')
-
-#combine_sets([[300, 1, 'n14'], [400, 1, 'n14']], 3.5, 'Pm_vs_thrq', 'fsi', 'proj')
-
 
 
 scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 -> 4 weeks, . . . )
@@ -1744,23 +1722,23 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 # ------ plot kinematic variables -----
 # no self-cut 
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', field, scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', field, scale)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi', field, scale)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
 
 
 
 # spectrometer kinematics
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proton momentum
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'kf',     'fsi', field,  scale)   # e- momentum
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- angle
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proton momentum
+overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
+overlay_d2pol(tgt_set, pm_set, q2_set, 'kf',     'fsi', field,  scale)   # e- momentum
+overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- angle
 
 
 # electron kinematics
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'nu',     'fsi', field,  scale)   # energy transfer
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj',    'fsi', field,  scale)  # x-bjorken
+overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj',    'fsi', field,  scale)  # x-bjorken
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'q',      'fsi', field,  scale)    # 3-momentum (q) transfer
 
@@ -1773,7 +1751,7 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 # angle distributions
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'thq',    'fsi', field,  scale)  # 3-momentum (q) angle
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'thpq',   'fsi', field,  scale)    # in-plane angle between (proton,q)
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq',   'fsi', field,  scale)    # in-plane angle between (recoil,q)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq',   'fsi', field,  scale)    # in-plane angle between (recoil,q)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'phi_pq', 'fsi', field,  scale)  # out-of-plane angle between (proton, q)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq' 'fsi', field,  scale)
 
@@ -1813,10 +1791,10 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 # ------ Pm vs theta_rq yield projections and errors -----
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', '2d', 1)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.9, 'fsi', 'fieldON', 'proj', 1)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.9, 'fsi', 'fieldON', 'proj_err', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
 
-calc_dilution(300, 2.9, 'fsi', 'fieldON', scale=4)
+#calc_dilution(300, 2.9, 'fsi', 'fieldON', scale=4)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 
 #overlay_dilution()

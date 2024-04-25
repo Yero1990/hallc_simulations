@@ -227,16 +227,16 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     input_HBinFileName = "inp/d2_pol/set_basic_histos_d2pol.inp";
     
     //Define File Name Patterns
-    simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/%s.data",    basename.Data());
-    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s/%s.root",  field_config.Data(),                    basename.Data());
+    simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi0/%s.data",    basename.Data());
+    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s/phi0/%s.root",  field_config.Data(),                    basename.Data());
 
-    simc_OutputFileName = Form("worksim/d2_pol/smallFSI/optimized/analyzed/%s_output.root",          basename.Data());
+    simc_OutputFileName = Form("worksim/d2_pol/smallFSI/optimized/analyzed/%s_phi0_output.root",          basename.Data());
     
     // define output file to write the rates
-    output_file = "yield_estimates/d2_pol/smallFSI/optimized/output_rates_d2pol_optim.txt";
+    output_file = "yield_estimates/d2_pol/smallFSI/optimized/output_rates_d2pol_phi0_optim.txt";
     
     // define output directory where numerical histogram .txt will be placed
-    output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s_%s", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data());
+    output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/%s_pm%d_Q2_%.1f_%s_%s", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data());
    
     
     if (debug) {
