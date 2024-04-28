@@ -63,12 +63,12 @@ paero_xmax = 100.
 # Units | spec. angle: deg,  energy: GeV
 
 # electron arm central angle
-the_nbins = 60
+the_nbins = 100
 the_xmin = 10.0
 the_xmax = 25.0
 
 # final electron arm momentum [GeV/c]
-kf_nbins = 60
+kf_nbins = 100
 kf_xmin = 4.
 kf_xmax = 12.
 
@@ -83,9 +83,9 @@ W2_xmin = 0.1
 W2_xmax = 3.0;
 
 # 4-momentum transfer
-Q2_nbins = 60
+Q2_nbins = 100
 Q2_xmin = 0
-Q2_xmax = 12
+Q2_xmax = 8
 
 # Bjorken-X
 X_nbins = 60
@@ -93,22 +93,22 @@ X_xmin = 0.3
 X_xmax = 2.
 
 # energy transfer
-nu_nbins = 60
+nu_nbins = 90
 nu_xmin = 1.
-nu_xmax = 10
+nu_xmax = 6
 
 # 3-momentum transfer
-q_nbins = 60
+q_nbins = 90
 q_xmin = 2.
 q_xmax = 10
 
 # 3-momentum transfer (x-component)
-qx_nbins = 100
+qx_nbins = 90
 qx_xmin = 0.
 qx_xmax = 10.
 
 # 3-momentum transfer (y-component)
-qy_nbins = 100
+qy_nbins = 90
 qy_xmin = 0.
 qy_xmax = 10.
 
@@ -118,7 +118,7 @@ qz_xmin = 0.
 qz_xmax = 10.
 
 # in-plane angle between q-vector and +z (beam)
-thq_nbins = 80
+thq_nbins = 90
 thq_xmin = 10.
 thq_xmax = 70.
 
@@ -244,9 +244,9 @@ thxq_cm_xmin = 0.
 thxq_cm_xmax = 360.
 
 # final hadron arm momentum [GeV/c]
-Pf_nbins = 60
+Pf_nbins = 100
 Pf_xmin = 1.
-Pf_xmax = 10.
+Pf_xmax = 5.
 
 # In-plane angle between the recoil system and q in CM frame
 thrq_cm_nbins = 100

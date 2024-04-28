@@ -537,7 +537,7 @@ def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=[1,1,1]):
 
             #plt.errorbar(x, N, Nerr, linestyle='None', marker='o', mec='k', label=r"$\theta_{nq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
 
-            plt.legend()
+            #plt.legend()
             #plt.xlabel(xlabel, fontsize=18)
             #plt.ylabel(ylabel, fontsize=18)
             plt.xticks(fontsize = 22)
@@ -556,6 +556,15 @@ def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=[1,1,1]):
             #plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
             #plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
 
+            # shms delta
+            plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
+            plt.axvline(x = 22, color = 'r', linestyle = '--', linewidth=2)
+
+            # Q2
+            #plt.axvline(x = 4, color = 'r', linestyle = '--', linewidth=2)
+            #plt.axvline(x = 5, color = 'r', linestyle = '--', linewidth=2)
+
+            
 
             
             idx = idx + 1
@@ -903,7 +912,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
         #fig, ax = plt.subplots(5, 8, sharex='col', sharey='row')
         # fig, ax = plt.subplots(5, 8) #original
 
-        fig, ax = plt.subplots(4, 3)  # only pm ~520 - 960 (12 plots)
+        #fig, ax = plt.subplots(4, 3)  # only pm ~520 - 960 (12 plots)
+        fig, ax = plt.subplots(3, 3)  # only pm = 500 setting (9 plots)
         
         #fig.text(0.5, 0.01, r'Recoil Angle $\theta_{nq}$ [deg]', ha='center', fontsize=12)
         #fig.text(0.01, 0.5, r'R = FSI / PWIA', va='center', rotation='vertical', fontsize=12)
@@ -977,14 +987,19 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
             for idx, pm_bin in enumerate(pm_bins):
 
                 print('idx_plot', idx_plot)
-                if pm_bin<0.520 or pm_bin>0.960: continue
-                                
+                #if pm_bin<0.520 or pm_bin>0.960: continue  # only for 12 plots (for pm=800 setting)
+
+                if pm_bin<=0.160 or pm_bin>0.520:  continue  # only for pm=500 setting
+
+                
                 if plot_flag=='ratio':
                 
                     # ---- plot ratio fsi/pwia -----
                     # ax = plt.subplot(5, 8, idx+1) original
-                    ax = plt.subplot(4, 3, idx_plot+1)
+                    #ax = plt.subplot(4, 3, idx_plot+1)  # pm=800
+                    ax = plt.subplot(3, 3, idx_plot+1)  # pm=500
 
+                    
                     ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
                     ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=16)
                     plt.axhline(1, linestyle='--', color='gray')
@@ -992,7 +1007,16 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     ax.set_ylim(0,4.5)
                     plt.xticks(fontsize = 16)
                     plt.yticks(fontsize = 16)
-                
+
+                    # limit the number of ticks
+                    max_xticks = 4
+                    max_yticks = 4
+                    xloc = plt.MaxNLocator(max_xticks)
+                    yloc = plt.MaxNLocator(max_yticks)
+                    ax.xaxis.set_major_locator(xloc)
+                    ax.yaxis.set_major_locator(yloc)
+
+                    
                 idx_plot = idx_plot+1
    
     plt.tight_layout()
@@ -1789,32 +1813,25 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 # overlay_d2fsi([800], [28, 49, 55], 'thrq', 'fsi')
 
 
-
-#*************************************
-#
-# POLARIZED DEUTERON PROPOSAL PLOTS  *
-#
-#*************************************
-
-
-
 #*************************************
 #
 # D2 FSI STUDIES PROPOSAL PLOTS  *
 #
 #*************************************
 
-#thrq_set = [49, 60, 72]
-#scale_set = [200, 144, 160]
-
+# pm=800 setting scale is in hours
+#           blue, orange, green 
 thrq_set =  [72,  60,  49]
 scale_set = [160, 144, 200]  # hrs
+
+# pm=500 setting scale is in hours
+#thrq_set =  [70]
+#scale_set = [12]  # hrs
 
 
 #scale_set = [1, 1, 1]
 
 # spectrometer kinematics
-
 #overlay_d2fsi([800], thrq_set, 'Pf',  'fsi', scale_set)
 #overlay_d2fsi([800], thrq_set, 'thp', 'fsi', scale_set)
 #overlay_d2fsi([800], thrq_set, 'kf',  'fsi', scale_set)
@@ -1822,7 +1839,6 @@ scale_set = [160, 144, 200]  # hrs
 
 
 # electron kinematics
-
 #overlay_d2fsi([800], thrq_set, 'nu',      'fsi', scale_set)
 #overlay_d2fsi([800], thrq_set, 'xbj',     'fsi', scale_set)
 #overlay_d2fsi([800], thrq_set, 'Q2_nsc',  'fsi', scale_set)
@@ -1840,9 +1856,13 @@ scale_set = [160, 144, 200]  # hrs
 #overlay_d2fsi([800], thrq_set, 'thrq',   'fsi', scale_set)
 #overlay_d2fsi([800], thrq_set, 'phi_pq', 'fsi', scale_set)
 
-
+#===================
 # plot yield ratio
+#===================
 #make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  # scale represent hrs
+#make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
+
+
 
 # plot 2d correlations
 #make_projY_d2fsi('hXColl_vs_hYColl_nsc',[800], [72], 'fsi', '2d', [160])
@@ -1859,13 +1879,15 @@ scale_set = [160, 144, 200]  # hrs
 
 #overlay_d2fsi([800], [72, 60, 49], 'Q2_nsc', 'fsi', scale=[1,1,1])
 #overlay_d2fsi([800], [72, 60, 49], 'Em_nuc_nsc', 'fsi', scale=[1,1,1])
-#overlay_d2fsi([800], [72, 60, 49], 'edelta_nsc', 'fsi',  scale=1)
-#overlay_d2fsi([800], [72, 60, 49], 'hdelta_nsc', 'fsi', scale=[1,1,1])
+
 #overlay_d2fsi([500], [70], 'Pm', 'fsi', scale=[12])
 #overlay_d2fsi([800], [72, 60, 49], 'Pm', 'fsi', scale=[120,132,240])
 
-#make_1d_Xprojections('hXColl_vs_hYColl_nsc', 800, 60, 'fsi')
-#make_1d_Xprojections('eXColl_vs_eYColl_nsc', 800, 60, 'fsi')
+# acceptance
+#overlay_d2fsi([800], thrq_set, 'edelta_nsc', 'fsi',  scale_set)
+#overlay_d2fsi([800], thrq_set, 'hdelta_nsc', 'fsi', scale_set)
+#make_projY_d2fsi('hXColl_vs_hYColl_nsc',[800], [72], 'fsi', '2d', [160])
+#make_projY_d2fsi('eXColl_vs_eYColl_nsc',[800], [72], 'fsi', '2d', [160])
 
 
 
