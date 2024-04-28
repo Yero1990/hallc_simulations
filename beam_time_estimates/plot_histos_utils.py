@@ -656,7 +656,7 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 print('min(df.xlow), max(df.xup) --> ', min(df.xlow), max(df.xup))
                 print('xbin_center:', xbc)
                 print('bins:', len(xbc))
-                axs.set_title(title)
+                #axs.set_title(title)
                 axs.hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.15, ec='k',  color=clr[i], density=False, label="$P_{m}$=%d MeV"%(ipm)+"\n"+ "$Q^{2}$=%.1f GeV$^{2}$ (%d)"%(iq2, counts)+"\n"+"%s"%(itgt))
                 #axs.set_ylabel(ylabel)
                 #axs.set_xlabel(xlabel)
@@ -671,12 +671,19 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 plt.xticks(fontsize = 22)
                 plt.yticks(fontsize = 22)
 
-                # To specify the number of ticks on both or any single axes
-                plt.locator_params(axis='y')
-                plt.locator_params(axis='x')
+                #plt.ylim(1e-1, 5e5)
 
-                #plt.axvline(x = -0.005, color = 'r', linestyle = '--', linewidth=2)
-                #plt.axvline(x = 0.03, color = 'r', linestyle = '--', linewidth=2)
+                # To specify the number of ticks on both or any single axes
+                nxbins = len(xbc)
+
+                #plt.locator_params(axis='y')
+                #plt.locator_params(axis='x', tight=True)
+                max_xticks = 6
+                xloc = plt.MaxNLocator(max_xticks)
+                axs.xaxis.set_major_locator(xloc)
+
+                #plt.axvline(x = -0.01, color = 'r', linestyle = '--', linewidth=2)
+                #plt.axvline(x = 0.04, color = 'r', linestyle = '--', linewidth=2)
 
                 #plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
                 #plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
@@ -1195,8 +1202,8 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     '''
     
     # h2 -> 2d histo (not related to hydrogrn)
-    #h2_hist_basename = 'H_Pm_vs_thrq_dil_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name  (finer bins)
-    h2_hist_basename = 'H_Pm_vs_thrq_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name (coarser bins)
+    h2_hist_basename = 'H_Pm_vs_thrq_dil_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name  (finer bins)
+    #h2_hist_basename = 'H_Pm_vs_thrq_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name (coarser bins)
     
     d2_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/d2_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
     he4_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/he4_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
@@ -1298,11 +1305,11 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
             # uncomment if plotting overlay for all thrq_bins 
             fig= plt.subplot()
             plt.plot(x_interp,  y_interp, marker='None', linestyle='--', label=r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.) )
-            plt.xticks(fontsize = 22)
-            plt.yticks(fontsize = 22)
+            plt.xticks([0.0, 0.2, 0.4, 0.6], fontsize = 32)
+            plt.yticks(fontsize = 32)
             plt.ylim(0, 1.0)
             plt.xlim(0, 0.65)
-            plt.legend(fontsize=12, loc='lower right')
+            plt.legend(fontsize=16, loc='lower right')
             #--------------------------------------------------------------------
             
             
@@ -1313,6 +1320,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
 
 
             '''
+            #uncomment if plotting individual subplots
             # plot interpolated function
             ax.plot(x_interp,  y_interp, marker='None', alpha=0.9, linestyle='--', color='r')
 
@@ -1721,7 +1729,7 @@ overlay_d2fsi([800], thrq_set, 'phi_pq', 'fsi', scale_set)
 pm_set = [400]
 q2_set = [2.0]
 tgt_set = ['d2', 'n14', 'he4' ]
-#tgt_set = ['d2']
+#tgt_set = ['n14']
 
 field = 'fieldON'
 
@@ -1749,10 +1757,10 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 
 # spectrometer kinematics
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proton momentum
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
-overlay_d2pol(tgt_set, pm_set, q2_set, 'kf',     'fsi', field,  scale)   # e- momentum
-overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- angle
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proton momentum
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'kf',     'fsi', field,  scale)   # e- momentum
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- angle
 
 
 # electron kinematics
@@ -1797,8 +1805,8 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- ang
 #make_projY_d2pol('hxptar_vs_exptar',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
 #make_projY_d2pol('hyptar_vs_eyptar',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
 #make_projY_d2pol('hdelta_vs_edelta',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
-#make_projY_d2pol('Q2_vs_xbj',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
-#make_projY_d2pol('Em_nuc_vs_Pm_nsc',  ['d2'], pm_set, 2.5, 'fsi', field, '2d')
+make_projY_d2pol('Q2_vs_xbj',     ['d2'], pm_set, 2.0, 'fsi', field, '2d')
+make_projY_d2pol('Em_nuc_vs_Pm_nsc',  ['d2'], pm_set, 2.0, 'fsi', field, '2d')
 
 
 
