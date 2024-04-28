@@ -1248,7 +1248,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
 
   if( analysis_flag == "d2pol") {
     Ib = 0.085;         // beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC (0.1 uA -> 100 nA)
-    time = 168.0*2;     // estimated time (in hours) a run takes (start - end) of run (2 weeks)
+    time = 336.;     // estimated time (in hours) a run takes (start - end) of run (2 weeks)
     charge_factor = Ib * time * 3600. / 1000.; // in mC
 
     // efficiencies (assume 1 for now)
@@ -1275,7 +1275,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       tgt_name = "n14";
       
       // re-define output directory (as Nitrogen-14) where numerical histogram .txt will be placed
-      output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s_%s", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data());
+      //output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s_%s", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data());
+      output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/%s_pm%d_Q2_%.1f_%s_%s", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data());
 
       
       scale_T     = get_nuclT(14) / get_nuclT(12);  // transparency scaling
