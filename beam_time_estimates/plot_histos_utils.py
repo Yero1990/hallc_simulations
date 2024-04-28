@@ -664,9 +664,9 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 
 
                 #axs.legend(fontsize=12)
-                axs.set_yscale('log')
+                #axs.set_yscale('log')
                 axs.xaxis.set_tick_params(labelbottom=True)
-                #plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0), useMathText=True)  # comment out if using log
+                plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0), useMathText=True)  # comment out if using log
                 axs.yaxis.offsetText.set_fontsize(18)
                 plt.xticks(fontsize = 22)
                 plt.yticks(fontsize = 22)
@@ -678,15 +678,15 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
 
                 #plt.locator_params(axis='y')
                 #plt.locator_params(axis='x', tight=True)
-                max_xticks = 6
+                max_xticks = 7
                 xloc = plt.MaxNLocator(max_xticks)
                 axs.xaxis.set_major_locator(xloc)
 
                 #plt.axvline(x = -0.01, color = 'r', linestyle = '--', linewidth=2)
                 #plt.axvline(x = 0.04, color = 'r', linestyle = '--', linewidth=2)
 
-                #plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
-                #plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
+                plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
+                plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
 
 
                 '''
@@ -1540,7 +1540,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                     plt.hist2d(df.x0 ,df.y0, weights=df.zcont, bins=(nxbins, nybins), range=[ [min(df.xlow), max(df.xup)], [min(df.ylow), max(df.yup)]], cmap = 'viridis', norm=mcolors.LogNorm())
 
                     #plt.plot(x_shms,y_shms, color='r', linewidth=2)  # plot shms collimator geometry contour line
-                    # plt.plot(x_hms,y_hms, color='r', linewidth=2)  # plot hms collimator geometry contour line
+                    #plt.plot(x_hms,y_hms, color='r', linewidth=2)  # plot hms collimator geometry contour line
                     #plt.text(0.6*(df.x0[df.y0==df.y0[0]]).max(), 0.7*(df.y0[df.x0==df.x0[0]]).max(), r"Q$^{2}$=%.1f GeV$^{2}$"%(Q2_user)+"\n"+"$P_{m}$=%d MeV"%(ipm)+"\n"+"(counts = %d)"%(counts)+"\n"+"target: %s"%(itgt), fontsize=12)
 
 
@@ -1743,8 +1743,8 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 
 #make_projY_d2pol('Em_nuc_vs_Pm_nsc',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
-#make_projY_d2pol('hXColl_vs_hYColl',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
-#make_projY_d2pol('eXColl_vs_eYColl',     tgt_set, pm_set, 2.5, 'fsi', field, '2d')
+#make_projY_d2pol('hXColl_vs_hYColl_nsc',     ['d2'], pm_set, 2.0, 'fsi', field, '2d')
+#make_projY_d2pol('eXColl_vs_eYColl',     ['d2'], pm_set, 2.0, 'fsi', field, '2d')
 
 
 # ------ plot kinematic variables -----
@@ -1805,8 +1805,8 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 #make_projY_d2pol('hxptar_vs_exptar',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
 #make_projY_d2pol('hyptar_vs_eyptar',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
 #make_projY_d2pol('hdelta_vs_edelta',     ['d2'], pm_set, 2.5, 'fsi', field, '2d')
-make_projY_d2pol('Q2_vs_xbj',     ['d2'], pm_set, 2.0, 'fsi', field, '2d')
-make_projY_d2pol('Em_nuc_vs_Pm_nsc',  ['d2'], pm_set, 2.0, 'fsi', field, '2d')
+#make_projY_d2pol('Q2_vs_xbj',     ['d2'], pm_set, 2.0, 'fsi', field, '2d')
+#make_projY_d2pol('Em_nuc_vs_Pm_nsc',  ['d2'], pm_set, 2.0, 'fsi', field, '2d')
 
 
 
@@ -1817,9 +1817,9 @@ make_projY_d2pol('Em_nuc_vs_Pm_nsc',  ['d2'], pm_set, 2.0, 'fsi', field, '2d')
 
 # ------ Pm vs theta_rq yield projections and errors -----
 
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', '2d', 1)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
+make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', '2d', 1)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
 
 #calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=4)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
