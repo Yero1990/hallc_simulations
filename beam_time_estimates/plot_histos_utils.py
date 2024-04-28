@@ -664,12 +664,16 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 
 
                 #axs.legend(fontsize=12)
-                #axs.set_yscale('log')
+                axs.set_yscale('log')
                 axs.xaxis.set_tick_params(labelbottom=True)
-                plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0), useMathText=True)
+                #plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0), useMathText=True)  # comment out if using log
                 axs.yaxis.offsetText.set_fontsize(18)
                 plt.xticks(fontsize = 22)
                 plt.yticks(fontsize = 22)
+
+                # To specify the number of ticks on both or any single axes
+                plt.locator_params(axis='y')
+                plt.locator_params(axis='x')
 
                 #plt.axvline(x = -0.005, color = 'r', linestyle = '--', linewidth=2)
                 #plt.axvline(x = 0.03, color = 'r', linestyle = '--', linewidth=2)
@@ -1745,10 +1749,10 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 
 # spectrometer kinematics
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proton momentum
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'kf',     'fsi', field,  scale)   # e- momentum
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- angle
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proton momentum
+overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
+overlay_d2pol(tgt_set, pm_set, q2_set, 'kf',     'fsi', field,  scale)   # e- momentum
+overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- angle
 
 
 # electron kinematics
@@ -1809,7 +1813,7 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
 
-calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=4)
+#calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=4)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 
 #overlay_dilution()
