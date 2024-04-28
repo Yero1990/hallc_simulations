@@ -13,6 +13,7 @@
 # time: beam-on-target time [hrs] 
 # charge: beam charge [mC] 
 # each of the 3 sets are for hms_delta shifted by: 15, 23, 25 %, respectively in that order (to improved acceptance)
+
 target,pm_set,Q2_set,model,field_config,pm_counts,deep_rates,daq_rates,current,time,charge
 d2,     400,     2.00,    fsi,     fieldON,      503878.1,       4.166E-01,        8.495E-01,        85.000,      336.000,     102.816 
 d2,     400,     2.00,    fsi,     fieldON,      745563.8,       6.164E-01,        1.016E+00,        85.000,      336.000,     102.816 
@@ -25,8 +26,14 @@ he4,     400,     2.00,    fsi,     fieldON,      2425.9,       2.006E-03,      
 n14,     400,     2.00,    fsi,     fieldON,      46326.8,       3.830E-02,        9.533E-02,        85.000,      336.000,     102.816 
 n14,     400,     2.00,    fsi,     fieldON,      70555.8,       5.833E-02,        1.230E-01,        85.000,      336.000,     102.816 
 n14,     400,     2.00,    fsi,     fieldON,      70848.5,       5.857E-02,        1.205E-01,        85.000,      336.000,     102.816 
-d2,     400,     2.00,    fsi,     fieldON,      745563.8,       6.164E-01,        1.016E+00,        85.000,      336.000,     102.816 
-n14,     400,     2.00,    fsi,     fieldON,      70555.8,       5.833E-02,        1.230E-01,        85.000,      336.000,     102.816 
+
+
+d2,      400,     2.00,    fsi,     fieldON,      745563.8,       6.164E-01,        1.016E+00,        85.000,      336.000,     102.816 
 he4,     400,     2.00,    fsi,     fieldON,      2284.2,       1.888E-03,        6.003E-03,        85.000,      336.000,     102.816 
 n14,     400,     2.00,    fsi,     fieldON,      70555.8,       5.833E-02,        1.230E-01,        85.000,      336.000,     102.816 
-n14,     400,     2.00,    fsi,     fieldON,      70555.8,       5.833E-02,        1.230E-01,        85.000,      336.000,     102.816 
+
+
+target   counts   counts/hr     daq rates
+d2	 745,564  2219		1.02
+he4	 2,284	  7		0.006
+n14	 70,556	  210		0.123

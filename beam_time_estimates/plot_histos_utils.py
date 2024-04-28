@@ -205,7 +205,7 @@ def combine_sets(kin_set=[], tgt='', hist_name='', model='', plot_flag=''):
                                 #plot combined settings
                                 ax = plt.subplot(5, 4, jdx+1)
                                 ax.hist(ybc, bins=len(ybc), weights=total_counts, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', color="gray", density=False, label=r'%d counts'%(cnts))
-                                plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                                plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                                 plt.legend(frameon=False, loc='upper right')
                                 jdx = jdx+1
 
@@ -223,7 +223,7 @@ def combine_sets(kin_set=[], tgt='', hist_name='', model='', plot_flag=''):
                                 plt.axhline(y = -0.20, color = 'r', linestyle = '--')
                                 plt.ylim(-0.6,0.6)
                                 plt.xlim(0., 0.7)
-                                plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                                plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                                 jdx = jdx+1
                                 
                     plt.show()
@@ -239,7 +239,7 @@ def combine_sets(kin_set=[], tgt='', hist_name='', model='', plot_flag=''):
                     #plot overlay of settings
                     ax = plt.subplot(4, 3, jdx+1)
                     ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], color=clr[i], alpha=0.5, ec='k', density=False, label=r'%d counts'%(cnts)+"\n"+r"setting:(%d MeV, %.1f GeV$^{2}$)"%(pm, Q2))
-                    plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                    plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                     plt.legend(frameon=False, loc='upper right')
 
                     jdx = jdx+1
@@ -259,7 +259,7 @@ def combine_sets(kin_set=[], tgt='', hist_name='', model='', plot_flag=''):
                     plt.axhline(y = -0.20, color = 'r', linestyle = '--')
                     plt.ylim(-0.6,0.6)
                     plt.xlim(0.0, 0.7)
-                    plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                    plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
 
                     #print('------> relative errors for (pm, Q2):', pm, Q2)
                     #print('rel_err:',  count_per_xbin_rel_err_m,)
@@ -412,7 +412,7 @@ def combine_sets_alt(kin_set=[], Q2 = 0, hist_name='', model='', plot_flag=''):
                                 #plot combined settings
                                 ax = plt.subplot(5, 4, jdx+1)
                                 ax.hist(ybc, bins=len(ybc), weights=total_counts, range=[min(df.ylow), max(df.yup)], alpha=0.5, ec='k', color="gray", density=False, label=r'%d counts'%(cnts))
-                                plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                                plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                                 plt.legend(frameon=False, loc='upper right')
                                 jdx = jdx+1
 
@@ -430,7 +430,7 @@ def combine_sets_alt(kin_set=[], Q2 = 0, hist_name='', model='', plot_flag=''):
                                 plt.axhline(y = -0.20, color = 'r', linestyle = '--')
                                 plt.ylim(-0.6,0.6)
                                 plt.xlim(0., 0.7)
-                                plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                                plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                                 jdx = jdx+1
                                 
                     plt.show()
@@ -446,7 +446,7 @@ def combine_sets_alt(kin_set=[], Q2 = 0, hist_name='', model='', plot_flag=''):
                     #plot overlay of settings
                     ax = plt.subplot(4, 3, jdx+1)
                     ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], color=clr[i], alpha=0.5, ec='k', density=False, label=r'%d counts'%(cnts)+"\n"+r"setting:(%s, %d MeV, %.1f GeV$^{2}$)"%(tgt, pm, Q2))
-                    plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                    plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                     plt.legend(frameon=False, loc='upper right')
 
                     jdx = jdx+1
@@ -466,7 +466,7 @@ def combine_sets_alt(kin_set=[], Q2 = 0, hist_name='', model='', plot_flag=''):
                     plt.axhline(y = -0.20, color = 'r', linestyle = '--')
                     plt.ylim(-0.6,0.6)
                     plt.xlim(0.0, 0.7)
-                    plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                    plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
 
                     #print('------> relative errors for (pm, Q2):', pm, Q2)
                     #print('rel_err:',  count_per_xbin_rel_err_m,)
@@ -531,8 +531,8 @@ def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=[1,1,1]):
 
             idx = idx + 1
             
-            plt.hist(df.x0, bins=len(df.x0), weights=df.ycont, alpha=0.5, ec='k', density=False, label=r"$\theta_{rq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
-            #plt.errorbar(x, N, Nerr, linestyle='None', marker='o', mec='k', label=r"$\theta_{rq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
+            plt.hist(df.x0, bins=len(df.x0), weights=df.ycont, alpha=0.5, ec='k', density=False, label=r"$\theta_{nq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
+            #plt.errorbar(x, N, Nerr, linestyle='None', marker='o', mec='k', label=r"$\theta_{nq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
 
             plt.legend()
             plt.xlabel(xlabel, fontsize=18)
@@ -685,8 +685,8 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 #plt.axvline(x = -0.01, color = 'r', linestyle = '--', linewidth=2)
                 #plt.axvline(x = 0.04, color = 'r', linestyle = '--', linewidth=2)
 
-                plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
-                plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
+                #plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
+                #plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
 
 
                 '''
@@ -820,7 +820,7 @@ def make_all_plots(pm_user, thrq_user, model):
             plt.ylabel(ylabel, fontsize=12)
             plt.title(title,   fontsize=14)
              
-            plt.text(0.6*(df.x0[df.y0==df.y0[0]]).max(), 0.7*(df.y0[df.x0==df.x0[0]]).max(), r"$\theta_{rq}=%d$ deg"%(thrq_user)+"\n"+"$P_{m}$=%d MeV"%(pm_user)+"\n"+"(counts = %d)"%(counts), fontsize=12)
+            plt.text(0.6*(df.x0[df.y0==df.y0[0]]).max(), 0.7*(df.y0[df.x0==df.x0[0]]).max(), r"$\theta_{nq}=%d$ deg"%(thrq_user)+"\n"+"$P_{m}$=%d MeV"%(pm_user)+"\n"+"(counts = %d)"%(counts), fontsize=12)
             plt.colorbar(extend='max')
 
             plt.show()
@@ -841,7 +841,7 @@ def make_all_plots(pm_user, thrq_user, model):
             else:
                 hist2d = plt.hist2d(df.x0 ,df.y0, weights=zcont, bins=(xbins, ybins), range=[ [min(df.xlow), max(df.xup)], [min(df.ylow), max(df.yup)]], cmap = 'viridis')
                 #plt.scatter(df.x0, df.y0, c=zcont, s = 1, cmap = 'viridis', vmin = zcont.min(), vmax = zcont.max())
-            plt.text(0.6*(df.x0[df.y0==df.y0[0]]).max(), 0.7*(df.y0[df.x0==df.x0[0]]).max(), r"$\theta_{rq}=%d$ deg"%(thrq_user)+"\n"+"$P_{m}$=%d MeV"%(pm_user), fontsize=12)
+            plt.text(0.6*(df.x0[df.y0==df.y0[0]]).max(), 0.7*(df.y0[df.x0==df.x0[0]]).max(), r"$\theta_{nq}=%d$ deg"%(thrq_user)+"\n"+"$P_{m}$=%d MeV"%(pm_user), fontsize=12)
             plt.colorbar(extend='max')
             plt.xlabel(xlabel, fontsize=12)
             plt.ylabel(ylabel, fontsize=12)
@@ -861,7 +861,7 @@ def make_all_plots(pm_user, thrq_user, model):
             title  = get_label('title', hist_file) 
 
       
-            plt.hist(df.x0, bins=len(df.xb), weights=df.ycont, range=[min(df.xlow), max(df.xup)], alpha=0.2, density=False, label=r"$\theta_{rq}=%d$ deg"%(thrq_user)+"\n"+"$P_{m}$=%d MeV"%(pm_user)+ "\n"+"(counts = %d)"%(counts))
+            plt.hist(df.x0, bins=len(df.xb), weights=df.ycont, range=[min(df.xlow), max(df.xup)], alpha=0.2, density=False, label=r"$\theta_{nq}=%d$ deg"%(thrq_user)+"\n"+"$P_{m}$=%d MeV"%(pm_user)+ "\n"+"(counts = %d)"%(counts))
             plt.xlabel(xlabel, fontsize=12)
             plt.ylabel(ylabel, fontsize=12)
             plt.title(title,   fontsize=14)
@@ -885,7 +885,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
         # set figure subplots for ratio
         #fig, ax = plt.subplots(5, 8, sharex='col', sharey='row')
         fig, ax = plt.subplots(5, 8)
-        fig.text(0.5, 0.01, r'Recoil Angle $\theta_{rq}$ [deg]', ha='center', fontsize=12)
+        fig.text(0.5, 0.01, r'Recoil Angle $\theta_{nq}$ [deg]', ha='center', fontsize=12)
         fig.text(0.01, 0.5, r'R = FSI / PWIA', va='center', rotation='vertical', fontsize=12)
         subplot_title ='angular distributions FSI/PWIA ratio'   #setting: (%d MeV, %d deg)'%(pm_set, thrq_set)
         plt.suptitle(subplot_title, fontsize=15);
@@ -959,7 +959,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     print('')
                     # ---- plot ratio fsi/pwia -----
                     ax = plt.subplot(5, 8, idx+1)
-                    ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', linestyle='None', ms=5, label=r'$\theta_{rq}=%.1f$ deg'%ithrq)
+                    ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
                     ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=10)
                     plt.axhline(1, linestyle='--', color='gray')
                     ax.set_xlim(20,90)
@@ -1021,7 +1021,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
 
             fig.text(0.5, 0.002, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=12)
             fig.text(0.005, 0.5, 'counts', va='center', rotation='vertical', fontsize=12)
-            subplot_title =  r"p$_{m}$ vs. $\theta_{rq}$ 1d projection (%s), central p$_{m}$ setting: %d MeV"%(model, ipm)
+            subplot_title =  r"p$_{m}$ vs. $\theta_{nq}$ 1d projection (%s), central p$_{m}$ setting: %d MeV"%(model, ipm)
             plt.suptitle(subplot_title, fontsize=15);
             fig.set_size_inches(12,10, forward=True)
         
@@ -1127,7 +1127,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
                         else:
                             ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], ec='k', density=False, label=r'%d counts (%.1f GeV$^{2}$)'%(cnts, jq2))
 
-                        plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                        plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                         plt.legend(frameon=False, loc='upper right')
                         jdx = jdx+1
                         
@@ -1145,7 +1145,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
                         plt.axhline(y = 0.20, color = 'r', linestyle = '--')
                         plt.axhline(y = -0.20, color = 'r', linestyle = '--')
                         plt.xlim(0.15, 0.72)
-                        plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
+                        plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.))
                         jdx = jdx+1
             plt.legend(frameon=False, loc='upper right')
 
@@ -1189,7 +1189,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
 
 
     # if overlay_flag == False:
-    '''
+    
     # uncomment comment for plotting dilution factor into subplots binned in thrq 
     fig, ax = plt.subplots(3, 3)
     fig.set_size_inches(10,10, forward=True)
@@ -1199,7 +1199,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     plt.suptitle(subplot_title, fontsize=15);
     plt.tight_layout()
     #------------------------------------------------------
-    '''
+    
     
     # h2 -> 2d histo (not related to hydrogrn)
     h2_hist_basename = 'H_Pm_vs_thrq_dil_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name  (finer bins)
@@ -1239,7 +1239,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
         if xbin>=110: continue
 
         # uncomment for plotting dilution factor into subplots binned in thrq 
-        #ax = plt.subplot(3, 3, jdx+1)
+        ax = plt.subplot(3, 3, jdx+1)
 
         
         d2_count_per_xbin     = df_d2.zcont[df_d2.x0==xbin]
@@ -1301,17 +1301,17 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
 
             
             # -- plotting option: overlay dilution factors for all thrq_bins ---
-            
+            '''
             # uncomment if plotting overlay for all thrq_bins 
             fig= plt.subplot()
-            plt.plot(x_interp,  y_interp, marker='None', linestyle='--', label=r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.) )
+            plt.plot(x_interp,  y_interp, marker='None', linestyle='--', label=r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.) )
             plt.xticks([0.0, 0.2, 0.4, 0.6], fontsize = 32)
             plt.yticks(fontsize = 32)
             plt.ylim(0, 1.0)
             plt.xlim(0, 0.65)
             plt.legend(fontsize=16, loc='lower right')
             #--------------------------------------------------------------------
-            
+            '''
             
             # loop over y-bins (pm_bins) to write to file
             for ipm, ybin in enumerate( ybc ):
@@ -1319,7 +1319,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
                 ofile.write("%.1f,%.3f,%.1f,%.3f,%.1f,%.3f,%.1f,%.3f,%.3f,%.3f\n" % (xbin, ybin, x[ipm], sigx[ipm], y[ipm], sigy[ipm], z[ipm], sigz[ipm], dilution[ipm], dilution_err[ipm] ))
 
 
-            '''
+            
             #uncomment if plotting individual subplots
             # plot interpolated function
             ax.plot(x_interp,  y_interp, marker='None', alpha=0.9, linestyle='--', color='r')
@@ -1328,12 +1328,12 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
             ax.errorbar(ybc, dilution, dilution_err, marker='o', markersize=8, alpha=0.4, linestyle='None', color='r', label=r'%.1f GeV$^{2}$'%(Q2_user))
 
             
-            plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
+            plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
             plt.xticks(fontsize = 18)
             plt.yticks(fontsize = 18)
             plt.ylim(0.,1.0)
             plt.xlim(0, 0.7)
-            '''
+            
             
             jdx = jdx+1
        
@@ -1380,7 +1380,7 @@ def overlay_dilution():
         plt.xlim(0.0,1.08)
         plt.xticks(fontsize = 18)
         plt.yticks(fontsize = 18)
-        plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, 10), fontsize=14)
+        plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, 10), fontsize=14)
         jdx = jdx+1
     plt.legend()
     plt.show()
@@ -1480,7 +1480,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
             #elif plot_flag=='proj_err':
             #    fig.text(0.01, 0.5, 'relative error', va='center', rotation='vertical', fontsize=14)
 
-            subplot_title =  r"p$_{m}$ vs. $\theta_{rq}$ 1d projection (%s), central p$_{m}$ setting: %d MeV"%(model, ipm)
+            subplot_title =  r"p$_{m}$ vs. $\theta_{nq}$ 1d projection (%s), central p$_{m}$ setting: %d MeV"%(model, ipm)
             #plt.suptitle(subplot_title, fontsize=15);
             plt.tight_layout()
             
@@ -1600,7 +1600,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                             plt.ylim(0.1, 2e5)
                             plt.xticks(fontsize = 14)
                             plt.yticks(fontsize = 14)
-                        plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
+                        plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
                         plt.legend(frameon=False, loc='upper right')
                         jdx = jdx+1
                         
@@ -1620,7 +1620,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                         plt.xlim(0.15, 0.65)
                         plt.xticks(fontsize = 14)
                         plt.yticks(fontsize = 14)
-                        plt.title(r'$\theta_{rq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
+                        plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
                         jdx = jdx+1
             plt.legend(frameon=False, loc='upper right')
 
@@ -1817,9 +1817,9 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 # ------ Pm vs theta_rq yield projections and errors -----
 
-make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', '2d', 1)
-make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
-make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
+#make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', '2d', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
 
 #calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=4)
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
