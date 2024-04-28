@@ -497,6 +497,8 @@ def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=[1,1,1]):
     scale: default set to 1; scale counts by a multiple of beam_time (need to know what the beam time was during simulation)
     '''
 
+    fig, axs = plt.subplots(1, figsize=(6,5))
+
     idx = 0  # counter for scale index 
     # loop over central missing momentum setting
     for ipm in pm_set:
@@ -529,19 +531,34 @@ def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=[1,1,1]):
             N =   ma.masked_where(N==0, N)
             Nerr = ma.masked_where(N==0, Nerr)
 
-            idx = idx + 1
             
             plt.hist(df.x0, bins=len(df.x0), weights=df.ycont, alpha=0.5, ec='k', density=False, label=r"$\theta_{nq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
+
+
             #plt.errorbar(x, N, Nerr, linestyle='None', marker='o', mec='k', label=r"$\theta_{nq}=%d$ deg"%(ithrq)+"\n"+"$P_{m}$=%d MeV"%(ipm))
 
             plt.legend()
-            plt.xlabel(xlabel, fontsize=18)
-            plt.ylabel(ylabel, fontsize=18)
+            #plt.xlabel(xlabel, fontsize=18)
+            #plt.ylabel(ylabel, fontsize=18)
             plt.xticks(fontsize = 22)
             plt.yticks(fontsize = 22)
             plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0), useMathText=True)
+            axs.yaxis.offsetText.set_fontsize(18) # increase fontsie of y-axis sci not.
+            #plt.title(title, fontsize=15)
 
-            plt.title(title, fontsize=15)
+            # for drawing vertical lines of cuts
+
+            # missing energy
+            #plt.axvline(x = -0.02, color = 'r', linestyle = '--', linewidth=2)
+            #plt.axvline(x = 0.04, color = 'r', linestyle = '--', linewidth=2)
+
+            # hms delta
+            #plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
+            #plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
+
+
+            
+            idx = idx + 1
 
             
 
@@ -884,17 +901,21 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
         
         # set figure subplots for ratio
         #fig, ax = plt.subplots(5, 8, sharex='col', sharey='row')
-        fig, ax = plt.subplots(5, 8)
-        fig.text(0.5, 0.01, r'Recoil Angle $\theta_{nq}$ [deg]', ha='center', fontsize=12)
-        fig.text(0.01, 0.5, r'R = FSI / PWIA', va='center', rotation='vertical', fontsize=12)
-        subplot_title ='angular distributions FSI/PWIA ratio'   #setting: (%d MeV, %d deg)'%(pm_set, thrq_set)
-        plt.suptitle(subplot_title, fontsize=15);
-        fig.set_size_inches(14,10, forward=True)
+        # fig, ax = plt.subplots(5, 8) #original
+
+        fig, ax = plt.subplots(4, 3)  # only pm ~520 - 960 (12 plots)
+        
+        #fig.text(0.5, 0.01, r'Recoil Angle $\theta_{nq}$ [deg]', ha='center', fontsize=12)
+        #fig.text(0.01, 0.5, r'R = FSI / PWIA', va='center', rotation='vertical', fontsize=12)
+        #subplot_title ='angular distributions FSI/PWIA ratio'   #setting: (%d MeV, %d deg)'%(pm_set, thrq_set)
+        #plt.suptitle(subplot_title, fontsize=15);
+        fig.set_size_inches(8,10, forward=True)
 
     
     # loop over central missing momentum kin. setting 
     for ipm in pm_set:
 
+             
         scl_idx = 0  # scale index
         
         # loop over central recoil angle kin. setting for a given central momentum
@@ -952,24 +973,150 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
             #print('thrq_bins:', thrq_bins)
             #print('ratio[thrq=37.5]:', ratio[thrq_bins==37.5])
 
-            
+            idx_plot = 0 
             for idx, pm_bin in enumerate(pm_bins):
-                
+
+                print('idx_plot', idx_plot)
+                if pm_bin<0.520 or pm_bin>0.960: continue
+                                
                 if plot_flag=='ratio':
-                    print('')
+                
                     # ---- plot ratio fsi/pwia -----
-                    ax = plt.subplot(5, 8, idx+1)
+                    # ax = plt.subplot(5, 8, idx+1) original
+                    ax = plt.subplot(4, 3, idx_plot+1)
+
                     ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
-                    ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=10)
+                    ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=16)
                     plt.axhline(1, linestyle='--', color='gray')
                     ax.set_xlim(20,90)
                     ax.set_ylim(0,4.5)
+                    plt.xticks(fontsize = 16)
+                    plt.yticks(fontsize = 16)
+                
+                idx_plot = idx_plot+1
    
     plt.tight_layout()
     plt.legend()
     plt.show()
     plt.savefig('test.png')
 
+def make_projY_d2fsi(h2_hist_name, pm_user, thrq_user, model, plot_flag, scale=[1,1,1]):
+
+
+
+    ifig = 1 # counter for 2d histogram figures
+
+    # define collimator polygon shape (for plotting contour lines) 
+    shms_hsize = 8.5
+    shms_vsize = 12.5
+    
+    hms_hsize = 4.575
+    hms_vsize = 11.646
+    
+    
+    coord_shms = [[  shms_hsize,     shms_vsize/2.],
+                  [  shms_hsize/2.,  shms_vsize   ],
+                  [ -shms_hsize/2.,  shms_vsize   ],
+                  [ -shms_hsize,     shms_vsize/2.],
+                  [ -shms_hsize,    -shms_vsize/2.],
+                  [ -shms_hsize/2., -shms_vsize   ],
+                  [  shms_hsize/2., -shms_vsize   ],
+                  [  shms_hsize,    -shms_vsize/2.],
+                  [  shms_hsize,     shms_vsize/2.]]
+    
+    
+    
+    coord_hms = [[  hms_hsize,     hms_vsize/2.],
+                 [  hms_hsize/2.,  hms_vsize   ],
+                 [ -hms_hsize/2.,  hms_vsize   ],
+                 [ -hms_hsize,     hms_vsize/2.],
+                 [ -hms_hsize,    -hms_vsize/2.],
+                 [ -hms_hsize/2., -hms_vsize   ],
+                 [  hms_hsize/2., -hms_vsize   ],
+                 [  hms_hsize,    -hms_vsize/2.],
+                 [  hms_hsize,     hms_vsize/2.]]
+
+
+    coord_shms.append(coord_shms[0])
+    coord_hms.append(coord_hms[0])
+    x_shms, y_shms = zip(*coord_shms)
+    x_hms, y_hms = zip(*coord_hms)
+ 
+    # loop over central pm setting
+    for ipm in pm_user:
+
+        idx=0
+        for ithrq in thrq_user:
+            
+            # set histo base name and file path
+            h2_hist_basename = 'H_%s_yield_d2fsi_pm%d_thrq_%d.txt'%(h2_hist_name, ipm, ithrq)   # generic histogram name
+            hist_file_path = 'yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s/%s'%(ipm, ithrq, model, h2_hist_basename)  #optimized kinematics
+
+            print('hist_file_path:', hist_file_path)
+            # check if file exists, else continue reading next file
+            if not os.path.isfile(hist_file_path):
+
+                # try again 
+                h2_hist_basename = 'H_%s_yield_d2fsi_pm%d_thrq%d.txt'%(h2_hist_name, ipm, ithrq)   # generic histogram name
+                hist_file_path = 'yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s/%s'%(ipm, ithrq, model, h2_hist_basename)  #optimized kinematics
+
+                if not os.path.isfile(hist_file_path):
+                    print('FILE DOES NOT EXIST !')
+                    continue
+
+            df = pd.read_csv(hist_file_path, comment='#')
+
+            # get histo parameters from .txt file
+            xlabel = get_label('xlabel',     hist_file_path)
+            ylabel = get_label('ylabel',     hist_file_path)
+            title  = get_label('title',      hist_file_path)
+            ybinw  = float(get_label('ybin_width', hist_file_path))
+            xbinw  = float(get_label('xbin_width', hist_file_path))
+            nxbins = len(df.xb[df.yb==df.yb[0]])
+            nybins = len(df.yb[df.xb==df.xb[0]])
+            ybc = (df.y0[df.x0==df.x0[0]]).to_numpy() # y-bin central value
+            xbc = (df.x0[df.y0==df.y0[0]]).to_numpy() # x-bin central value
+            if "_2Davg" in h2_hist_basename:
+                print('not setting up counts')
+            else:
+                df.zcont = df.zcont * scale[idx]
+                counts = np.sum(df.zcont)
+
+            # index counter for thrq
+            idx = idx+1
+            
+            if plot_flag=='2d':
+
+                print('PASS1')
+                # plotting the 2d histo
+                fig2d = plt.figure(ifig, figsize=(9,6))
+
+                if "_2Davg" in h2_hist_basename:
+                    plt.hist2d(df.x0 ,df.y0, weights=df.zcont, bins=(nxbins, nybins), range=[ [min(df.xlow), max(df.xup)], [min(df.ylow), max(df.yup)]], cmap = 'viridis')
+                else:                        
+                    plt.hist2d(df.x0 ,df.y0, weights=df.zcont, bins=(nxbins, nybins), range=[ [min(df.xlow), max(df.xup)], [min(df.ylow), max(df.yup)]], cmap = 'viridis', norm=mcolors.LogNorm())
+                    print('TRIED TO PLOT')
+                    # plot the countour lines of collimator when appropiate
+                    if "hXColl_vs_hYColl" in h2_hist_basename:
+                        plt.plot(x_hms,y_hms, color='r', linewidth=2)  # plot hms collimator geometry contour line
+                    if "eXColl_vs_eYColl" in h2_hist_basename:
+                        plt.plot(x_shms,y_shms, color='r', linewidth=2)  # plot shms collimator geometry contour line
+                        
+                
+
+                plt.xlabel(xlabel, fontsize=12)
+                plt.ylabel(ylabel, fontsize=12)
+                plt.title(title,   fontsize=14)
+                plt.xticks(fontsize = 22)
+                plt.yticks(fontsize = 22)
+                cbar = plt.colorbar()
+                cbar.ax.tick_params(labelsize=22)
+                
+                ifig = ifig+1
+            
+                plt.grid()
+                plt.show()
+                
 # original method (without multiple targets option)
 def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
     # NEED TO FIX THIS FUNCTION, AS IT CURRENTLY DISPLAYS MULTIPLE SUBPLOTS, WHERE ONLY ONE IS NEEDED
@@ -1661,40 +1808,52 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 #scale_set = [200, 144, 160]
 
 thrq_set =  [72,  60,  49]
-scale_set = [160, 144, 200]
+scale_set = [160, 144, 200]  # hrs
+
+
+#scale_set = [1, 1, 1]
 
 # spectrometer kinematics
-'''
-overlay_d2fsi([800], thrq_set, 'Pf',  'fsi', scale_set)
-overlay_d2fsi([800], thrq_set, 'thp', 'fsi', scale_set)
-overlay_d2fsi([800], thrq_set, 'kf',  'fsi', scale_set)
-overlay_d2fsi([800], thrq_set, 'the', 'fsi', scale_set)
-'''
+
+#overlay_d2fsi([800], thrq_set, 'Pf',  'fsi', scale_set)
+#overlay_d2fsi([800], thrq_set, 'thp', 'fsi', scale_set)
+#overlay_d2fsi([800], thrq_set, 'kf',  'fsi', scale_set)
+#overlay_d2fsi([800], thrq_set, 'the', 'fsi', scale_set)
+
 
 # electron kinematics
-'''
-overlay_d2fsi([800], thrq_set, 'nu',      'fsi', scale_set)
-overlay_d2fsi([800], thrq_set, 'xbj',     'fsi', scale_set)
-overlay_d2fsi([800], thrq_set, 'Q2_nsc',  'fsi', scale_set)
-overlay_d2fsi([800], thrq_set, 'q',       'fsi', scale_set)
-'''
+
+#overlay_d2fsi([800], thrq_set, 'nu',      'fsi', scale_set)
+#overlay_d2fsi([800], thrq_set, 'xbj',     'fsi', scale_set)
+#overlay_d2fsi([800], thrq_set, 'Q2_nsc',  'fsi', scale_set)
+#overlay_d2fsi([800], thrq_set, 'q',       'fsi', scale_set)
+
 
 # missing variables
-'''
-overlay_d2fsi([800], thrq_set, 'Pm',             'fsi', scale_set)
-overlay_d2fsi([800], thrq_set, 'Em_nuc_nsc',     'fsi', scale_set)
-'''
+#overlay_d2fsi([800], thrq_set, 'Pm',             'fsi', scale_set)
+#overlay_d2fsi([800], thrq_set, 'Em_nuc_nsc',     'fsi', scale_set)
+
 
 # angle distributions
-'''
-overlay_d2fsi([800], thrq_set, 'thq',    'fsi', scale_set)
-overlay_d2fsi([800], thrq_set, 'thpq',   'fsi', scale_set)
-overlay_d2fsi([800], thrq_set, 'thrq',   'fsi', scale_set)
-overlay_d2fsi([800], thrq_set, 'phi_pq', 'fsi', scale_set)
-'''
+#overlay_d2fsi([800], thrq_set, 'thq',    'fsi', scale_set)
+#overlay_d2fsi([800], thrq_set, 'thpq',   'fsi', scale_set)
+#overlay_d2fsi([800], thrq_set, 'thrq',   'fsi', scale_set)
+#overlay_d2fsi([800], thrq_set, 'phi_pq', 'fsi', scale_set)
+
 
 # plot yield ratio
 #make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  # scale represent hrs
+
+# plot 2d correlations
+#make_projY_d2fsi('hXColl_vs_hYColl_nsc',[800], [72], 'fsi', '2d', [160])
+#make_projY_d2fsi('eXColl_vs_eYColl_nsc',[800], [72], 'fsi', '2d', [160])
+
+#make_projY_d2fsi('hxptar_vs_exptar',[800], [72], 'fsi', '2d', [160])
+#make_projY_d2fsi('hyptar_vs_eyptar',[800], [72], 'fsi', '2d', [160])
+#make_projY_d2fsi('hdelta_vs_edelta',[800], [72], 'fsi', '2d', [160])
+#make_projY_d2fsi('Q2_vs_xbj',       [800], [72], 'fsi', '2d', [160])
+#make_projY_d2fsi('Em_nuc_vs_Pm_nsc',[800], [72], 'fsi', '2d', [160])
+
 
 
 
@@ -1708,13 +1867,7 @@ overlay_d2fsi([800], thrq_set, 'phi_pq', 'fsi', scale_set)
 #make_1d_Xprojections('hXColl_vs_hYColl_nsc', 800, 60, 'fsi')
 #make_1d_Xprojections('eXColl_vs_eYColl_nsc', 800, 60, 'fsi')
 
-#make_projY_d2pol('hXColl_vs_hYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')
-#make_projY_d2pol('eXColl_vs_eYColl_nsc', ['d2'], pm_set, 2.5, 'fsi', field, '2d')
 
-
-#overlay_d2fsi([800], [49, 60, 72], 'Q2_nsc', 'fsi', scale=[200,132,160])
-
-# plot kinematics
 
 
 
