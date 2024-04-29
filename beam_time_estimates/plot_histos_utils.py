@@ -988,7 +988,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
             scl_idx = scl_idx + 1  # increment index for every increment in ipm
 
-            
+          
             #print('ratio:', ratio)
             #print('thrq_bins:', thrq_bins)
             #print('ratio[thrq=37.5]:', ratio[thrq_bins==37.5])
@@ -1003,18 +1003,33 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
                 
                 if plot_flag=='ratio':
+
                 
+                  
+                    
+                    # do interpolation    (need to do this, but for combined thrq, not individually)    
+                    #f = interp1d(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], kind='linear', bounds_error=True)
+                    #x_interp = np.linspace(thrq_min, thrq_max, num=100)
+                    #y_interp = f(x_interp)
+                    #print('x_interp;', x_interp)
+                    #print('y_interp;', y_interp)
+
+
+                    
                     # ---- plot ratio fsi/pwia -----
                     # ax = plt.subplot(5, 8, idx+1) original
                     ax = plt.subplot(4, 3, idx_plot+1)  # pm=800
                     #ax = plt.subplot(3, 3, idx_plot+1)  # pm=500
 
-                    
+               
                     ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
                     ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=16)
                     plt.axhline(1, linestyle='--', color='gray')
+                    
+                    plt.vlines(x = 70, ymin=1, ymax=4.5, color = 'r', linestyle = '--', linewidth=1.5) # reference line at 70 deg
+
                     ax.set_xlim(20,90)
-                    ax.set_ylim(0,4.5)
+                    ax.set_ylim(0,4.)
                     plt.xticks(fontsize = 16)
                     plt.yticks(fontsize = 16)
 
@@ -1029,6 +1044,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     ax.xaxis.set_major_locator(xloc)
                     ax.yaxis.set_major_locator(yloc)
 
+             
                     
                 idx_plot = idx_plot+1
    
