@@ -922,8 +922,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
         #fig, ax = plt.subplots(5, 8, sharex='col', sharey='row')
         # fig, ax = plt.subplots(5, 8) #original
 
-        #fig, ax = plt.subplots(4, 3)  # only pm ~520 - 960 (12 plots)
-        fig, ax = plt.subplots(3, 3)  # only pm = 500 setting (9 plots)
+        fig, ax = plt.subplots(4, 3)  # only pm ~520 - 960 (12 plots)
+        #fig, ax = plt.subplots(3, 3)  # only pm = 500 setting (9 plots)
         
         #fig.text(0.5, 0.01, r'Recoil Angle $\theta_{nq}$ [deg]', ha='center', fontsize=12)
         #fig.text(0.01, 0.5, r'R = FSI / PWIA', va='center', rotation='vertical', fontsize=12)
@@ -997,17 +997,17 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
             for idx, pm_bin in enumerate(pm_bins):
 
                 print('idx_plot', idx_plot)
-                #if pm_bin<0.520 or pm_bin>0.960: continue  # only for 12 plots (for pm=800 setting)
+                if pm_bin<0.520 or pm_bin>0.960: continue  # only for 12 plots (for pm=800 setting)
 
-                if pm_bin<=0.160 or pm_bin>0.520:  continue  # only for pm=500 setting
+                #if pm_bin<=0.160 or pm_bin>0.520:  continue  # only for pm=500 setting
 
                 
                 if plot_flag=='ratio':
                 
                     # ---- plot ratio fsi/pwia -----
                     # ax = plt.subplot(5, 8, idx+1) original
-                    #ax = plt.subplot(4, 3, idx_plot+1)  # pm=800
-                    ax = plt.subplot(3, 3, idx_plot+1)  # pm=500
+                    ax = plt.subplot(4, 3, idx_plot+1)  # pm=800
+                    #ax = plt.subplot(3, 3, idx_plot+1)  # pm=500
 
                     
                     ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
@@ -1018,6 +1018,9 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     plt.xticks(fontsize = 16)
                     plt.yticks(fontsize = 16)
 
+                    if pm_bin==0.520:
+                        plt.legend(loc='upper left')
+ 
                     # limit the number of ticks
                     max_xticks = 4
                     max_yticks = 4
@@ -1030,7 +1033,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                 idx_plot = idx_plot+1
    
     plt.tight_layout()
-    plt.legend()
+   
     plt.show()
     plt.savefig('test.png')
 
@@ -1870,15 +1873,15 @@ scale_set = [160, 144, 200]  # hrs
 
 
 # angle distributions
-overlay_d2fsi([800], thrq_set, 'thq',    'fsi', scale_set)
-overlay_d2fsi([800], thrq_set, 'thpq',   'fsi', scale_set)
-overlay_d2fsi([800], thrq_set, 'thrq',   'fsi', scale_set)
-overlay_d2fsi([800], thrq_set, 'phi_pq', 'fsi', scale_set)
+#overlay_d2fsi([800], thrq_set, 'thq',    'fsi', scale_set)
+#overlay_d2fsi([800], thrq_set, 'thpq',   'fsi', scale_set)
+#overlay_d2fsi([800], thrq_set, 'thrq',   'fsi', scale_set)
+#overlay_d2fsi([800], thrq_set, 'phi_pq', 'fsi', scale_set)
 
 #===================
 # plot yield ratio
 #===================
-#make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  # scale represent hrs
+make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  # scale represent hrs
 #make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
 
 
