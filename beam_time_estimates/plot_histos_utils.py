@@ -546,6 +546,16 @@ def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=[1,1,1]):
             axs.yaxis.offsetText.set_fontsize(18) # increase fontsie of y-axis sci not.
             #plt.title(title, fontsize=15)
 
+
+            # limit the number of ticks
+            max_xticks = 4
+            max_yticks = 4
+            xloc = plt.MaxNLocator(max_xticks)
+            yloc = plt.MaxNLocator(max_yticks)
+            axs.xaxis.set_major_locator(xloc)
+            axs.yaxis.set_major_locator(yloc)
+
+            
             # for drawing vertical lines of cuts
 
             # missing energy
@@ -557,8 +567,8 @@ def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=[1,1,1]):
             #plt.axvline(x = 10, color = 'r', linestyle = '--', linewidth=2)
 
             # shms delta
-            plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
-            plt.axvline(x = 22, color = 'r', linestyle = '--', linewidth=2)
+            #plt.axvline(x = -10, color = 'r', linestyle = '--', linewidth=2)
+            #plt.axvline(x = 22, color = 'r', linestyle = '--', linewidth=2)
 
             # Q2
             #plt.axvline(x = 4, color = 'r', linestyle = '--', linewidth=2)
@@ -1027,7 +1037,6 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 def make_projY_d2fsi(h2_hist_name, pm_user, thrq_user, model, plot_flag, scale=[1,1,1]):
 
 
-
     ifig = 1 # counter for 2d histogram figures
 
     # define collimator polygon shape (for plotting contour lines) 
@@ -1126,15 +1135,25 @@ def make_projY_d2fsi(h2_hist_name, pm_user, thrq_user, model, plot_flag, scale=[
                     if "eXColl_vs_eYColl" in h2_hist_basename:
                         plt.plot(x_shms,y_shms, color='r', linewidth=2)  # plot shms collimator geometry contour line
                         
-                
+                # limit the number of ticks
+                #max_xticks = 4
+                #max_yticks = 4
+                #xloc = plt.MaxNLocator(max_xticks)
+                #yloc = plt.MaxNLocator(max_yticks)
+                #axs.xaxis.set_major_locator(xloc)
+                #axs.yaxis.set_major_locator(yloc)
 
                 plt.xlabel(xlabel, fontsize=12)
                 plt.ylabel(ylabel, fontsize=12)
                 plt.title(title,   fontsize=14)
-                plt.xticks(fontsize = 22)
-                plt.yticks(fontsize = 22)
+                plt.xticks(fontsize = 30)
+                plt.yticks(fontsize = 30)
                 cbar = plt.colorbar()
-                cbar.ax.tick_params(labelsize=22)
+                cbar.ax.tick_params(labelsize=30)
+
+         
+
+            
                 
                 ifig = ifig+1
             
@@ -1851,10 +1870,10 @@ scale_set = [160, 144, 200]  # hrs
 
 
 # angle distributions
-#overlay_d2fsi([800], thrq_set, 'thq',    'fsi', scale_set)
-#overlay_d2fsi([800], thrq_set, 'thpq',   'fsi', scale_set)
-#overlay_d2fsi([800], thrq_set, 'thrq',   'fsi', scale_set)
-#overlay_d2fsi([800], thrq_set, 'phi_pq', 'fsi', scale_set)
+overlay_d2fsi([800], thrq_set, 'thq',    'fsi', scale_set)
+overlay_d2fsi([800], thrq_set, 'thpq',   'fsi', scale_set)
+overlay_d2fsi([800], thrq_set, 'thrq',   'fsi', scale_set)
+overlay_d2fsi([800], thrq_set, 'phi_pq', 'fsi', scale_set)
 
 #===================
 # plot yield ratio
@@ -1868,10 +1887,11 @@ scale_set = [160, 144, 200]  # hrs
 #make_projY_d2fsi('hXColl_vs_hYColl_nsc',[800], [72], 'fsi', '2d', [160])
 #make_projY_d2fsi('eXColl_vs_eYColl_nsc',[800], [72], 'fsi', '2d', [160])
 
+
 #make_projY_d2fsi('hxptar_vs_exptar',[800], [72], 'fsi', '2d', [160])
 #make_projY_d2fsi('hyptar_vs_eyptar',[800], [72], 'fsi', '2d', [160])
 #make_projY_d2fsi('hdelta_vs_edelta',[800], [72], 'fsi', '2d', [160])
-#make_projY_d2fsi('Q2_vs_xbj',       [800], [72], 'fsi', '2d', [160])
+#make_projY_d2fsi('Q2_vs_xbj_nsc',       [800], [72], 'fsi', '2d', [160])
 #make_projY_d2fsi('Em_nuc_vs_Pm_nsc',[800], [72], 'fsi', '2d', [160])
 
 
