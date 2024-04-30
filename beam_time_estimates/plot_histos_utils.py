@@ -700,9 +700,9 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 
 
                 #axs.legend(fontsize=12)
-                #axs.set_yscale('log')
+                axs.set_yscale('log')
                 axs.xaxis.set_tick_params(labelbottom=True)
-                plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0), useMathText=True)  # comment out if using log
+                #plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0), useMathText=True)  # comment out if using log
                 axs.yaxis.offsetText.set_fontsize(18)
                 plt.xticks(fontsize = 22)
                 plt.yticks(fontsize = 22)
@@ -1897,7 +1897,7 @@ scale_set = [160, 144, 200]  # hrs
 #===================
 # plot yield ratio
 #===================
-make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  # scale represent hrs
+#make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  # scale represent hrs
 #make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
 
 
@@ -1980,7 +1980,7 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 # electron kinematics
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'nu',     'fsi', field,  scale)   # energy transfer
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj',    'fsi', field,  scale)  # x-bjorken
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'q',      'fsi', field,  scale)    # 3-momentum (q) transfer
 
 
