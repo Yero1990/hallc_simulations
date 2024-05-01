@@ -916,7 +916,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
     
                 
-    if plot_flag=='ratio':
+    if plot_flag=='ratio' or plot_flag=='ratio_err':
         
         # set figure subplots for ratio
         #fig, ax = plt.subplots(5, 8, sharex='col', sharey='row')
@@ -931,7 +931,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
         #plt.suptitle(subplot_title, fontsize=15);
         fig.set_size_inches(8,10, forward=True)
 
-    
+    offset=0
     # loop over central missing momentum kin. setting 
     for ipm in pm_set:
 
@@ -939,7 +939,10 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
         scl_idx = 0  # scale index
         
         # loop over central recoil angle kin. setting for a given central momentum
-        for ithrq in thrq_set: 
+        for ithrq in thrq_set:
+
+            offset = offset + 1
+            
             print('ithrq: ', ithrq)
             hist_file                 = 'H_Pm_vs_thrq_yield_d2fsi_pm%d_thrq%d.txt'%(ipm, ithrq)  # histogram file with numerical info
             histos_file_path_pwia = 'yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_pwia/%s'%(ipm, ithrq, hist_file)
@@ -986,6 +989,10 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
             ratio = ma.masked_where(ratio_rel_err>rel_err_thrs,     ratio)
             ratio_err = ma.masked_where(ratio_rel_err>rel_err_thrs, ratio_err)
 
+            rel_error = ratio_err / ratio
+            y_const = np.zeros(len(rel_error))
+
+      
             scl_idx = scl_idx + 1  # increment index for every increment in ipm
 
           
@@ -996,6 +1003,10 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
             idx_plot = 0 
             for idx, pm_bin in enumerate(pm_bins):
 
+      
+
+                cnts = np.sum(count_per_xbin )
+                
                 print('idx_plot', idx_plot)
                 if pm_bin<0.520 or pm_bin>0.960: continue  # only for 12 plots (for pm=800 setting)
 
@@ -1023,6 +1034,13 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
                
                     ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
+
+
+                    # alternatively plot a yield (try)
+                    #ax.hist(fsi_N[df_fsi.y0==pm_bin], bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], ec='k', density=False, label=r'%d counts (%.1f GeV$^{2}$)'%(cnts, jq2))
+
+
+                    
                     ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=16)
                     plt.axhline(1, linestyle='--', color='gray')
                     
@@ -1045,7 +1063,44 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     ax.yaxis.set_major_locator(yloc)
 
              
+                if plot_flag=='ratio_err':
+
+                    ax = plt.subplot(4, 3, idx_plot+1)
                     
+                    # mask if exceed rel error thresh
+                    rel_error_m = ma.masked_where(rel_error>rel_err_thrs, rel_error)
+                    y_const_m = ma.masked_where(rel_error>rel_err_thrs, y_const)
+                    thrq_bins_m = ma.masked_where(rel_error>rel_err_thrs,thrq_bins)
+                    
+                    
+                    thrq_bins_m = thrq_bins_m + offset
+                    ax.errorbar(thrq_bins_m[df_fsi.y0==pm_bin], y_const_m[df_fsi.y0==pm_bin], rel_error_m[df_fsi.y0==pm_bin], marker='o', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
+                    
+                    
+                    ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=20)
+                    plt.axhline(0, linestyle='--', color='gray')
+                
+                    plt.axhline(y = 0.20, color = 'r', linestyle = '--')
+                    plt.axhline(y = -0.20, color = 'r', linestyle = '--')
+                        
+                    ax.set_xlim(20,90)
+                    ax.set_ylim(-0.5,0.5)
+                    plt.xticks(fontsize = 20)
+                    plt.yticks(fontsize = 20)
+                    
+                    if pm_bin==0.520:
+                        plt.legend(loc='lower right')
+                        
+                    # limit the number of ticks
+                    max_xticks = 4
+                    max_yticks = 4
+                    xloc = plt.MaxNLocator(max_xticks)
+                    yloc = plt.MaxNLocator(max_yticks)
+                    ax.xaxis.set_major_locator(xloc)
+                    ax.yaxis.set_major_locator(yloc)
+
+                    
+                         
                 idx_plot = idx_plot+1
    
     plt.tight_layout()
@@ -1897,7 +1952,11 @@ scale_set = [160, 144, 200]  # hrs
 #===================
 # plot yield ratio
 #===================
-#make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  # scale represent hrs
+make_projY_d2fsi('Pm_vs_thrq',[800], [72], 'pwia', '2d', [160])
+make_projY_d2fsi('Pm_vs_thrq',[800], [60], 'pwia', '2d', [144])
+make_projY_d2fsi('Pm_vs_thrq',[800], [49], 'pwia', '2d', [200])
+
+#make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio_err')  # scale represent hrs
 #make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
 
 
@@ -1980,7 +2039,7 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 # electron kinematics
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'nu',     'fsi', field,  scale)   # energy transfer
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj',    'fsi', field,  scale)  # x-bjorken
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'q',      'fsi', field,  scale)    # 3-momentum (q) transfer
 
 
