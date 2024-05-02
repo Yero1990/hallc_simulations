@@ -16,10 +16,11 @@
      doing_pion  =  F		!  (T = TRUE)
      doing_decay  =  F		!  1=decay ON, 0=decay OFF.
      ctau  =  780.4			!  decay length (cm)
-     extra_dbase_file = 'extra_cafe_norad.data' !  additional input parameters.
+     extra_dbase_file = 'extra_cafe_rad.data' !  additional input parameters.
      set_allow_scat_in_coll=1  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
      use_sf = T                ! Use spectral function 
-     transparency = 0.551       ! need to explicitly put in nuclear transparency if use_sf = T ( T = A**(-0.24) ) 
+     transparency = 0.281       ! need to explicitly put in nuclear transparency if use_sf = T ( T = A**(-0.24) ) 
+
 / 
  =?
  &KINEMATICS_MAIN
@@ -46,12 +47,12 @@
 
  ?=
  &TARGET
-     targ%A  =  12.0			!  target A
-     targ%Z  =  6.0			!  target Z
-     targ%mass_amu  =  12.0107	        !  target mass in amu
-     targ%mrec_amu  =  11.0	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
-     targ%rho  =  1.8		        !  target density (g/cm^3)
-     targ%thick = 573.84                !  target thick (mg/cm^2)  
+     targ%A  =  197.			!  target A
+     targ%Z  =  79.			!  target Z
+     targ%mass_amu  =  196.96	        !  target mass in amu
+     targ%mrec_amu  =  196	        !  recoil mass in amu (eep=A-1 system,pion=A-2)
+     targ%rho  =  19.32		        !  target density (g/cm^3)
+     targ%thick = 404.7                !  target thick (mg/cm^2)  
      targ%angle  =  0.		        !  
      targ%abundancy  =  100.		!  target purity (%)
      targ%can  =  1                     !  1=beer can (fpi), 2=pudding can (nucpi)
@@ -89,15 +90,15 @@
      targ%fr_pattern  =  3	!  raster pattern: 1=square, 2=circular, 3=real square
      targ%fr1  =  0.1		!  horizontal size OR inner radius(2)
      targ%fr2  =  0.1		!  vertical size OR outer radius(2)
-     targ%xoffset  =  0.03194	!  target x-offset (cm): +x = beam right (EPICS)
-     targ%yoffset  = -0.0149	!  target y-offset (cm): +y = up
+     targ%xoffset  =  0.0548	!  target x-offset (cm): +x = beam right (EPICS)
+     targ%yoffset  = -0.0386	!  target y-offset (cm): +y = up
      targ%zoffset  =  0.0	!  target z-offset (cm): +z = downstream
    				!   zreal = znominal + zoffset
 /
 
  &E_ARM_OFFSET
-     spec%e%offset%x  =  -0.126		!  x offset (cm) (Xtar offset) Mispointing_x -0.126
-     spec%e%offset%y  =  -0.06		!  y offset (cm) (Ytar offset) Mispointing_y -0.06 
+     spec%e%offset%x  =  -0.126		!  x offset (cm) (Xtar offset) Mispointing_x -0.126  
+     spec%e%offset%y  =  -0.06		!  y offset (cm) (Ytar offset) Opposite sign to data to get Ytar SIMC/DATA to agree for now.) Mispointing_y -0.06 
      spec%e%offset%z  =  0.0		!  z offset (cm) (Ztar offset)
      spec%e%offset%xptar  =  0.	        !  xptar offset (mr) xptar = dx/dz (called 'p(h)phi_offset' in HCANA/PARAM/S(H)MS/GEN/s(h)msflags.param)
      spec%e%offset%yptar  =  0.2        !  yptar offset (mr) yptar = dy/dz (called 'p(h)theta_offset' in HCANA/PARAM/S(H)MS/GEN/s(h)msflags.param)
