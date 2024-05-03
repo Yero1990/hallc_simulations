@@ -18,6 +18,8 @@
      ctau  =  780.4			!  decay length (cm)
      extra_dbase_file = 'extra_cafe_rad.data' !  additional input parameters.
      set_allow_scat_in_coll=1  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
+     use_sf = T                ! Use spectral function 
+     transparency = 0.551       ! need to explicitly put in nuclear transparency if use_sf = T ( T = A**(-0.24) ) 
 / 
  =?
  &KINEMATICS_MAIN

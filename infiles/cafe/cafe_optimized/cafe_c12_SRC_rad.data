@@ -19,6 +19,8 @@
      ctau  =  780.4			!  decay length (cm)
      extra_dbase_file = 'extra_cafe_rad.data' !  additional input parameters.
      set_allow_scat_in_coll=1  ! allow scattering in HMS Collimator? (in cm)  0 =  OFF
+     use_sf = F                ! Read spectral function   x
+     transparency = 1          ! need to explicitly put in nuclear transparency if use_sf = T ( T = A**(-0.24) ) 
 / 
  =?
  &KINEMATICS_MAIN
@@ -99,7 +101,7 @@
      spec%e%offset%y  =  -0.06		!  y offset (cm) (Ytar offset) Mispointing_y -0.06 
      spec%e%offset%z  =  0.0		!  z offset (cm) (Ztar offset)
      spec%e%offset%xptar  =  0.	        !  xptar offset (mr) xptar = dx/dz (called 'p(h)phi_offset' in HCANA/PARAM/S(H)MS/GEN/s(h)msflags.param)
-     spec%e%offset%yptar  =  0.2        !  yptar offset (mr) yptar = dy/dz (called 'p(h)theta_offset' in HCANA/PARAM/S(H)MS/GEN/s(h)msflags.param)
+     spec%e%offset%yptar  =  0.        !  yptar offset (mr) yptar = dy/dz (called 'p(h)theta_offset' in HCANA/PARAM/S(H)MS/GEN/s(h)msflags.param)
 /
 
  &P_ARM_OFFSET
