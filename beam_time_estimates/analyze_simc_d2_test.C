@@ -228,7 +228,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     
     //Define File Name Patterns
     simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi0/%s.data",    basename.Data());
-    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s/phi0/large_raster/%s.root",  field_config.Data(),                    basename.Data());
+    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s/phi0/bfield_22p5_deg//%s.root",  field_config.Data(),                    basename.Data());
 
     simc_OutputFileName = Form("worksim/d2_pol/smallFSI/optimized/analyzed/%s_phi0_output.root",          basename.Data());
     

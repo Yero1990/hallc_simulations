@@ -2097,7 +2097,7 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
 
-calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=4)
+#calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=4)
 
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 
