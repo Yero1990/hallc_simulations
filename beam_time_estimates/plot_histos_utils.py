@@ -1455,6 +1455,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     # if overlay_flag == False:
     
     # uncomment comment for plotting dilution factor into subplots binned in thrq 
+    
     fig, ax = plt.subplots(3, 3)
     fig.set_size_inches(10,10, forward=True)
     fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)
@@ -1462,12 +1463,13 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     subplot_title =  r"dilution factor, central p$_{m,cent}$ = %d MeV, $Q^{2}$ = %.1f GeV$^{2}$"%(pm_user, Q2_user)
     plt.suptitle(subplot_title, fontsize=15);
     plt.tight_layout()
+    
     #------------------------------------------------------
     
     
     # h2 -> 2d histo (not related to hydrogrn)
-    h2_hist_basename = 'H_Pm_vs_thrq_dil_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name  (finer bins)
-    #h2_hist_basename = 'H_Pm_vs_thrq_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name (coarser bins)
+    #h2_hist_basename = 'H_Pm_vs_thrq_dil_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name  (finer bins)
+    h2_hist_basename = 'H_Pm_vs_thrq_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name (coarser bins)
     
     d2_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/d2_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
     he4_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/he4_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
@@ -1574,8 +1576,9 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
             plt.ylim(0, 1.0)
             plt.xlim(0, 0.65)
             plt.legend(fontsize=16, loc='lower right')
-            #--------------------------------------------------------------------
             '''
+            #--------------------------------------------------------------------
+            
             
             # loop over y-bins (pm_bins) to write to file
             for ipm, ybin in enumerate( ybc ):
@@ -1914,8 +1917,8 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 
 # pm=800 setting scale is in hours
 #           blue, orange, green 
-thrq_set =  [72,  60,  49]
-scale_set = [160, 144, 200]  # hrs
+#thrq_set =  [72,  60,  49]
+#scale_set = [160, 144, 200]  # hrs
 
 # pm=500 setting scale is in hours
 #thrq_set =  [70]
@@ -1952,9 +1955,9 @@ scale_set = [160, 144, 200]  # hrs
 #===================
 # plot yield ratio
 #===================
-make_projY_d2fsi('Pm_vs_thrq',[800], [72], 'pwia', '2d', [160])
-make_projY_d2fsi('Pm_vs_thrq',[800], [60], 'pwia', '2d', [144])
-make_projY_d2fsi('Pm_vs_thrq',[800], [49], 'pwia', '2d', [200])
+#make_projY_d2fsi('Pm_vs_thrq',[800], [72], 'pwia', '2d', [160])
+#make_projY_d2fsi('Pm_vs_thrq',[800], [60], 'pwia', '2d', [144])
+#make_projY_d2fsi('Pm_vs_thrq',[800], [49], 'pwia', '2d', [200])
 
 #make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio_err')  # scale represent hrs
 #make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
@@ -2094,7 +2097,8 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
 
-#calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=4)
+calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=4)
+
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 
 #overlay_dilution()

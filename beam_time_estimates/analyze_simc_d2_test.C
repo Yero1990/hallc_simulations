@@ -93,8 +93,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
   
   using namespace std;
   
-  //TString analysis_flag="d2pol";  // "d2pol" or "d2fsi" 
-  TString analysis_flag="d2fsi";  // "d2pol" or "d2fsi" 
+  TString analysis_flag="d2pol";  // "d2pol" or "d2fsi" 
+  //TString analysis_flag="d2fsi";  // "d2pol" or "d2fsi" 
   
   Bool_t debug = true;
   
@@ -228,7 +228,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     
     //Define File Name Patterns
     simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi0/%s.data",    basename.Data());
-    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s/phi0/%s.root",  field_config.Data(),                    basename.Data());
+    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s/phi0/large_raster/%s.root",  field_config.Data(),                    basename.Data());
 
     simc_OutputFileName = Form("worksim/d2_pol/smallFSI/optimized/analyzed/%s_phi0_output.root",          basename.Data());
     
