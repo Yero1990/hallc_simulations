@@ -227,8 +227,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     input_HBinFileName = "inp/d2_pol/set_basic_histos_d2pol.inp";
     
     //Define File Name Patterns
-    simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi0/%s.data",    basename.Data());
-    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s/phi0/bfield_22p5_deg//%s.root",  field_config.Data(),                    basename.Data());
+    simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi0/bfield_22p5_deg/hms_3deg_lower/%s.data",    basename.Data());
+    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s/phi0/bfield_22p5_deg/hms_3deg_lower/%s.root",  field_config.Data(),                    basename.Data());
 
     simc_OutputFileName = Form("worksim/d2_pol/smallFSI/optimized/analyzed/%s_phi0_output.root",          basename.Data());
     

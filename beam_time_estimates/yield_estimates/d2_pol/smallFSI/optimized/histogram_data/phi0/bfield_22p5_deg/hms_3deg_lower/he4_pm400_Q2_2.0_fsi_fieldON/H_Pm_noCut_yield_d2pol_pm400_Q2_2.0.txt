@@ -1,0 +1,33 @@
+# 1D Histogram Bin Extraction 
+#                   
+# histogram parameters:  
+# title      : Missing Momentum, P_{miss} (no cuts, DAQ rates)   
+# xbins      : 15   
+# xlabel     :  missing momentum, P_{m} [GeV/c]   
+# xbin_width : 0.080 
+# ylabel     :  Counts   
+#                   
+# header definitions:
+# xb:         x-axis bin number 
+# x0:         x-axis central bin value 
+# xlow:       x-axis low-edge bin value 
+# xup:        x-axis up-edge bin value 
+# ycont:      bin content (y-axis) 
+# ycont_err:  bin content error (y-axis) 
+#                                        
+xb,x0,xlow,xup,ycont,ycont_err
+1,0.040,0.000,0.080,902.131,23.565
+2,0.120,0.080,0.160,2580.944,31.393
+3,0.200,0.160,0.240,1889.488,19.047
+4,0.280,0.240,0.320,826.150,8.949
+5,0.360,0.320,0.400,342.854,4.689
+6,0.440,0.400,0.480,138.346,3.276
+7,0.520,0.480,0.560,41.546,1.611
+8,0.600,0.560,0.640,12.344,1.009
+9,0.680,0.640,0.720,6.138,0.881
+10,0.760,0.720,0.800,3.466,0.723
+11,0.840,0.800,0.880,1.439,0.313
+12,0.920,0.880,0.960,0.698,0.429
+13,1.000,0.960,1.040,0.110,0.027
+14,1.080,1.040,1.120,0.370,0.140
+15,1.160,1.120,1.200,0.067,0.025
