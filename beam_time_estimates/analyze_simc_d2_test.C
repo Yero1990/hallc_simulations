@@ -227,8 +227,8 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     input_HBinFileName = "inp/d2_pol/set_basic_histos_d2pol.inp";
     
     //Define File Name Patterns
-    simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi0/bfield_22p5_deg/hms_3deg_lower/%s.data",    basename.Data());
-    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s/phi0/bfield_22p5_deg/hms_3deg_lower/%s.root",  field_config.Data(),                    basename.Data());
+    simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi0/bfield_22p5_deg/%s.data",    basename.Data());
+    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s/phi0/bfield_22p5_deg/%s.root",  field_config.Data(),                    basename.Data());
 
     simc_OutputFileName = Form("worksim/d2_pol/smallFSI/optimized/analyzed/%s_phi0_output.root",          basename.Data());
     
@@ -301,7 +301,11 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     //--------------------
     // READ ANALYSIS CUTS
     //-------------------
-
+    
+    // special target cut for  polarized deuterium proposal
+    Bool_t zvertex_cut;
+    Bool_t hms_angle_cut;
+    
     //-------Collimator Study-------
     Bool_t hmsCollCut_flag;      //flag to enable/disable collimator cut
     Bool_t shmsCollCut_flag;
@@ -1635,6 +1639,64 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     
     //------Define ANALYSIS CUTS-------
 
+    
+    // Apply special target cut for  polarized deuterium proposal (required for cutting out eventa
+    // that might hit the bore magnet)  Cut function determined by N. Santiesteban, Jun 23, 2024
+
+    /*
+      The region that may interact with the bore of the magnet is:
+      
+      For HMS central angle =  50.34
+
+      good_events:
+      z > -1.71x – 8.709 mm
+      theta < 57.7 
+      
+      For HMS central angle =  52.34
+      
+      z > -1.5x – 15.27 mm
+      theta < 56.3
+
+    */
+
+    if( analysis_flag == "d2pol" ) {
+
+      zvertex_cut = 0;
+      hms_angle_cut = 0;
+      
+      if(thp_central == 50.23) {
+	// set true if event is outside limits (bad event is true)
+	zvertex_cut = htar_z < -1.71*tar_x - 0.8709 ; // [cm]
+	hms_angle_cut = h_yptar > (57.7 - thp_central)*dtr ; // cut on relative (to central)  in-plane angle [rad]
+
+	/*
+	cout << "" << endl;
+	cout << "zvertex_cut : " << zvertex_cut  << endl;
+	cout << "" << endl;
+	cout << "hms_angle_cut: " << hms_angle_cut  << endl;
+	cout << "h_yptar: " << hyptar << endl;
+	cout << "(56.3 - thp_central) : " << (56.3 - thp_central) << endl;
+	cout << "(56.3 - thp_central)*dtr : " << (56.3 - thp_central)*dtr << endl;
+	*/
+	
+	//cout << "" << endl;
+	
+		
+      }
+      
+      
+      if(thp_central == 52.23) {
+	// set true if event is outside limits (bad event is true)
+	zvertex_cut = htar_z < -1.5*tar_x - 1.527 ; // [cm]
+	hms_angle_cut = h_yptar > (56.3 - thp_central)*dtr ; // cut on relative (to central)  in-plane angle [rad]
+
+	//cout << "zvertex_cut : " << zvertex_cut  << endl;
+	//cout << "hms_angle_cut: " << hms_angle_cut  << endl;
+	
+      }
+
+    }
+    
     //---Collimator CUTS---
     
     if(hmsCollCut_flag)  { hmsColl_Cut =  hms_Coll_gCut->IsInside(hYColl, hXColl);}
@@ -1704,6 +1766,15 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     H_Q2_vs_xbj_noCut->Fill(X, Q2, FullWeight);
     H_cthrq_vs_Pm_noCut->Fill(Pm, cos(th_rq * dtr), FullWeight);
       
+
+    /*
+    if(analysis_flag == "d2pol" ) {
+
+      // continue to next event if condition is met (condition: event outside of target magnet)
+      if(zvertex_cut || hms_angle_cut) continue;
+
+    }
+    */
     
     if(c_allCuts) {
 
