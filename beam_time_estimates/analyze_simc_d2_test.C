@@ -1646,16 +1646,19 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     /*
       The region that may interact with the bore of the magnet is:
       
-      For HMS central angle =  50.34
-
+      For HMS central angle =  52.23
+      ------------------------------
       good_events:
-      z > -1.71x – 8.709 mm
-      theta < 57.7 
+      z > -1.58x – 8.014 mm
+      theta < 54.9
+
       
-      For HMS central angle =  52.34
+      For HMS central angle =  50.23
+      -------------------------------
+      z > -1.71x – 15.701 mm
+      theta < 52.6
       
-      z > -1.5x – 15.27 mm
-      theta < 56.3
+      (z&&theta)
 
     */
 
