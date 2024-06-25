@@ -622,6 +622,13 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     TH1F *H_Em      = new TH1F("H_Em","Missing Energy; missing energy, E_{m} [GeV]; Counts", Em_nbins, Em_xmin, Em_xmax); 
     TH1F *H_Em_nuc      = new TH1F("H_Em_nuc","Nuclear Missing Energy; nuclear missing energy, E_{m, nuc} [GeV]; Counts", Em_nbins, Em_xmin, Em_xmax); 
     TH1F *H_Em_nuc_nsc      = new TH1F("H_Em_nuc_nsc","Nuclear Missing Energy; nuclear missing energy, E_{m} [GeV]; Counts", Em_nbins, Em_xmin, Em_xmax); 
+
+    // special plots to show effect of punch thru collimator particles on missing energy
+    TH1F *H_Em_nuc_pac0      = new TH1F("H_Em_nuc_pac0","Nuclear Missing Energy; nuclear missing energy (all events), E_{m} [GeV]; Counts", Em_nbins, Em_xmin, Em_xmax); 
+    TH1F *H_Em_nuc_pac1      = new TH1F("H_Em_nuc_pac1","Nuclear Missing Energy; nuclear missing energy (punch-thru), E_{m} [GeV]; Counts", Em_nbins, Em_xmin, Em_xmax); 
+    TH1F *H_Em_nuc_pac2      = new TH1F("H_Em_nuc_pac2","Nuclear Missing Energy; nuclear missing energ (punch-thru + coll)y, E_{m} [GeV]; Counts", Em_nbins, Em_xmin, Em_xmax); 
+
+
     
     TH1F *H_Pm      = new TH1F("H_Pm","Missing Momentum, P_{miss}; missing momentum, P_{m} [GeV/c]; Counts", Pm_nbins, Pm_xmin, Pm_xmax);
     TH1F *H_Pm_noCut      = new TH1F("H_Pm_noCut","Missing Momentum, P_{miss} (no cuts, DAQ rates); missing momentum, P_{m} [GeV/c]; Counts", Pm_nbins, Pm_xmin, Pm_xmax); 
@@ -706,6 +713,10 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     kin_HList->Add( H_Em       );
     kin_HList->Add( H_Em_nuc       );
     kin_HList->Add( H_Em_nuc_nsc   );
+    kin_HList->Add( H_Em_nuc_pac0   );
+    kin_HList->Add( H_Em_nuc_pac1   );
+    kin_HList->Add( H_Em_nuc_pac2   );
+
     kin_HList->Add( H_Pm       );
     kin_HList->Add( H_Pm_noCut       );
     
@@ -1668,34 +1679,29 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
       hms_angle_cut = 0;
       
       if(thp_central == 50.23) {
-	// set true if event is outside limits (bad event is true)
-	zvertex_cut = htar_z < -1.71*tar_x - 0.8709 ; // [cm]
-	hms_angle_cut = h_yptar > (57.7 - thp_central)*dtr ; // cut on relative (to central)  in-plane angle [rad]
 
-	/*
-	cout << "" << endl;
-	cout << "zvertex_cut : " << zvertex_cut  << endl;
-	cout << "" << endl;
-	cout << "hms_angle_cut: " << hms_angle_cut  << endl;
-	cout << "h_yptar: " << hyptar << endl;
-	cout << "(56.3 - thp_central) : " << (56.3 - thp_central) << endl;
-	cout << "(56.3 - thp_central)*dtr : " << (56.3 - thp_central)*dtr << endl;
-	*/
-	
-	//cout << "" << endl;
-	
+	// set true if good event 
+	zvertex_cut = htar_z > -1.71*tar_x - 1.5701 ; // [cm]
+	hms_angle_cut = h_yptar < (52.6 - thp_central)*dtr ; // cut on relative (to central)  in-plane angle [rad]
 		
       }
       
       
       if(thp_central == 52.23) {
-	// set true if event is outside limits (bad event is true)
-	zvertex_cut = htar_z < -1.5*tar_x - 1.527 ; // [cm]
-	hms_angle_cut = h_yptar > (56.3 - thp_central)*dtr ; // cut on relative (to central)  in-plane angle [rad]
-
-	//cout << "zvertex_cut : " << zvertex_cut  << endl;
-	//cout << "hms_angle_cut: " << hms_angle_cut  << endl;
 	
+	// set true if good event
+	zvertex_cut = htar_z > -1.58*tar_x - 0.8014 ; // [cm]
+	hms_angle_cut = h_yptar < (54.9 - thp_central)*dtr ; // cut on relative (to central)  in-plane angle [rad]
+
+	/*
+	cout << "tar_z [cm]: " << htar_z << endl;
+	cout << "-1.58*tar_x - 0.8014 [cm] :" <<  -1.58*tar_x - 0.8014 << endl;
+	cout << "Is tar_z  > -1.58*tar_x - 0.8014 ? : " << zvertex_cut << endl;
+	cout << "" << endl;
+	cout << "h_yptar [deg] : " << h_yptar/dtr << endl;
+	cout << "(54.9 - 52.23) [deg] : " << (54.9 - thp_central) << endl;
+	cout << "Is h_yptar < (54.9 - thp_central) ? : " << hms_angle_cut  << endl;
+	*/
       }
 
     }
@@ -1770,15 +1776,9 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     H_cthrq_vs_Pm_noCut->Fill(Pm, cos(th_rq * dtr), FullWeight);
       
 
-    /*
-    if(analysis_flag == "d2pol" ) {
-
-      // continue to next event if condition is met (condition: event outside of target magnet)
-      if(zvertex_cut || hms_angle_cut) continue;
-
-    }
-    */
     
+    
+    //if(c_allCuts && zvertex_cut && hms_angle_cut) {
     if(c_allCuts) {
 
       // ------ This is for calculation of avergaed kinematics ---
@@ -1904,6 +1904,7 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
 
 						 
     }
+    
 
     //No Self Cut Histos
     if(c_accpCuts &&  c_Q2) {
@@ -1925,6 +1926,17 @@ void analyze_simc_d2_test(TString basename="", Bool_t heep_check=false){
     if(c_kinCuts && c_hdelta && c_edelta && c_ztarDiff && shmsColl_Cut) { H_hXColl_vs_hYColl_nsc->Fill(hYColl, hXColl, FullWeight); }
     if(c_kinCuts && c_hdelta && c_edelta && c_ztarDiff && hmsColl_Cut) { H_eXColl_vs_eYColl_nsc->Fill(eYColl, eXColl, FullWeight); }
 
+    // emiss histos for pac (to show effect of particles that punch-thru collimator and the effect of a collimator cut on them)
+    if(c_Q2 && c_hdelta && c_edelta && c_ztarDiff && shmsColl_Cut) { H_Em_nuc_pac0->Fill(Em_nuc, FullWeight); }
+
+    // add cut to select only events that punch thru the collimator (hit the collimator boundary)
+    if(c_Q2 && c_hdelta && c_edelta && c_ztarDiff && shmsColl_Cut && prob_abs<1) { H_Em_nuc_pac1->Fill(Em_nuc, FullWeight); }
+
+    // add collimator cut to remove the punch thru events 
+    if(c_Q2 && c_hdelta && c_edelta && c_ztarDiff && shmsColl_Cut && prob_abs<1 && hmsColl_Cut) { H_Em_nuc_pac2->Fill(Em_nuc, FullWeight); }
+
+
+    
     cout << "SIMC Events Completed: " << std::setprecision(2) << double(i) / nentries * 100. << "  % " << std::flush << "\r";
     
   } // end entry loop
