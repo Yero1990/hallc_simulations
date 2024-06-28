@@ -1,8 +1,0 @@
-cafe_c12_MF_norad.data                                               
-cafe_c12_MF_rad.data                                                                                                                                     
-cafe_c12_MF_norad_benhar.data                                                                                                                           
-cafe_c12_MF_rad_benhar.data
-cafe_c12_SRC_norad.data 
-cafe_c12_SRC_rad.data 
-cafe_c12_SRC_norad_benhar.data                                                                                                                                         
-cafe_c12_SRC_rad_benhar.data 
