@@ -1,0 +1,24 @@
+# d(e,e'p)n Central Kinematics Summary
+# Beam Energy (Ei) = 8.800 GeV
+# 4-Momentum Transfer (Q2) = 1.00 - 1.90 GeV (step: 0.10) 
+# x-Bjorken (xbj) = 1.00 - 2.05 (step: 0.05) 
+# Missing Momentum (Pr) = 0.10 - 0.55 GeV (step: 0.05) 
+# Hadron Out-of-Plane Angle (phi): rotation axis is q-vector 
+# thp = thq + thpq, phi = 180  (q-vector scatters at smaller  angles than proton scattering angle)# 
+# # 
+# Tensor Polarized Deuterium: d(e,e'p) kinematics :
+# 
+# Header Definitions: 
+# Pr   : Central Missing Momentum [GeV/c] 
+# xbj  : Bjorken x  
+# kf   : e- final momentum [GeV/c] 
+# th_e : e- scattering angle [deg] 
+# Pf   : final proton momentum [GeV/c] 
+# th_p : proton scattering angle [deg] 
+# q    : 3-momentum transfer [GeV] 
+# th_q : relative angle between q-vector and +z (lab)  [deg] 
+# th_nq: relative angle between q-vector and recoil neutron [deg] 
+# th_pq: relative angle between q-vector and knocked-out proton [deg] 
+# Q2   : 4-Momentum Transfer [GeV^2]  
+# 
+#! Pr[f,0]/ 	  xbj[f,1]/ 	 kf[f,2]/ 	 th_e[f,3]/ 	 Pf[f,4]/ 	 th_p[f,5]/ 	 q[f,6]/ 	 th_q[f,7]/ 	 th_nq[f,8]/ 	 th_pq[f,9]/ 	 Q2[f,10]/
