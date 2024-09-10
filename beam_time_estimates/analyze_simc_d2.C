@@ -102,11 +102,11 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   int thrq_set=0;
   float Q2_set=0.;
 
-  TString tgt_name;
-  TString thrq_str;
-  TString pm_str;
-  TString Q2_str;
-  TString field_config;
+  TString tgt_name="";
+  TString thrq_str="";
+  TString pm_str="";
+  TString Q2_str="";
+  TString field_config="";
   
   TString model="";
 
@@ -128,10 +128,10 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   
   if( analysis_flag == "d2pol") {
 
+    /*
     // split base into kin setting values
-    //Q2_str = split(split(split(basename.Data(), '_')[0], '_')[0], '_')[1];   // for generic name: d2_pm350_Q2_2p5_fsi_rad
-    //pm_str =split( split(split(split(split(basename.Data(), '_')[0], '_')[0], '_')[0], '_')[0], '_')[1];
-
+    // generic format example: d2_pm400_Q2_2p0_fsi_rad_fieldON.root
+ 
     Q2_str = split(split(split(split(basename.Data(), '_')[0], '_')[0], '_')[0], '_')[1];  // d2_pm350_Q2_2p5_fsi_rad_fieldON
     pm_str = split(split( split(split(split(split(basename.Data(), '_')[0], '_')[0], '_')[0], '_')[0], '_')[0], '_')[1];
     
@@ -153,6 +153,8 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       cout << "Target Field Config: " << field_config.Data() << endl;
 
     }
+    */
+    
   }
   
   
@@ -217,7 +219,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     output_file = "yield_estimates/d2_fsi/output_rates_d2fsi.txt";
     
     // define output directory where numerical histogram .txt will be placed
-    output_hist_data= Form("yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s", pm_set, thrq_set, model.Data());
+    output_hist_data= Form("yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s", pm_set, thrq_set, model.Data()); 
   }
   
   if( analysis_flag == "d2pol") {
@@ -228,17 +230,17 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     
     //Define File Name Patterns
     
-    simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi0/bfield_22p5_deg/Eb8p8/%s.data",    basename.Data());
-    simc_InputFileName  = Form("worksim/d2_pol/smallFSI/optimized/raw/%s/phi0/bfield_22p5_deg/Eb8p8/%s.root",  field_config.Data(),                    basename.Data());
+    simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi0/bfield_12_deg/%s.data",    basename.Data());
+    simc_InputFileName  = Form("worksim/d2_pol/raw/phi0/bfield_12_deg/%s.root",                     basename.Data());
 
-    simc_OutputFileName = Form("worksim/d2_pol/smallFSI/optimized/analyzed/%s_phi0_output.root",          basename.Data());
+    simc_OutputFileName = Form("worksim/d2_pol/analyzed/phi0/bfield_12_deg/%s_analyzed.root",          basename.Data());
     
     // define output file to write the rates
-    output_file = "yield_estimates/d2_pol/smallFSI/optimized/output_rates_d2pol_phi0_Eb8p8_optim.txt";
+    output_file = "yield_estimates/d2_pol/output_rates_d2pol.txt";
     
     // define output directory where numerical histogram .txt will be placed
-    output_hist_data= Form("yield_estimates/d2_pol/histogram_data/bfield_22p5_deg/Eb8p8/%s_pm%d_Q2_%.1f_%s_%s", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data());
-   
+    //output_hist_data= Form("yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/%s_pm%d_Q2_%.1f_%s_%s", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data()); // default generic name
+    output_hist_data = Form("yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/%s_histos", basename.Data());
     
     if (debug) {
       cout << "---- Set Filenames ----" << endl;
@@ -2210,7 +2212,9 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 	}
 	
 	if( analysis_flag == "d2pol") {
-	  extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h_i->GetName(), pm_set, Q2_set));
+	  //extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h_i->GetName(), pm_set, Q2_set)); // default name
+	  extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol.txt", output_hist_data.Data(), h_i->GetName()));
+	  
 	}
 	
 	   
@@ -2248,7 +2252,9 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 	}
 	
 	if( analysis_flag == "d2pol") {
-	  extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, Q2_set));
+	  // extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, Q2_set)); // defualt name
+	  extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol.txt", output_hist_data.Data(), h2_i->GetName())); // defualt name
+	  
 	}
 	
       }
@@ -2291,7 +2297,9 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 	}
 
 	if( analysis_flag == "d2pol") {
-	  extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h_i->GetName(), pm_set, Q2_set));
+	  //extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h_i->GetName(), pm_set, Q2_set)); // default
+	  extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol.txt", output_hist_data.Data(), h_i->GetName()));
+
 	}
 		
       }
@@ -2324,7 +2332,9 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 	}
 	
 	if( analysis_flag == "d2pol") {
-	  extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, Q2_set));
+	  // extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, Q2_set)); // default
+	  extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol.txt", output_hist_data.Data(), h2_i->GetName()));
+
 	}
 	
       }
