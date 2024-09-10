@@ -13,7 +13,7 @@
 
  =?
  &EXPERIMENT
-     ngen  =  100000			!  POS: # of successes
+     ngen  =  1000000			!  POS: # of successes
      EXPER%charge  =   1.0		!  total charge (mC)
      doing_phsp  =  F		!  (T = TRUE)	- If all of the doing_* are
      doing_kaon  =  F		!  (T = TRUE)   false, then doing (e,e'p).
@@ -25,13 +25,13 @@
 / 
  =?
  &KINEMATICS_MAIN
-     Ebeam  =  11000.                                  !  (MeV)
+     Ebeam  =  8800.                                  !  (MeV)
      dEbeam  =  0.05                                   !  beam energy variation (%)
      electron_arm  =  5                                !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
      hadron_arm  =  1                                  !  1=hms,2=sos,3=hrsr,4=hrsl,5 = shms
-     spec%e%P  =  10000.                              !  e arm central momentum (MeV/c) 
-     spec%e%theta  =  6.5                            !  e arm angle setting (degrees) 
-     spec%p%P  =    1200.                             !  p arm central momentum (MeV/c)
+     spec%e%P  =  8360.                              !  e arm central momentum (MeV/c) 
+     spec%e%theta  =  8.2                            !  e arm angle setting (degrees) 
+     spec%p%P  =    1150.                             !  p arm central momentum (MeV/c)
      spec%p%theta  =   55.00                           !  p arm angle setting (degrees) 
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
