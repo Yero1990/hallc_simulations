@@ -1,0 +1,28 @@
+# 1D Histogram Bin Extraction 
+#                   
+# histogram parameters:  
+# title      : In-Plane Angle, $\theta_{rq}$   
+# xbins      : 10   
+# xlabel     :  in-plane angle, $\theta_{rq}$ [deg]   
+# xbin_width : 20.000 
+# ylabel     :  Counts   
+#                   
+# header definitions:
+# xb:         x-axis bin number 
+# x0:         x-axis central bin value 
+# xlow:       x-axis low-edge bin value 
+# xup:        x-axis up-edge bin value 
+# ycont:      bin content (y-axis) 
+# ycont_err:  bin content error (y-axis) 
+#                                        
+xb,x0,xlow,xup,ycont,ycont_err
+1,10.000,0.000,20.000,5224.491,711.759
+2,30.000,20.000,40.000,26875.639,1287.381
+3,50.000,40.000,60.000,85148.859,2206.515
+4,70.000,60.000,80.000,179507.781,3564.603
+5,90.000,80.000,100.000,285546.219,5091.080
+6,110.000,100.000,120.000,306125.469,5758.662
+7,130.000,120.000,140.000,245687.203,4864.969
+8,150.000,140.000,160.000,162433.750,3577.738
+9,170.000,160.000,180.000,57599.656,2161.567
+10,190.000,180.000,200.000,0.000,0.000

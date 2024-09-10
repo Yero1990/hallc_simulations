@@ -637,7 +637,8 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 #hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, field, hist_name, ipm, iq2)
 
                 # phi = 0 config
-                hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, field, hist_name, ipm, iq2)
+                # hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, field, hist_name, ipm, iq2) # default
+                hist_file = 'yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/d2_Eb11_phi0_fsi_rad_fieldON_histos/H_%s_yield_d2pol.txt'%(hist_name)
 
 
 
@@ -693,14 +694,17 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 print('xbin_center:', xbc)
                 print('bins:', len(xbc))
                 #axs.set_title(title)
-                axs.hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.15, ec='k',  color=clr[i], density=False, label="$P_{m}$=%d MeV"%(ipm)+"\n"+ "$Q^{2}$=%.1f GeV$^{2}$ (%d)"%(iq2, counts)+"\n"+"%s"%(itgt))
+
+                #axs.hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.15, ec='k',  color=clr[i], density=False, label="$P_{m}$=%d MeV"%(ipm)+"\n"+ "$Q^{2}$=%.1f GeV$^{2}$ (%d)"%(iq2, counts)+"\n"+"%s"%(itgt)) default
+                axs.hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.15, ec='k',  color=clr[i], density=False)
+
                 #axs.set_ylabel(ylabel)
                 #axs.set_xlabel(xlabel)
 
                 
 
                 #axs.legend(fontsize=12)
-                axs.set_yscale('log')
+                #axs.set_yscale('log')
                 axs.xaxis.set_tick_params(labelbottom=True)
                 #plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0), useMathText=True)  # comment out if using log
                 axs.yaxis.offsetText.set_fontsize(18)
@@ -1685,7 +1689,8 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
     
     '''
     
-
+    print('Calling make_projY_d2pol () . . . ')
+    
     rel_err_thrs = 0.5 # mask >30 % relative error
 
     clr = ['orange', 'deepskyblue', 'magenta']
@@ -1770,11 +1775,14 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
             
             # phi = 0 config
             # hist_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/%s_pm%d_Q2_%.1f_%s_%s/%s'%(itgt, ipm, Q2_user, model, field, h2_hist_basename)  # default path optimized kinematics
-            hist_file_path = 'yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/d2_Eb11_phi0_fsi_rad_fieldON_histos'
+            hist_file_path = 'yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/d2_Eb11_phi0_fsi_rad_fieldON_histos/%s' % (h2_hist_basename)
             
             print('hist_file_path:', hist_file_path)
+
             # check if file exists, else continue reading next file
-            if not os.path.isfile(hist_file_path): continue
+            if not os.path.isfile(hist_file_path):
+                print('path of file NOT found: ', hist_file_path)
+                continue
 
                     
             df = pd.read_csv(hist_file_path, comment='#')
@@ -1789,12 +1797,15 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
             nybins = len(df.yb[df.xb==df.xb[0]])
             ybc = (df.y0[df.x0==df.x0[0]]).to_numpy() # y-bin central value
             xbc = (df.x0[df.y0==df.y0[0]]).to_numpy() # x-bin central value
+
+            
+            
             if "_2Davg" in h2_hist_basename:
                 print('not setting up counts')
             else:
                 df.zcont = df.zcont * scale
                 counts = np.sum(df.zcont)
-
+                
       
 
             if plot_flag=='2d':
@@ -1831,7 +1842,8 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
             
             #loop over x-bins (for y-projections)
             for idx, xbin in enumerate( xbc ):
-                           
+
+                print('idx, xbin -> ', idx, xbin)
                 count_per_xbin     = df.zcont[df.x0==xbin]
                 count_per_xbin_err = np.sqrt( count_per_xbin )
 
@@ -1842,7 +1854,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 
                 cnts = np.sum(count_per_xbin )
 
-                    
+                print(idx, xbin, count_per_xbin, count_per_xbin_err, cnts)
                 # variables for plotting relative error
                 count_per_xbin_rel_err = count_per_xbin_err / count_per_xbin
                 y_const = np.zeros(len(count_per_xbin_rel_err))
@@ -1855,6 +1867,8 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                 if(not np.ma.is_masked(cnts)):
 
                     if plot_flag=='proj':
+                        
+                        
                         ax = plt.subplot(3, 3, jdx+1)
                         
                         if "_2Davg" in h2_hist_basename:
@@ -2005,8 +2019,8 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
 pm_set = [100]
 q2_set = [1.5]
-tgt_set = ['d2', 'n14', 'he4' ]
-#tgt_set = ['n14']
+#tgt_set = ['d2', 'n14', 'he4' ]
+tgt_set = ['d2']
 
 field = 'fieldON'
 
@@ -2026,36 +2040,36 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 # ------ plot kinematic variables -----
 # no self-cut 
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', field, scale)
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi', field, scale)
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', field, scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi', field, scale)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
 
 
 
 # spectrometer kinematics
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proton momentum
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'kf',     'fsi', field,  scale)   # e- momentum
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- angle
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proton momentum
+overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
+overlay_d2pol(tgt_set, pm_set, q2_set, 'kf',     'fsi', field,  scale)   # e- momentum
+overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- angle
 
 
 # electron kinematics
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'nu',     'fsi', field,  scale)   # energy transfer
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj',    'fsi', field,  scale)  # x-bjorken
+overlay_d2pol(tgt_set, pm_set, q2_set, 'nu',     'fsi', field,  scale)   # energy transfer
+overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj',    'fsi', field,  scale)  # x-bjorken
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'q',      'fsi', field,  scale)    # 3-momentum (q) transfer
+overlay_d2pol(tgt_set, pm_set, q2_set, 'q',      'fsi', field,  scale)    # 3-momentum (q) transfer
 
 
 
 # missing variables
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'Pm',     'fsi', field,  scale)   # missing momentum
+overlay_d2pol(tgt_set, pm_set, q2_set, 'Pm',     'fsi', field,  scale)   # missing momentum
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', field, scale)
 
 # angle distributions
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'thq',    'fsi', field,  scale)  # 3-momentum (q) angle
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'thpq',   'fsi', field,  scale)    # in-plane angle between (proton,q)
-#overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq',   'fsi', field,  scale)    # in-plane angle between (recoil,q)
+overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq',   'fsi', field,  scale)    # in-plane angle between (recoil,q)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'phi_pq', 'fsi', field,  scale)  # out-of-plane angle between (proton, q)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq' 'fsi', field,  scale)
 
@@ -2094,7 +2108,10 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 # ------ Pm vs theta_rq yield projections and errors -----
 
-make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', '2d', 1)
+#make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', '2d', 1)
+make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
+make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
+
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
 

@@ -68,9 +68,9 @@ the_xmin = 5.0
 the_xmax = 15.0
 
 # final electron arm momentum [GeV/c]
-kf_nbins = 40
+kf_nbins = 60
 kf_xmin = 7.2
-kf_xmax = 9.5
+kf_xmax = 12.
 
 # invariant mass (assuming proton target mass)
 W_nbins = 100
@@ -338,9 +338,9 @@ exptar_nbins = 60
 exptar_xmin  = -0.06
 exptar_xmax = 0.06
   
-edelta_nbins = 50
-edelta_xmin = 5.  
-edelta_xmax =  20.  
+edelta_nbins = 70
+edelta_xmin = -10.  
+edelta_xmax =  22.  
 
 #-------------------------------  
 #----Hadron Arm Focal Plane-----
