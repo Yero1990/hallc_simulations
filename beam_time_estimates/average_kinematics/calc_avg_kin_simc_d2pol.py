@@ -106,7 +106,8 @@ list_of_args = sys.argv
 #basename='d2_pm800_thrq49_fsi_rad_output' 
 
 # deuteron polarized proposal files
-basename='he4_pm400_Q2_2p0_fsi_rad_fieldON_phi0_output'
+basename='d2_Eb11_phi0_fsi_rad_fieldON_analyzed'
+#basename='he4_pm400_Q2_2p0_fsi_rad_fieldON_phi0_output'
 #basename='c12_pm400_Q2_2p0_fsi_rad_fieldON_phi0_output'
 #basename='d2_pm400_Q2_2p0_fsi_rad_fieldON_phi0_output'
 
