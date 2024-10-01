@@ -102,7 +102,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   int thrq_set=0;
   float Q2_set=0.;
 
-  TString tgt_name="";
+  TString tgt_name="he4";
   TString thrq_str="";
   TString pm_str="";
   TString Q2_str="";
@@ -1294,7 +1294,8 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       
       // re-define output directory (as Nitrogen-14) where numerical histogram .txt will be placed
       //output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s_%s", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data());
-      output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/%s_pm%d_Q2_%.1f_%s_%s", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data());
+      //output_hist_data= Form("yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/%s_pm%d_Q2_%.1f_%s_%s", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data());
+      output_hist_data = Form("yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/%s_histos", basename.Data());
 
       
       scale_T     = get_nuclT(14) / get_nuclT(12);  // transparency scaling

@@ -1434,7 +1434,9 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     overlay_flag = True
     
     # create file to write dilution factors
-    ofname = 'd2pol_dilution_factors_pm%d_Q2_%.1f_phi0_%s.csv' %(pm_user, Q2_user, field)
+    #ofname = 'd2pol_dilution_factors_pm%d_Q2_%.1f_phi0_%s.csv' %(pm_user, Q2_user, field)
+    ofname = 'd2pol_dilution_factors_Eb8p8_phi0_%s_finePmBins.csv' %(field)
+
     ofile = open(ofname, 'w+')
     ofile.write('# d2pol dilution factors (%s) \n'%(field))
     ofile.write('# \n'
@@ -1455,29 +1457,36 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     ofile.write('thrq_bin,pm_bin,d2,d2_err,he4,he4_err,n14,n14_err,dilution,dilution_err\n') 
 
 
-
-    # if overlay_flag == False:
+    '''
+    if overlay_flag == False:
     
     # uncomment comment for plotting dilution factor into subplots binned in thrq 
-    
-    fig, ax = plt.subplots(3, 3)
-    fig.set_size_inches(10,10, forward=True)
-    fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)
-    fig.text(0.01, 0.5, 'dilution', va='center', rotation='vertical', fontsize=14)
-    subplot_title =  r"dilution factor, central p$_{m,cent}$ = %d MeV, $Q^{2}$ = %.1f GeV$^{2}$"%(pm_user, Q2_user)
-    plt.suptitle(subplot_title, fontsize=15);
-    plt.tight_layout()
-    
+        
+        fig, ax = plt.subplots(3, 3)
+        fig.set_size_inches(10,10, forward=True)
+        fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)
+        fig.text(0.01, 0.5, 'dilution', va='center', rotation='vertical', fontsize=14)
+        subplot_title =  r"dilution factor, central p$_{m,cent}$ = %d MeV, $Q^{2}$ = %.1f GeV$^{2}$"%(pm_user, Q2_user)
+        plt.suptitle(subplot_title, fontsize=15);
+        plt.tight_layout()
+    '''
     #------------------------------------------------------
     
     
     # h2 -> 2d histo (not related to hydrogrn)
     #h2_hist_basename = 'H_Pm_vs_thrq_dil_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name  (finer bins)
-    h2_hist_basename = 'H_Pm_vs_thrq_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name (coarser bins)
-    
-    d2_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/d2_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
-    he4_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/he4_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
-    n14_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/n14_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
+    #h2_hist_basename = 'H_Pm_vs_thrq_yield_d2pol_pm%d_Q2_%.1f.txt'%(pm_user, Q2_user)   # generic histogram name (coarser bins)
+    h2_hist_basename = 'H_Pm_vs_thrq_dil_yield_d2pol.txt'   # file name for epja 
+
+    # ORIGINAL
+    #d2_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/d2_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
+    #he4_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/he4_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
+    #n14_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/n14_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
+
+    # NEW FILES (For re-optim EPJA, Sep 30, 2024)
+    d2_file_path = 'yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/d2_Eb8p8_phi0_fsi_rad_fieldON_histos/%s'%(h2_hist_basename)
+    he4_file_path = 'yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/he4_Eb8p8_phi0_fsi_rad_fieldON_histos/%s'%(h2_hist_basename)
+    n14_file_path = 'yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/n14_Eb8p8_phi0_fsi_rad_fieldON_histos/%s'%(h2_hist_basename)
     
     df_d2  = pd.read_csv(d2_file_path, comment='#')
     df_he4 = pd.read_csv(he4_file_path, comment='#')
@@ -1509,7 +1518,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
         if xbin>=110: continue
 
         # uncomment for plotting dilution factor into subplots binned in thrq 
-        ax = plt.subplot(3, 3, jdx+1)
+        #ax = plt.subplot(3, 3, jdx+1)
 
         
         d2_count_per_xbin     = df_d2.zcont[df_d2.x0==xbin]
@@ -1571,16 +1580,20 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
 
             
             # -- plotting option: overlay dilution factors for all thrq_bins ---
-            '''
+            
             # uncomment if plotting overlay for all thrq_bins 
+            
             fig= plt.subplot()
             plt.plot(x_interp,  y_interp, marker='None', linestyle='--', label=r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.) )
             plt.xticks([0.0, 0.2, 0.4, 0.6], fontsize = 32)
             plt.yticks(fontsize = 32)
             plt.ylim(0, 1.0)
             plt.xlim(0, 0.65)
+            plt.xlabel('Missing Momentum, $P_{m}$ (GeV/c)', fontsize=26)
+            plt.ylabel('Dilution Factor', fontsize=26)
             plt.legend(fontsize=16, loc='lower right')
-            '''
+        
+
             #--------------------------------------------------------------------
             
             
@@ -1593,17 +1606,17 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
             
             #uncomment if plotting individual subplots
             # plot interpolated function
-            ax.plot(x_interp,  y_interp, marker='None', alpha=0.9, linestyle='--', color='r')
+            #ax.plot(x_interp,  y_interp, marker='None', alpha=0.9, linestyle='--', color='r')
 
             # plot data
-            ax.errorbar(ybc, dilution, dilution_err, marker='o', markersize=8, alpha=0.4, linestyle='None', color='r', label=r'%.1f GeV$^{2}$'%(Q2_user))
+            #ax.errorbar(ybc, dilution, dilution_err, marker='o', markersize=8, alpha=0.4, linestyle='None', color='r', label=r'%.1f GeV$^{2}$'%(Q2_user))
 
             
-            plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
-            plt.xticks(fontsize = 18)
-            plt.yticks(fontsize = 18)
-            plt.ylim(0.,1.0)
-            plt.xlim(0, 0.7)
+            #plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
+            #plt.xticks(fontsize = 18)
+            #plt.yticks(fontsize = 18)
+            #plt.ylim(0.,1.0)
+            #plt.xlim(0, 0.7)
             
             
             jdx = jdx+1
@@ -2040,36 +2053,36 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 # ------ plot kinematic variables -----
 # no self-cut 
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'edelta_nsc', 'fsi', field, scale)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'hdelta_nsc', 'fsi', field, scale)
 
 
 
 # spectrometer kinematics
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proton momentum
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
-overlay_d2pol(tgt_set, pm_set, q2_set, 'kf',     'fsi', field,  scale)   # e- momentum
-overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- angle
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Pf',     'fsi', field,  scale)   # proton momentum
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'kf',     'fsi', field,  scale)   # e- momentum
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'the',    'fsi', field,  scale)  # e- angle
 
 
 # electron kinematics
-overlay_d2pol(tgt_set, pm_set, q2_set, 'nu',     'fsi', field,  scale)   # energy transfer
-overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj',    'fsi', field,  scale)  # x-bjorken
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'nu',     'fsi', field,  scale)   # energy transfer
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'xbj',    'fsi', field,  scale)  # x-bjorken
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc',     'fsi', field, scale)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'q',      'fsi', field,  scale)    # 3-momentum (q) transfer
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'q',      'fsi', field,  scale)    # 3-momentum (q) transfer
 
 
 
 # missing variables
-overlay_d2pol(tgt_set, pm_set, q2_set, 'Pm',     'fsi', field,  scale)   # missing momentum
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'Pm',     'fsi', field,  scale)   # missing momentum
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'Em_nuc_nsc', 'fsi', field, scale)
 
 # angle distributions
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'thq',    'fsi', field,  scale)  # 3-momentum (q) angle
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'thpq',   'fsi', field,  scale)    # in-plane angle between (proton,q)
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq',   'fsi', field,  scale)    # in-plane angle between (recoil,q)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq',   'fsi', field,  scale)    # in-plane angle between (recoil,q)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'phi_pq', 'fsi', field,  scale)  # out-of-plane angle between (proton, q)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'cphi_pq' 'fsi', field,  scale)
 
@@ -2109,13 +2122,13 @@ overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq',   'fsi', field,  scale)    # in-p
 # ------ Pm vs theta_rq yield projections and errors -----
 
 #make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', '2d', 1)
-make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
-make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
+#make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
+#make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
 
-#calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=4)
+calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=2)
 
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 
