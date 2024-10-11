@@ -29,32 +29,32 @@ def calc_d2_kin():
     me = 0.000511  #electron
 
     #Initial parameter kinematics [GeV]
-    Ei = 8.8  #beam energy
+    Ei = 11  #beam energy
 
     #Q2 = 2.9   #4-momentum transfer ( this can be ignorde for now)
 
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 1.49 #2.9
+    Q2_min = 2.5 #2.9
     Q2_step = 0.1 
-    Q2_max = 1.51 #4.5 + Q2_step   #include endpoint (+Pr_step)
+    Q2_max = 3.1 #4.5 + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
-    Pr_min = 0.1
+    Pr_min = 0.4
     Pr_step = 0.05    
     Pr_max = 0.5 + Pr_step   #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
     xbj_min = 1.0
-    xbj_step = 0.05
+    xbj_step = 0.1
     xbj_max = 2. + xbj_step
     xbj_range = np.arange(xbj_min, xbj_max, xbj_step)
     
     #output file to write kinematics
     #fname = 'polarized_deut_kin_summary_Eb%.2f_phi180.csv' % (Ei)
     #fname = 'polarized_deut_kin_summary_Eb%.2f_phi180_HMSwideOpen_thrq35.txt' % (Ei)
-    fname = 'd2pol_Eb8p8_phi0.txt'
+    fname = 'd2pol_Eb11_phi180.txt'
     
     ofile = open(fname, 'w')
     ofile.write('# d(e,e\'p)n Central Kinematics Summary\n')
@@ -63,7 +63,7 @@ def calc_d2_kin():
     ofile.write('# x-Bjorken (xbj) = %.2f - %.2f (step: %.2f) \n' % (xbj_min, xbj_max, xbj_step))    
     ofile.write('# Missing Momentum (Pr) = %.2f - %.2f GeV (step: %.2f) \n' % (Pr_min, Pr_max, Pr_step))
     ofile.write('# Hadron Out-of-Plane Angle (phi): rotation axis is q-vector \n')
-    ofile.write('# thp = thq - thpq, phi = 0  (q-vector scatters at smaller  angles than proton scattering angle)')
+    ofile.write('# thp = thq - thpq, phi = 180  (q-vector scatters at smaller  angles than proton scattering angle)')
     ofile.write('# \n')
     ofile.write('# ')
     ofile.write('# \n'
@@ -140,8 +140,8 @@ def calc_d2_kin():
                 thnq = np.arccos(cthnq) / dtr  #theta_nq [deg]
                 
                 #theta_p (proton angle relative to +z (lab))
-                #thp = thq + thpq  # phi = 180  (q-vector scatters at smaller angles than proton scattering angle)
-                thp = thq - thpq   # phi = 0   (q-vector scatters at larger  angles than proton scattering angle)
+                thp = thq + thpq  # phi = 180  (q-vector scatters at smaller angles than proton scattering angle)
+                #thp = thq - thpq   # phi = 0   (q-vector scatters at larger  angles than proton scattering angle)
 
                 if (np.isnan(thp)): continue
 
@@ -150,7 +150,7 @@ def calc_d2_kin():
                 
 
                 # restrict the neutron recoil angle relative to q-vector, theta_rq
-                #if(thnq < 10. or thnq > 30): continue
+                if(thnq < 10. or thnq > 30): continue
                 
                 if(th_e<7.5): continue
                 if(th_e>=40.): continue

@@ -1,0 +1,12 @@
+Eb = 11 GeV
+Pm_peak ~ 400 MeV/c
+Q2 2.5 - 3
+theta_rq = 10 - 30 deg
+phi=180
+>=1000 counts per pmiss bin / th_rq_bin
+(do NOT put any limits)
+B-field: 0 deg
+
+
+SHMS: 5.5 - 40 deg
+HMS: 10.5 - 70 deg
