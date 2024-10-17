@@ -1,0 +1,12 @@
+
+--> unpolarized d(e,e'p) Pm>800 MeV/c, with SoLID detector (Eb = 22 GeV)
+    (make estimates of cross-sections at different locations of phi)
+
+    * ask for help to get started to prepare a few slides to present at 22 GeV workshop
+      to show proof of principle of how such an experiment would be realizable using
+      the SoLID detector at 22 GeV
+
+    * perhaps I can start with simulatons using Hall C spectrometer at 22 GeV
+
+
+(discuss briefly polarized deuteron)
