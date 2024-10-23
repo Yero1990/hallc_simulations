@@ -613,7 +613,7 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
 
     #fig, axs = plt.subplots(2, sharex=True, figsize=(5,10))
     #fig, axs = plt.subplots(2, figsize=(6,7))
-    fig, axs = plt.subplots(1, figsize=(6,5))
+    fig, axs = plt.subplots(1, figsize=(8,7))
 
     #clr = ['orange', 'b', 'magenta']
     #clr = ['orange', 'b', 'magenta']
@@ -634,14 +634,12 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 
                 # set histogram file path
                 
-                #hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, field, hist_name, ipm, iq2)
+                #hist_file = 'yield_estimates/d2_pol/histogram_data/phi180/bfield_0_deg/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, field, hist_name, ipm, iq2)
+                hist_file = 'yield_estimates/d2_pol/histogram_data/phi180/bfield_0_deg/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol.txt'%(itgt, ipm, iq2, model, field, hist_name)
 
                 # phi = 0 config
                 # hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, field, hist_name, ipm, iq2) # default
-                hist_file = 'yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/d2_Eb11_phi0_fsi_rad_fieldON_histos/H_%s_yield_d2pol.txt'%(hist_name)
-
-
-
+                #hist_file = 'yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/d2_Eb11_phi0_fsi_rad_fieldON_histos/H_%s_yield_d2pol.txt'%(hist_name)
 
                 
                 print('tgt_set:', itgt, 'Pm:', ipm, 'Q2:', iq2)
@@ -693,17 +691,17 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 print('min(df.xlow), max(df.xup) --> ', min(df.xlow), max(df.xup))
                 print('xbin_center:', xbc)
                 print('bins:', len(xbc))
-                #axs.set_title(title)
+                axs.set_title(title, fontsize=20)
 
                 #axs.hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.15, ec='k',  color=clr[i], density=False, label="$P_{m}$=%d MeV"%(ipm)+"\n"+ "$Q^{2}$=%.1f GeV$^{2}$ (%d)"%(iq2, counts)+"\n"+"%s"%(itgt)) default
                 axs.hist(x=xbc, bins=len(xbc), range=[min(df.xlow), max(df.xup)], weights=N, alpha=0.15, ec='k',  color=clr[i], density=False)
 
-                #axs.set_ylabel(ylabel)
-                #axs.set_xlabel(xlabel)
+                axs.set_ylabel(ylabel, fontsize=20)
+                axs.set_xlabel(xlabel, fontsize=20)
 
                 
 
-                #axs.legend(fontsize=12)
+                axs.legend(fontsize=12)
                 #axs.set_yscale('log')
                 axs.xaxis.set_tick_params(labelbottom=True)
                 #plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0), useMathText=True)  # comment out if using log
@@ -1783,12 +1781,11 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
             
             # set histo base name and file path
             #h2_hist_basename = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(h2_hist_name, ipm, Q2_user)   # default generic histogram name
-            h2_hist_basename = 'H_Pm_vs_thrq_yield_d2pol.txt'
+            h2_hist_basename = 'H_%s_yield_d2pol.txt'%(h2_hist_name)
 
             
-            # phi = 0 config
-            # hist_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/%s_pm%d_Q2_%.1f_%s_%s/%s'%(itgt, ipm, Q2_user, model, field, h2_hist_basename)  # default path optimized kinematics
-            hist_file_path = 'yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/d2_Eb11_phi0_fsi_rad_fieldON_histos/%s' % (h2_hist_basename)
+            hist_file_path = 'yield_estimates/d2_pol/histogram_data/phi180/bfield_0_deg/%s_pm%d_Q2_%.1f_%s_%s/%s'%(itgt, ipm, Q2_user, model, field, h2_hist_basename)  # default path optimized kinematics
+            #hist_file_path = 'yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/d2_Eb11_phi0_fsi_rad_fieldON_histos/%s' % (h2_hist_basename)
             
             print('hist_file_path:', hist_file_path)
 
@@ -1890,7 +1887,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                             ax.set_ylim(-20,20)
                         else:
                             ax.hist(ybc, bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], alpha=0.2,  color=clr[i], ec='k', density=False, label=r'%d counts (%s)'%(cnts, itgt))
-                            plt.axhline(y = 500, color = 'r', linestyle = '--')
+                            plt.axhline(y = 1000, color = 'r', linestyle = '--')
                             ax.set_yscale('log')
                             plt.ylim(0.1, 2e5)
                             plt.xticks(fontsize = 14)
@@ -2030,8 +2027,8 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 #*************************************
 
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
-pm_set = [100]
-q2_set = [1.5]
+pm_set = [450]
+q2_set = [2.5]
 #tgt_set = ['d2', 'n14', 'he4' ]
 tgt_set = ['d2']
 
@@ -2121,14 +2118,14 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 # ------ Pm vs theta_rq yield projections and errors -----
 
-#make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', '2d', 1)
+#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', '2d', 1)
 #make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
 
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj', 12)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 12)
 
-calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=2)
+#calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=2)
 
 #calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
 

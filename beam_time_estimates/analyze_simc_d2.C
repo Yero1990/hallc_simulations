@@ -102,7 +102,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   int thrq_set=0;
   float Q2_set=0.;
 
-  TString tgt_name="he4";
+  TString tgt_name="";
   TString thrq_str="";
   TString pm_str="";
   TString Q2_str="";
@@ -128,7 +128,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   
   if( analysis_flag == "d2pol") {
 
-    /*
+    
     // split base into kin setting values
     // generic format example: d2_pm400_Q2_2p0_fsi_rad_fieldON.root
  
@@ -153,7 +153,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       cout << "Target Field Config: " << field_config.Data() << endl;
 
     }
-    */
+    
     
   }
   
@@ -230,17 +230,17 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     
     //Define File Name Patterns
     
-    simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi0/bfield_12_deg/%s.data",    basename.Data());
-    simc_InputFileName  = Form("worksim/d2_pol/raw/phi0/bfield_12_deg/%s.root",                     basename.Data());
+    simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi180/bfield_0_deg/%s.data",    basename.Data());
+    simc_InputFileName  = Form("worksim/d2_pol/raw/phi180/bfield_0_deg/%s.root",                     basename.Data());
 
-    simc_OutputFileName = Form("worksim/d2_pol/analyzed/phi0/bfield_12_deg/%s_analyzed.root",          basename.Data());
+    simc_OutputFileName = Form("worksim/d2_pol/analyzed/phi180/bfield_0_deg/%s_analyzed.root",          basename.Data());
     
     // define output file to write the rates
     output_file = "yield_estimates/d2_pol/output_rates_d2pol.txt";
     
     // define output directory where numerical histogram .txt will be placed
-    //output_hist_data= Form("yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/%s_pm%d_Q2_%.1f_%s_%s", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data()); // default generic name
-    output_hist_data = Form("yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/%s_histos", basename.Data());
+    output_hist_data= Form("yield_estimates/d2_pol/histogram_data/phi180/bfield_0_deg/%s_pm%d_Q2_%.1f_%s_%s", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data()); // default generic name
+    //output_hist_data = Form("yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/%s_histos", basename.Data());
     
     if (debug) {
       cout << "---- Set Filenames ----" << endl;
@@ -1266,7 +1266,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 
   if( analysis_flag == "d2pol") {
     Ib = 0.085;         // beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC (0.1 uA -> 100 nA)
-    time = 336.;     // estimated time (in hours) a run takes (start - end) of run (2 weeks)
+    time = 168.;     // estimated time (in hours) a run takes (start - end) of run (1 weeks)
     charge_factor = Ib * time * 3600. / 1000.; // in mC
 
     // efficiencies (assume 1 for now)
