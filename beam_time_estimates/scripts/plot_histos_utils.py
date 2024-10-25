@@ -2032,7 +2032,7 @@ q2_set = [2.5]
 #tgt_set = ['d2', 'n14', 'he4' ]
 tgt_set = ['d2']
 
-field = 'fieldON'
+field = 'fieldOFF'
 
 
 scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 -> 4 weeks, . . . )
@@ -2122,8 +2122,8 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 #make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
 #make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
 
-make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj', 12)
-make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', 'proj_err', 12)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldOFF', 'proj', 12)
+make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldOFF', 'proj_err', 12)
 
 #calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=2)
 
