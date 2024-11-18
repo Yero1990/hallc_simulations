@@ -2146,7 +2146,7 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 # d2_pm150_Q2_1p8_fsi_rad_fieldON.root
 # d2_pm180_Q2_1p8_fsi_rad_fieldON.root
 
-pm_set = [180]  #
+pm_set = [200]  #
 q2_set = [2.4]  #
 #tgt_set = ['d2', 'n14', 'he4' ]
 tgt_set = ['d2']
