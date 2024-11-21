@@ -329,7 +329,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     
     
     //------------------------------
-    
+    cout << "L332 " << endl;
     //---------Kinematics Cuts---------- 
     //4-Momentum Transfers
     Bool_t Q2_cut_flag = stoi(split(FindString("Q2_cut_flag", input_CutFileName.Data())[0], '=')[1]);
@@ -385,7 +385,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     Bool_t c_kinCuts;   //kinematics cuts
     
     //---------------------------------------------------------------------------------------------------------
-    
+
     //--------------------
     // READ HISTO BINS
     //-------------------
@@ -426,7 +426,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     Double_t W_nbins  =  stod(split(FindString("W_nbins",  input_HBinFileName.Data())[0], '=')[1]);
     Double_t W_xmin   =  stod(split(FindString("W_xmin",  input_HBinFileName.Data())[0], '=')[1]);
     Double_t W_xmax   =  stod(split(FindString("W_xmax",  input_HBinFileName.Data())[0], '=')[1]);
-    
+
     //Secondary Kinematics
     Double_t Pf_nbins    = stod(split(FindString("Pf_nbins",  	input_HBinFileName.Data())[0], '=')[1]);   //final proton momentum
     Double_t Pf_xmin     = stod(split(FindString("Pf_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
@@ -447,7 +447,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     Double_t Pmx_nbins   = stod(split(FindString("Pmx_lab_nbins",  	input_HBinFileName.Data())[0], '=')[1]);
     Double_t Pmx_xmin    = stod(split(FindString("Pmx_lab_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
     Double_t Pmx_xmax    = stod(split(FindString("Pmx_lab_xmax",  	input_HBinFileName.Data())[0], '=')[1]);               				        	  	       
-    
+
     Double_t Pmy_nbins   = stod(split(FindString("Pmy_lab_nbins",  	input_HBinFileName.Data())[0], '=')[1]);
     Double_t Pmy_xmin    = stod(split(FindString("Pmy_lab_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
     Double_t Pmy_xmax    = stod(split(FindString("Pmy_lab_xmax",  	input_HBinFileName.Data())[0], '=')[1]);               				                 	       				  	       
@@ -464,7 +464,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     Double_t MM2_nbins  = stod(split(FindString("MM2_nbins",  	input_HBinFileName.Data())[0], '=')[1]);  
     Double_t MM2_xmin   = stod(split(FindString("MM2_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
     Double_t MM2_xmax   = stod(split(FindString("MM2_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
-    
+
     Double_t thpq_nbins  = stod(split(FindString("thxq_nbins",  input_HBinFileName.Data())[0], '=')[1]);
     Double_t thpq_xmin   = stod(split(FindString("thxq_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
     Double_t thpq_xmax   = stod(split(FindString("thxq_xmax",  	input_HBinFileName.Data())[0], '=')[1]);
@@ -476,8 +476,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     Double_t thrq_nbins  = stod(split(FindString("thrq_nbins",  input_HBinFileName.Data())[0], '=')[1]);
     Double_t thrq_xmin   = stod(split(FindString("thrq_xmin",  	input_HBinFileName.Data())[0], '=')[1]);
     Double_t thrq_xmax   = stod(split(FindString("thrq_xmax",  	input_HBinFileName.Data())[0], '=')[1]);               				              
-    
-    
+  
     //---------------------------------
     // Acceptance Histograms Binning
     //---------------------------------
@@ -635,7 +634,8 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     
     TH1F *H_Pm      = new TH1F("H_Pm","Missing Momentum, P_{miss}; missing momentum, P_{m} [GeV/c]; Counts", Pm_nbins, Pm_xmin, Pm_xmax);
     TH1F *H_Pm_noCut      = new TH1F("H_Pm_noCut","Missing Momentum, P_{miss} (no cuts, DAQ rates); missing momentum, P_{m} [GeV/c]; Counts", Pm_nbins, Pm_xmin, Pm_xmax); 
-    
+
+ 
     TH1F *H_MM      = new TH1F("H_MM","Missing Mass, M_{miss}; missing mass, M_{miss} [GeV]", MM_nbins, MM_xmin, MM_xmax);        
     TH1F *H_MM2     = new TH1F("H_MM2","Missing Mass Squared, M^{2}_{miss}; missing mass, MM^{2} [GeV^{2}]; Counts", MM2_nbins, MM2_xmin, MM2_xmax); 
     TH1F *H_thpq    = new TH1F("H_thpq", "In-Plane Angle, #theta_{pq}; in-plane angle, #theta_{pq} [deg]; Counts", thpq_nbins, thpq_xmin, thpq_xmax);

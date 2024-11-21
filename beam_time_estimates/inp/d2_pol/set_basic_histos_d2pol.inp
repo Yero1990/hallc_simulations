@@ -222,15 +222,15 @@ thxq_xmin = 0.
 thxq_xmax = 40.
 
 # In-plane angle between the recoil system and q (+/- 5 deg bins)
-#thrq nbins = 19
-#thrq xmin = 0.
-#thrq xmax = 190.
+thrq_nbins = 19
+thrq_xmin = -5.
+thrq_xmax = 185.
+
 
 # In-plane angle between the recoil system and q (+/- 10 deg bins) - increased bin width for d2 pol stats
-thrq_nbins = 10
-thrq_xmin = 0.
-thrq_xmax = 200.
-
+#thrq_nbins = 10
+#thrq_xmin = 0.
+#thrq_xmax = 200.
 
 # Out-of-plane angle between detected particle and q
 phxq_nbins = 100
