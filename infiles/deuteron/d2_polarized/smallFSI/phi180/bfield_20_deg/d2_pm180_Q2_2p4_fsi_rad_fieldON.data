@@ -32,7 +32,7 @@
      spec%e%P  =    9500.                              !  e arm central momentum (MeV/c) original:  10016
      spec%e%theta  =  8.46                            !  e arm angle setting (degrees) 
      spec%p%P  =    1655.                             !  p arm central momentum (MeV/c) 
-     spec%p%theta  =   53.7                           !  p arm angle setting (degrees)
+     spec%p%theta  =   53.                           !  p arm angle setting (degrees) original: 53.7
      spec%e%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt. in eArm focal plane                                     
      spec%p%sig_musc  = 1.0e-6, 1.0e-6                 ! add extra mult scatt in pArm focal plane           
      spec%e%sig_smear = 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 ! add extra smearing in recon eArm (Ytar, xptar, yptar, delta) 
