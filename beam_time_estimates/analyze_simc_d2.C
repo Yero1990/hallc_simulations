@@ -1265,8 +1265,8 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   }
 
   if( analysis_flag == "d2pol") {
-    Ib = 0.085;         // beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC (0.1 uA -> 100 nA)
-    time = 168.;     // estimated time (in hours) a run takes (start - end) of run (1 weeks)
+    Ib = 0.1;         // beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC (0.1 uA -> 100 nA)
+    time = 168.;     // estimated time (in hours) a run takes (start - end) of run (1 week)
     charge_factor = Ib * time * 3600. / 1000.; // in mC
 
     // efficiencies (assume 1 for now)
