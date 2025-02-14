@@ -29,20 +29,20 @@ def calc_d2_kin():
     me = 0.000511  #electron
 
     #Initial parameter kinematics [GeV]
-    Ei = 11.  #beam energy
+    Ei = 2.2  #beam energy: 2.2, 4.4, 6.6, 8.8, 11 GeV
 
     #Q2 = 2.9   #4-momentum transfer ( this can be ignorde for now)
 
     #Set Q2 Range to cover [GeV^2]
-    Q2_min = 2 #2.9
+    Q2_min = 1 #2.9
     Q2_step = 0.1 
-    Q2_max = 4.0 #4.5 + Q2_step   #include endpoint (+Pr_step)
+    Q2_max = 3.0 #4.5 + Q2_step   #include endpoint (+Pr_step)
     Q2_range = np.arange(Q2_min, Q2_max, Q2_step)
     
     #Set Missing Momentum Range to cover [GeV]
     Pr_min = 0.2
     Pr_step = 0.01    
-    Pr_max = 0.6 + Pr_step   #include endpoint (+Pr_step)
+    Pr_max = 0.35 + Pr_step   #include endpoint (+Pr_step)
     Pr_range = np.arange(Pr_min, Pr_max, Pr_step)
     
     #Set x-Bjorken Range to cover
@@ -54,7 +54,7 @@ def calc_d2_kin():
     #output file to write kinematics
     #fname = 'polarized_deut_kin_summary_Eb%.2f_phi180.csv' % (Ei)
     #fname = 'polarized_deut_kin_summary_Eb%.2f_phi180_HMSwideOpen_thrq35.txt' % (Ei)
-    fname = 'd2Kin_Eb11_phi180_upperQ2_2GeV_higherPm.txt'
+    fname = 'd2Kin_Eb2p2_phi0_minQ2.txt'
     
     ofile = open(fname, 'w')
     ofile.write('# d(e,e\'p)n Central Kinematics Summary\n')
@@ -140,8 +140,8 @@ def calc_d2_kin():
                 thnq = np.arccos(cthnq) / dtr  #theta_nq [deg]
                 
                 #theta_p (proton angle relative to +z (lab))
-                thp = thq + thpq  # phi = 180  (q-vector scatters at smaller angles than proton scattering angle)
-                #thp = thq - thpq   # phi = 0   (q-vector scatters at larger  angles than proton scattering angle)
+                #thp = thq + thpq  # phi = 180  (q-vector scatters at smaller angles than proton scattering angle)
+                thp = thq - thpq   # phi = 0   (q-vector scatters at larger  angles than proton scattering angle)
 
                 if (np.isnan(thp)): continue
 
@@ -150,9 +150,10 @@ def calc_d2_kin():
                 
 
                 # restrict the neutron recoil angle relative to q-vector, theta_rq
-                if(thnq > 45): continue
-                
-                #if(th_e<7.5): continue
+                if(thnq >= 35): continue
+
+                # restrict e- angle to < 20 - 35 deg = -15 deg  (+15 deg beam-left [SHMS e- angle])
+                if(th_e>=15.): continue
                 #if(th_e>=40.): continue
                 
                 ofile.write("  %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )
