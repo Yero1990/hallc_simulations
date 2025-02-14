@@ -230,10 +230,10 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     
     //Define File Name Patterns
     
-    simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi180/bfield_20_deg/%s.data",    basename.Data());
-    simc_InputFileName  = Form("worksim/d2_pol/raw/phi180/bfield_20_deg/%s.root",                     basename.Data());
+    simc_infile         = Form("infiles/deuteron/d2_polarized/smallFSI/phi180/bfield_20_deg/lowestQ2/Eb_6p6GeV/%s.data",    basename.Data());
+    simc_InputFileName  = Form("worksim/d2_pol/raw/phi180/bfield_20_deg/Eb_6p6GeV/%s.root",                     basename.Data());
 
-    simc_OutputFileName = Form("worksim/d2_pol/analyzed/phi180/bfield_20_deg/%s_analyzed.root",          basename.Data());
+    simc_OutputFileName = Form("worksim/d2_pol/analyzed/phi180/bfield_20_deg/Eb_6p6GeV/%s_analyzed.root",          basename.Data());
     
     // define output file to write the rates
     output_file = "yield_estimates/d2_pol/output_rates_d2pol.txt";

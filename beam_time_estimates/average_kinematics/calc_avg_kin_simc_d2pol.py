@@ -106,10 +106,10 @@ list_of_args = sys.argv
 #basename='d2_pm800_thrq49_fsi_rad_output' 
 
 # deuteron polarized proposal files
-basename='d2_pm180_Q2_2p4_fsi_rad_fieldON_analyzed'
+basename='d2_pm310_Q2_2p5_fsi_rad_fieldON_analyzed'
 
 
-output_file = basename+'_avgkin.csv'
+output_file = basename+'_avgkin_Eb6p6GeV.csv'
 
 
 o = open(output_file,'w')
