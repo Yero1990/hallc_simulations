@@ -1,0 +1,18 @@
+
+lowest Q2 = 1.5 GeV^2
+-------------------------------------------
+
+Do simulation: target field 20 deg beam right
+but without the limiting factor of the opening
+(allow as high as possible e- and proton angles)
+
+-------------------------------------------
+
+Do simulations: change target field to 15 deg beam left, and
+check how low Q2 can we go
+
+targ_Bphi = 90. (for SHMS)
+targ_Bangle = 15 (beam left)
+
+HMS: (55 deg, 70 deg)
+SHMS: (6.5 deg, 40 deg)
