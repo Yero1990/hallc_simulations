@@ -21,7 +21,6 @@
 # th_pq: relative angle between q-vector and knocked-out proton [deg] 
 # Q2   : 4-Momentum Transfer [GeV^2]  
 # 
-
   Pr,            xbj,            kf,             th_e,           Pf,             th_p,           q,              th_q,           th_nq,          th_pq,          Q2
   0.2000 	 1.4000 	 10.5432 	 5.8307 	 1.0007 	 68.3238 	 1.1869 	 64.4810 	 19.5927 	 3.8429 	 1.2000
   0.2000 	 1.4000 	 10.5052 	 6.0800 	 1.0523 	 66.5611 	 1.2429 	 63.5344 	 16.1292 	 3.0267 	 1.3000

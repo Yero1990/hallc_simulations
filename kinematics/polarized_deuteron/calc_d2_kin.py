@@ -54,7 +54,7 @@ def calc_d2_kin():
     #output file to write kinematics
     #fname = 'polarized_deut_kin_summary_Eb%.2f_phi180.csv' % (Ei)
     #fname = 'polarized_deut_kin_summary_Eb%.2f_phi180_HMSwideOpen_thrq35.txt' % (Ei)
-    fname = 'd2Kin_Eb11_phi180_minQ2_unrestricted.txt'
+    fname = 'd2Kin_Eb11_phi180_minQ2_bfield15deg_beamleft.txt'
     
     ofile = open(fname, 'w')
     ofile.write('# d(e,e\'p)n Central Kinematics Summary\n')
@@ -147,15 +147,16 @@ def calc_d2_kin():
 
                 # restrict the proton angle to < 20 + 35 deg (allowed by magnet used in polarization)
                 #if(thp>=55): continue
-                if(thp>=70): continue     # restricted to physical HMS max
-
+                #if(thp>=70): continue     # restricted to physical HMS max
+                if(thp<=55. or thp>=70.): continue  # restriction for target field beam-left (by 15 deg)
     
                 # restrict the neutron recoil angle relative to q-vector, theta_rq
                 if(thnq >= 35): continue
 
                 # restrict e- angle to < 20 - 35 deg = -15 deg  (+15 deg beam-left [SHMS e- angle])
                 #if(th_e>=15.): continue
-                if(th_e>=40.): continue   # restricted to physical SHMS max
+                #if(th_e>=40.): continue   # restricted to physical SHMS max
+                if(th_e<=6.5 or th_e>=40.): continue  # restriction for target field beam-left (by 15 deg)
                 
                 ofile.write("  %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f \t %.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )
                 #ofile.write("%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,%.4f\n" % (Pr, xbj, kf, th_e, Pf, thp, q, thq, thnq, thpq, Q2 ) )
