@@ -635,7 +635,7 @@ def overlay_d2pol(tgt_set, pm_set, Q2_set, hist_name, model, field, scale=1):
                 # set histogram file path
                 
                 #hist_file = 'yield_estimates/d2_pol/histogram_data/phi180/bfield_0_deg/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, field, hist_name, ipm, iq2)
-                hist_file = 'yield_estimates/d2_pol/histogram_data/phi180/bfield_20_deg/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol.txt'%(itgt, ipm, iq2, model, field, hist_name)
+                hist_file = 'yield_estimates/d2_pol/histogram_data/phi180/bfield_20_deg/unrestricted/Eb_11GeV/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol.txt'%(itgt, ipm, iq2, model, field, hist_name)
 
                 # phi = 0 config
                 # hist_file = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/%s_pm%d_Q2_%.1f_%s_%s/H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(itgt, ipm, iq2, model, field, hist_name, ipm, iq2) # default
@@ -1304,7 +1304,7 @@ def make_projY_d2pol(h2_hist_name, pm_user, Q2_user, model, plot_flag, scale=1):
             # set histo base name and file path
             h2_hist_basename = 'H_%s_yield_d2pol_pm%d_Q2_%.1f.txt'%(h2_hist_name, ipm, jq2)   # generic histogram name
             #hist_file_path = 'yield_estimates/d2_pol/smallFSI/phi_0deg/histogram_data/pm%d_Q2_%.1f_%s/%s'%(ipm, jq2, model, h2_hist_basename)             #original kinematics
-            hist_file_path = 'yield_estimates/d2_pol/histogram_data/phi180/bfield_20_deg/pm%d_Q2_%.1f_%s/%s'%(ipm, jq2, model, h2_hist_basename)  #optimized kinematics
+            hist_file_path = 'yield_estimates/d2_pol/histogram_data/phi180/bfield_20_deg/unrestricted/d2_pm%d_Q2_%.1f_%s/%s'%(ipm, jq2, model, h2_hist_basename)  #optimized kinematics
 
             print('hist_file_path:', hist_file_path)
             # check if file exists, else continue reading next file
@@ -1785,7 +1785,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
             h2_hist_basename = 'H_%s_yield_d2pol.txt'%(h2_hist_name)
 
             
-            hist_file_path = 'yield_estimates/d2_pol/histogram_data/phi180/bfield_20_deg/%s_pm%d_Q2_%.1f_%s_%s/%s'%(itgt, ipm, Q2_user, model, field, h2_hist_basename)  # default path optimized kinematics
+            hist_file_path = 'yield_estimates/d2_pol/histogram_data/phi180/bfield_20_deg/unrestricted/Eb_11GeV/%s_pm%d_Q2_%.1f_%s_%s/%s'%(itgt, ipm, Q2_user, model, field, h2_hist_basename)  # default path optimized kinematics
             #hist_file_path = 'yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/d2_Eb11_phi0_fsi_rad_fieldON_histos/%s' % (h2_hist_basename)
             
             print('>>>>>>>>> hist_file_path:', hist_file_path)
@@ -1880,7 +1880,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                     if plot_flag=='proj':
                         
                         
-                        ax = plt.subplot(3, 3, jdx+1)
+                        ax = plt.subplot(3, 4, jdx+1)
                         
                         if "_2Davg" in h2_hist_basename:
                             ax.errorbar(ybc, count_per_xbin, count_per_xbin_err, marker='o', markersize=4, linestyle='None', label=r'%.1f GeV$^{2}$'%(Q2_user)) #//, label=r'%d counts'%(cnts))
@@ -1900,7 +1900,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
                     # ---- relative error plots ----
                     if plot_flag=='proj_err':
 
-                        ax = plt.subplot(3, 3, jdx+1)
+                        ax = plt.subplot(3, 4, jdx+1)
                         count_per_xbin_rel_err_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, count_per_xbin_rel_err)
 
                         y_const_m = ma.masked_where(count_per_xbin_rel_err>rel_err_thrs, y_const)
@@ -2028,8 +2028,8 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 #*************************************
 
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
-pm_set = [150]
-q2_set = [2.1]
+pm_set = [300]
+q2_set = [1.5]
 #tgt_set = ['d2', 'n14', 'he4' ]
 tgt_set = ['d2']
 
@@ -2119,9 +2119,9 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 # ------ Pm vs theta_rq yield projections and errors -----
 
-#make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.5, 'fsi', 'fieldON', '2d', 1)
-#make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', 'proj', 1)
-#make_projY_d2pol('Pm_vs_thrq', ['d2'], pm_set, 2.0, 'fsi', 'fieldON', 'proj_err', 1)
+make_projY_d2pol('Pm_vs_thrq', ['d2'],  pm_set, 1.5, 'fsi', 'fieldON', '2d', 1)
+make_projY_d2pol('Pm_vs_thrq', ['d2'],  pm_set, 1.5, 'fsi', 'fieldON', 'proj', 1)
+make_projY_d2pol('Pm_vs_thrq', ['d2'],  pm_set, 1.5, 'fsi', 'fieldON', 'proj_err', 1)
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.3, 'fsi', 'fieldON', 'proj', 1)
 
@@ -2146,8 +2146,8 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 # d2_pm150_Q2_1p8_fsi_rad_fieldON.root
 # d2_pm180_Q2_1p8_fsi_rad_fieldON.root
 
-pm_set = [200]  #
-q2_set = [2.4]  #
+pm_set = [300]  #
+q2_set = [1.5]  #
 #tgt_set = ['d2', 'n14', 'he4' ]
 tgt_set = ['d2']
 
@@ -2156,7 +2156,7 @@ scale = 1
 
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc', 'fsi', field, scale)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
-overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq',   'fsi', field,  scale)    # in-plane angle between (recoil,q)
+#overlay_d2pol(tgt_set, pm_set, q2_set, 'thrq',   'fsi', field,  scale)    # in-plane angle between (recoil,q)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'Pm',    'fsi', field,  scale)  # proton angle
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, [120], 2.1, 'fsi', 'fieldON', 'proj', scale)

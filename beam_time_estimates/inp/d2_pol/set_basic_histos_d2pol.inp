@@ -69,8 +69,8 @@ the_xmax = 15.0
 
 # final electron arm momentum [GeV/c]
 kf_nbins = 60
-kf_xmin = 7.2
-kf_xmax = 12.
+kf_xmin = 1.0
+kf_xmax = 11.
 
 # invariant mass (assuming proton target mass)
 W_nbins = 100
@@ -84,18 +84,18 @@ W2_xmax = 3.0;
 
 # 4-momentum transfer
 Q2_nbins = 40
-Q2_xmin = 0.5
-Q2_xmax = 3.5
+Q2_xmin = 1.0
+Q2_xmax = 2.5
 
 # Bjorken-X
 X_nbins = 40
 X_xmin = 0.5
-X_xmax = 1.8
+X_xmax = 2.5
 
 # energy transfer
 nu_nbins = 40
 nu_xmin = 0.
-nu_xmax = 1.
+nu_xmax = 2.
 
 # 3-momentum transfer
 q_nbins = 50
@@ -213,13 +213,13 @@ MM2_xmax = 1.2
 
 # hadron arm central angle
 thx_nbins = 50  
-thx_xmin = 40.
-thx_xmax = 65.
+thx_xmin = 45.
+thx_xmax = 75.
 
 # In-plane angle between detected particle and q 
 thxq_nbins = 40
 thxq_xmin = 0.
-thxq_xmax = 40.
+thxq_xmax = 10.
 
 # In-plane angle between the recoil system and q (+/- 5 deg bins)
 thrq_nbins = 19
@@ -327,16 +327,16 @@ eypfp_xmax = 0.1
 #----Electron Arm Reconstructed-----
 #-----------------------------------
 eytar_nbins = 60
-eytar_xmin = -2.
-eytar_xmax = 2.
+eytar_xmin = -2.5
+eytar_xmax = 2.5
 
 eyptar_nbins = 60
 eyptar_xmin = -0.06
 eyptar_xmax = 0.06
   
-exptar_nbins = 60
-exptar_xmin  = -0.06
-exptar_xmax = 0.06
+exptar_nbins = 70
+exptar_xmin  = -0.1
+exptar_xmax = 0.1
   
 edelta_nbins = 70
 edelta_xmin = -10.  
