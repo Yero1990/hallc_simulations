@@ -106,7 +106,7 @@ list_of_args = sys.argv
 #basename='d2_pm800_thrq49_fsi_rad_output' 
 
 # deuteron polarized proposal files
-basename='d2_pm300_Q2_1p5_fsi_rad_fieldON_2p2GeV_analyzed'
+basename='d2_pm300_Q2_1p5_fsi_rad_fieldON_11GeV_analyzed'
 
 
 output_file = basename+'_avgkin.csv'
