@@ -11,7 +11,10 @@ but without the limiting factor of the opening
 Do simulations: change target field to 15 deg beam left, and
 check how low Q2 can we go
 
-targ_Bphi = 90. (for SHMS)
+targ_Bphi = 270. (for HMS, beam right)
+
+
+targ_Bphi = 90. (for SHMS, beam left)
 targ_Bangle = 15 (beam left)
 
 HMS: (55 deg, 70 deg)
