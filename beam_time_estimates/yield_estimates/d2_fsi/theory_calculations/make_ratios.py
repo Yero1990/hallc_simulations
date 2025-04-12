@@ -46,7 +46,7 @@ model_set = ["2_1_1_0_123"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
 
 # central recoil angle
 #thrq_set = [28, 49, 55, 60, 66, 72, 79]
-thrq_set = [49,60,72]
+thrq_set = [49, 60, 72]
 
 # set the central pm bin +/- bin width condition for plotting angular distribution
 # (this is esentially to select the angular distirbution for  pmiss slice)
@@ -90,37 +90,67 @@ for model in model_set:
         #print('ratio = ', ratio)
 
         # interpolate data
-        f_ratio = interp1d(thrq, ratio, 'cubic', fill_value="extrapolate")
+        f_ratio = interp1d(thrq, ratio, 'linear', fill_value="extrapolate")
         x = np.linspace(min(thrq), max(thrq), num=20, endpoint=True)
 
       
     
         # Custom extrapolation function
-        def f_ratio_xpl(x_val):
-            for i in x_val:
-                if x_val < x.min() or x_val > x.max():
-                    return 0
-                else:
-                    return f_ratio(x_val)
+        def f_ratio_xpl(x_vals):
 
+            print('')
+            print('--------------------------')
+            print('calling f_ratio_xpl . . . ')
+            print(x_vals)
+            ival = 0
+            f_vals_arr = np.array([])
+            for i in range(len(x_vals)):
+                print('(i, xvals[i]) = ', i, x_vals[i])
+                print('x.min, x.max = ', x.min(), x.max())
+                if x_vals[i] < x.min() or x_vals[i] > x.max():
+                    ival = 0
+                    f_vals_arr = np.append(f_vals_arr, ival)
+                    
+                else:
+                    ival = f_ratio(x_vals[i])
+                    f_vals_arr = np.append(f_vals_arr, ival)
+
+            print('--------------------------')
+            print('f_vals_arr = ', f_vals_arr)
+            print('')
             
+            return f_vals_arr
+
+                
+        #print('x = ', x)
+        #print('f_ratio =', f_ratio(x))
+        #print('x, f_ratio_xpl =', x, f_ratio_xpl(x))
+     
         # append the interpolated function array to a total array
         total_x.append(x)
-        total_f.append(f_ratio_xpl)
+        total_f.append(f_ratio)
 
         plt.plot(x, f_ratio(x), marker='None', linestyle='-', label=r'$\theta_{nq} = %d$'%ithrq)
 
     # Define the common x-values for averaging
-    #x_new = np.linspace(min(min(total_x[0]), min(total_x[1]), min(total_x[2])), max(max(total_x[0]), max(total_x[1]), max(total_x[2])), num=20)
+
+    #print('total_x[0], total_f[0]', total_x[0], total_f[0](total_x[0]))
     
+    #x_conc = np.concatenate(total_x)
+    #x_new = np.linspace(min(x_conc), max(x_conc), num=20)
+    
+    x_new = np.linspace(min(min(total_x[0]), min(total_x[1])), max(max(total_x[0]), max(total_x[1])), num=20)
+
+    print('x_new = ',x_new)
     
     # Calculate the average of the two functions
-    #y_avg = (total_f[0](x_new) + total_f[1](x_new) + total_f[2](x_new)) / 3.
-    
- 
-    #plt.plot(x_new, y_avg, marker='None', linestyle='--', label=r'total; model %s'%model)
+    #print('x_new, total_f[0], total_[f1] = ', x_new, total_f[0](x_new), total_f[1](x_new))
+    y_avg = (total_f[0](x_new) + total_f[1](x_new)) / 2.
+    print('y_avg = ', y_avg)
+   
+    plt.plot(x_new, y_avg, marker='None', linestyle='--', label=r'total; model %s'%model)
 plt.legend()
-#plt.show()
+plt.show()
 
 
 
