@@ -39,14 +39,15 @@ GeV2MeV = 1000.  # 1 GeV = 1000 MeV
 # the actual PWIA model is within the data file, in a column named:
 # crs0 : PWIA
 # crs12 : PWIA + FSI
-# ratio: crs12 /  crs0 
-#model_set = ["2_1_1_0_12", "3_1_1_0_12"]   #[V18, CD-Bonn] [the '12' stands for PWIA+FSI]
-model_set = ["2_1_1_0_123"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
+# ratio: crs12 /  crs0
+model_name     = ["V18", "CD-Bonn"]
+model_set = ["2_1_1_0_12", "3_1_1_0_12"]   #[V18, CD-Bonn] [the '12' stands for PWIA+FSI]
+#model_set = ["2_1_1_0_123"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
 #model_set = ["3_1_1_0_12"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
 
 # central recoil angle
 #thrq_set = [28, 49, 55, 60, 66, 72, 79]
-thrq_set = [49, 60, 72]
+thrq_set = [60]
 
 # set the central pm bin +/- bin width condition for plotting angular distribution
 # (this is esentially to select the angular distirbution for  pmiss slice)
@@ -56,17 +57,16 @@ pm_c = 0.84
 pm_bw = 0.02 
 
 
-# list to append interpolated functions
-#total_f = []
-#total_x = []
-# np.array(total_f) convert total_f to an array (after all arrays have been added)
-# take average of each array, to get an avergaed array (i.e., axis=0)
-# np.mean(arr, axis=0)
+# define a common x range (that includes full th_rq range for multiple interpolations)
+x = np.linspace(0, 90, num=200, endpoint=True)
 
-
+imod = 0
 # loop over each model (V18, CD-Bonn)
 for model in model_set:
 
+    theory_calc_name = model_name[imod]
+    imod = imod+1
+    
     total_f = []
     total_x = []
     total_f_avg = []
@@ -76,7 +76,7 @@ for model in model_set:
     # loop over central recoil angle kin. setting
     for ithrq in thrq_set: 
         print('ithrq: ', ithrq)
-        basename = 'q4_sig_avkin_thnq_pm_chx/csv/csec_calc_thrq%d_%s.data' % (ithrq, model)
+        basename = 'q4_sig_avkin_thnq_pm/csv/csec_calc_thrq%d_%s.data' % (ithrq, model)
 
         df = pd.read_csv(basename, comment='#')
         
@@ -86,69 +86,23 @@ for model in model_set:
         thrq  = ((df['th_nq_mc'])[(df['pr']>pm_min) & (df['pr']<pm_max) ]).to_numpy()
         ratio = ((df['ratio'])[(df['pr']>pm_min) & (df['pr']<pm_max) ]).to_numpy()
 
-        #print('thrq = ', thrq)
-        #print('ratio = ', ratio)
-
         # interpolate data
-        f_ratio = interp1d(thrq, ratio, 'linear', fill_value="extrapolate")
-        x = np.linspace(min(thrq), max(thrq), num=20, endpoint=True)
+        f_ratio = interp1d(thrq, ratio, kind='cubic', fill_value=np.nan, bounds_error=False)
 
-      
-    
-        # Custom extrapolation function
-        def f_ratio_xpl(x_vals):
-
-            print('')
-            print('--------------------------')
-            print('calling f_ratio_xpl . . . ')
-            print(x_vals)
-            ival = 0
-            f_vals_arr = np.array([])
-            for i in range(len(x_vals)):
-                print('(i, xvals[i]) = ', i, x_vals[i])
-                print('x.min, x.max = ', x.min(), x.max())
-                if x_vals[i] < x.min() or x_vals[i] > x.max():
-                    ival = 0
-                    f_vals_arr = np.append(f_vals_arr, ival)
-                    
-                else:
-                    ival = f_ratio(x_vals[i])
-                    f_vals_arr = np.append(f_vals_arr, ival)
-
-            print('--------------------------')
-            print('f_vals_arr = ', f_vals_arr)
-            print('')
-            
-            return f_vals_arr
-
-                
-        #print('x = ', x)
-        #print('f_ratio =', f_ratio(x))
-        #print('x, f_ratio_xpl =', x, f_ratio_xpl(x))
-     
         # append the interpolated function array to a total array
-        total_x.append(x)
-        total_f.append(f_ratio)
+        total_f.append(f_ratio(x))
 
-        plt.plot(x, f_ratio(x), marker='None', linestyle='-', label=r'$\theta_{nq} = %d$'%ithrq)
+        
+        # plot the different thrq calculations separately (before avergaing)
+        #plt.plot(x, f_ratio(x), marker='None', linestyle='-', label=r'$\theta_{nq} = %d$'%ithrq)
 
     # Define the common x-values for averaging
 
-    #print('total_x[0], total_f[0]', total_x[0], total_f[0](total_x[0]))
-    
-    #x_conc = np.concatenate(total_x)
-    #x_new = np.linspace(min(x_conc), max(x_conc), num=20)
-    
-    x_new = np.linspace(min(min(total_x[0]), min(total_x[1])), max(max(total_x[0]), max(total_x[1])), num=20)
+    # calculate the average (excluding nan)
+    y_avg = np.nanmean(total_f, axis=0)
 
-    print('x_new = ',x_new)
-    
-    # Calculate the average of the two functions
-    #print('x_new, total_f[0], total_[f1] = ', x_new, total_f[0](x_new), total_f[1](x_new))
-    y_avg = (total_f[0](x_new) + total_f[1](x_new)) / 2.
-    print('y_avg = ', y_avg)
-   
-    plt.plot(x_new, y_avg, marker='None', linestyle='--', label=r'total; model %s'%model)
+    # plot the avergaed calculations for overlapping thrq
+    plt.plot(x, y_avg, marker='None', linestyle='--', label=r' %s'%theory_calc_name)
 plt.legend()
 plt.show()
 
