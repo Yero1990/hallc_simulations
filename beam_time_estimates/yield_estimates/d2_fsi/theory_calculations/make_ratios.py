@@ -40,13 +40,13 @@ GeV2MeV = 1000.  # 1 GeV = 1000 MeV
 # crs0 : PWIA
 # crs12 : PWIA + FSI
 # ratio: crs12 /  crs0 
-#model_set = ["2_1_1_0_12", "3_1_1_0_12"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
+#model_set = ["2_1_1_0_12", "3_1_1_0_12"]   #[V18, CD-Bonn] [the '12' stands for PWIA+FSI]
 model_set = ["2_1_1_0_123"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
 #model_set = ["3_1_1_0_12"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
 
 # central recoil angle
-thrq_set = [28, 49, 55, 60, 66, 72, 79]
-#thrq_set = [28, 49]
+#thrq_set = [28, 49, 55, 60, 66, 72, 79]
+thrq_set = [49,60,72]
 
 # set the central pm bin +/- bin width condition for plotting angular distribution
 # (this is esentially to select the angular distirbution for  pmiss slice)
@@ -71,40 +71,94 @@ for model in model_set:
     total_x = []
     total_f_avg = []
     total_x_avg = []
+    total_func = []
+    
     # loop over central recoil angle kin. setting
     for ithrq in thrq_set: 
         print('ithrq: ', ithrq)
         basename = 'q4_sig_avkin_thnq_pm_chx/csv/csec_calc_thrq%d_%s.data' % (ithrq, model)
 
         df = pd.read_csv(basename, comment='#')
-
-       
         
         pm_min = pm_c - pm_bw
         pm_max = pm_c + pm_bw
         
-        
         thrq  = ((df['th_nq_mc'])[(df['pr']>pm_min) & (df['pr']<pm_max) ]).to_numpy()
         ratio = ((df['ratio'])[(df['pr']>pm_min) & (df['pr']<pm_max) ]).to_numpy()
 
+        #print('thrq = ', thrq)
+        #print('ratio = ', ratio)
+
         # interpolate data
-        f_ratio = interp1d(thrq, ratio, 'cubic')
+        f_ratio = interp1d(thrq, ratio, 'cubic', fill_value="extrapolate")
         x = np.linspace(min(thrq), max(thrq), num=20, endpoint=True)
-        
-        
-        total_x.append(x)
+
+      
+    
+        # Custom extrapolation function
+        def f_ratio_xpl(x_val):
+            for i in x_val:
+                if x_val < x.min() or x_val > x.max():
+                    return 0
+                else:
+                    return f_ratio(x_val)
+
+            
         # append the interpolated function array to a total array
-        total_f.append(f_ratio(x))
+        total_x.append(x)
+        total_f.append(f_ratio_xpl)
 
         plt.plot(x, f_ratio(x), marker='None', linestyle='-', label=r'$\theta_{nq} = %d$'%ithrq)
 
-    # calculate the mean of the concatenated arrays to get an avergaed array
-    #total_f_avg = np.mean(total_f, axis=0)
-    #total_x_avg = np.mean(total_x, axis=0)
-
-        
-    #total_f_avg_intp = interp1d(total_x_avg, total_f_avg, 'cubic')
+    # Define the common x-values for averaging
+    #x_new = np.linspace(min(min(total_x[0]), min(total_x[1]), min(total_x[2])), max(max(total_x[0]), max(total_x[1]), max(total_x[2])), num=20)
+    
+    
+    # Calculate the average of the two functions
+    #y_avg = (total_f[0](x_new) + total_f[1](x_new) + total_f[2](x_new)) / 3.
+    
  
-    #plt.plot(total_x_avg, total_f_avg_intp(total_x_avg), marker='None', linestyle='-', label=r'total; model %s'%model)
+    #plt.plot(x_new, y_avg, marker='None', linestyle='--', label=r'total; model %s'%model)
 plt.legend()
+#plt.show()
+
+
+
+
+'''
+#--------------------------------------------------------------------------------------
+# Here's how to average two interpolated functions in Python using scipy.interpolate.
+#--------------------------------------------------------------------------------------
+
+import numpy as np
+from scipy.interpolate import interp1d
+import matplotlib.pyplot as plt
+
+# Define the data points for the two functions
+x1 = np.array([1, 2, 3, 4, 5])
+y1 = np.array([2, 4, 1, 3, 5])
+x2 = np.array([1.5, 2.5, 3.5, 4.5])
+y2 = np.array([3, 1, 4, 2])
+
+# Create the interpolation functions
+f1 = interp1d(x1, y1, kind='linear')
+f2 = interp1d(x2, y2, kind='linear', fill_value="extrapolate")
+
+# Define the common x-values for averaging
+x_new = np.linspace(max(min(x1), min(x2)), max(max(x1), max(x2)), num=100)
+
+# Calculate the average of the two functions
+y_avg = (f1(x_new) + f2(x_new)) / 2
+
+# Plot the results
+plt.plot(x1, y1, 'o', label='Data 1')
+plt.plot(x2, y2, 'x', label='Data 2')
+plt.plot(x_new, f1(x_new), '-', label='Interpolation 1')
+plt.plot(x_new, f2(x_new), '--', label='Interpolation 2')
+plt.plot(x_new, y_avg, '-', label='Average Interpolation')
+plt.legend()
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Average of Two Interpolated Functions')
 plt.show()
+'''
