@@ -47,16 +47,21 @@ model_set = ["2_1_1_0_12", "3_1_1_0_12"]   #[V18, CD-Bonn] [the '12' stands for 
 
 # central recoil angle
 #thrq_set = [28, 49, 55, 60, 66, 72, 79]
-thrq_set = [60]
+thrq_set = [49, 60, 72]
+pm_set = [520, 560, 600, 640, 680, 720, 760, 800, 840, 880, 920, 960]
 
 # set the central pm bin +/- bin width condition for plotting angular distribution
 # (this is esentially to select the angular distirbution for  pmiss slice)
 
 # pm_c +/- pm_bw [GeV/c]
-pm_c = 0.84
+pm_c = 0.760
 pm_bw = 0.02 
 
 
+# loop over each pm bin
+#for pm_c in pm_set:
+    # --> 1 TAB
+    
 # define a common x range (that includes full th_rq range for multiple interpolations)
 x = np.linspace(0, 90, num=200, endpoint=True)
 
@@ -64,17 +69,16 @@ imod = 0
 # loop over each model (V18, CD-Bonn)
 for model in model_set:
 
+    # --> 1 TAB 
     theory_calc_name = model_name[imod]
     imod = imod+1
     
     total_f = []
-    total_x = []
-    total_f_avg = []
-    total_x_avg = []
-    total_func = []
-    
+       
     # loop over central recoil angle kin. setting
-    for ithrq in thrq_set: 
+    for ithrq in thrq_set:
+
+        # --> 1 TAB 
         print('ithrq: ', ithrq)
         basename = 'q4_sig_avkin_thnq_pm/csv/csec_calc_thrq%d_%s.data' % (ithrq, model)
 
@@ -94,15 +98,18 @@ for model in model_set:
 
         
         # plot the different thrq calculations separately (before avergaing)
-        #plt.plot(x, f_ratio(x), marker='None', linestyle='-', label=r'$\theta_{nq} = %d$'%ithrq)
+        plt.plot(x, f_ratio(x), marker='None', linestyle='-', label=r'$\theta_{nq} = %d$'%ithrq)
 
+    # <-- TAB
     # Define the common x-values for averaging
 
     # calculate the average (excluding nan)
-    y_avg = np.nanmean(total_f, axis=0)
+    #y_avg = np.nanmean(total_f, axis=0)
 
     # plot the avergaed calculations for overlapping thrq
-    plt.plot(x, y_avg, marker='None', linestyle='--', label=r' %s'%theory_calc_name)
+    #plt.plot(x, y_avg, marker='None', linestyle='--', label=r' %s'%theory_calc_name)
+
+    
 plt.legend()
 plt.show()
 

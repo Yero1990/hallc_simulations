@@ -933,23 +933,29 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
         #plt.suptitle(subplot_title, fontsize=15);
         fig.set_size_inches(8,10, forward=True)
 
+
+
     offset=0
     # loop over central missing momentum kin. setting 
     for ipm in pm_set:
 
              
         scl_idx = 0  # scale index
-        
+
+        # define a common x range (that includes full th_rq range for multiple interpolations)
+        theory_thrq = np.linspace(0, 90, num=200, endpoint=True)
+
         # loop over central recoil angle kin. setting for a given central momentum
         for ithrq in thrq_set:
 
             offset = offset + 1
             
-            print('ithrq: ', ithrq)
             hist_file                 = 'H_Pm_vs_thrq_yield_d2fsi_pm%d_thrq%d.txt'%(ipm, ithrq)  # histogram file with numerical info
             histos_file_path_pwia = 'yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_pwia/%s'%(ipm, ithrq, hist_file)
             histos_file_path_fsi  = 'yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_fsi/%s'%(ipm, ithrq, hist_file)
 
+      
+             
             # read histogram param
             pm_binw   = float(get_label('ybin_width', histos_file_path_pwia))
             thrq_binw = float(get_label('xbin_width', histos_file_path_pwia))
@@ -961,10 +967,13 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
             df_fsi  = pd.read_csv(histos_file_path_fsi,  comment='#')
             df_pwia = pd.read_csv(histos_file_path_pwia, comment='#')
 
+            
+            
             # get central bin values arrays
             thrq_bins = (df_fsi.x0).to_numpy()
             pm_bins   = (df_fsi.y0[thrq_bins==thrq_bins[0]]).to_numpy()
 
+            
             
             # get bin content / bin content error
             fsi_N       = df_fsi.zcont * scale[scl_idx]
@@ -1002,23 +1011,19 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
             #print('thrq_bins:', thrq_bins)
             #print('ratio[thrq=37.5]:', ratio[thrq_bins==37.5])
 
+            print('pm_bins', pm_bins)
             idx_plot = 0 
             for idx, pm_bin in enumerate(pm_bins):
 
-      
-
-                cnts = np.sum(count_per_xbin )
+                #cnts = np.sum(count_per_xbin)
                 
-                print('idx_plot', idx_plot)
                 if pm_bin<0.520 or pm_bin>0.960: continue  # only for 12 plots (for pm=800 setting)
-
                 #if pm_bin<=0.160 or pm_bin>0.520:  continue  # only for pm=500 setting
 
                 
                 if plot_flag=='ratio':
 
-                
-                  
+              
                     
                     # do interpolation    (need to do this, but for combined thrq, not individually)    
                     #f = interp1d(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], kind='linear', bounds_error=True)
@@ -1034,9 +1039,37 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     ax = plt.subplot(4, 3, idx_plot+1)  # pm=800
                     #ax = plt.subplot(3, 3, idx_plot+1)  # pm=500
 
-               
-                    ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
 
+                    # plot the different thrq calculations separately (before avergaing)
+                    if ( ithrq==60 ):
+                        theory_file_cd = 'yield_estimates/d2_fsi/theory_calculations/q4_sig_avkin_thnq_pm/csv/csec_calc_thrq%d_3_1_1_0_12.data' %(ithrq)
+                        theory_file_v18 = 'yield_estimates/d2_fsi/theory_calculations/q4_sig_avkin_thnq_pm/csv/csec_calc_thrq%d_2_1_1_0_12.data' %(ithrq)
+
+                        df_cd  = pd.read_csv(theory_file_cd, comment='#')
+                        df_v18 = pd.read_csv(theory_file_v18, comment='#')
+
+                        pm_bw = 0.02 #bin width
+                        pm_min = pm_bin - pm_bw
+                        pm_max = pm_bin + pm_bw
+
+                        thrq_cd  = ((df_cd['th_nq_mc'])[(df_cd['pr']>pm_min) & (df_cd['pr']<pm_max) ]).to_numpy()
+                        ratio_cd = ((df_cd['ratio'])[(df_cd['pr']>pm_min) & (df_cd['pr']<pm_max) ]).to_numpy()
+
+                        thrq_v18  = ((df_v18['th_nq_mc'])[(df_v18['pr']>pm_min) & (df_v18['pr']<pm_max) ]).to_numpy()
+                        ratio_v18 = ((df_v18['ratio'])[(df_v18['pr']>pm_min) & (df_v18['pr']<pm_max) ]).to_numpy()
+
+
+                        # interpolate data
+                        f_ratio_cd  = interp1d(thrq_cd,  ratio_cd,  kind='cubic', fill_value=np.nan, bounds_error=False)
+                        f_ratio_v18 = interp1d(thrq_v18, ratio_v18, kind='cubic', fill_value=np.nan, bounds_error=False)
+
+                        plt.plot(theory_thrq , f_ratio_cd(theory_thrq), marker='None', color='magenta', linestyle='--', label=r'CD-Bonn (MS)', zorder=5)
+                        plt.plot(theory_thrq , f_ratio_v18(theory_thrq), marker='None', color='magenta', linestyle='-', label=r'AV18 (MS)', zorder=5)
+
+                    # plot Laget SIMC
+                    ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq, zorder=4)
+
+                  
 
                     # alternatively plot a yield (try)
                     #ax.hist(fsi_N[df_fsi.y0==pm_bin], bins=len(ybc), weights=count_per_xbin, range=[min(df.ylow), max(df.yup)], ec='k', density=False, label=r'%d counts (%.1f GeV$^{2}$)'%(cnts, jq2))
@@ -1046,10 +1079,10 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=16)
                     plt.axhline(1, linestyle='--', color='gray')
                     
-                    plt.vlines(x = 70, ymin=1, ymax=4.5, color = 'r', linestyle = '--', linewidth=1.5) # reference line at 70 deg
+                    plt.vlines(x = 70, ymin=1, ymax=6, color = 'r', linestyle = '--', linewidth=1.5) # reference line at 70 deg
 
                     ax.set_xlim(20,90)
-                    ax.set_ylim(0,4.)
+                    ax.set_ylim(0,6)
                     plt.xticks(fontsize = 16)
                     plt.yticks(fontsize = 16)
 
@@ -1985,7 +2018,7 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 #make_projY_d2fsi('Pm_vs_thrq',[800], [60], 'pwia', '2d', [144])
 #make_projY_d2fsi('Pm_vs_thrq',[800], [49], 'pwia', '2d', [200])
 
-#make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio_err')  # scale represent hrs
+make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  # scale represent hrs
 #make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
 
 
@@ -2119,9 +2152,9 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 # ------ Pm vs theta_rq yield projections and errors -----
 
-make_projY_d2pol('Pm_vs_thrq', ['d2'],  pm_set, 1.5, 'fsi', 'fieldON', '2d', 1)
-make_projY_d2pol('Pm_vs_thrq', ['d2'],  pm_set, 1.5, 'fsi', 'fieldON', 'proj', 1)
-make_projY_d2pol('Pm_vs_thrq', ['d2'],  pm_set, 1.5, 'fsi', 'fieldON', 'proj_err', 1)
+#make_projY_d2pol('Pm_vs_thrq', ['d2'],  pm_set, 1.5, 'fsi', 'fieldON', '2d', 1)
+#make_projY_d2pol('Pm_vs_thrq', ['d2'],  pm_set, 1.5, 'fsi', 'fieldON', 'proj', 1)
+#make_projY_d2pol('Pm_vs_thrq', ['d2'],  pm_set, 1.5, 'fsi', 'fieldON', 'proj_err', 1)
 
 #make_projY_d2pol('Pm_vs_thrq', tgt_set, pm_set, 2.3, 'fsi', 'fieldON', 'proj', 1)
 
@@ -2146,13 +2179,13 @@ make_projY_d2pol('Pm_vs_thrq', ['d2'],  pm_set, 1.5, 'fsi', 'fieldON', 'proj_err
 # d2_pm150_Q2_1p8_fsi_rad_fieldON.root
 # d2_pm180_Q2_1p8_fsi_rad_fieldON.root
 
-pm_set = [300]  #
-q2_set = [1.5]  #
+#pm_set = [300]  #
+#q2_set = [1.5]  #
 #tgt_set = ['d2', 'n14', 'he4' ]
-tgt_set = ['d2']
+#tgt_set = ['d2']
 
-field = 'fieldON'
-scale = 1
+#field = 'fieldON'
+#scale = 1
 
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'Q2_nsc', 'fsi', field, scale)
 #overlay_d2pol(tgt_set, pm_set, q2_set, 'thp',    'fsi', field,  scale)  # proton angle
