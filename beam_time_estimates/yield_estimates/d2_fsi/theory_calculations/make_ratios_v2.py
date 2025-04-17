@@ -115,19 +115,19 @@ for ipm_c in pm_set:
             print('idx_plot = ', idx_plot)
             ax = plt.subplot(4, 3, idx_plot+1)
 
-            if(model=="2_1_1_0_12"):   # AV18
+            #if(model=="2_1_1_0_12"):   # AV18
                 # plot the different thrq calculations separately (before avergaing)
-                ax.plot(x, f_ratio(x), marker='None', color=col[icol], linestyle='--', label=r'$\theta_{nq} = %d$'%ithrq)
-            if(model=="3_1_1_0_12"):   # CD-Bonn
+            #    ax.plot(x, f_ratio(x), marker='None', color=col[icol], linestyle='--', label=r'$\theta_{nq} = %d$'%ithrq)
+            #if(model=="3_1_1_0_12"):   # CD-Bonn
                 # plot the different thrq calculations separately (before avergaing)
-                ax.plot(x, f_ratio(x), marker='None', color=col[icol], linestyle='-', label=r'$\theta_{nq} = %d$'%ithrq)
+            #    ax.plot(x, f_ratio(x), marker='None', color=col[icol], linestyle='-', label=r'$\theta_{nq} = %d$'%ithrq)
             icol = icol+1
             
     
         # <-- TAB
         # Define the common x-values for averaging
         
-        '''
+        
         total_f_m0 = np.ma.masked_array(total_f[0], np.isnan(total_f[0]))
         total_f_m1 = np.ma.masked_array(total_f[1], np.isnan(total_f[1]))
         total_f_m2 = np.ma.masked_array(total_f[2], np.isnan(total_f[2]))
@@ -146,8 +146,11 @@ for ipm_c in pm_set:
         
         print('f_ratio_total = ', f_ratio_total(x))
         # plot the avergaed calculations for overlapping thrq
-        plt.plot(x, f_ratio_total(x), marker='None', color='k', linestyle='--', label=r' %s'%theory_calc_name)
-        '''
+        #if(model=="2_1_1_0_12"):
+        #    plt.plot(x, f_ratio_total(x), marker='None', color='k', linestyle='--', label=r' %s'%theory_calc_name)
+        if(model=="3_1_1_0_12"):
+            plt.plot(x, f_ratio_total(x), marker='None', color='k', linestyle='-', label=r' %s'%theory_calc_name)
+
     idx_plot = idx_plot+1
         
     
