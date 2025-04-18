@@ -924,8 +924,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
         #fig, ax = plt.subplots(5, 8, sharex='col', sharey='row')
         # fig, ax = plt.subplots(5, 8) #original
 
-        #fig, ax = plt.subplots(4, 3)  # only pm ~520 - 960 (12 plots)
-        fig, ax = plt.subplots(3, 3)  # only pm = 500 setting (9 plots)
+        fig, ax = plt.subplots(4, 3)  # only pm ~520 - 960 (12 plots)
+        #fig, ax = plt.subplots(3, 3)  # only pm = 500 setting (9 plots)
         
         #fig.text(0.5, 0.01, r'Recoil Angle $\theta_{nq}$ [deg]', ha='center', fontsize=12)
         #fig.text(0.01, 0.5, r'R = FSI / PWIA', va='center', rotation='vertical', fontsize=12)
@@ -1024,8 +1024,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
                 #cnts = np.sum(count_per_xbin)
                 
-                #if pm_bin<0.520 or pm_bin>0.960: continue  # only for 12 plots (for pm=800 setting)
-                if pm_bin<=0.160 or pm_bin>0.520:  continue  # only for pm=500 setting
+                if pm_bin<0.520 or pm_bin>0.960: continue  # only for 12 plots (for pm=800 setting)
+                #if pm_bin<=0.160 or pm_bin>0.520:  continue  # only for pm=500 setting
 
                 
                 if plot_flag=='ratio':
@@ -1043,8 +1043,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     
                     # ---- plot ratio fsi/pwia -----
                     # ax = plt.subplot(5, 8, idx+1) original
-                    #ax = plt.subplot(4, 3, idx_plot+1)  # pm=800
-                    ax = plt.subplot(3, 3, idx_plot+1)  # pm=500
+                    ax = plt.subplot(4, 3, idx_plot+1)  # pm=800
+                    #ax = plt.subplot(3, 3, idx_plot+1)  # pm=500
 
 
                     # plot the different thrq calculations separately (before avergaing)
@@ -1067,8 +1067,13 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
 
                         # interpolate data
-                        f_ratio_cd  = interp1d(thrq_cd,  ratio_cd,  kind='cubic', fill_value=np.nan, bounds_error=False)
-                        f_ratio_v18 = interp1d(thrq_v18, ratio_v18, kind='cubic', fill_value=np.nan, bounds_error=False)
+                        if len(ratio_cd)<=3:
+                            f_ratio_cd  = interp1d(thrq_cd,  ratio_cd,  kind='linear', fill_value=np.nan, bounds_error=False)
+                        if len(ratio_v18)<=3:
+                            f_ratio_v18 = interp1d(thrq_v18, ratio_v18, kind='linear', fill_value=np.nan, bounds_error=False)
+                        else:                            
+                            f_ratio_cd  = interp1d(thrq_cd,  ratio_cd,  kind='cubic', fill_value=np.nan, bounds_error=False)
+                            f_ratio_v18 = interp1d(thrq_v18, ratio_v18, kind='cubic', fill_value=np.nan, bounds_error=False)
 
                         plt.plot(theory_thrq , f_ratio_cd(theory_thrq), marker='None' , color=clr[i], linestyle='--', label=r'', zorder=4)
                         plt.plot(theory_thrq , f_ratio_v18(theory_thrq), marker='None', color=clr[i], linestyle='-', label=r'', zorder=4)
@@ -1086,10 +1091,10 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=16)
                     plt.axhline(1, linestyle='--', color='gray')
                     
-                    plt.vlines(x = 70, ymin=1, ymax=6.5, color = 'r', linestyle = '--', linewidth=1.5) # reference line at 70 deg
+                    plt.vlines(x = 70, ymin=1, ymax=7., color = 'r', linestyle = '--', linewidth=1.5) # reference line at 70 deg
 
                     ax.set_xlim(20,90)
-                    ax.set_ylim(0,6.5)
+                    ax.set_ylim(0,7.)
                     plt.xticks(fontsize = 16)
                     plt.yticks(fontsize = 16)
 
@@ -2025,8 +2030,8 @@ scale_set = [24]  # hrs
 #make_projY_d2fsi('Pm_vs_thrq',[800], [60], 'pwia', '2d', [144])
 #make_projY_d2fsi('Pm_vs_thrq',[800], [49], 'pwia', '2d', [200])
 
-#make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  # scale represent hrs
-make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
+make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  # scale represent hrs
+#make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
 
 
 
