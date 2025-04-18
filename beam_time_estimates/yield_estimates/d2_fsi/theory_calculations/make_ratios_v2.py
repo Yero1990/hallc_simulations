@@ -40,8 +40,10 @@ GeV2MeV = 1000.  # 1 GeV = 1000 MeV
 # crs0 : PWIA
 # crs12 : PWIA + FSI
 # ratio: crs12 /  crs0
-model_name     = ["V18", "CD-Bonn"]
-model_set = ["2_1_1_0_12", "3_1_1_0_12"]   #[V18, CD-Bonn] [the '12' stands for PWIA+FSI]
+#model_name     = ["V18", "CD-Bonn"]
+model_name     = ["V18"]
+#model_set = ["2_1_1_0_12", "3_1_1_0_12"]   #[V18, CD-Bonn] [the '12' stands for PWIA+FSI]
+model_set = ["2_1_1_0_12"]   #V18 [the '12' stands for PWIA+FSI]
 #model_set = ["2_1_1_0_123"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
 #model_set = ["3_1_1_0_12"]   #V18, CD-Bonn [the '12' stands for PWIA+FSI]
 
@@ -106,8 +108,15 @@ for ipm_c in pm_set:
 
             print('ithrq = ', ithrq)
             print('thrq = ', thrq)
+
             # interpolate data
-            f_ratio = interp1d(thrq, ratio, kind='linear', fill_value=np.nan, bounds_error=False)
+            if len(ratio)==3:
+                f_ratio = interp1d(thrq, ratio, kind='linear', fill_value=np.nan, bounds_error=False)
+            else:
+                f_ratio = interp1d(thrq, ratio, kind='cubic', fill_value=np.nan, bounds_error=False)
+
+            print('thrq, len(ratio) = ', ithrq,  len(ratio))
+
             
             # append the interpolated function array to a total array
             total_f.append(f_ratio(x))
@@ -115,9 +124,9 @@ for ipm_c in pm_set:
             print('idx_plot = ', idx_plot)
             ax = plt.subplot(4, 3, idx_plot+1)
 
-            #if(model=="2_1_1_0_12"):   # AV18
+            if(model=="2_1_1_0_12"):   # AV18
                 # plot the different thrq calculations separately (before avergaing)
-            #    ax.plot(x, f_ratio(x), marker='None', color=col[icol], linestyle='--', label=r'$\theta_{nq} = %d$'%ithrq)
+                ax.plot(x, f_ratio(x), marker='None', color=col[icol], linestyle='--', label=r'$\theta_{nq} = %d$'%ithrq)
             #if(model=="3_1_1_0_12"):   # CD-Bonn
                 # plot the different thrq calculations separately (before avergaing)
             #    ax.plot(x, f_ratio(x), marker='None', color=col[icol], linestyle='-', label=r'$\theta_{nq} = %d$'%ithrq)
@@ -127,7 +136,7 @@ for ipm_c in pm_set:
         # <-- TAB
         # Define the common x-values for averaging
         
-        
+        '''
         total_f_m0 = np.ma.masked_array(total_f[0], np.isnan(total_f[0]))
         total_f_m1 = np.ma.masked_array(total_f[1], np.isnan(total_f[1]))
         total_f_m2 = np.ma.masked_array(total_f[2], np.isnan(total_f[2]))
@@ -139,18 +148,23 @@ for ipm_c in pm_set:
         
         total_f_avg = np.ma.average(data, axis=0)
 
-        print(total_f_avg)
+
+        #print(total_f_avg)
         f_ratio_total = interp1d(x, total_f_avg, kind='cubic')
 
-       
-        
-        print('f_ratio_total = ', f_ratio_total(x))
-        # plot the avergaed calculations for overlapping thrq
-        #if(model=="2_1_1_0_12"):
-        #    plt.plot(x, f_ratio_total(x), marker='None', color='k', linestyle='--', label=r' %s'%theory_calc_name)
-        if(model=="3_1_1_0_12"):
-            plt.plot(x, f_ratio_total(x), marker='None', color='k', linestyle='-', label=r' %s'%theory_calc_name)
+        mask = f_ratio_total(x) <= 0.0
 
+        y = np.ma.array(f_ratio_total(x), mask=mask)
+        x = np.ma.array(x, mask=mask)
+        print(x)
+        # plot the avergaed calculations for overlapping thrq
+        if(model=="2_1_1_0_12"):
+            plt.plot(x, y, marker='None', color='k', linestyle='--', label=r' %s'%theory_calc_name)
+        #if(model=="3_1_1_0_12"):
+        #    plt.plot(x, f_ratio_total(x), marker='None', color='k', linestyle='-', label=r' %s'%theory_calc_name)
+        '''
+        
+        
     idx_plot = idx_plot+1
         
     
