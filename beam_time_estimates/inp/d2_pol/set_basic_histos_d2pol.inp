@@ -64,13 +64,13 @@ paero_xmax = 100.
 
 # electron arm central angle
 the_nbins = 40
-the_xmin = 5.0
-the_xmax = 15.0
+the_xmin = 0.0
+the_xmax = 10.0
 
 # final electron arm momentum [GeV/c]
 kf_nbins = 60
-kf_xmin = 1.0
-kf_xmax = 11.
+kf_xmin = 8.0
+kf_xmax = 12.
 
 # invariant mass (assuming proton target mass)
 W_nbins = 100
@@ -217,20 +217,20 @@ thx_xmin = 45.
 thx_xmax = 75.
 
 # In-plane angle between detected particle and q 
-thxq_nbins = 40
+thxq_nbins = 90
 thxq_xmin = 0.
-thxq_xmax = 10.
+thxq_xmax = 30.
 
 # In-plane angle between the recoil system and q (+/- 5 deg bins)
-thrq_nbins = 19
-thrq_xmin = -5.
-thrq_xmax = 185.
+#thrq_nbins = 19
+#thrq_xmin = -5.
+#thrq_xmax = 185.
 
 
 # In-plane angle between the recoil system and q (+/- 10 deg bins) - increased bin width for d2 pol stats
-#thrq_nbins = 10
-#thrq_xmin = 0.
-#thrq_xmax = 200.
+thrq_nbins = 10
+thrq_xmin = 0.
+thrq_xmax = 200.
 
 # Out-of-plane angle between detected particle and q
 phxq_nbins = 100
@@ -374,7 +374,7 @@ hyptar_xmax = 0.15
   
 hxptar_nbins = 100
 hxptar_xmin  = -0.35
-hxptar_xmax = 0.15
+hxptar_xmax = 0.35
   
 hdelta_nbins = 40
 hdelta_xmin = -15.
@@ -404,12 +404,12 @@ ztar_diff_xmax = 10.
 #----Collimator Quantities----
 #-----------------------------
 hXColl_nbins = 100
-hXColl_xmin =  -15.
-hXColl_xmax =   15. 
+hXColl_xmin =  -25.
+hXColl_xmax =   25. 
   
 hYColl_nbins =  100                                          
-hYColl_xmin =  -15.                                                                                             
-hYColl_xmax =  15.
+hYColl_xmin =  -25.                                                                                             
+hYColl_xmax =  25.
   
 eXColl_nbins = 100
 eXColl_xmin = -15.

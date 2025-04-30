@@ -1474,11 +1474,11 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     Brief: function to calculate the d2pol dilution factor: dilution = d2 / (d2 + he4 + n14)
     '''
 
-    overlay_flag = True
+    overlay_flag = False
     
     # create file to write dilution factors
     #ofname = 'd2pol_dilution_factors_pm%d_Q2_%.1f_phi0_%s.csv' %(pm_user, Q2_user, field)
-    ofname = 'd2pol_dilution_factors_Eb8p8_phi0_%s_finePmBins.csv' %(field)
+    ofname = 'd2pol_dilution_factors_%s_finePmBins.csv' %(field)
 
     ofile = open(ofname, 'w+')
     ofile.write('# d2pol dilution factors (%s) \n'%(field))
@@ -1500,10 +1500,10 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     ofile.write('thrq_bin,pm_bin,d2,d2_err,he4,he4_err,n14,n14_err,dilution,dilution_err\n') 
 
 
-    '''
+    
     if overlay_flag == False:
     
-    # uncomment comment for plotting dilution factor into subplots binned in thrq 
+        # uncomment comment for plotting dilution factor into subplots binned in thrq 
         
         fig, ax = plt.subplots(3, 3)
         fig.set_size_inches(10,10, forward=True)
@@ -1512,7 +1512,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
         subplot_title =  r"dilution factor, central p$_{m,cent}$ = %d MeV, $Q^{2}$ = %.1f GeV$^{2}$"%(pm_user, Q2_user)
         plt.suptitle(subplot_title, fontsize=15);
         plt.tight_layout()
-    '''
+    
     #------------------------------------------------------
     
     
@@ -1527,9 +1527,9 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     #n14_file_path = 'yield_estimates/d2_pol/smallFSI/optimized/histogram_data/phi0/n14_pm%d_Q2_%.1f_%s_%s/%s'%(pm_user, Q2_user, model, field, h2_hist_basename)  #optimized kinematics
 
     # NEW FILES (For re-optim EPJA, Sep 30, 2024)
-    d2_file_path = 'yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/d2_Eb8p8_phi0_fsi_rad_fieldON_histos/%s'%(h2_hist_basename)
-    he4_file_path = 'yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/he4_Eb8p8_phi0_fsi_rad_fieldON_histos/%s'%(h2_hist_basename)
-    n14_file_path = 'yield_estimates/d2_pol/histogram_data/phi0/bfield_12_deg/n14_Eb8p8_phi0_fsi_rad_fieldON_histos/%s'%(h2_hist_basename)
+    d2_file_path = 'yield_estimates/d2_pol/histogram_data/pac53/d2_pm300_Q2_1.5_fsi_fieldON/%s'%(h2_hist_basename)
+    he4_file_path = 'yield_estimates/d2_pol/histogram_data/pac53/he4_pm300_Q2_1.5_fsi_fieldON/%s'%(h2_hist_basename)
+    n14_file_path = 'yield_estimates/d2_pol/histogram_data/pac53/n14_pm300_Q2_1.5_fsi_fieldON/%s'%(h2_hist_basename)
     
     df_d2  = pd.read_csv(d2_file_path, comment='#')
     df_he4 = pd.read_csv(he4_file_path, comment='#')
@@ -1560,9 +1560,10 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
         # ignore thetarq >110
         if xbin>=110: continue
 
+        print('xbin = ', xbin)
         # uncomment for plotting dilution factor into subplots binned in thrq 
-        #ax = plt.subplot(3, 3, jdx+1)
-
+        ax = plt.subplot(3, 3, jdx+1)
+        
         
         d2_count_per_xbin     = df_d2.zcont[df_d2.x0==xbin]
         d2_count_per_xbin_err = np.sqrt( d2_count_per_xbin )
@@ -1619,26 +1620,26 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
             
 
         
-            #if overlay_flag == True:
+            if overlay_flag == True:
 
             
-            # -- plotting option: overlay dilution factors for all thrq_bins ---
+                # -- plotting option: overlay dilution factors for all thrq_bins ---
             
-            # uncomment if plotting overlay for all thrq_bins 
+                # uncomment if plotting overlay for all thrq_bins 
             
-            fig= plt.subplot()
-            plt.plot(x_interp,  y_interp, marker='None', linestyle='--', label=r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.) )
-            plt.xticks([0.0, 0.2, 0.4, 0.6], fontsize = 32)
-            plt.yticks(fontsize = 32)
-            plt.ylim(0, 1.0)
-            plt.xlim(0, 0.65)
-            plt.xlabel('Missing Momentum, $P_{m}$ (GeV/c)', fontsize=26)
-            plt.ylabel('Dilution Factor', fontsize=26)
-            plt.legend(fontsize=16, loc='lower right')
-        
-
-            #--------------------------------------------------------------------
-            
+                fig= plt.subplot()
+                plt.plot(x_interp,  y_interp, marker='None', linestyle='--', label=r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.) )
+                plt.xticks([0.0, 0.2, 0.4, 0.6], fontsize = 32)
+                plt.yticks(fontsize = 32)
+                plt.ylim(0, 1.0)
+                plt.xlim(0, 0.65)
+                plt.xlabel('Missing Momentum, $P_{m}$ (GeV/c)', fontsize=26)
+                plt.ylabel('Dilution Factor', fontsize=26)
+                plt.legend(fontsize=16, loc='lower right')
+                
+                
+                #--------------------------------------------------------------------
+                
             
             # loop over y-bins (pm_bins) to write to file
             for ipm, ybin in enumerate( ybc ):
@@ -1646,22 +1647,22 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
                 ofile.write("%.1f,%.3f,%.1f,%.3f,%.1f,%.3f,%.1f,%.3f,%.3f,%.3f\n" % (xbin, ybin, x[ipm], sigx[ipm], y[ipm], sigy[ipm], z[ipm], sigz[ipm], dilution[ipm], dilution_err[ipm] ))
 
 
-            
+            #----------------------------
             #uncomment if plotting individual subplots
-            # plot interpolated function
-            #ax.plot(x_interp,  y_interp, marker='None', alpha=0.9, linestyle='--', color='r')
+            #plot interpolated function
+            ax.plot(x_interp,  y_interp, marker='None', alpha=0.9, linestyle='--', color='r')
 
             # plot data
-            #ax.errorbar(ybc, dilution, dilution_err, marker='o', markersize=8, alpha=0.4, linestyle='None', color='r', label=r'%.1f GeV$^{2}$'%(Q2_user))
+            ax.errorbar(ybc, dilution, dilution_err, marker='o', markersize=8, alpha=0.4, linestyle='None', color='r', label=r'%.1f GeV$^{2}$'%(Q2_user))
 
             
-            #plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
-            #plt.xticks(fontsize = 18)
-            #plt.yticks(fontsize = 18)
-            #plt.ylim(0.,1.0)
-            #plt.xlim(0, 0.7)
-            
-            
+            plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
+            plt.xticks(fontsize = 18)
+            plt.yticks(fontsize = 18)
+            plt.ylim(0.,1.0)
+            plt.xlim(0, 0.7)
+            #---------------------------
+            print('jdx = ', jdx)
             jdx = jdx+1
        
     ofile.close()
@@ -2030,7 +2031,7 @@ scale_set = [24]  # hrs
 #make_projY_d2fsi('Pm_vs_thrq',[800], [60], 'pwia', '2d', [144])
 #make_projY_d2fsi('Pm_vs_thrq',[800], [49], 'pwia', '2d', [200])
 
-make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  # scale represent hrs
+#make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  # scale represent hrs
 #make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
 
 
@@ -2075,8 +2076,8 @@ make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
 pm_set = [300]
 q2_set = [1.5]
-#tgt_set = ['d2', 'n14', 'he4' ]
-tgt_set = ['d2']
+tgt_set = ['d2', 'n14', 'he4' ]
+#tgt_set = ['d2']
 
 field = 'fieldON'
 
@@ -2175,7 +2176,7 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 #calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=2)
 
-#calc_dilution(350, 2.5, 'fsi', 'fieldOFF', scale=1)
+calc_dilution(300, 1.5, 'fsi', 'fieldON', scale=1)
 
 #overlay_dilution()
 
