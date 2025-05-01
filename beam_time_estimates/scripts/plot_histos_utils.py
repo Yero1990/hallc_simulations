@@ -1474,7 +1474,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
     Brief: function to calculate the d2pol dilution factor: dilution = d2 / (d2 + he4 + n14)
     '''
 
-    overlay_flag = False
+    overlay_flag = True
     
     # create file to write dilution factors
     #ofname = 'd2pol_dilution_factors_pm%d_Q2_%.1f_phi0_%s.csv' %(pm_user, Q2_user, field)
@@ -1501,17 +1501,17 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
 
 
     
-    if overlay_flag == False:
+    #if overlay_flag == False:
     
         # uncomment comment for plotting dilution factor into subplots binned in thrq 
         
-        fig, ax = plt.subplots(3, 3)
-        fig.set_size_inches(10,10, forward=True)
-        fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)
-        fig.text(0.01, 0.5, 'dilution', va='center', rotation='vertical', fontsize=14)
-        subplot_title =  r"dilution factor, central p$_{m,cent}$ = %d MeV, $Q^{2}$ = %.1f GeV$^{2}$"%(pm_user, Q2_user)
-        plt.suptitle(subplot_title, fontsize=15);
-        plt.tight_layout()
+        #fig, ax = plt.subplots(2, 3)
+        #fig.set_size_inches(10,10, forward=True)
+        #fig.text(0.5, 0.01, 'missing momentum, p$_{m}$ [GeV/c]', ha='center', fontsize=14)
+        #fig.text(0.01, 0.5, 'dilution', va='center', rotation='vertical', fontsize=14)
+        #subplot_title =  r"dilution factor, central p$_{m,cent}$ = %d MeV, $Q^{2}$ = %.1f GeV$^{2}$"%(pm_user, Q2_user)
+        #plt.suptitle(subplot_title, fontsize=15);
+        #plt.tight_layout()
     
     #------------------------------------------------------
     
@@ -1562,7 +1562,7 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
 
         print('xbin = ', xbin)
         # uncomment for plotting dilution factor into subplots binned in thrq 
-        ax = plt.subplot(3, 3, jdx+1)
+        #ax = plt.subplot(2, 3, jdx+1)
         
         
         d2_count_per_xbin     = df_d2.zcont[df_d2.x0==xbin]
@@ -1625,12 +1625,12 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
             
                 # -- plotting option: overlay dilution factors for all thrq_bins ---
             
-                # uncomment if plotting overlay for all thrq_bins 
+                # uncomment if plotting overlay for all thrq_bins  (and set flag to true at the top)
             
                 fig= plt.subplot()
                 plt.plot(x_interp,  y_interp, marker='None', linestyle='--', label=r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.) )
-                plt.xticks([0.0, 0.2, 0.4, 0.6], fontsize = 32)
-                plt.yticks(fontsize = 32)
+                plt.xticks([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7], fontsize = 42)
+                plt.yticks(fontsize = 42)
                 plt.ylim(0, 1.0)
                 plt.xlim(0, 0.65)
                 plt.xlabel('Missing Momentum, $P_{m}$ (GeV/c)', fontsize=26)
@@ -1650,10 +1650,10 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
             #----------------------------
             #uncomment if plotting individual subplots
             #plot interpolated function
-            ax.plot(x_interp,  y_interp, marker='None', alpha=0.9, linestyle='--', color='r')
+            #ax.plot(x_interp,  y_interp, marker='None', alpha=0.9, linestyle='--', color='r')
 
             # plot data
-            ax.errorbar(ybc, dilution, dilution_err, marker='o', markersize=8, alpha=0.4, linestyle='None', color='r', label=r'%.1f GeV$^{2}$'%(Q2_user))
+            #ax.errorbar(ybc, dilution, dilution_err, marker='o', markersize=8, alpha=0.4, linestyle='None', color='r', label=r'%.1f GeV$^{2}$'%(Q2_user))
 
             
             plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)

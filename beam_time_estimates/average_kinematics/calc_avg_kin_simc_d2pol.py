@@ -106,7 +106,7 @@ list_of_args = sys.argv
 #basename='d2_pm800_thrq49_fsi_rad_output' 
 
 # deuteron polarized proposal files
-basename='d2_pm300_Q2_1p5_fsi_rad_fieldON_11GeV_analyzed'
+basename='he4_pm300_Q2_1p5_fsi_rad_fieldON_analyzed'
 
 
 output_file = basename+'_avgkin.csv'
@@ -162,9 +162,9 @@ for i,acont in enumerate(all.cont):
    i_ybin = all.iy[i]
    thnq_b = all.xb[i]
    pm_b = all.yb[i]
-   if (acont == 0):
+   if (all.cont[i] <= 0):
       # skip zero content bins
-      continue
+      #continue
       print('acont = ',acont)
    else:
       
@@ -264,7 +264,8 @@ for i,acont in enumerate(all.cont):
 
 
       # for JLab 22 GeV calculation
-      l = "%i,%i,%i,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3E\n"%(
+      l = "%i,%i,%i,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3E\n"%(i_bin,i_xbin,i_ybin,thnq_b,pm_b,Ei,kf,the,nu,nu_calc,Q2_calc,q_calc,Ep_calc,Pf,Pm,Pm_calc,En_calc,Pf_Par_q,Pf_Perp_q,thpq,thpq_calc,thpq_cm,thnq,thnq_calc,cphi_pq,sphi_pq,alpha_calc,all.cont[i])
+      '''
                                                                                                           # 0 2d bin number
                                                                                                           i_bin, \
                                                                                                           # 1 
@@ -321,6 +322,7 @@ for i,acont in enumerate(all.cont):
                                                                                                           alpha_calc, \
                                                                                                           # 27
                                                                                                           all.cont[i])
+      '''
        
                                                                          
       o.write(l)

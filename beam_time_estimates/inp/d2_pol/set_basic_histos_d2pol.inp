@@ -151,14 +151,14 @@ Em_xmax = 0.2
 # Pm xmax = 1.2
 
 # Missing (Recoil) Momentum (+/- 40 MeV bin width) -increased bin width for d2 pol stats
-Pm_nbins = 15
-Pm_xmin = 0.
-Pm_xmax = 1.2
-
-# finer bins (for dilution plots)
-#Pm_nbins = 60
+#Pm_nbins = 15
 #Pm_xmin = 0.
 #Pm_xmax = 1.2
+
+# finer bins (for dilution plots)
+Pm_nbins = 60
+Pm_xmin = 0.
+Pm_xmax = 1.2
 
 
 # Missing Momentum (X-component, lab)
