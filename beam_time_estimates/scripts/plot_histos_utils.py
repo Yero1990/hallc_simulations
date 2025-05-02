@@ -1628,14 +1628,14 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
                 # uncomment if plotting overlay for all thrq_bins  (and set flag to true at the top)
             
                 fig= plt.subplot()
-                plt.plot(x_interp,  y_interp, marker='None', linestyle='--', label=r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.) )
-                plt.xticks([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7], fontsize = 42)
-                plt.yticks(fontsize = 42)
+                plt.plot(x_interp,  y_interp, marker='None', linestyle='--', linewidth=7.0, label=r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.) )
+                plt.xticks([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7], fontsize = 38)
+                plt.yticks(fontsize = 38)
                 plt.ylim(0, 1.0)
-                plt.xlim(0, 0.65)
+                plt.xlim(0, 0.7)
                 plt.xlabel('Missing Momentum, $P_{m}$ (GeV/c)', fontsize=26)
                 plt.ylabel('Dilution Factor', fontsize=26)
-                plt.legend(fontsize=16, loc='lower right')
+                plt.legend(fontsize=25, loc='lower right')
                 
                 
                 #--------------------------------------------------------------------
@@ -1656,11 +1656,11 @@ def calc_dilution(pm_user, Q2_user, model, field, scale=1):
             #ax.errorbar(ybc, dilution, dilution_err, marker='o', markersize=8, alpha=0.4, linestyle='None', color='r', label=r'%.1f GeV$^{2}$'%(Q2_user))
 
             
-            plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
-            plt.xticks(fontsize = 18)
-            plt.yticks(fontsize = 18)
-            plt.ylim(0.,1.0)
-            plt.xlim(0, 0.7)
+            #plt.title(r'$\theta_{nq}$ = %d $\pm$ %d deg'%(xbin, xbinw/2.), fontsize=15)
+            #plt.xticks(fontsize = 18)
+            #plt.yticks(fontsize = 18)
+            #plt.ylim(0.,1.0)
+            #plt.xlim(0, 0.7)
             #---------------------------
             print('jdx = ', jdx)
             jdx = jdx+1
@@ -2176,7 +2176,7 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 #calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=2)
 
-calc_dilution(300, 1.5, 'fsi', 'fieldON', scale=1)
+calc_dilution(300, 1.5, 'fsi', 'fieldON', scale=8)  # baseline 168 hrs 1 week (scale to 4 weeks x 2 cups, scale = 8)
 
 #overlay_dilution()
 
