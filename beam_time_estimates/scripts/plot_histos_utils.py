@@ -1989,12 +1989,12 @@ def make_projY_d2pol(h2_hist_name, tgt_set, pm_user, Q2_user, model, field, plot
 
 # pm=800 setting scale is in hours
 #           blue, orange, green 
-#thrq_set =  [72,  60,  49]
-#scale_set = [160, 144, 200]  # hrs
+thrq_set =  [72,  60,  49]
+scale_set = [160, 144, 200]  # hrs
 
 # pm=500 setting scale is in hours
-thrq_set =  [70]
-scale_set = [24]  # hrs
+#thrq_set =  [70]
+#scale_set = [24]  # hrs
 
 
 #scale_set = [1, 1, 1]
@@ -2031,7 +2031,7 @@ scale_set = [24]  # hrs
 #make_projY_d2fsi('Pm_vs_thrq',[800], [60], 'pwia', '2d', [144])
 #make_projY_d2fsi('Pm_vs_thrq',[800], [49], 'pwia', '2d', [200])
 
-#make_ratios_d2fsi([800], [49, 60, 72], scale=[200,144,160], plot_flag='ratio')  # scale represent hrs
+make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio_err')  # scale represent hrs
 #make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
 
 
@@ -2176,7 +2176,7 @@ scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 ->
 
 #calc_dilution(400, 2.0, 'fsi', 'fieldON', scale=2)
 
-calc_dilution(300, 1.5, 'fsi', 'fieldON', scale=8)  # baseline 168 hrs 1 week (scale to 4 weeks x 2 cups, scale = 8)
+#calc_dilution(300, 1.5, 'fsi', 'fieldON', scale=8)  # baseline 168 hrs 1 week (scale to 4 weeks x 2 cups, scale = 8)
 
 #overlay_dilution()
 

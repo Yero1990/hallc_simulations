@@ -1,0 +1,59 @@
+Questions for Misak:
+
+1. What is meant by 'angular condition' ? 
+Does it specifically refers to the appearance
+of L=1 (P-wave) state in the deuteron ?
+
+
+2. In the momentum distribution plot from F. Vera thesis (attached),
+Can you verify the following:
+
+(i) [dashed blue] momentum distribution calculated within VNA,
+using a non-relativistic deuteron w.f.
+
+(ii) [solid orange] momentum distribution calculated using a
+relativistic deuteron w.f. that has both the 'pn' and non-nucleonic components
+
+(iii) Does a calculation exist for where the momentum distribution is calculated
+using a relativistic deuteron w.f. which ONLY includes the 'pn' component ? And would
+this calculation be expected to be somewhere in the middle between non-relativistic and
+(relativistic with non-nucleonic) ?
+
+Also, for this plot, Im assuming it is integrated over all internal angles: cos (theta) =  (alpha - 1) Ek / k,
+
+
+3. for the angle defined as: cos (theta) =  (alpha - 1) Ek / k,
+
+(i) What is the interpretation of this angle ? Is is the internal angle
+of the proton (while still inside the deuteron) relative to the direction of
+the incident virtual photon, q ?  How can we experimentally find Ek, k ? Is it just the energy
+and relative momentum of the bound neutron inside the deuteron ? 
+
+(ii) alpha is the light cone momentum fraction of the proton which I have defined in my code as:
+
+alpha = 2 - alpha_n  (since alpha + alpha_n = 2)
+Can you verify that the definition of alpha_n is given by:
+
+alpha_n = (En - PmPar)/ (MD/2.),
+
+En -> Energy of recoil neutron En = (sqrt(MN^2 + Pmiss^2)
+PmPar -> parallel component of missing momentum relative to q : PmPar = Pmiss * cos(theta_nq)
+MD -> mass of deuteron
+
+4. from the article "A new structure in the deuteron" Phys. Rev. Lett. 130, 112502, Fig.1, the
+light-cone momentum distribution vs. cos(theta), show a significant difference between
+calcualtion with only the 'pn' component compared to non-nucleonic components at 1 GeV, compared to 800 MeV
+momenta.  Our proposal focuses on Pm=800 MeV/c, but the acceptance extends up to 940 MeV (with smaller stats)
+Can calculations for for Pm=900 MeV, be generated as well ?
+
+for our deuteron FSI proposal, I believe that provided the cos(theta) is close or equal to zero,
+then we can actually detect a signature of non-nucleonic component, given that from the
+momentum distribution vs. cos(theta), the largest difference between the calcualtion with only
+the 'pn' component (dashed) and that including non-nucleonic effects (solid) happens when cos(theta) = 0
+
+Can we  bin the data in bins of cos(theta) to select a specific
+angle where cos(theta)=0, or is this not necessary?  Additional binning
+would probably significantly reduce statistics even more for our proposal.
+
+
+
