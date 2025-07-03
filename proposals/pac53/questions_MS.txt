@@ -5,7 +5,10 @@ Does it specifically refers to the appearance
 of L=1 (P-wave) state in the deuteron ?
 
 
-2. In the momentum distribution plot from F. Vera thesis (attached),
+---------------------------------------------------------------------------
+
+
+2. In the momentum distribution plot from Frank Vera's thesis (Fig. 4.8),
 Can you verify the following:
 
 (i) [dashed blue] momentum distribution calculated within VNA,
@@ -19,26 +22,42 @@ using a relativistic deuteron w.f. which ONLY includes the 'pn' component ? And 
 this calculation be expected to be somewhere in the middle between non-relativistic and
 (relativistic with non-nucleonic) ?
 
-Also, for this plot, Im assuming it is integrated over all internal angles: cos (theta) =  (alpha - 1) Ek / k,
+Is this plot integrated over all internal angles: cos (theta) =  (alpha - 1) Ek / k, ?
+
+
+
+---------------------------------------------------------------------------
 
 
 3. for the angle defined as: cos (theta) =  (alpha - 1) Ek / k,
 
 (i) What is the interpretation of this angle ? Is is the internal angle
 of the proton (while still inside the deuteron) relative to the direction of
-the incident virtual photon, q ?  How can we experimentally find Ek, k ? Is it just the energy
-and relative momentum of the bound neutron inside the deuteron ? 
+the incident virtual photon, q ?
+
+How can we experimentally find Ek, k ? Is it just the energy
+and relative momentum of the bound neutron inside the deuteron, in which
+case, to experimentally calculate it, should we just is the missing momentum of neutron
+while selecting minimal FSI, (Pmiss ~ intrernal nucleon momentum k assuming PWIA)
+
 
 (ii) alpha is the light cone momentum fraction of the proton which I have defined in my code as:
 
 alpha = 2 - alpha_n  (since alpha + alpha_n = 2)
+
 Can you verify that the definition of alpha_n is given by:
 
 alpha_n = (En - PmPar)/ (MD/2.),
 
+where 
 En -> Energy of recoil neutron En = (sqrt(MN^2 + Pmiss^2)
 PmPar -> parallel component of missing momentum relative to q : PmPar = Pmiss * cos(theta_nq)
 MD -> mass of deuteron
+
+
+---------------------------------------------------------------------------
+
+
 
 4. from the article "A new structure in the deuteron" Phys. Rev. Lett. 130, 112502, Fig.1, the
 light-cone momentum distribution vs. cos(theta), show a significant difference between
