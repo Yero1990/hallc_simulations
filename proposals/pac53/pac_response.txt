@@ -1,0 +1,58 @@
+Comments and questions from the first reader:
+
+(1) Please describe the difference between your previous Hall C experiment [14] and the
+proposed experiment. I understand that you will repeat the experiment with the same
+kinematics but with a wider angular coverage of theta_nq =30-80 deg to investigate the
+effect of FSI. What else are different? How much statistical improvement do you expect
+in the theta_nq =30-50 region? Please plot, in Fig.14, the data points of the previous
+experiment [14] at 35 and 45 for various p_m.
+
+
+Answer:
+
+
+
+
+
+(2) Since this experiment is an extension of the previous one with the same setup, there
+seems to be no major problem in the feasibility and the systematic errors. Are there any
+concerns in using a higher beam current (80 muA) than before (45-60 muA), as mentioned
+in the TAC report? Are the target and DAQ systems the same as before? Please show us
+your possible concerns and/or expected improvement, if any, in the performance of the
+apparatus, DAQ, or the analysis, compared to the previous experiment.
+
+
+Answer:
+
+
+
+
+(3) It is not very clear how well you will be able to understand and/or control the FSI by
+using the new data from this experiment.
+
+In the proposal, you wrote “If it is due to the wave function then this experiment for
+the first time will establish the existence of non-nucleonic components in the deuteron.”,
+but how and in which case can you establish the non-nucleonic components?
+
+Based on Ref. [15], you hope to observe “angular anisotropy” as evidence for non-
+nucleonic components. FIG. 1 of Ref. [15] shows an anisotropic distribution falling
+down at forward and backward angles above 800 MeV/c. Although the definition of
+“angle” is different, I am afraid that it could be difficult to distinguish between the
+angular distribution from the FSI and the angular anisotropy due to exotics. Could you
+roughly draw in Fig.14 an expected angular distribution (in theta_nq) for the anisotropy
+due to exotics? (Although, of course, it will be done after the relativistic PWIA
+calculation by Sargsian is finished.) Will you need a wider coverage of theta_q and/or
+better statistics to confirm the angular anisotropy in future?
+(If possible, please send me Ref.[1] because I cannot access it from my university.
+In addition, if possible, could you give an intuitive explanation on why angular
+anisotropy appears from non-nucleonic components at a relativistic regime? --It was
+hard for me to understand it from Ref.[15].)
+
+
+
+
+
+
+
+
+
