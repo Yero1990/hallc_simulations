@@ -35,9 +35,9 @@ def calc_d2_fsi_kin():
 
 
     #Set Eb Range to cover [GeV^2]
-    Eb_min = 10.549
+    Eb_min = 10.78
     Eb_step = 1.    
-    Eb_max = 10.549 + Eb_step   #include endpoint (+Pr_step)
+    Eb_max = 10.78 + Eb_step   #include endpoint (+Pr_step)
     Eb_range = np.arange(Eb_min, Eb_max, Eb_step)
     
     #Set Q2 Range to cover [GeV^2]

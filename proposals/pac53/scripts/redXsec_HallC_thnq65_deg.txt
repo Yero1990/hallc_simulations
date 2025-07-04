@@ -1,0 +1,33 @@
+#This datafile contains redXsec and ratio to JML FSI from Hall C Deuteron Experiment: E12-10-003
+#Units: pm_avg [GeV/c] :: redXsec [fm^3],   theta_nq = 65 +\- 5 deg 
+#!pm_avg[f,0]/   data_redXsec[f,1]/   data_redXsec_tot_err[f,2]/   stats_rel_err[f,3]/  kin_rel_err[f,4]/   norm_rel_err[f,5]   tot_rel_syst_err[f,6]/   tot_rel_err[f,7]/ 
+0.03116 5.30229E+00  1.34665E+00  0.25052  0.02005  0.03661  0.04174  0.25398
+0.06157 1.38623E+00  1.21595E-01  0.07471  0.02780  0.03661  0.04597  0.08772
+0.09847 2.95014E-01  2.00422E-02  0.05226  0.02333  0.03661  0.04341  0.06794
+0.13752 7.10214E-02  5.30290E-03  0.06387  0.01246  0.03661  0.03867  0.07467
+0.17772 1.89572E-02  1.99392E-03  0.09853  0.00375  0.03661  0.03680  0.10518
+0.21785 4.85172E-03  8.59800E-04  0.17333  0.00459  0.03661  0.03690  0.17722
+0.25887 2.20313E-03  5.39302E-04  0.24194  0.00671  0.03661  0.03722  0.24479
+0.29937 1.11419E-03  3.63196E-04  0.32384  0.00659  0.03661  0.03720  0.32597
+0.33983 1.10155E-03  3.70373E-04  0.33418  0.00560  0.03661  0.03704  0.33623
+0.37986 7.82393E-04  3.21101E-04  0.40875  0.00448  0.03661  0.03688  0.41041
+0.41972 NAN  1.39699E-04  1.00025  0.00360  0.03661  0.03679  1.00092
+0.45962 NAN  2.30945E-04  0.70731  0.00293  0.03661  0.03673  0.70826
+0.49914 NAN  3.95787E-04  0.50035  0.00246  0.03661  0.03669  0.50169
+0.53842 NAN  2.60092E-04  1.00023  0.00219  0.03661  0.03668  1.00090
+0.57766 NAN  3.73545E-04  1.00038  0.00210  0.03661  0.03667  1.00105
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan

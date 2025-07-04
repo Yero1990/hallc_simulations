@@ -970,11 +970,11 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                         
             rel_err_thrs = 0.4   #  relative stat. error threshold for masking
 
-            # read dataframe
+            # read dataframe (from simulation of pac 53)
             df_fsi  = pd.read_csv(histos_file_path_fsi,  comment='#')
             df_pwia = pd.read_csv(histos_file_path_pwia, comment='#')
 
-            
+     
             
             # get central bin values arrays
             thrq_bins = (df_fsi.x0).to_numpy()
@@ -1023,10 +1023,17 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
             for idx, pm_bin in enumerate(pm_bins):
 
                 #cnts = np.sum(count_per_xbin)
+
                 
                 if pm_bin<0.520 or pm_bin>0.960: continue  # only for 12 plots (for pm=800 setting)
                 #if pm_bin<=0.160 or pm_bin>0.520:  continue  # only for pm=500 setting
 
+                # define commissioning data path
+                histos_file_path_comm = '../proposals/pac53/data/redXsec_HallC_pm%d_MeV.txt'%(pm_bin*1000)
+
+                # read d(e,e'p) 2018 commissioning data
+                df_comm = pd.read_csv(histos_file_path_comm, comment='#')
+            
                 
                 if plot_flag=='ratio':
 
@@ -1078,8 +1085,11 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                         plt.plot(theory_thrq , f_ratio_cd(theory_thrq), marker='None' , color=clr[i], linestyle='--', label=r'', zorder=4)
                         plt.plot(theory_thrq , f_ratio_v18(theory_thrq), marker='None', color=clr[i], linestyle='-', label=r'', zorder=4)
 
-                    # plot Laget SIMC
+                    # plot Laget FSI/PWIA SIMC ratios (pac 53 simulations)
                     ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', mec='k', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq, zorder=5)
+
+                    # plot  comm_data_2018/PWIA SIMC ratios (for comparison)
+                    ax.errorbar(df_comm.thnq, df_comm.R, df_comm.R_err, marker='^', mec='k', mfc='k', ecolor='k', linestyle='None', ms=7, zorder=4)
 
                   
 
@@ -2031,7 +2041,7 @@ scale_set = [160, 144, 200]  # hrs
 #make_projY_d2fsi('Pm_vs_thrq',[800], [60], 'pwia', '2d', [144])
 #make_projY_d2fsi('Pm_vs_thrq',[800], [49], 'pwia', '2d', [200])
 
-make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio_err')  # scale represent hrs
+make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio')  # scale represent hrs
 #make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
 
 

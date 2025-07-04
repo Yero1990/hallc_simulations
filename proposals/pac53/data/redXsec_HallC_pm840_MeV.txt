@@ -1,0 +1,7 @@
+#This datafile contains redXsec and ratio to JML FSI from Hall C Deuteron Experiment: E12-10-003
+#Units: pm_avg [GeV/c] :: redXsec [fm^3], pm = 840 +/- 20 MeV/c 
+pm_avg,pm_c,thnq,data_redXsec,data_redXsec_tot_err,R,R_err
+0.85798,0.860,25,NAN,3.52212E-06,nan,0.50832 
+0.85839,0.860,35,7.12090E-06,1.62321E-06,1.05074,0.23952 
+0.85887,0.860,45,8.17710E-06,1.73564E-06,1.21461,0.25781 
+0.85761,0.860,55,NAN,5.57962E-05,nan,8.35687 

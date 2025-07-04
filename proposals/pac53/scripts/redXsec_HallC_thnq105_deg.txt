@@ -1,0 +1,33 @@
+#This datafile contains redXsec and ratio to JML FSI from Hall C Deuteron Experiment: E12-10-003
+#Units: pm_avg [GeV/c] :: redXsec [fm^3],   theta_nq = 105 +\- 5 deg 
+#!pm_avg[f,0]/   data_redXsec[f,1]/   data_redXsec_tot_err[f,2]/   stats_rel_err[f,3]/  kin_rel_err[f,4]/   norm_rel_err[f,5]   tot_rel_syst_err[f,6]/   tot_rel_err[f,7]/ 
+0.02932 NAN  2.51614E+00  0.66824  0.07385  0.03661  0.08243  0.67330
+0.05919 1.59295E+00  5.41490E-01  0.32616  0.08848  0.03661  0.09575  0.33993
+0.09435 2.86678E-01  1.16107E-01  0.39523  0.08056  0.03661  0.08848  0.40501
+0.13081 NAN  1.55769E-01  0.71334  0.06826  0.03661  0.07746  0.71753
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan
+nan NAN  NAN  nan  nan  nan  nan  nan

@@ -1,0 +1,26 @@
+# D(e,e'p)n Central Kinematics Summary
+# Beam Energy (Ei) = 10.780 GeV
+# Out-of-Plane Angle (Phi) = 180 deg
+# 
+# Header Definitions: 
+# Pr   : Central Missing Momentum [GeV/c] 
+# xbj  : Bjorken x  
+# kf   : e- final momentum [GeV/c] 
+# th_e : e- scattering angle [deg] 
+# Pf   : final proton momentum [GeV/c] 
+# th_p : proton scattering angle [deg] 
+# q    : 3-momentum transfer [GeV] 
+# th_q : relative angle between q-vector and +z (lab)  [deg] 
+# th_nq: relative angle between q-vector and recoil neutron [deg] 
+# th_pq: relative angle between q-vector and knocked-out proton [deg] 
+# Q2   : 4-Momentum Transfer [GeV^2]  
+# 
+Eb,Pr,xbj,kf,th_e,Pf,th_p,q,th_q,th_rq,th_pq,Q2
+10.78,0.8000,0.8000,7.7825,13.2995,3.5161,41.7137,3.6722,29.1779,72.5465,12.5358,4.5000  <----- ~72 deg
+10.55,0.8000,0.8000,7.5515,13.6501,3.5161,41.5671,3.6722,29.0313,72.5465,12.5358,4.5000  <----- ~72 deg
+
+10.78,0.8000,1.0000,8.3820,12.8130,2.8912,49.4119,3.2016,35.4927,60.3837,13.9192,4.5000  <----- ~60 deg
+10.55,0.8000,1.0000,8.1510,13.1362,2.8912,49.2707,3.2016,35.3516,60.3837,13.9192,4.5000  <----- ~60 deg
+
+10.78,0.8000,1.2000,8.7816,12.5169,2.4676,54.9875,2.9143,40.7721,49.2400,14.2154,4.5000 <------ ~49 deg
+10.55,0.8000,1.2000,8.5506,12.8242,2.4676,54.8497,2.9143,40.6343,49.2400,14.2154,4.5000 <------ ~49 deg
