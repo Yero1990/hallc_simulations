@@ -14,6 +14,10 @@ Answer:
 
 
 
+
+
+
+
 (2) Since this experiment is an extension of the previous one with the same setup, there
 seems to be no major problem in the feasibility and the systematic errors. Are there any
 concerns in using a higher beam current (80 muA) than before (45-60 muA), as mentioned
@@ -23,6 +27,21 @@ apparatus, DAQ, or the analysis, compared to the previous experiment.
 
 
 Answer:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -56,3 +75,26 @@ hard for me to understand it from Ref.[15].)
 
 
 
+
+
+
+
+Additional Question from first  reader (Hiro)
+
+I still have a little concern. How does the relativistic theoretical calculation 
+depend on the NN interaction model?
+
+From Fig.3 in your proposal, you assume that the CD-Bonn model perfectly 
+describes nucleonic processes (although the calculations are non-relativistic.)
+In my understanding, since the CD-Bonn as well as other NN models are adjusted 
+so as to reproduce the NN scattering data up to E(lab)=350 MeV (namely, p(CM)~380 MeV/c), 
+it is quite natural that PWIA calculations with these models cannot reproduce 
+the NN short-range phenomenon above p_r~400 MeV/c. Actually, above p_r~400 MeV/c, 
+the PWIA cross sections with CD-Bonn, AV18, Paris begin to separate from each other. 
+It is surprising that the CD-Bonn PWIA seems to agree with the data up to p_r~700 MeV/c.
+Although CD-Bonn is a sophisticated meson exchange model and thus it could be better 
+than the others, but it may not guarantee that the CD-Bonn can be safely used as a reference 
+of the nucleonic PWIA around and above p_r~700 MeV/c, apart from the nonrelativistic problem.
+I completely agree that observation of the anisotropy as in Fig.1 of Ref.15 is a clear evidence 
+for non-nucleonic component, but I am afraid that theoretical ambiguity in the calculated 
+(nucleonic) momentum distribution could make the situation complicated.
