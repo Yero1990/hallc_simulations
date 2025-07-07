@@ -968,7 +968,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
             thrq_binw = float(get_label('xbin_width', histos_file_path_pwia))
 
                         
-            rel_err_thrs = 0.4   #  relative stat. error threshold for masking
+            rel_err_thrs = 0.45   #  relative stat. error threshold for masking
 
             # read dataframe (from simulation of pac 53)
             df_fsi  = pd.read_csv(histos_file_path_fsi,  comment='#')
@@ -983,7 +983,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
             
             
             # get bin content / bin content error
-            fsi_N       = df_fsi.zcont * scale[scl_idx]
+            fsi_N       = df_fsi.zcont * scale[scl_idx] 
             fsi_Nerr    = np.sqrt(fsi_N) 
             fsi_rel_err = fsi_Nerr / fsi_N
 
@@ -1010,7 +1010,72 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
             rel_error = ratio_err / ratio
             y_const = np.zeros(len(rel_error))
 
-      
+
+            # ------ scale beam current for pac53 response (x 60 muA / 80 muA)
+            # to check how much would data be affected if current reduced to 60 muA
+            # get bin content / bin content error
+            fsi_60_N       = df_fsi.zcont * scale[scl_idx] * 60./80.
+            fsi_60_Nerr    = np.sqrt(fsi_60_N) 
+            fsi_60_rel_err = fsi_60_Nerr / fsi_60_N
+
+            fsi_60_N    = ma.masked_where(fsi_60_N==0, fsi_60_N)
+            fsi_60_Nerr = ma.masked_where(fsi_60_N==0, fsi_60_Nerr)
+
+            pwia_60_N       = df_pwia.zcont * scale[scl_idx] * 60./80.
+            pwia_60_Nerr    = np.sqrt(pwia_60_N)
+            pwia_60_rel_err = pwia_60_Nerr / pwia_60_N
+            
+            pwia_60_N    = ma.masked_where(pwia_60_N==0, pwia_60_N)
+            pwia_60_Nerr = ma.masked_where(pwia_60_N==0, pwia_60_Nerr)
+
+            
+            ratio_60 = fsi_60_N / pwia_60_N
+            ratio_60_err = ratio_60 * np.sqrt((fsi_60_Nerr/fsi_60_N)**2 + (pwia_60_Nerr/pwia_60_N)**2)
+            
+            ratio_60_rel_err = ratio_60_err / ratio_60
+
+            
+            ratio_60 = ma.masked_where(ratio_60_rel_err>rel_err_thrs,     ratio_60)
+            ratio_60_err = ma.masked_where(ratio_60_rel_err>rel_err_thrs, ratio_60_err)
+
+            rel_60_error = ratio_60_err / ratio_60
+            y_60_const = np.zeros(len(rel_60_error))
+
+            #====================================================================
+
+             # ------ scale beam current for pac53 response (x 40 muA / 80 muA)
+            # to check how much would data be affected if current reduced to 40 muA
+            # get bin content / bin content error
+            fsi_40_N       = df_fsi.zcont * scale[scl_idx] * 40./80.
+            fsi_40_Nerr    = np.sqrt(fsi_40_N) 
+            fsi_40_rel_err = fsi_40_Nerr / fsi_40_N
+
+            fsi_40_N    = ma.masked_where(fsi_40_N==0, fsi_40_N)
+            fsi_40_Nerr = ma.masked_where(fsi_40_N==0, fsi_40_Nerr)
+
+            pwia_40_N       = df_pwia.zcont * scale[scl_idx] * 40./80.
+            pwia_40_Nerr    = np.sqrt(pwia_40_N)
+            pwia_40_rel_err = pwia_40_Nerr / pwia_40_N
+            
+            pwia_40_N    = ma.masked_where(pwia_40_N==0, pwia_40_N)
+            pwia_40_Nerr = ma.masked_where(pwia_40_N==0, pwia_40_Nerr)
+
+            
+            ratio_40 = fsi_40_N / pwia_40_N
+            ratio_40_err = ratio_40 * np.sqrt((fsi_40_Nerr/fsi_40_N)**2 + (pwia_40_Nerr/pwia_40_N)**2)
+            
+            ratio_40_rel_err = ratio_40_err / ratio_40
+
+            
+            ratio_40 = ma.masked_where(ratio_40_rel_err>rel_err_thrs,     ratio_40)
+            ratio_40_err = ma.masked_where(ratio_40_rel_err>rel_err_thrs, ratio_40_err)
+
+            rel_40_error = ratio_40_err / ratio_40
+            y_40_const = np.zeros(len(rel_40_error))
+
+            #====================================================================
+
+            
             scl_idx = scl_idx + 1  # increment index for every increment in ipm
 
           
@@ -1122,11 +1187,31 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     rel_error_m = ma.masked_where(rel_error>rel_err_thrs, rel_error)
                     y_const_m = ma.masked_where(rel_error>rel_err_thrs, y_const)
                     thrq_bins_m = ma.masked_where(rel_error>rel_err_thrs,thrq_bins)
+
+                    # mask if exceed rel error thresh (for 60 muA)
+                    rel_60_error_m = ma.masked_where(rel_60_error>rel_err_thrs, rel_60_error)
+                    y_60_const_m = ma.masked_where(rel_60_error>rel_err_thrs, y_60_const)
+                    thrq_60_bins_m = ma.masked_where(rel_60_error>rel_err_thrs,thrq_bins)
                     
+                    # mask if exceed rel error thresh (for 40 muA)
+                    rel_40_error_m = ma.masked_where(rel_40_error>rel_err_thrs, rel_40_error)
+                    y_40_const_m = ma.masked_where(rel_40_error>rel_err_thrs, y_40_const)
+                    thrq_40_bins_m = ma.masked_where(rel_40_error>rel_err_thrs,thrq_bins)
                     
+
+                    # plot 40muA scaled first (as this would be larger errors)
+                    #thrq_40_bins_m = thrq_40_bins_m + offset
+                    #ax.errorbar(thrq_40_bins_m[df_fsi.y0==pm_bin], y_40_const_m[df_fsi.y0==pm_bin], rel_40_error_m[df_fsi.y0==pm_bin], marker='o', mfc='white', mec='k', ecolor='r', capsize=5, linestyle='None', ms=5) #label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
+
+                    # plot 60muA scaled second (as this would be larger errors)
+                    #thrq_60_bins_m = thrq_60_bins_m + offset
+                    #ax.errorbar(thrq_60_bins_m[df_fsi.y0==pm_bin], y_60_const_m[df_fsi.y0==pm_bin], rel_60_error_m[df_fsi.y0==pm_bin], marker='o', mfc='white', mec='k', ecolor='b', capsize=5, linestyle='None', ms=5) #label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
+
+                    # plot 80muA 
                     thrq_bins_m = thrq_bins_m + offset
-                    ax.errorbar(thrq_bins_m[df_fsi.y0==pm_bin], y_const_m[df_fsi.y0==pm_bin], rel_error_m[df_fsi.y0==pm_bin], marker='o', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
-                    
+                    ax.errorbar(thrq_bins_m[df_fsi.y0==pm_bin], y_const_m[df_fsi.y0==pm_bin], rel_error_m[df_fsi.y0==pm_bin], marker='o', capsize=5, linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
+
+                  
                     
                     ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=20)
                     plt.axhline(0, linestyle='--', color='gray')
@@ -1138,13 +1223,13 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     ax.set_ylim(-0.5,0.5)
                     plt.xticks(fontsize = 20)
                     plt.yticks(fontsize = 20)
-                    
+
                     if pm_bin==0.520:
                         plt.legend(loc='lower right')
                         
                     # limit the number of ticks
                     max_xticks = 4
-                    max_yticks = 4
+                    max_yticks = 6
                     xloc = plt.MaxNLocator(max_xticks)
                     yloc = plt.MaxNLocator(max_yticks)
                     ax.xaxis.set_major_locator(xloc)
@@ -2035,7 +2120,9 @@ scale_set = [160, 144, 200]  # hrs
 #make_projY_d2fsi('Pm_vs_thrq',[800], [60], 'pwia', '2d', [144])
 #make_projY_d2fsi('Pm_vs_thrq',[800], [49], 'pwia', '2d', [200])
 
-make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio')  # scale represent hrs
+#make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio')  # scale represent hrs
+make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio_err')  # scale represent hrs
+
 #make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
 
 
