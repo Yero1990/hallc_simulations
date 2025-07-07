@@ -1037,16 +1037,6 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                 
                 if plot_flag=='ratio':
 
-              
-                    
-                    # do interpolation    (need to do this, but for combined thrq, not individually)    
-                    #f = interp1d(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], kind='linear', bounds_error=True)
-                    #x_interp = np.linspace(thrq_min, thrq_max, num=100)
-                    #y_interp = f(x_interp)
-                    #print('x_interp;', x_interp)
-                    #print('y_interp;', y_interp)
-
-
                     
                     # ---- plot ratio fsi/pwia -----
                     # ax = plt.subplot(5, 8, idx+1) original
@@ -1072,7 +1062,6 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                         thrq_v18  = ((df_v18['th_nq_mc'])[(df_v18['pr']>pm_min) & (df_v18['pr']<pm_max) ]).to_numpy()
                         ratio_v18 = ((df_v18['ratio'])[(df_v18['pr']>pm_min) & (df_v18['pr']<pm_max) ]).to_numpy()
 
-
                         # interpolate data
                         if len(ratio_cd)<=3:
                             f_ratio_cd  = interp1d(thrq_cd,  ratio_cd,  kind='linear', fill_value=np.nan, bounds_error=False)
@@ -1082,14 +1071,19 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                             f_ratio_cd  = interp1d(thrq_cd,  ratio_cd,  kind='cubic', fill_value=np.nan, bounds_error=False)
                             f_ratio_v18 = interp1d(thrq_v18, ratio_v18, kind='cubic', fill_value=np.nan, bounds_error=False)
 
+                          
                         plt.plot(theory_thrq , f_ratio_cd(theory_thrq), marker='None' , color=clr[i], linestyle='--', label=r'', zorder=4)
                         plt.plot(theory_thrq , f_ratio_v18(theory_thrq), marker='None', color=clr[i], linestyle='-', label=r'', zorder=4)
+
+                        
 
                     # plot Laget FSI/PWIA SIMC ratios (pac 53 simulations)
                     ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', mec='k', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq, zorder=5)
 
-                    # plot  comm_data_2018/PWIA SIMC ratios (for comparison)
-                    ax.errorbar(df_comm.thnq, df_comm.R, df_comm.R_err, marker='^', mec='k', mfc='k', ecolor='k', linestyle='None', ms=7, zorder=4)
+                    # plot  comm_data_2018/JML_Paris_PWIA SIMC ratios (for comparison)
+                    ax.errorbar(df_comm.thnq, df_comm.R_paris, df_comm.R_paris_err, marker='o', mec='k', mfc='white', ecolor='k', linestyle='None', ms=7, zorder=4)
+                    ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='s', mec='k', mfc='white', ecolor='k', linestyle='None', ms=7, zorder=4)
+                    ax.errorbar(df_comm.thnq, df_comm.R_v18,   df_comm.R_v18_err,   marker='^', mec='k', mfc='white', ecolor='k', linestyle='None', ms=7, zorder=4)
 
                   
 

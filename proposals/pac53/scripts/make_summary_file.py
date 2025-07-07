@@ -16,7 +16,7 @@ from mpl_toolkits.axes_grid1.inset_locator import (inset_axes, InsetPosition, ma
 # This code is used to write into a summary file the different recoil angle data /  simc
 # for purposes of plotting (in future studies)
 
-matplotlib.use('Agg')
+#matplotlib.use('Agg')
 
 #Use latex commands (e.g. \textit ot \textbf)
 rc('text', usetex=True)
@@ -127,51 +127,108 @@ def write_output():
     # write numerical data binned in pm
     #--------------------------------------------
     
-    # define central recoil angles
+    # define central pmiss
     pm_c = [520, 560, 600, 640, 680, 720, 760, 800, 840, 880, 920, 960]
 
+    
     for pm_i in pm_c:
 
         # set limits for missing momentum bins
         pm_min = pm_i/1000. - 0.02  # central momntum +/- 20 Mev
         pm_max = pm_i/1000. + 0.02
-        
-        print(pm_i)
-
+                
         # define pm selection
         pm_sel = (pm_avg>pm_min) & (pm_avg<pm_max)
 
         #Convert to sig_reduced from MeV^-3 to fm^3
         red_pwiaXsec_avg_i = red_pwiaXsec_avg[pm_sel]*MeV2fm    #Laget PWIA
 
+        
+        #----- read AV18, CD-Bonn theory calculations (used in deep 2018 analysis) ----
 
+        # arrays to be saved for a range of thnq and a single pm bin 
+        red_pwiaXsec_CD = []
+        red_pwiaXsec_V18 = []
+        thnq_cd_arr = []
+        thnq_v18_arr = []
+
+        # loop over all different thnq files for a specific pm_i, to construct an angular distribution
+        for ithnq in (5, 15, 25, 35, 45, 55, 65, 75, 85, 95, 105):
+
+            print('ithnq = ', ithnq)
+
+            fname_cd_pwia =  'theory_deep_2018/PWIA_models/theoryXsec_CD-BonnPWIA_thnq%d.00_combined.data' % (ithnq)
+            fname_av18_pwia =  'theory_deep_2018/PWIA_models/theoryXsec_V18PWIA_thnq%d.00_combined.data' % (ithnq)
+
+            cd_pwia = dfile(fname_cd_pwia)
+            v18_pwia = dfile(fname_av18_pwia)
+
+            pm_avg_cd = cd_pwia['pm_avg']
+            pm_avg_v18 = v18_pwia['pm_avg']
+
+            # define pm selection for both cd /  v18
+            pm_sel_cd = (pm_avg_cd>pm_min) & (pm_avg_cd<pm_max)
+            pm_sel_v18 = (pm_avg_v18>pm_min) & (pm_avg_v18<pm_max)
+
+            # append theory points to array for each thnq of a given pm bin
+            if(len( (cd_pwia['red_pwiaXsec_theory'])[pm_sel_cd])) > 0:  # UNITS: MeV^-3
+                red_pwiaXsec_CD.append(((cd_pwia['red_pwiaXsec_theory'])[pm_sel_cd])[0])
+                thnq_cd_arr.append(ithnq)
+
+            if(len( (v18_pwia['red_pwiaXsec_theory'])[pm_sel_v18])) > 0:  # UNITS: MeV^-3
+                red_pwiaXsec_V18.append(((v18_pwia['red_pwiaXsec_theory'])[pm_sel_v18])[0])
+                thnq_v18_arr.append(ithnq) 
+
+        # interpolate redXsec vs. thnq for the particular pm_i bin
+        f_red_pwiaXsec_CD = interp1d(thnq_cd_arr, red_pwiaXsec_CD, fill_value='extrapolate', kind='cubic')                        #CD-Bonn (M. Sargsian calculation)
+        f_red_pwiaXsec_V18 = interp1d(thnq_v18_arr, red_pwiaXsec_V18, fill_value='extrapolate', kind='cubic')                        #AV18 (M. Sargsian calculation)
         
-        #Define the Data to JML PWIA Ratio  
-        R_data = red_dataXsec_avg_masked[pm_sel]*MeV2fm / red_pwiaXsec_avg_i
-        R_data_err = red_dataXsec_avg_tot_err[pm_sel]*MeV2fm / red_pwiaXsec_avg_i
-        
-        
-        #------Get Averaged Missing Momentum-----
+        #x = np.linspace(5,105,100)
+        #plt.plot(x, f_red_pwiaXsec_CD(x), linestyle='--', marker = 'o', label='pm_i = %d'%(pm_i))
+        #plt.legend()
+        #plt.show()
+        #-----------------------------------------------------------------------------------
+
+        #------ define data Averaged Missing Momentum-----
         pmiss_avg = pm_avg[pm_sel]
         thnq_c = thnq[pm_sel]
 
-        print('pm-avg = ', pmiss_avg)
-        print('pm_c = ', pm[pm_sel])
+        print('pmiss_avg = ',pmiss_avg)
         print('thnq_c = ',thnq_c)
-        print('R_data = ', R_data)
+        #Define the Data to JML PWIA Ratio  
+        R_data = red_dataXsec_avg_masked[pm_sel]*MeV2fm / red_pwiaXsec_avg_i
+        R_data_err = red_dataXsec_avg_tot_err[pm_sel]*MeV2fm / red_pwiaXsec_avg_i
+
+        # Define the Data to MS CD-Bonn PWIA Ratio
+        R_data_CD = red_dataXsec_avg_masked[pm_sel]*MeV2fm / ( f_red_pwiaXsec_CD(thnq_c) * MeV2fm )
+        R_data_CD_err = red_dataXsec_avg_tot_err[pm_sel]*MeV2fm / ( f_red_pwiaXsec_CD(thnq_c) * MeV2fm )
+
+        # Define the Data to MS CD-Bonn PWIA Ratio
+        R_data_V18 = red_dataXsec_avg_masked[pm_sel]*MeV2fm / ( f_red_pwiaXsec_V18(thnq_c) * MeV2fm )
+        R_data_V18_err = red_dataXsec_avg_tot_err[pm_sel]*MeV2fm / ( f_red_pwiaXsec_V18(thnq_c) * MeV2fm )
+
+        #print('red_dataXsec_avg_masked[pm_sel]*MeV2fm = ', red_dataXsec_avg_masked[pm_sel]*MeV2fm)
+        #print('red_pwiaXsec_avg_i = ', red_pwiaXsec_avg_i)
+        #print('f_red_pwiaXsec_CD(thnq_c) * MeV2fm = ', f_red_pwiaXsec_CD(thnq_c) * MeV2fm)
+
+        #print('pm-avg = ', pmiss_avg)
+        #print('pm_c = ', pm[pm_sel])
+        #print('thnq_c = ',thnq_c)
+        #print('R_data = ', R_data)
+        #print('R_data_CD = ', R_data_CD)
         
-        fout_name = 'redXsec_HallC_pm%d_MeV.txt'%(pm_i)
+        fout_name = '../data/redXsec_HallC_pm%d_MeV.txt'%(pm_i)
         fout = open(fout_name, 'w')
-        comment1='#This datafile contains redXsec and ratio to JML FSI from Hall C Deuteron Experiment: E12-10-003\n' 
+        comment1='#This datafile contains exp. redXsec and ratio to (JML Paris, MS CD-Bonn, MS AV18) PWIA, from Hall C Deuteron Experiment: E12-10-003\n' 
         comment2='#Units: pm_avg [GeV/c] :: redXsec [fm^3], pm = %d +/- 20 MeV/c \n' % (pm_i)
-        header='pm_avg,pm_c,thnq,data_redXsec,data_redXsec_tot_err,R,R_err\n'
+        header='pm_avg,pm_c,thnq,data_redXsec,data_redXsec_tot_err,R_paris,R_paris_err,R_cd,R_cd_err,R_v18,R_v18_err\n'
         fout.write(comment1)
         fout.write(comment2)
         fout.write(header)
 
         for i in range(len(thnq_c)):
             print(i)
-            fout.write('%.5f,%.3f,%d,%.5E,%.5E,%.5f,%.5f \n' % ((pmiss_avg[i], (pm[pm_sel])[i], thnq_c[i], (red_dataXsec_avg_masked[pm_sel]*MeV2fm)[i], (red_dataXsec_avg_tot_err[pm_sel]*MeV2fm)[i],R_data[i],R_data_err[i])))
+            fout.write('%.5f,%.3f,%d,%.5E,%.5E,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f \n' % ((pmiss_avg[i], (pm[pm_sel])[i], thnq_c[i], (red_dataXsec_avg_masked[pm_sel]*MeV2fm)[i], (red_dataXsec_avg_tot_err[pm_sel]*MeV2fm)[i],R_data[i],R_data_err[i], R_data_CD[i], R_data_CD_err[i], R_data_V18[i], R_data_V18_err[i])))
 
         fout.close()
         

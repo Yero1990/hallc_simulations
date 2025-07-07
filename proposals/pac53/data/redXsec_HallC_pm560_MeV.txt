@@ -1,9 +1,9 @@
-#This datafile contains redXsec and ratio to JML FSI from Hall C Deuteron Experiment: E12-10-003
+#This datafile contains exp. redXsec and ratio to (JML Paris, MS CD-Bonn, MS AV18) PWIA, from Hall C Deuteron Experiment: E12-10-003
 #Units: pm_avg [GeV/c] :: redXsec [fm^3], pm = 560 +/- 20 MeV/c 
-pm_avg,pm_c,thnq,data_redXsec,data_redXsec_tot_err,R,R_err
-0.54056,0.540,15,NAN,8.31310E-05,nan,0.75725 
-0.54008,0.540,25,2.40863E-05,1.02815E-05,0.22676,0.09680 
-0.54070,0.540,35,4.24708E-05,9.94946E-06,0.40337,0.09450 
-0.54176,0.540,45,6.89393E-05,1.80477E-05,0.65144,0.17054 
-0.57766,0.580,65,NAN,3.73545E-04,nan,4.50898 
-0.57688,0.580,75,NAN,8.49567E-04,nan,10.33480 
+pm_avg,pm_c,thnq,data_redXsec,data_redXsec_tot_err,R_paris,R_paris_err,R_cd,R_cd_err,R_v18,R_v18_err
+0.54056,0.540,15,NAN,8.31310E-05,nan,0.75725,nan,1.42437,nan,0.78366 
+0.54008,0.540,25,2.40863E-05,1.02815E-05,0.22676,0.09680,0.42572,0.18172,0.23209,0.09907 
+0.54070,0.540,35,4.24708E-05,9.94946E-06,0.40337,0.09450,0.75384,0.17660,0.40980,0.09600 
+0.54176,0.540,45,6.89393E-05,1.80477E-05,0.65144,0.17054,1.25074,0.32743,0.67837,0.17759 
+0.57766,0.580,65,NAN,3.73545E-04,nan,4.50898,nan,9.75581,nan,4.87096 
+0.57688,0.580,75,NAN,8.49567E-04,nan,10.33480,nan,22.27881,nan,11.14499 
