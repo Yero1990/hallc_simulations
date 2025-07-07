@@ -1,0 +1,79 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+
+df = pd.read_csv('exp_deep_2023/deut-2023_runlist.csv', comment='#')
+
+'''
+Index(['run', 'start_run', 'end_run', 'kin_study', 'setting', 'BCM4A_thrs',
+       'BCM4A_current', 'BCM4A_charge', 'real_counts', 'real_rate',
+       'beam_on_target', 'evts_replayed', 'beam_energy', 'target',
+       'target_mass', 'HMS_P', 'HMS_Angle', 'SHMS_P', 'SHMS_Angle', 'PS1',
+       'PS2', 'PS3', 'PS5', 'PS6', 'T1_scl_rates', 'T2_scl_rates',
+       'T3_scl_rates', 'T5_scl_rates', 'T6_scl_rates', 'T1_ccp_rates',
+       'T2_accp_rates', 'T3_accp_rates', 'T5_accp_rates', 'T6_accp_rates',
+       'T1_tLT', 'T2_tLT', 'T3_tLT', 'T5_tLT', 'T6_tLT', 'HMS_TrkEff',
+       'SHMS_TrkEff', 'simc_counts_goal', 'simc_charge_goal', 'Comments'],
+      dtype='object')
+'''
+
+
+# selection cuts
+pm500_sel = (df.setting=='pm_500') & (df.BCM4A_current>5.)
+pm800_sel = (df.setting=='pm_800') & (df.BCM4A_current>5.)
+pm900_sel = (df.setting=='pm_900') & (df.BCM4A_current>5.)
+
+t1_500rates = df[pm500_sel].T1_scl_rates  # SHMS [kHz]
+t3_500rates = df[pm500_sel].T3_scl_rates  # HMS
+t6_500rates = df[pm500_sel].T6_scl_rates  # coin
+
+t1_800rates = df[pm800_sel].T1_scl_rates  # SHMS [kHz]
+t3_800rates = df[pm800_sel].T3_scl_rates  # HMS
+t6_800rates = df[pm800_sel].T6_scl_rates  # coin
+
+t1_900rates = df[pm900_sel].T1_scl_rates  # SHMS [kHz]
+t3_900rates = df[pm900_sel].T3_scl_rates  # HMS
+t6_900rates = df[pm900_sel].T6_scl_rates  # coin
+
+
+
+htrk_500 = df[pm500_sel].HMS_TrkEff
+etrk_500 = df[pm500_sel].SHMS_TrkEff
+tLT_500  = df[pm500_sel].T6_tLT
+
+htrk_800 = df[pm800_sel].HMS_TrkEff
+etrk_800 = df[pm800_sel].SHMS_TrkEff
+tLT_800  = df[pm800_sel].T6_tLT
+
+htrk_900 = df[pm900_sel].HMS_TrkEff
+etrk_900 = df[pm900_sel].SHMS_TrkEff
+tLT_900  = df[pm900_sel].T6_tLT
+
+current_500 = df[pm500_sel].BCM4A_current # muA
+current_800 = df[pm800_sel].BCM4A_current # muA
+current_900 = df[pm900_sel].BCM4A_current # muA
+
+
+# live time vs. SHMS T1 rates
+#plt.plot(t1_800rates, tLT_800, marker='o', linestyle='None', mec='k')
+#plt.plot(t1_900rates, tLT_900, marker='o', linestyle='None', mec='k')
+
+# live time vs. current
+#plt.plot(current_800, tLT_800, marker='o', linestyle='None', mec='k')
+#plt.plot(current_900, tLT_900, marker='o', linestyle='None', mec='k')
+
+
+# e- track eff vs. SHMS T1 rates
+#plt.plot(t1_800rates, etrk_800, marker='o', linestyle='None', mec='k')
+#plt.plot(t1_900rates, etrk_900, marker='o', linestyle='None', mec='k')
+
+# e- track eff vs. current
+#plt.plot(current_800, etrk_800, marker='o', color='b', linestyle='None', mec='k')
+#plt.plot(current_900, etrk_900, marker='o', color='g', linestyle='None', mec='k')
+
+# rates vs. current
+plt.plot(current_800, t1_800rates, marker='o', color='b', linestyle='None', mec='k')
+plt.plot(current_900, t1_900rates, marker='o', color='g', linestyle='None', mec='k')
+
+plt.show()
