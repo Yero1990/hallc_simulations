@@ -913,6 +913,7 @@ Brief: Plotting histos utilities specialized for
 d(e,e'p) fsi studies proposal
 '''
 
+    
 def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
 
@@ -936,6 +937,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
 
     offset=0
+
+    
     # loop over central missing momentum kin. setting 
     for ipm in pm_set:
 
@@ -949,6 +952,12 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
         clr = ['tab:blue', 'tab:orange', 'tab:green'] 
         # loop over central recoil angle kin. setting for a given central momentum
         for ithrq in thrq_set:
+
+            print('')
+            print('=:=:=:=;=:=:=:=')
+            print('ithrq = ', ithrq)
+            print('=:=:=:=;=:=:=:=')
+            print('')
 
             # increment index for this loop
             i = i+1
@@ -1098,8 +1107,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
                 # read d(e,e'p) 2018 commissioning data
                 df_comm = pd.read_csv(histos_file_path_comm, comment='#')
-            
                 
+                        
                 if plot_flag=='ratio':
 
                     
@@ -1145,10 +1154,12 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     # plot Laget FSI/PWIA SIMC ratios (pac 53 simulations)
                     ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', mec='k', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq, zorder=5)
 
-                    # plot  comm_data_2018/JML_Paris_PWIA SIMC ratios (for comparison)
-                    ax.errorbar(df_comm.thnq, df_comm.R_paris, df_comm.R_paris_err, marker='o', mec='k', mfc='white', ecolor='k', linestyle='None', ms=7, zorder=4)
-                    ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='s', mec='k', mfc='white', ecolor='k', linestyle='None', ms=7, zorder=4)
-                    ax.errorbar(df_comm.thnq, df_comm.R_v18,   df_comm.R_v18_err,   marker='^', mec='k', mfc='white', ecolor='k', linestyle='None', ms=7, zorder=4)
+                    # avoid double plotting data
+                    if(ithrq==49):
+                        # plot  comm_data_2018/JML_Paris_PWIA SIMC ratios (for comparison)
+                        #ax.errorbar(df_comm.thnq, df_comm.R_paris, df_comm.R_paris_err, marker='o', mec='k', mfc='white', ecolor='k', linestyle='None', ms=7, zorder=4)
+                        ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='s', mec='k', mfc='white', mew= 2, ecolor='k', linestyle='None', ms=7, zorder=5, label='data (2018)')
+                        #ax.errorbar(df_comm.thnq, df_comm.R_v18,   df_comm.R_v18_err,   marker='^', mec='k', mfc='white', ecolor='k', linestyle='None', ms=7, zorder=4)
 
                   
 
@@ -1163,7 +1174,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     plt.vlines(x = 70, ymin=1, ymax=7., color = 'r', linestyle = '--', linewidth=1.5) # reference line at 70 deg
 
                     ax.set_xlim(20,90)
-                    ax.set_ylim(0,7.)
+                    ax.set_ylim(0,15.)
                     plt.xticks(fontsize = 16)
                     plt.yticks(fontsize = 16)
 
@@ -2120,8 +2131,8 @@ scale_set = [160, 144, 200]  # hrs
 #make_projY_d2fsi('Pm_vs_thrq',[800], [60], 'pwia', '2d', [144])
 #make_projY_d2fsi('Pm_vs_thrq',[800], [49], 'pwia', '2d', [200])
 
-#make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio')  # scale represent hrs
-make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio_err')  # scale represent hrs
+make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio')  # scale represent hrs
+#make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio_err')  # scale represent hrs
 
 #make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
 
