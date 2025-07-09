@@ -1158,7 +1158,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     if(ithrq==49):
                         # plot  comm_data_2018/JML_Paris_PWIA SIMC ratios (for comparison)
                         #ax.errorbar(df_comm.thnq, df_comm.R_paris, df_comm.R_paris_err, marker='o', mec='k', mfc='white', ecolor='k', linestyle='None', ms=7, zorder=4)
-                        ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='s', mec='k', mfc='white', mew= 2, ecolor='k', linestyle='None', ms=7, zorder=5, label='data (2018)')
+                        ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='s', mec='k', mfc='white', mew= 2, ecolor='k', linestyle='None', ms=7, zorder=5, label='Hall C Data (2018)')
                         #ax.errorbar(df_comm.thnq, df_comm.R_v18,   df_comm.R_v18_err,   marker='^', mec='k', mfc='white', ecolor='k', linestyle='None', ms=7, zorder=4)
 
                   
@@ -1171,7 +1171,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=16)
                     plt.axhline(1, linestyle='--', color='gray')
                     
-                    plt.vlines(x = 70, ymin=1, ymax=7., color = 'r', linestyle = '--', linewidth=1.5) # reference line at 70 deg
+                    plt.vlines(x = 70, ymin=1, ymax=15., color = 'r', linestyle = '--', linewidth=1.5) # reference line at 70 deg
 
                     ax.set_xlim(20,90)
                     ax.set_ylim(0,15.)
@@ -1179,7 +1179,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     plt.yticks(fontsize = 16)
 
                     if pm_bin==0.520:
-                        plt.legend(loc='upper left')
+                        plt.legend(loc='upper left', fontsize=12)
  
                     # limit the number of ticks
                     max_xticks = 4
