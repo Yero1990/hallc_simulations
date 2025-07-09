@@ -1,10 +1,9 @@
 #This datafile contains exp. redXsec and ratio to (JML Paris, MS CD-Bonn, MS AV18) PWIA, from Hall C Deuteron Experiment: E12-10-003
-#Units: pm_avg [GeV/c] :: redXsec [fm^3], pm = 680 +/- 20 MeV/c 
-pm_avg,pm_c,thnq,data_redXsec,data_redXsec_tot_err,R_paris,R_paris_err,R_cd,R_cd_err,R_v18,R_v18_err
-0.69674,0.700,15,NAN,6.09750E-05,nan,1.98800,nan,3.48336,nan,1.42442 
-0.69898,0.700,25,NAN,2.67849E-06,nan,0.08704,nan,0.22533,nan,0.08463 
-0.66007,0.660,35,1.23535E-05,2.72886E-06,0.29136,0.06436,0.69690,0.15394,0.28515,0.06299 
-0.69960,0.700,35,1.24201E-05,2.34538E-06,0.40719,0.07689,0.70066,0.13231,0.28669,0.05414 
-0.66104,0.660,45,2.35715E-05,4.74670E-06,0.55300,0.11136,1.91700,0.38603,0.72492,0.14598 
-0.66016,0.660,55,1.11857E-04,4.27997E-05,2.67458,1.02337,6.47841,2.47882,2.64933,1.01371 
-0.69951,0.700,55,5.89375E-05,2.67891E-05,1.97634,0.89832,3.41347,1.55154,1.39593,0.63450 
+#Units: pm_avg [GeV/c] :: redXsec [fm^3], pm = 680 +/- 20 MeV/c
+# the line with the zeros only have the averages of ratios of previous duplicate thnq entries (just for making the ratio plots)
+pm_avg,pm_c,thnq,data_redXsec,data_redXsec_tot_err,redXsec_paris,redXsec_cd,redXsec_v18,R_paris,R_paris_err,R_cd,R_cd_err,R_v18,R_v18_err
+0.69674,0.700,15,NAN,6.09750E-05,3.06715E-05,1.75046E-05,4.28070E-05,nan,1.98800,nan,3.48336,nan,1.42442 
+0.69898,0.700,25,NAN,2.67849E-06,3.07729E-05,1.18870E-05,3.16507E-05,nan,0.08704,nan,0.22533,nan,0.08463 
+0.67983,0.679,35,0,0,0,0,0,0.34927,0.05013,0.69878,0.10149,0.28592,0.041529
+0.66104,0.660,45,2.35715E-05,4.74670E-06,4.26246E-05,1.22961E-05,3.25160E-05,0.55300,0.11136,1.91700,0.38603,0.72492,0.14598 
+0.67983,0.679,55,0,0,0,0,0,2.32546,0.680856,4.9459,1.46217,2.02263,0.59795
