@@ -1157,9 +1157,9 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     # avoid double plotting data
                     if(ithrq==49):
                         # plot  comm_data_2018/JML_Paris_PWIA SIMC ratios (for comparison)
-                        #ax.errorbar(df_comm.thnq, df_comm.R_paris, df_comm.R_paris_err, marker='o', mec='k', mfc='white', ecolor='k', linestyle='None', ms=7, zorder=4)
-                        ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='s', mec='k', mfc='white', mew= 2, ecolor='k', linestyle='None', ms=7, zorder=5, label='Hall C Data (2018)')
-                        #ax.errorbar(df_comm.thnq, df_comm.R_v18,   df_comm.R_v18_err,   marker='^', mec='k', mfc='white', ecolor='k', linestyle='None', ms=7, zorder=4)
+                        ax.errorbar(df_comm.thnq, df_comm.R_paris, df_comm.R_paris_err, marker='o', mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
+                        ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='s', mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5, label='Hall C Data (2018)')
+                        ax.errorbar(df_comm.thnq, df_comm.R_v18,   df_comm.R_v18_err,   marker='^', mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
 
                   
 
