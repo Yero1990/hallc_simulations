@@ -1,0 +1,34 @@
+PAC 53 comment (July 18, 2025 email)
+
+by: Hirokazu Tamura
+
+In the theory report for your proposal, they say that
+-----------------------
+Since the proposed experiment only measures scattered electron and the knocked-out proton, 
+the “missing” neutron will be reconstructed from momentum conservation, 
+any collision-induced photon radiation would not be measured and it could alter 
+both the direction (θq in Fig. 6) and the value of exchanged virtual photon 
+momentum q between the electron and the deuterium. 
+Since the central neutron recoil angles are defined relative to direction of momentum 
+transferred from the scattered electron to the deuterium target (q), a careful simulation 
+and control of such collision-induced radiation will be needed and important for the 
+proposed study of FSI.
+-----------------------
+
+I naively imagine the effect of such collision-induced radiation is small enough, 
+but is it correct? How much will be the effect?
+
+
+
+Response:
+
+Yes, we have included radiative effects in SIMC for the incoming electron, scattered electron and scatter proton using the prescription described in
+ Phys.Rev.C 64 (2001), 054610 . This is a standard prescription used for all Hall C coincidence experiments.
+We apply the correction for each of the (theta_nq, Pmiss)  bins. For the published d(e,e'p) data of
+Phys. Rev. Lett. 125, 262501 (2020) the correction factor (radiative to non-radiative yield ratio) was between 1 and 2 for
+missing momenta up to 1.8 GeV/c corresponding to neutron central recoil angles 35 deg and 45 deg (see  Fig. 11 of Supplementary Materials of Ref. [14] )
+
+
+
+See Fig. 11 of Supplementary Materials of Ref. Yero et al. (2020) https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.125.262501
+which shows the ratio of radiative to non-radiative effects for missing momenta up to 1.2 GeV for recoil angle ~35, 45 deg.

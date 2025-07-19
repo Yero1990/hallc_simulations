@@ -1,0 +1,23 @@
+PAC 53 comment (July 18, 2025 email)
+
+by: Hirokazu Tamura
+
+In the theory report for your proposal, they say that
+-----------------------
+Since the proposed experiment only measures scattered electron and the knocked-out proton, 
+the “missing” neutron will be reconstructed from momentum conservation, 
+any collision-induced photon radiation would not be measured and it could alter 
+both the direction (θq in Fig. 6) and the value of exchanged virtual photon 
+momentum q between the electron and the deuterium. 
+Since the central neutron recoil angles are defined relative to direction of momentum 
+transferred from the scattered electron to the deuterium target (q), a careful simulation 
+and control of such collision-induced radiation will be needed and important for the 
+proposed study of FSI.
+-----------------------
+
+I naively imagine the effect of such collision-induced radiation is small enough, 
+but is it correct? How much will be the effect?
+
+
+
+Response:
