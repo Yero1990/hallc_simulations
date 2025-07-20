@@ -1152,7 +1152,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                         
 
                     # plot Laget FSI/PWIA SIMC ratios (pac 53 simulations)
-                    ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', mec='k', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq, zorder=5)
+                    ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', color=clr[i], mec='k', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq, zorder=5)
 
                     # avoid double plotting data
                     if(ithrq==49):
@@ -1168,15 +1168,17 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
 
                     
-                    ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=16)
+                    ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=20)
                     plt.axhline(1, linestyle='--', color='gray')
                     
                     plt.vlines(x = 70, ymin=1, ymax=15., color = 'r', linestyle = '--', linewidth=1.5) # reference line at 70 deg
 
                     ax.set_xlim(20,90)
-                    ax.set_ylim(0,15.)
-                    plt.xticks(fontsize = 16)
-                    plt.yticks(fontsize = 16)
+                    #ax.set_ylim(0,15.)
+                    ax.set_ylim(0,8.)
+
+                    plt.xticks(fontsize = 20)
+                    plt.yticks(fontsize = 20)
 
                     if pm_bin==0.520:
                         plt.legend(loc='upper left', fontsize=12)
@@ -1193,6 +1195,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                 if plot_flag=='ratio_err':
 
                     ax = plt.subplot(4, 3, idx_plot+1)
+
+                  
                     
                     # mask if exceed rel error thresh
                     rel_error_m = ma.masked_where(rel_error>rel_err_thrs, rel_error)
@@ -1220,9 +1224,33 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
                     # plot 80muA 
                     thrq_bins_m = thrq_bins_m + offset
-                    ax.errorbar(thrq_bins_m[df_fsi.y0==pm_bin], y_const_m[df_fsi.y0==pm_bin], rel_error_m[df_fsi.y0==pm_bin], marker='o', capsize=5, linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
+                    ax.errorbar(thrq_bins_m[df_fsi.y0==pm_bin], y_const_m[df_fsi.y0==pm_bin], rel_error_m[df_fsi.y0==pm_bin], marker='o', capsize=5, linestyle='None', ms=5) #, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
 
-                  
+
+                     
+                    # calculate 2018 data relative error (avoid double plotting)
+                    if(ithrq==49):
+                        
+                        # calculate 2018 data relative errors
+                        rel_err_paris = df_comm.R_paris_err / df_comm.R_paris
+                        rel_err_v18 = df_comm.R_v18_err / df_comm.R_v18
+                        rel_err_cd = df_comm.R_cd_err / df_comm.R_cd
+                    
+                        # plot commissioning (2018) data rel. error
+                        y_const_p = np.zeros(len(rel_err_paris))
+                        y_const_v = np.zeros(len(rel_err_v18))
+                        y_const_c = np.zeros(len(rel_err_cd))
+
+                        nan_mask = np.isnan(rel_err_cd)
+                        
+                        #rel_err_cd_m = ma.masked_where(rel_err_cd == 0, rel_err_cd)
+                        #y_const_c_m =  ma.masked_where(rel_err_cd == 0, y_const_c)
+                        thnq_c_m = ma.masked_where(rel_err_cd == 0, df_comm.thnq)
+                        
+                        #ax.errorbar(df_comm.thnq, y_const_p, rel_err_paris, marker='o', capsize=5, mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
+                        ax.errorbar(df_comm.thnq[~nan_mask] , y_const_c[~nan_mask], rel_err_cd[~nan_mask], marker='s', capsize=5, mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
+                        #ax.errorbar(df_comm.thnq+2, y_const_v, rel_err_v18, marker='^', capsize=5, mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
+
                     
                     ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=20)
                     plt.axhline(0, linestyle='--', color='gray')
@@ -2132,7 +2160,7 @@ scale_set = [160, 144, 200]  # hrs
 #make_projY_d2fsi('Pm_vs_thrq',[800], [49], 'pwia', '2d', [200])
 
 make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio')  # scale represent hrs
-#make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio_err')  # scale represent hrs
+make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio_err')  # scale represent hrs
 
 #make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
 
