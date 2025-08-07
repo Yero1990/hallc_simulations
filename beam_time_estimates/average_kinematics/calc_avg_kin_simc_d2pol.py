@@ -81,12 +81,13 @@ header = \
 # thpq_cm    : calculated angle between proton and q in c.m. [deg]
 # thnq       : averaged angle between recoil neutron and q [deg]
 # thnq_calc  : calculated angle between recoil neutron and q [deg]
+# phi_pq     : averaged out-of-plane angle betweeen proton and q [deg]
 # cphi_pq    : averaged cos(angle) betweeen proton and q [deg]
 # sphi_pq    : averaged sin(angle) betweeen proton and q [deg] 
 # alpha_calc : calculated spectatror (neutron) light-cone momentum fraction 
 # contz      : bin content for the specified (Pm thnq) bin
 # 
-id_bin,id_xbin,id_ybin,thnq_b,pm_b,Ei,kf,the,nu,nu_calc,Q2_calc,q_calc,Ep_calc,Pf,Pm,Pm_calc,En_calc,Pf_Par_q,Pf_Perp_q,thpq,thpq_calc,thpq_cm,thnq,thnq_calc,cphi_pq,sphi_pq,alpha_calc,contz
+id_bin,id_xbin,id_ybin,thnq_b,pm_b,Ei,kf,the,nu,nu_calc,Q2_calc,q_calc,Ep_calc,Pf,Pm,Pm_calc,En_calc,Pf_Par_q,Pf_Perp_q,thpq,thpq_calc,thpq_cm,thnq,thnq_calc,phi_pq,cphi_pq,sphi_pq,alpha_calc,contz
 """
 #------------------------------------------------------------
 
@@ -103,10 +104,10 @@ list_of_args = sys.argv
 
 
 # deuteron FSI proposal files
-#basename='d2_pm800_thrq49_fsi_rad_output' 
+basename='d2_pm800_thrq72_fsi_rad_output' 
 
 # deuteron polarized proposal files
-basename='he4_pm300_Q2_1p5_fsi_rad_fieldON_analyzed'
+#basename='he4_pm300_Q2_1p5_fsi_rad_fieldON_analyzed'
 
 
 output_file = basename+'_avgkin.csv'
@@ -149,6 +150,7 @@ bin_info_xbj       = BI.get_histo_data_arrays(rf.H_xbj_2Davg)          # Xbj, Bj
 bin_info_Pm        = BI.get_histo_data_arrays(rf.H_Pm_2Davg)           # Missing Momentum
 bin_info_thpq      = BI.get_histo_data_arrays(rf.H_theta_pq_2Davg)     # theta_pq [deg]
 bin_info_thrq      = BI.get_histo_data_arrays(rf.H_thrq_2Davg)         # theta_nq [deg]
+bin_info_phi_pq    = BI.get_histo_data_arrays(rf.H_phi_pq_2Davg)       # phi_pq [deg]
 bin_info_cphi_pq   = BI.get_histo_data_arrays(rf.H_cphi_pq_2Davg)      # cos(phi_pq) (-1,1)
 bin_info_sphi_pq   = BI.get_histo_data_arrays(rf.H_sphi_pq_2Davg)      # sin(phi_pq) (-1,1)
 
@@ -182,6 +184,7 @@ for i,acont in enumerate(all.cont):
       Pm        = bin_info_Pm.cont[i]*1000.
       thpq      = bin_info_thpq.cont[i]
       thnq      = bin_info_thrq.cont[i]
+      phi_pq    = bin_info_phi_pq.cont[i]
       cphi_pq   = bin_info_cphi_pq.cont[i]
       sphi_pq   = bin_info_sphi_pq.cont[i]
 
@@ -264,7 +267,7 @@ for i,acont in enumerate(all.cont):
 
 
       # for JLab 22 GeV calculation
-      l = "%i,%i,%i,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3E\n"%(i_bin,i_xbin,i_ybin,thnq_b,pm_b,Ei,kf,the,nu,nu_calc,Q2_calc,q_calc,Ep_calc,Pf,Pm,Pm_calc,En_calc,Pf_Par_q,Pf_Perp_q,thpq,thpq_calc,thpq_cm,thnq,thnq_calc,cphi_pq,sphi_pq,alpha_calc,all.cont[i])
+      l = "%i,%i,%i,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3E\n"%(i_bin,i_xbin,i_ybin,thnq_b,pm_b,Ei,kf,the,nu,nu_calc,Q2_calc,q_calc,Ep_calc,Pf,Pm,Pm_calc,En_calc,Pf_Par_q,Pf_Perp_q,thpq,thpq_calc,thpq_cm,thnq,thnq_calc,phi_pq,cphi_pq,sphi_pq,alpha_calc,all.cont[i])
       '''
                                                                                                           # 0 2d bin number
                                                                                                           i_bin, \

@@ -79,7 +79,7 @@ header = \
 #\\ xb = th_nq
 #\\ yb = pm
 # current header line:
-#! i_b[i,0]/ i_x[i,1]/ i_y[i,2]/ xb[f,3]/ yb[f,4]/ Ei[f,5]/ kf[f,6]/ th_e[f,7]/ omega[f,8]/ Q2_calc[f,9]/ q_lab[f,10]/ Ep_calc[f,11]/ pf[f,12]/ pm_mc[f,13]/ pm[f,14]/ En_calc[f,15]/ beta_cm[f,16]/ gamma_cm[f,17]/ PfPar_q[f,18]/ PfPerp_q[f,19]/ theta_pq[f,20]/ theta_pq_calc[f,21]/ PfPar_cm[f,22]/ th_pq_cm[f,23]/ th_nq_mc[f,24]/ th_nq_calc[f,25]/  cos_phi[f,26]/  sin_phi[f,27]/  alpha_c[f,28]/  nx[i,29]/ ny[i,30]/ cont[f,31]/        
+#! i_b[i,0]/ i_x[i,1]/ i_y[i,2]/ xb[f,3]/ yb[f,4]/ Ei[f,5]/ kf[f,6]/ th_e[f,7]/ omega[f,8]/ Q2_calc[f,9]/ q_lab[f,10]/ Ep_calc[f,11]/ pf[f,12]/ pm_mc[f,13]/ pm[f,14]/ En_calc[f,15]/ beta_cm[f,16]/ gamma_cm[f,17]/ PfPar_q[f,18]/ PfPerp_q[f,19]/ theta_pq[f,20]/ theta_pq_calc[f,21]/ PfPar_cm[f,22]/ th_pq_cm[f,23]/ th_nq_mc[f,24]/ th_nq_calc[f,25]/  phi[f,26]/  cos_phi[f,27]/  sin_phi[f,28]/  alpha_c[f,29]/  nx[i,30]/ ny[i,31]/ cont[f,32]/        
 """
 #------------------------------------------------------------
 
@@ -145,6 +145,7 @@ bin_info_xbj       = BI.get_histo_data_arrays(rf.H_xbj_2Davg)          # Xbj, Bj
 bin_info_Pm         = BI.get_histo_data_arrays(rf.H_Pm_2Davg)           # Missing Momentum
 bin_info_thpq      = BI.get_histo_data_arrays(rf.H_theta_pq_2Davg)     # theta_pq [deg]
 bin_info_thrq       = BI.get_histo_data_arrays(rf.H_thrq_2Davg)     # theta_nq [deg]
+bin_info_phi_pq   = BI.get_histo_data_arrays(rf.H_phi_pq_2Davg)      # phi_pq [deg]
 bin_info_cphi_pq   = BI.get_histo_data_arrays(rf.H_cphi_pq_2Davg)      # cos(phi_pq) (-1,1)
 bin_info_sphi_pq   = BI.get_histo_data_arrays(rf.H_sphi_pq_2Davg)      # sin(phi_pq) (-1,1)
 
@@ -178,6 +179,7 @@ for i,acont in enumerate(all.cont):
       Pm        = bin_info_Pm.cont[i]*1000.
       thpq      = bin_info_thpq.cont[i]
       thnq      = bin_info_thrq.cont[i]
+      phi_pq    = bin_info_phi_pq.cont[i]
       cphi_pq   = bin_info_cphi_pq.cont[i]
       sphi_pq   = bin_info_sphi_pq.cont[i]
 
@@ -417,7 +419,7 @@ for i,acont in enumerate(all.cont):
       '''
 
             # for JLab 22 GeV calculation / fsi studies
-      l = "%i %i %i %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %i %i %.3E\n"%(i_bin,i_xbin,i_ybin,thnq_b,pm_b,Ei,kf,the,nu_calc,Q2_calc,q_calc,Ep,Pf,Pm,Pm_calc,En_calc,beta_cm,gamma_cm,Pf_par,Pf_perp,thpq,th_pq_calc,Pf_par_cm,theta_pq_cm,thnq,theta_nq_calc,cphi_pq,sphi_pq,alpha_calc,all.nx,all.ny,all.cont[i])
+      l = "%i %i %i %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %.3f %i %i %.3E\n"%(i_bin,i_xbin,i_ybin,thnq_b,pm_b,Ei,kf,the,nu_calc,Q2_calc,q_calc,Ep,Pf,Pm,Pm_calc,En_calc,beta_cm,gamma_cm,Pf_par,Pf_perp,thpq,th_pq_calc,Pf_par_cm,theta_pq_cm,thnq,theta_nq_calc,phi_pq,cphi_pq,sphi_pq,alpha_calc,all.nx,all.ny,all.cont[i])
                                                                                                          
                                                                          
       o.write(l)
