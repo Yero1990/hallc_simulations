@@ -93,8 +93,8 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   
   using namespace std;
   
-  TString analysis_flag="d2pol";  // "d2pol" or "d2fsi" 
-  //TString analysis_flag="d2fsi";  // "d2pol" or "d2fsi" 
+  //TString analysis_flag="d2pol";  // "d2pol" or "d2fsi" 
+  TString analysis_flag="d2fsi";  // "d2pol" or "d2fsi" 
   
   Bool_t debug = true;
   
@@ -901,7 +901,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 
   //Get the data tree
   tree = (TTree*)inROOT->Get("SNT");
-  nentries = tree->GetEntries();
+  nentries = 200; //tree->GetEntries();
 
   
   //--- Define Variables for Calculation ----
@@ -1360,7 +1360,8 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   //  LOOP OVER ENTRIES
   //---------------------
   
-  for (Long64_t i=0; i < nentries; i++) {
+  //for (Long64_t i=0; i < nentries; i++) {
+  for (Long64_t i=0; i < 500; i++) {
 
     //Get the ith entry from the SNT TTree
     tree->GetEntry(i);
@@ -1576,6 +1577,14 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       ph_pq_v = ph_pq_v - 360.;
      }
 
+    // M Jones suggeston (Feb 6)
+    // we dont expect phi, cosphi avg to be the same, as the weighted values changes
+    // however, the phi, cosphi,sinphi should not be drastically different when converting one to the other
+    // try out phi: 0 - 360 deg, as from -180 to 180, for the sin average it might jump a lot from neg to pos
+    
+    // theta_p > theta_q ,  thp = thq + thpq  # phi = 180 
+    // thp = thq - thpq   # phi = 0   (q-vector scatters at larger  angles than proton scattering angle)
+    
     p_miss_q_v = -bq_v;  // missing momentum vector in q-frame
 
     //Missing Momentum Components in the q-frame [GeV]
@@ -1857,6 +1866,11 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       H_phi_pq_v ->Fill(ph_pq_v, FullWeight);
       H_cphi_pq_v ->Fill(cos(ph_pq_v*dtr), FullWeight);
 
+      cout << "--- ev: " << i << endl;
+      cout << Form("ph_pq_v (deg): %.3f", ph_pq_v) << endl;
+      cout << Form("cos(ph_pq_v) : %.3f", cos(ph_pq_v*dtr)) << endl;
+      cout << "---" << endl;
+      cout << "" << endl;
       
       //Target Reconstruction (Hall Coord. System)
       H_htar_x->Fill(tar_x, FullWeight);
