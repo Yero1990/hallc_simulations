@@ -901,7 +901,8 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 
   //Get the data tree
   tree = (TTree*)inROOT->Get("SNT");
-  nentries = 200; //tree->GetEntries();
+  //nentries = 200;
+  tree->GetEntries();
 
   
   //--- Define Variables for Calculation ----
@@ -1249,7 +1250,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   
 
   if( analysis_flag == "d2fsi") {
-    Ib = 80;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
+    Ib = 65;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
     time = 1.0;     //estimated time (in hours) a run takes (start - end) of run
     charge_factor = Ib * time * 3600. / 1000.; // in mC
 
@@ -1359,10 +1360,11 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   //---------------------
   //  LOOP OVER ENTRIES
   //---------------------
-  
-  //for (Long64_t i=0; i < nentries; i++) {
-  for (Long64_t i=0; i < 500; i++) {
+  cout << "L1363 " << endl;
+  for (Long64_t i=0; i < nentries; i++) {
+  //for (Long64_t i=0; i < 500; i++) {
 
+    
     //Get the ith entry from the SNT TTree
     tree->GetEntry(i);
 
@@ -1922,7 +1924,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 
 						 
     }
-    
+  
 
     //No Self Cut Histos
     if(c_accpCuts &&  c_Q2) {
@@ -2007,7 +2009,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   
   //Close File
   outROOT->Close();
-  
+
   //** IMPORTANT** Consideration of statistical uncertainty based on counts
   /*
     The uncertainty calculated per kinematic bin in SIMC is representative of the
@@ -2022,7 +2024,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     
   */
   
-  
+
 
   //-----------------------------------------------------------------
   //
@@ -2033,7 +2035,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   //FileStreams objects to READ/WRITE to a .txt file
   ofstream out_file;
   ifstream in_file;
-  
+
 
   // variable integrations for determining total counts, (e,e'p) rates, and daq rats
   float Pmcnts = H_Pm->Integral();
@@ -2132,9 +2134,10 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       
     }
 
+  
     // create output file if it does not exist
     if(in_file.fail()){
-
+      
       out_file.open(output_file);
       //set headers
       out_file << "# SIMC rates estimates (polarized deut studies)" << endl;
@@ -2151,104 +2154,106 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       out_file << "# time: beam-on-target time [hrs] " << endl;
       out_file << "# charge: beam charge [mC] " << endl;
       out_file << "#" << endl;
-      
+    
       out_file <<"target,pm_set,Q2_set,model,field_config,pm_counts,deep_rates,daq_rates,current,time,charge" << endl;
       out_file << Form("%s,     %i,     %.2f,    %s,     %s,     %.1f,       %.3E,        %.3E,        %.3f,      %.3f,     %.3f ", tgt_name.Data(), pm_set, Q2_set, model.Data(), field_config.Data(),Pmcnts, rates, daq_rates, Ib*1000, time, charge_factor ) << endl;
 
     }
+  
+  }
 
+}
+  
+  
+  /*
+  // --------------------------------------------------------
+  // Write Histogram to numerical data file for plotting
+  // --------------------------------------------------------
+  
+  TString cmd = "";
+  
+  
+  
+  if( analysis_flag == "d2fsi") {
+    
+    cmd = Form("mkdir -p %s", output_hist_data.Data() );
+    gSystem->Exec(cmd); // create  histo dir. if it doesn't exist (it will automatically check if it exists, otherwise, will create it_
   }
   
-
   
-    // --------------------------------------------------------
-    // Write Histogram to numerical data file for plotting
-    // --------------------------------------------------------
+  
+  if( analysis_flag == "d2pol") {
+    cmd = Form("mkdir -p %s", output_hist_data.Data() );
+    gSystem->Exec(cmd); // create  histo dir. if it doesn't exist (it will automatically check if it exists, otherwise, will create it_
+  }
+  
+  
+  TString class_name;
+  TH1F *h_i = 0;
+  TH2F *h2_i = 0;
+  
+  //-----------------------------------------------------
+  //Lopp over kin_HList of histogram objects 
+  //-----------------------------------------------------
+  string xlabel;
+  string ylabel;
+  string title;
+  for(int i=0; i<kin_HList->GetEntries(); i++) {
     
-    TString cmd = "";
-
-
-
-     if( analysis_flag == "d2fsi") {
-       
-       cmd = Form("mkdir -p %s", output_hist_data.Data() );
-       gSystem->Exec(cmd); // create  histo dir. if it doesn't exist (it will automatically check if it exists, otherwise, will create it_
-     }
-
-     
-
-     if( analysis_flag == "d2pol") {
-       cmd = Form("mkdir -p %s", output_hist_data.Data() );
-       gSystem->Exec(cmd); // create  histo dir. if it doesn't exist (it will automatically check if it exists, otherwise, will create it_
-     }
-
-    
-    TString class_name;
-    TH1F *h_i = 0;
-    TH2F *h2_i = 0;
-
-    //-----------------------------------------------------
-    //Lopp over kin_HList of histogram objects 
-    //-----------------------------------------------------
-    string xlabel;
-    string ylabel;
-    string title;
-    for(int i=0; i<kin_HList->GetEntries(); i++) {
-    
-      //Get the class name for each element on the list (either "TH1F" or TH2F")
-      class_name = kin_HList->At(i)->ClassName();
-      //Read ith histograms in the list from current run
-      if(class_name=="TH1F") {
-	//Get histogram from the list
-	h_i = (TH1F *)kin_HList->At(i);
+    //Get the class name for each element on the list (either "TH1F" or TH2F")
+    class_name = kin_HList->At(i)->ClassName();
+    //Read ith histograms in the list from current run
+    if(class_name=="TH1F") {
+      //Get histogram from the list
+      h_i = (TH1F *)kin_HList->At(i);
+      
+      title  =  h_i->GetTitle();
+      xlabel =  h_i->GetXaxis()->GetTitle();
+      ylabel =  h_i->GetYaxis()->GetTitle();
+      
+      try{
+	title.replace(title.find("#"),1,"$\\");
+	title.replace(title.find("}"),1,"}$");
 	
-	title  =  h_i->GetTitle();
-	xlabel =  h_i->GetXaxis()->GetTitle();
-	ylabel =  h_i->GetYaxis()->GetTitle();
+	xlabel.replace(xlabel.find("#"),1,"$\\");
+	xlabel.replace(xlabel.find("}"),1,"}$");
 	
-	try{
-	  title.replace(title.find("#"),1,"$\\");
-	  title.replace(title.find("}"),1,"}$");
-	  
-	  xlabel.replace(xlabel.find("#"),1,"$\\");
-	  xlabel.replace(xlabel.find("}"),1,"}$");
-	  
-	  ylabel.replace(ylabel.find("#"),1,"$\\");
-	  ylabel.replace(ylabel.find("}"),1,"}$");
-
-	}
-	catch (std::out_of_range){
-
-	}
-
-
-	if( analysis_flag == "d2fsi") {
-	  extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2fsi_pm%d_thrq%d.txt", output_hist_data.Data(), h_i->GetName(), pm_set, thrq_set));
-	}
+	ylabel.replace(ylabel.find("#"),1,"$\\");
+	ylabel.replace(ylabel.find("}"),1,"}$");
 	
-	if( analysis_flag == "d2pol") {
-	  //extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h_i->GetName(), pm_set, Q2_set)); // default name
-	  extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol.txt", output_hist_data.Data(), h_i->GetName()));
-	  
-	}
+      }
+      catch (std::out_of_range){
 	
-	   
       }
       
+      
+      if( analysis_flag == "d2fsi") {
+	extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2fsi_pm%d_thrq%d.txt", output_hist_data.Data(), h_i->GetName(), pm_set, thrq_set));
+      }
+      
+      if( analysis_flag == "d2pol") {
+	//extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h_i->GetName(), pm_set, Q2_set)); // default name
+	extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol.txt", output_hist_data.Data(), h_i->GetName()));
+	
+      }
+      
+      
+    }
+    
       if(class_name=="TH2F") {
-
+	
 	//Get histogram from the list
 	h2_i = (TH2F *)kin_HList->At(i);
 	
 	title =  h2_i->GetTitle();
 	xlabel =  h2_i->GetXaxis()->GetTitle();
 	ylabel =  h2_i->GetYaxis()->GetTitle();
-
-
+	
+	
 	try{
 	  title.replace(title.find("#"),1,"$\\");
 	  title.replace(title.find("}"),1,"}$");
-
+	  
 	  
 	  xlabel.replace(xlabel.find("#"),1,"$\\");
 	  xlabel.replace(xlabel.find("}"),1,"}$");
@@ -2258,10 +2263,10 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 
 	}
 	catch (std::out_of_range){
-	 
+	  
 	}
-
-
+	
+	
 	if( analysis_flag == "d2fsi") {
 	  extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2fsi_pm%d_thrq%d.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, thrq_set));
 	}
@@ -2274,90 +2279,90 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 	
       }
       
-    }//end loop over kin_HList
-
-    //-----------------------------------------------------
-    //Lopp over accp_HList of histogram objects 
-    //-----------------------------------------------------
+  }//end loop over kin_HList
+  
+  //-----------------------------------------------------
+  //Lopp over accp_HList of histogram objects 
+  //-----------------------------------------------------
+  
+  for(int i=0; i<accp_HList->GetEntries(); i++) {
     
-    for(int i=0; i<accp_HList->GetEntries(); i++) {
+    //Get the class name for each element on the list (either "TH1F" or TH2F")
+    class_name = accp_HList->At(i)->ClassName();
+    //Read ith histograms in the list from current run
+    if(class_name=="TH1F") {
+      //Get histogram from the list
+      h_i = (TH1F *)accp_HList->At(i);
       
-      //Get the class name for each element on the list (either "TH1F" or TH2F")
-      class_name = accp_HList->At(i)->ClassName();
-      //Read ith histograms in the list from current run
-      if(class_name=="TH1F") {
-	//Get histogram from the list
-	h_i = (TH1F *)accp_HList->At(i);
+      title =  h_i->GetTitle();
+      xlabel =  h_i->GetXaxis()->GetTitle();
+      ylabel =  h_i->GetYaxis()->GetTitle();
 
-	title =  h_i->GetTitle();
-	xlabel =  h_i->GetXaxis()->GetTitle();
-	ylabel =  h_i->GetYaxis()->GetTitle();
-
-	try{
-	  title.replace(title.find("#"),1,"$\\");
-	  title.replace(title.find("}"),1,"}$");
-
-	  xlabel.replace(xlabel.find("#"),1,"$\\");
-	  xlabel.replace(xlabel.find("}"),1,"}$");
-	  
-	  ylabel.replace(ylabel.find("#"),1,"$\\");
-	  ylabel.replace(ylabel.find("}"),1,"}$");
-
-	  
-	}
-	catch (std::out_of_range){  }
-
-	if( analysis_flag == "d2fsi") {
-	  extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2fsi_pm%d_thrq%d.txt", output_hist_data.Data(), h_i->GetName(), pm_set, thrq_set));
-	}
-
-	if( analysis_flag == "d2pol") {
-	  //extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h_i->GetName(), pm_set, Q2_set)); // default
-	  extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol.txt", output_hist_data.Data(), h_i->GetName()));
-
-	}
-		
+      try{
+	title.replace(title.find("#"),1,"$\\");
+	title.replace(title.find("}"),1,"}$");
+	
+	xlabel.replace(xlabel.find("#"),1,"$\\");
+	xlabel.replace(xlabel.find("}"),1,"}$");
+	
+	ylabel.replace(ylabel.find("#"),1,"$\\");
+	ylabel.replace(ylabel.find("}"),1,"}$");
+	
+	
+      }
+      catch (std::out_of_range){  }
+      
+      if( analysis_flag == "d2fsi") {
+	extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2fsi_pm%d_thrq%d.txt", output_hist_data.Data(), h_i->GetName(), pm_set, thrq_set));
       }
       
-      if(class_name=="TH2F") {
-	//Get histogram from the list
-	h2_i = (TH2F *)accp_HList->At(i);
-
-	title =  h2_i->GetTitle();
-	xlabel =  h2_i->GetXaxis()->GetTitle();
-	ylabel =  h2_i->GetYaxis()->GetTitle();
-
-	try{
-	  title.replace(title.find("#"),1,"$\\");
-	  title.replace(title.find("}"),1,"}$");
-
-	  xlabel.replace(xlabel.find("#"),1,"$\\");
-	  xlabel.replace(xlabel.find("}"),1,"}$");
-	  
-	  ylabel.replace(ylabel.find("#"),1,"$\\");
-	  ylabel.replace(ylabel.find("}"),1,"}$");
-	
-	  
-	}
-	catch (std::out_of_range){  }
-
-
-	if( analysis_flag == "d2fsi") {
-	  extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2fsi_pm%d_thrq_%d.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, thrq_set));
-	}
-	
-	if( analysis_flag == "d2pol") {
-	  // extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, Q2_set)); // default
-	  extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol.txt", output_hist_data.Data(), h2_i->GetName()));
-
-	}
+      if( analysis_flag == "d2pol") {
+	//extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h_i->GetName(), pm_set, Q2_set)); // default
+	extract_1d_hist(h_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol.txt", output_hist_data.Data(), h_i->GetName()));
 	
       }
       
-    }//end loop over accp_HList
+    }
     
+    if(class_name=="TH2F") {
+      //Get histogram from the list
+      h2_i = (TH2F *)accp_HList->At(i);
+      
+      title =  h2_i->GetTitle();
+      xlabel =  h2_i->GetXaxis()->GetTitle();
+      ylabel =  h2_i->GetYaxis()->GetTitle();
+      
+      try{
+	title.replace(title.find("#"),1,"$\\");
+	title.replace(title.find("}"),1,"}$");
+	
+	xlabel.replace(xlabel.find("#"),1,"$\\");
+	xlabel.replace(xlabel.find("}"),1,"}$");
+	
+	ylabel.replace(ylabel.find("#"),1,"$\\");
+	ylabel.replace(ylabel.find("}"),1,"}$");
+	
+	
+      }
+      catch (std::out_of_range){  }
+      
+      
+      if( analysis_flag == "d2fsi") {
+	extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2fsi_pm%d_thrq_%d.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, thrq_set));
+      }
+      
+      if( analysis_flag == "d2pol") {
+	// extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol_pm%d_Q2_%.1f.txt", output_hist_data.Data(), h2_i->GetName(), pm_set, Q2_set)); // default
+	extract_2d_hist(h2_i, xlabel.c_str(), ylabel.c_str(), title.c_str(), Form("%s/%s_yield_d2pol.txt", output_hist_data.Data(), h2_i->GetName()));
+	
+      }
+      
+    }
+    
+  }//end loop over accp_HList
 
-}
+  */
+
 
 
 

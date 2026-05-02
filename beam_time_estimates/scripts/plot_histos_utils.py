@@ -499,6 +499,7 @@ def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=[1,1,1]):
 
     fig, axs = plt.subplots(1, figsize=(6,5))
 
+    scale_I = 65./80.  # scaling current 
     idx = 0  # counter for scale index 
     # loop over central missing momentum setting
     for ipm in pm_set:
@@ -523,7 +524,7 @@ def overlay_d2fsi(pm_set, thrq_set, hist_name, model, scale=[1,1,1]):
             title  = get_label('title', hist_file) 
 
             x = df.x0
-            df.ycont = df.ycont * scale[idx]
+            df.ycont = df.ycont * scale[idx] * scale_I
             N = df.ycont
             Nerr = np.sqrt(N)
             
@@ -945,6 +946,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
              
         scl_idx = 0  # scale index
 
+        scale_I =  65./80. # beam current scaling
+        
         # define a common x range (that includes full th_rq range for multiple interpolations)
         theory_thrq = np.linspace(0, 90, num=200, endpoint=True)
 
@@ -992,14 +995,14 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
             
             
             # get bin content / bin content error
-            fsi_N       = df_fsi.zcont * scale[scl_idx] 
+            fsi_N       = df_fsi.zcont * scale[scl_idx] * scale_I
             fsi_Nerr    = np.sqrt(fsi_N) 
             fsi_rel_err = fsi_Nerr / fsi_N
 
             fsi_N    = ma.masked_where(fsi_N==0, fsi_N)
             fsi_Nerr = ma.masked_where(fsi_N==0, fsi_Nerr)
 
-            pwia_N       = df_pwia.zcont * scale[scl_idx]
+            pwia_N       = df_pwia.zcont * scale[scl_idx] * scale_I
             pwia_Nerr    = np.sqrt(pwia_N)
             pwia_rel_err = pwia_Nerr / pwia_N
             
@@ -1222,13 +1225,13 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     #thrq_60_bins_m = thrq_60_bins_m + offset
                     #ax.errorbar(thrq_60_bins_m[df_fsi.y0==pm_bin], y_60_const_m[df_fsi.y0==pm_bin], rel_60_error_m[df_fsi.y0==pm_bin], marker='o', mfc='white', mec='k', ecolor='b', capsize=5, linestyle='None', ms=5) #label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
 
-                    # plot 80muA 
-                    #thrq_bins_m = thrq_bins_m + offset
-                    #ax.errorbar(thrq_bins_m[df_fsi.y0==pm_bin], y_const_m[df_fsi.y0==pm_bin], rel_error_m[df_fsi.y0==pm_bin], marker='o', capsize=5, linestyle='None', ms=5) #, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
+                    # plot I/80muA 
+                    thrq_bins_m = thrq_bins_m + offset
+                    ax.errorbar(thrq_bins_m[df_fsi.y0==pm_bin], y_const_m[df_fsi.y0==pm_bin], rel_error_m[df_fsi.y0==pm_bin], marker='o', capsize=5, linestyle='None', ms=5) #, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
 
                     # plot 60muA (for PAC 54 official fig for rel errors)
-                    thrq_60_bins_m = thrq_60_bins_m 
-                    ax.errorbar(thrq_60_bins_m[df_fsi.y0==pm_bin], y_60_const_m[df_fsi.y0==pm_bin], rel_60_error_m[df_fsi.y0==pm_bin], marker='o', capsize=5, linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
+                    #thrq_60_bins_m = thrq_60_bins_m 
+                    #ax.errorbar(thrq_60_bins_m[df_fsi.y0==pm_bin], y_60_const_m[df_fsi.y0==pm_bin], rel_60_error_m[df_fsi.y0==pm_bin], marker='o', capsize=5, linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
 
 
                      
@@ -1292,6 +1295,7 @@ def make_projY_d2fsi(h2_hist_name, pm_user, thrq_user, model, plot_flag, scale=[
 
     ifig = 1 # counter for 2d histogram figures
 
+    scale_I = 65/80.   # scale beam current
     # define collimator polygon shape (for plotting contour lines) 
     shms_hsize = 8.5
     shms_vsize = 12.5
@@ -1365,7 +1369,7 @@ def make_projY_d2fsi(h2_hist_name, pm_user, thrq_user, model, plot_flag, scale=[
             if "_2Davg" in h2_hist_basename:
                 print('not setting up counts')
             else:
-                df.zcont = df.zcont * scale[idx]
+                df.zcont = df.zcont * scale[idx] * scale_I
                 counts = np.sum(df.zcont)
 
             # index counter for thrq
@@ -1398,7 +1402,7 @@ def make_projY_d2fsi(h2_hist_name, pm_user, thrq_user, model, plot_flag, scale=[
 
                 plt.xlabel(xlabel, fontsize=12)
                 plt.ylabel(ylabel, fontsize=12)
-                plt.title(title,   fontsize=14)
+                #plt.title(title,   fontsize=14)
                 plt.xticks(fontsize = 30)
                 plt.yticks(fontsize = 30)
                 cbar = plt.colorbar()
@@ -2159,11 +2163,11 @@ scale_set = [160, 144, 200]  # hrs
 #===================
 # plot yield ratio
 #===================
-#make_projY_d2fsi('Pm_vs_thrq',[800], [72], 'pwia', '2d', [160])
-#make_projY_d2fsi('Pm_vs_thrq',[800], [60], 'pwia', '2d', [144])
-#make_projY_d2fsi('Pm_vs_thrq',[800], [49], 'pwia', '2d', [200])
+#make_projY_d2fsi('Pm_vs_thrq',[800], [72], 'fsi', '2d', [160])
+#make_projY_d2fsi('Pm_vs_thrq',[800], [60], 'fsi', '2d', [144])
+#make_projY_d2fsi('Pm_vs_thrq',[800], [49], 'fsi', '2d', [200])
 
-#make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio')  # scale represent hrs
+make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio')  # scale represent hrs
 make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio_err')  # scale represent hrs
 
 #make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
