@@ -1223,8 +1223,12 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     #ax.errorbar(thrq_60_bins_m[df_fsi.y0==pm_bin], y_60_const_m[df_fsi.y0==pm_bin], rel_60_error_m[df_fsi.y0==pm_bin], marker='o', mfc='white', mec='k', ecolor='b', capsize=5, linestyle='None', ms=5) #label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
 
                     # plot 80muA 
-                    thrq_bins_m = thrq_bins_m + offset
-                    ax.errorbar(thrq_bins_m[df_fsi.y0==pm_bin], y_const_m[df_fsi.y0==pm_bin], rel_error_m[df_fsi.y0==pm_bin], marker='o', capsize=5, linestyle='None', ms=5) #, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
+                    #thrq_bins_m = thrq_bins_m + offset
+                    #ax.errorbar(thrq_bins_m[df_fsi.y0==pm_bin], y_const_m[df_fsi.y0==pm_bin], rel_error_m[df_fsi.y0==pm_bin], marker='o', capsize=5, linestyle='None', ms=5) #, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
+
+                    # plot 60muA (for PAC 54 official fig for rel errors)
+                    thrq_60_bins_m = thrq_60_bins_m 
+                    ax.errorbar(thrq_60_bins_m[df_fsi.y0==pm_bin], y_60_const_m[df_fsi.y0==pm_bin], rel_60_error_m[df_fsi.y0==pm_bin], marker='o', capsize=5, linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
 
 
                      
@@ -2159,7 +2163,7 @@ scale_set = [160, 144, 200]  # hrs
 #make_projY_d2fsi('Pm_vs_thrq',[800], [60], 'pwia', '2d', [144])
 #make_projY_d2fsi('Pm_vs_thrq',[800], [49], 'pwia', '2d', [200])
 
-make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio')  # scale represent hrs
+#make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio')  # scale represent hrs
 make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio_err')  # scale represent hrs
 
 #make_ratios_d2fsi([500], [70], scale=[24], plot_flag='ratio')  # scale represent hrs
@@ -2204,15 +2208,15 @@ make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio_err
 #*************************************
 
 # for overlay_2dpol() and make_projY_d2pol(), select the single-valued central momentum setting and multi-value Q2 setting for plotting
-pm_set = [300]
-q2_set = [1.5]
-tgt_set = ['d2', 'n14', 'he4' ]
+#pm_set = [300]
+#q2_set = [1.5]
+#tgt_set = ['d2', 'n14', 'he4' ]
 #tgt_set = ['d2']
 
-field = 'fieldON'
+#field = 'fieldON'
 
 
-scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 -> 4 weeks, . . . )
+#scale = 1 # in multiple of weeks ( defaults to scale=1 - 2 week, if scale = 2 -> 4 weeks, . . . )
 
 # ----- plot the kinematics variables in which a cut is used (without the self cut, ie nsc or no self cut) -----
 
