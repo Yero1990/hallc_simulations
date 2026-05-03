@@ -901,8 +901,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
 
   //Get the data tree
   tree = (TTree*)inROOT->Get("SNT");
-  //nentries = 200;
-  tree->GetEntries();
+  nentries = tree->GetEntries();
 
   
   //--- Define Variables for Calculation ----
@@ -1250,7 +1249,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   
 
   if( analysis_flag == "d2fsi") {
-    Ib = 65;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
+    Ib = 80;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
     time = 1.0;     //estimated time (in hours) a run takes (start - end) of run
     charge_factor = Ib * time * 3600. / 1000.; // in mC
 
@@ -1868,11 +1867,11 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       H_phi_pq_v ->Fill(ph_pq_v, FullWeight);
       H_cphi_pq_v ->Fill(cos(ph_pq_v*dtr), FullWeight);
 
-      cout << "--- ev: " << i << endl;
-      cout << Form("ph_pq_v (deg): %.3f", ph_pq_v) << endl;
-      cout << Form("cos(ph_pq_v) : %.3f", cos(ph_pq_v*dtr)) << endl;
-      cout << "---" << endl;
-      cout << "" << endl;
+      //cout << "--- ev: " << i << endl;
+      //cout << Form("ph_pq_v (deg): %.3f", ph_pq_v) << endl;
+      //cout << Form("cos(ph_pq_v) : %.3f", cos(ph_pq_v*dtr)) << endl;
+      //cout << "---" << endl;
+      //cout << "" << endl;
       
       //Target Reconstruction (Hall Coord. System)
       H_htar_x->Fill(tar_x, FullWeight);
@@ -2161,11 +2160,9 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     }
   
   }
-
-}
   
   
-  /*
+  
   // --------------------------------------------------------
   // Write Histogram to numerical data file for plotting
   // --------------------------------------------------------
@@ -2361,7 +2358,8 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     
   }//end loop over accp_HList
 
-  */
+}
+  
 
 
 
