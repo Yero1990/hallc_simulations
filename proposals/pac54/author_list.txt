@@ -1,0 +1,79 @@
+\author{C.~Yero$^{\dagger}$~\orcidlink{0000-0003-2822-7373}} % email: yero@cua.edu
+\author{P.~Pokhrel}
+\author{T.~Horn}
+\author{A.~Singh}
+\author{G.~Kalicy}
+\author{Md.~Hossain}
+\affil{The Catholic University of America, Washington, DC, USA}
+
+\author{W.~Boeglin$^{\ast}$}
+\author{M.~Sargsian$^{\ddagger}$}
+\author{H.~Szumila-Vance}
+\author{G.P.~Villegas}
+\affil{Florida International University, Miami, FL, USA}
+
+\author{M.K.~Jones$^{\ast}$}
+\author{J.O.~Hansen}
+\author{S.C.~Dusa}
+\author{T.~Hague}
+\author{A.~Tadepalli}
+\affil{Thomas Jefferson National Accelerator Facility, Newport News, VA, USA}
+
+\author{S.~Jeschonnek$^{\ddagger}$} 
+\affil{The Ohio State University, Lima, OH, USA}
+
+\author{E.~Long}
+\author{N.~Santiesteban}
+\affil{University of New Hampshire, Durham, NH, USA}
+
+\author{D.~Nguyen}
+\affil{The University of Tennessee, Knoxville, TN, USA}
+
+\author{S.~Li}
+\author{P.~Datta}
+\author{J.~Arrington}
+\affil{Lawrence Berkeley National Laboratory, Berkeley, CA, USA}
+
+%\author{H.~Atac}
+%\affil{Temple University, Philadelphia, PA, USA}
+
+\author{N.~Kalantarians}
+\affil{Virginia Union University, Richmond, VA, USA}
+
+\author{E.~Brash}
+\affil{Christopher Newport University, Newport News, VA, USA}
+
+\author{M.~Elaasar}
+\affil{Southern University at New Orleans, New Orleans, LA, USA}
+
+\author{H.~Mkrtchyan}
+\author{A.~Mkrtchyan}
+\author{V.~Tadevosyan}
+\author{A.~Hoghmrtsyan}
+\affil{A. I. Alikhanyan National Science Laboratory (Yerevan Physics Institute), Yerevan, Armenia}
+
+\author{S.~Bhattarai}
+\affil{Idaho State University, Pocatello, ID, USA}
+
+\author{E.R.~Kinney}
+\affil{University of Colorado, Boulder, CO, USA}
+
+\author{D.L.~Adhikari}
+\affil{Virginia Institute of Technology, Blacksburg, VA, USA}
+
+\author{D.~Bhesha}
+\author{H.~Bhatt}
+\affil{Mississippi State University, Mississippi State, MS, USA}
+
+\author{C.~Paudel}
+\affil{New Mexico State University, Las Cruces, NM, USA}
+
+\author{Md.~Junaid}
+\affil{University of Regina, Regina, SK, Canada}
+
+\date{ 
+\vspace{1 cm}
+\today \\
+\vspace{3 cm}
+\small{ $^{\dagger}$Contact-spokesperson (\href{mailto:yero@cua.edu}{yero@cua.edu} ), $^{\ast}$Co-spokesperson, $^{\ddagger}$Theory Collaborator }
+}
