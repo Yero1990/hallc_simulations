@@ -1123,12 +1123,19 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
                     # plot the different thrq calculations separately (before avergaing)
                     if ( ithrq==49 or ithrq==60 or ithrq==72 ):
+                        # Misak Sargsian VNA calculations
                         theory_file_cd = 'yield_estimates/d2_fsi/theory_calculations/q4_sig_avkin_thnq_pm/csv/csec_calc_thrq%d_3_1_1_0_12.data' %(ithrq)
                         theory_file_v18 = 'yield_estimates/d2_fsi/theory_calculations/q4_sig_avkin_thnq_pm/csv/csec_calc_thrq%d_2_1_1_0_12.data' %(ithrq)
 
+                        # Sabine Jeschonnek (relativistic deuteron)
+                        theory_file_sj = 'yield_estimates/d2_fsi/theory_calculations/SJ/d2_pm800_thrq%d_fsi_rad_output_avgkin.csv' %(ithrq)
+
+                        # read the files
                         df_cd  = pd.read_csv(theory_file_cd, comment='#')
                         df_v18 = pd.read_csv(theory_file_v18, comment='#')
 
+                        df_sj = pd.read_csv(theory_file_sj, comment='#')
+                        
                         pm_bw = 0.02 #bin width
                         pm_min = pm_bin - pm_bw
                         pm_max = pm_bin + pm_bw
@@ -1139,18 +1146,31 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                         thrq_v18  = ((df_v18['th_nq_mc'])[(df_v18['pr']>pm_min) & (df_v18['pr']<pm_max) ]).to_numpy()
                         ratio_v18 = ((df_v18['ratio'])[(df_v18['pr']>pm_min) & (df_v18['pr']<pm_max) ]).to_numpy()
 
+                        thrq_sj  = ((df_sj['thnq'])[(df_sj['pmiss']>pm_min) & (df_sj['pmiss']<pm_max) ]).to_numpy()
+                        xsec_fsi_sj  = ((df_sj['xsec_fsi'])[(df_sj['pmiss']>pm_min) & (df_sj['pmiss']<pm_max) ]).to_numpy()
+                        xsec_pwia_sj = ((df_sj['xsec_pwia'])[(df_sj['pmiss']>pm_min) & (df_sj['pmiss']<pm_max) ]).to_numpy()
+                        ratio_sj = xsec_fsi_sj / xsec_pwia_sj
+
+                        print('thrq_sj = ',thrq_sj )
+                        print('ratio = ',ratio_sj )
+                        
                         # interpolate data
                         if len(ratio_cd)<=3:
                             f_ratio_cd  = interp1d(thrq_cd,  ratio_cd,  kind='linear', fill_value=np.nan, bounds_error=False)
                         if len(ratio_v18)<=3:
                             f_ratio_v18 = interp1d(thrq_v18, ratio_v18, kind='linear', fill_value=np.nan, bounds_error=False)
+                        if len(ratio_sj)<=3:
+                            f_ratio_sj = interp1d(thrq_sj, ratio_sj, kind='linear', fill_value=np.nan, bounds_error=False)
+
                         else:                            
                             f_ratio_cd  = interp1d(thrq_cd,  ratio_cd,  kind='cubic', fill_value=np.nan, bounds_error=False)
                             f_ratio_v18 = interp1d(thrq_v18, ratio_v18, kind='cubic', fill_value=np.nan, bounds_error=False)
 
+                            f_ratio_sj = interp1d(thrq_sj, ratio_sj, kind='cubic', fill_value=np.nan, bounds_error=False)
                           
                         plt.plot(theory_thrq , f_ratio_cd(theory_thrq), marker='None' , color=clr[i], linestyle='--', label=r'', zorder=4)
                         plt.plot(theory_thrq , f_ratio_v18(theory_thrq), marker='None', color=clr[i], linestyle='-', label=r'', zorder=4)
+                        plt.plot(theory_thrq , f_ratio_sj(theory_thrq), marker='None', color=clr[i], linestyle=':', label=r'', zorder=4)
 
                         
 
@@ -1177,8 +1197,9 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     plt.vlines(x = 70, ymin=1, ymax=15., color = 'r', linestyle = '--', linewidth=1.5) # reference line at 70 deg
 
                     ax.set_xlim(20,90)
+                    ax.set_ylim(0,100.)
                     #ax.set_ylim(0,15.)
-                    ax.set_ylim(0,8.)
+                    #ax.set_ylim(0,8.)    
 
                     plt.xticks(fontsize = 20)
                     plt.yticks(fontsize = 20)
@@ -1194,7 +1215,9 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     ax.xaxis.set_major_locator(xloc)
                     ax.yaxis.set_major_locator(yloc)
 
-             
+                    # set yscale log
+                    ax.set_yscale('log')
+
                 if plot_flag=='ratio_err':
 
                     ax = plt.subplot(4, 3, idx_plot+1)
