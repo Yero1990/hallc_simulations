@@ -46,7 +46,9 @@ MeV2fm = 197.3**3    #convert MeV^-3 to fm^3
      
 
 #Get Reduced Xsec Data File
-fname = './redXsec_combined.txt'
+#fname = './redXsec_combined.txt'    # 2018 data
+fname = './redXsec_fullexp.txt'     # 2023 data
+
 f = B.get_file(fname)
 
 #Get Bin Information (Same info for all files)                                                                                                  
@@ -220,7 +222,7 @@ def write_output():
         #print('R_data = ', R_data)
         #print('R_data_CD = ', R_data_CD)
         
-        fout_name = '../data/redXsec_HallC_pm%d_MeV.txt'%(pm_i)
+        fout_name = './redXsec_fullexp_HallC_pm%d_MeV.txt'%(pm_i)
         fout = open(fout_name, 'w')
         comment1='#This datafile contains exp. redXsec and ratio to (JML Paris, MS CD-Bonn, MS AV18) PWIA, from Hall C Deuteron Experiment: E12-10-003\n' 
         comment2='#Units: pm_avg [GeV/c] :: redXsec [fm^3], pm = %d +/- 20 MeV/c \n' % (pm_i)

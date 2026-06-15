@@ -1106,12 +1106,17 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                 #if pm_bin<=0.160 or pm_bin>0.520:  continue  # only for pm=500 setting
 
                 # define commissioning data path
-                histos_file_path_comm = '../proposals/pac53/data/redXsec_HallC_pm%d_MeV.txt'%(pm_bin*1000)
+                histos_file_path_comm = '../exp_data/comm18/redXsec_HallC_pm%d_MeV.txt'%(pm_bin*1000)
 
+                # define 2023 d(e,e'p) data (from Gema Villegas)
+                histos_file_path_full = '../exp_data/full23/redXsec_fullexp_HallC_pm%d_MeV.txt'%(pm_bin*1000)
+
+                
                 # read d(e,e'p) 2018 commissioning data
                 df_comm = pd.read_csv(histos_file_path_comm, comment='#')
                 
-                        
+                df_full = pd.read_csv(histos_file_path_full, comment='#')
+   
                 if plot_flag=='ratio':
 
                     
@@ -1175,13 +1180,17 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                         
 
                     # plot Laget FSI/PWIA SIMC ratios (pac 53 simulations)
-                    ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', color=clr[i], mec='k', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq, zorder=5)
+                    #ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', color=clr[i], mec='k', linestyle='None', ms=5, label=r'$\theta_{nq}=%.1f$ deg'%ithrq, zorder=5)
+                    ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', color=clr[i], mec='k', linestyle='None', ms=5, label='', zorder=5)
 
                     # avoid double plotting data
                     if(ithrq==49):
                         # plot  comm_data_2018/JML_Paris_PWIA SIMC ratios (for comparison)
                         #ax.errorbar(df_comm.thnq, df_comm.R_paris, df_comm.R_paris_err, marker='o', mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
-                        ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='s', mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5, label='Hall C Data (2018)')
+                        ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='s', mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=5, label='comm (2018)')
+                        ax.errorbar(df_full.thnq, df_full.R_cd,    df_full.R_cd_err,    marker='^', mec='k', mfc='gray',alpha=0.5, mew = 1.5, ecolor='gray', linestyle='None', ms=7, zorder=6, label='full (2023)')
+
+
                         #ax.errorbar(df_comm.thnq, df_comm.R_v18,   df_comm.R_v18_err,   marker='^', mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
 
                   
@@ -1265,20 +1274,30 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                         rel_err_paris = df_comm.R_paris_err / df_comm.R_paris
                         rel_err_v18 = df_comm.R_v18_err / df_comm.R_v18
                         rel_err_cd = df_comm.R_cd_err / df_comm.R_cd
-                    
+
+                        # calculate 2023 data relative errors
+                        rel_err_cd_full = df_full.R_cd_err / df_full.R_cd
+                        
                         # plot commissioning (2018) data rel. error
                         y_const_p = np.zeros(len(rel_err_paris))
                         y_const_v = np.zeros(len(rel_err_v18))
                         y_const_c = np.zeros(len(rel_err_cd))
 
+                        # plot commissioning (2023) data rel. error
+                        y_const_cf = np.zeros(len(rel_err_cd_full))
+
+                        
                         nan_mask = np.isnan(rel_err_cd)
+                        nan_mask_f = np.isnan(rel_err_cd_full)
                         
                         #rel_err_cd_m = ma.masked_where(rel_err_cd == 0, rel_err_cd)
                         #y_const_c_m =  ma.masked_where(rel_err_cd == 0, y_const_c)
                         thnq_c_m = ma.masked_where(rel_err_cd == 0, df_comm.thnq)
                         
                         #ax.errorbar(df_comm.thnq, y_const_p, rel_err_paris, marker='o', capsize=5, mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
-                        ax.errorbar(df_comm.thnq[~nan_mask] , y_const_c[~nan_mask], rel_err_cd[~nan_mask], marker='s', capsize=5, mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
+                        ax.errorbar(df_comm.thnq[~nan_mask] , y_const_c[~nan_mask], rel_err_cd[~nan_mask],             marker='s', capsize=5, mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=5)
+                        ax.errorbar(df_full.thnq[~nan_mask_f] , y_const_cf[~nan_mask_f], rel_err_cd_full[~nan_mask_f], marker='^', alpha=0.5, capsize=5, mec='k', mfc='gray' , mew = 1.5, ecolor='gray', linestyle='None', ms=7, zorder=6)
+
                         #ax.errorbar(df_comm.thnq+2, y_const_v, rel_err_v18, marker='^', capsize=5, mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
 
                     
