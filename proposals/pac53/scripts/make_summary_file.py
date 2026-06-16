@@ -47,7 +47,7 @@ MeV2fm = 197.3**3    #convert MeV^-3 to fm^3
 
 #Get Reduced Xsec Data File
 #fname = './redXsec_combined.txt'    # 2018 data
-fname = './redXsec_fullexp.txt'     # 2023 data
+fname = './redXsec_full.txt'     # 2023 data
 
 f = B.get_file(fname)
 
@@ -58,6 +58,8 @@ i_y = B.get_data(f, 'i_y')    #y (pmiss) bin number
 thnq = B.get_data(f, 'xb')      #th_nq value at bin center                                                          
 pm =  B.get_data(f, 'yb')      #pmiss value at bin center   
 pm_avg = B.get_data(f, 'pm_avg')
+thnq_avg = B.get_data(f, 'thnq_avg')
+
 #pm_int = np.linspace(0.01, 1.1, 100)#B.get_data(f, 'pm_int')
 
 #Get Combined Final Red Xsec for all kinematics
@@ -194,20 +196,24 @@ def write_output():
         #------ define data Averaged Missing Momentum-----
         pmiss_avg = pm_avg[pm_sel]
         thnq_c = thnq[pm_sel]
-
+        thnq_avg_i = thnq_avg[pm_sel]
+        
         print('pmiss_avg = ',pmiss_avg)
         print('thnq_c = ',thnq_c)
         #Define the Data to JML PWIA Ratio  
         R_data = red_dataXsec_avg_masked[pm_sel]*MeV2fm / red_pwiaXsec_avg_i
-        R_data_err = red_dataXsec_avg_tot_err[pm_sel]*MeV2fm / red_pwiaXsec_avg_i
+        #R_data_err = red_dataXsec_avg_tot_err[pm_sel]*MeV2fm / red_pwiaXsec_avg_i
+        R_data_err = red_dataXsec_avg_err[pm_sel]*MeV2fm / red_pwiaXsec_avg_i  #stats err
 
         # Define the Data to MS CD-Bonn PWIA Ratio
-        R_data_CD = red_dataXsec_avg_masked[pm_sel]*MeV2fm / ( f_red_pwiaXsec_CD(thnq_c) * MeV2fm )
-        R_data_CD_err = red_dataXsec_avg_tot_err[pm_sel]*MeV2fm / ( f_red_pwiaXsec_CD(thnq_c) * MeV2fm )
+        R_data_CD = red_dataXsec_avg_masked[pm_sel]*MeV2fm / ( f_red_pwiaXsec_CD(thnq_avg_i) * MeV2fm )
+        #R_data_CD_err = red_dataXsec_avg_tot_err[pm_sel]*MeV2fm / ( f_red_pwiaXsec_CD(thnq_avg_i) * MeV2fm )
+        R_data_CD_err = red_dataXsec_avg_err[pm_sel]*MeV2fm / ( f_red_pwiaXsec_CD(thnq_avg_i) * MeV2fm )
 
         # Define the Data to MS AV18 PWIA Ratio
-        R_data_V18 = red_dataXsec_avg_masked[pm_sel]*MeV2fm / ( f_red_pwiaXsec_V18(thnq_c) * MeV2fm )
-        R_data_V18_err = red_dataXsec_avg_tot_err[pm_sel]*MeV2fm / ( f_red_pwiaXsec_V18(thnq_c) * MeV2fm )
+        R_data_V18 = red_dataXsec_avg_masked[pm_sel]*MeV2fm / ( f_red_pwiaXsec_V18(thnq_avg_i) * MeV2fm )
+        #R_data_V18_err = red_dataXsec_avg_tot_err[pm_sel]*MeV2fm / ( f_red_pwiaXsec_V18(thnq_avg_i) * MeV2fm )
+        R_data_V18_err = red_dataXsec_avg_err[pm_sel]*MeV2fm / ( f_red_pwiaXsec_V18(thnq_avg_i) * MeV2fm )
 
         
    
@@ -226,14 +232,14 @@ def write_output():
         fout = open(fout_name, 'w')
         comment1='#This datafile contains exp. redXsec and ratio to (JML Paris, MS CD-Bonn, MS AV18) PWIA, from Hall C Deuteron Experiment: E12-10-003\n' 
         comment2='#Units: pm_avg [GeV/c] :: redXsec [fm^3], pm = %d +/- 20 MeV/c \n' % (pm_i)
-        header='pm_avg,pm_c,thnq,data_redXsec,data_redXsec_tot_err,redXsec_paris,redXsec_cd,redXsec_v18,R_paris,R_paris_err,R_cd,R_cd_err,R_v18,R_v18_err\n'
+        header='pm_avg,pm_c,thnq,thnq_avg,data_redXsec,data_redXsec_tot_err,redXsec_paris,redXsec_cd,redXsec_v18,R_paris,R_paris_err,R_cd,R_cd_err,R_v18,R_v18_err\n'
         fout.write(comment1)
         fout.write(comment2)
         fout.write(header)
 
         for i in range(len(thnq_c)):
             print(i)
-            fout.write('%.5f,%.3f,%d,%.5E,%.5E,%.5E,%.5E,%.5E,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f \n' % ((pmiss_avg[i], (pm[pm_sel])[i], thnq_c[i], (red_dataXsec_avg_masked[pm_sel]*MeV2fm)[i], (red_dataXsec_avg_tot_err[pm_sel]*MeV2fm)[i], red_pwiaXsec_avg_i[i], ( f_red_pwiaXsec_CD(thnq_c) * MeV2fm )[i],  ( f_red_pwiaXsec_V18(thnq_c) * MeV2fm )[i], R_data[i],R_data_err[i], R_data_CD[i], R_data_CD_err[i], R_data_V18[i], R_data_V18_err[i])))
+            fout.write('%.5f,%.3f,%d,%.3f,%.5E,%.5E,%.5E,%.5E,%.5E,%.5f,%.5f,%.5f,%.5f,%.5f,%.5f \n' % ((pmiss_avg[i], (pm[pm_sel])[i], thnq_c[i], thnq_avg_i[i], (red_dataXsec_avg_masked[pm_sel]*MeV2fm)[i], (red_dataXsec_avg_tot_err[pm_sel]*MeV2fm)[i], red_pwiaXsec_avg_i[i], ( f_red_pwiaXsec_CD(thnq_avg_i) * MeV2fm )[i],  ( f_red_pwiaXsec_V18(thnq_avg_i) * MeV2fm )[i], R_data[i],R_data_err[i], R_data_CD[i], R_data_CD_err[i], R_data_V18[i], R_data_V18_err[i])))
 
         fout.close()
         
