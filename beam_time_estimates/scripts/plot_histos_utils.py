@@ -1187,8 +1187,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     if(ithrq==49):
                         # plot  comm_data_2018/JML_Paris_PWIA SIMC ratios (for comparison)
                         #ax.errorbar(df_comm.thnq, df_comm.R_paris, df_comm.R_paris_err, marker='o', mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
-                        ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='s', mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=5, label='comm (2018)')
-                        ax.errorbar(df_full.thnq, df_full.R_cd,    df_full.R_cd_err,    marker='^', mec='k', mfc='gray',alpha=0.5, mew = 1.5, ecolor='gray', linestyle='None', ms=7, zorder=6, label='full (2023)')
+                        ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='o', mec='k', mfc='k', mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=6, label='comm (2018)')
+                        ax.errorbar(df_full.thnq, df_full.R_cd,    df_full.R_cd_err,    marker='s', mec='k', mfc='lightgray', mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=5, label='full (2023)')
 
 
                         #ax.errorbar(df_comm.thnq, df_comm.R_v18,   df_comm.R_v18_err,   marker='^', mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
@@ -1203,13 +1203,13 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=20)
                     plt.axhline(1, linestyle='--', color='gray')
                     
-                    plt.vlines(x = 70, ymin=1, ymax=15., color = 'r', linestyle = '--', linewidth=1.5) # reference line at 70 deg
+                    plt.vlines(x = 70, ymin=1, ymax=100., color = 'r', linestyle = '--', linewidth=1.5) # reference line at 70 deg
 
                     ax.set_xlim(20,90)
-                    ax.set_ylim(0,100.)
+                    ax.set_ylim(0.2,100.)
                     #ax.set_ylim(0,15.)
                     #ax.set_ylim(0,8.)    
-
+                    
                     plt.xticks(fontsize = 20)
                     plt.yticks(fontsize = 20)
 
@@ -1295,8 +1295,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                         thnq_c_m = ma.masked_where(rel_err_cd == 0, df_comm.thnq)
                         
                         #ax.errorbar(df_comm.thnq, y_const_p, rel_err_paris, marker='o', capsize=5, mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
-                        ax.errorbar(df_comm.thnq[~nan_mask] , y_const_c[~nan_mask], rel_err_cd[~nan_mask],             marker='s', capsize=5, mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=5)
-                        ax.errorbar(df_full.thnq[~nan_mask_f] , y_const_cf[~nan_mask_f], rel_err_cd_full[~nan_mask_f], marker='^', alpha=0.5, capsize=5, mec='k', mfc='gray' , mew = 1.5, ecolor='gray', linestyle='None', ms=7, zorder=6)
+                        ax.errorbar(df_comm.thnq[~nan_mask] , y_const_c[~nan_mask], rel_err_cd[~nan_mask],             marker='o', capsize=5, mec='k', mfc='k',          mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=6, label='comm (2018)')
+                        ax.errorbar(df_full.thnq[~nan_mask_f] , y_const_cf[~nan_mask_f], rel_err_cd_full[~nan_mask_f], marker='s', capsize=5, mec='k', mfc='lightgray' , mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=5, label='full (2023)')
 
                         #ax.errorbar(df_comm.thnq+2, y_const_v, rel_err_v18, marker='^', capsize=5, mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
 
