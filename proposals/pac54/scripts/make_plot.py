@@ -119,7 +119,8 @@ plt.show()
 
 plt.figure(figsize=(7, 7))
 
-pm_bin_set = [0.520, 0.8]
+#pm_bin_set = [0.520, 0.8]
+pm_bin_set = [0.8]
 
 
 for pm_bin in pm_bin_set:
@@ -247,7 +248,10 @@ for pm_bin in pm_bin_set:
             
             f_ratio_sj = interp1d(thrq_sj, ratio_sj, kind='cubic', fill_value=np.nan, bounds_error=False)
 
-        if pm_bin==0.8:
+            
+        # plot theory curves
+
+        if pm_bin==0.8:  # change to the setting with curves to be displayed in color
             print('------> ', df_comm.thnq)
             
             plt.plot(theory_thrq , f_ratio_cd(theory_thrq),  marker='None', color=clr[i], linestyle='--', lw=3.5, label=r'', zorder=4)
@@ -259,22 +263,23 @@ for pm_bin in pm_bin_set:
             plt.plot(theory_thrq , f_ratio_sj(theory_thrq),  marker='None', color='lightgray', linestyle=':',  lw=3.5, label=r'', zorder=1)
             
    
-        #-- plot Laget FSI/PWIA SIMC ratios (pac 53 simulations)--
+        #-- plot PROJECTED DATA: Laget FSI/PWIA SIMC ratios (pac 53 simulations)--
+        # change to current pm_bin being plotted
         if(pm_bin==0.8):
             plt.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', ms=9.0, color=clr[i], mec='k', mew = 2.5, linestyle='None', label='', zorder=7)
-
+    
         # avoid double plotting data
         if( (ithrq==49) & (pm_bin==0.8)):
             print('ok')
           
-            # -- plot the data (comm / full) --
+            # -- plot the data (comm / full) in color --
             plt.errorbar(df_comm.thnq, df_comm.R_cd,        df_comm.R_cd_err,        elinewidth=3, marker='o', ms=10.5, color='k',                 linestyle='',     mew = 1.5, zorder=5, label='')
             plt.errorbar(df_full.thnq_avg, df_full.R_cd,    df_full.R_cd_err,        elinewidth=3, marker='s', ms=10.5, color='lightgray', mec='k',linestyle='',     mew = 2.5, zorder=6, ecolor='k', label='')
 
         if( (ithrq==49) & (pm_bin==0.520)):
             print('ok')
           
-            # -- plot the data (comm / full) --
+            # -- plot the data (comm / full) in gray --
             plt.errorbar(df_comm.thnq, df_comm.R_cd,        df_comm.R_cd_err,        elinewidth=3, marker='o', ms=10.5, color='lightgray', linestyle='',     mew = 2.5, zorder=5, label='')
             plt.errorbar(df_full.thnq_avg, df_full.R_cd,    df_full.R_cd_err,        elinewidth=3, marker='s', ms=10.5, color='lightgray', linestyle='',     mew = 2.5, zorder=6, label='')
 
