@@ -1,0 +1,44 @@
+Questions to SJ on theory calculations
+-----------------------------------------
+
+First, review M. Sargsian response to PAC 54, where it states:
+
+Unfortunately, it has to be stated that there is no widely accepted
+and experimentally confirmed “fully relativistic” calculation of the
+deuteron electro-disintegration reaction in particular and for nuclear
+structure general.
+
+1) Need to clarify what is meant by fully relativistic calculation, as it
+is states in PHYSICAL REVIEW C 78, 014007 (2008) S.J & J.W.Orden that
+"We perform a fully relativistic calculation of the 2H(e,e′p)n reaction
+in the impulse approximation. "
+
+2) How should we address the calculations (usually we just state an NN
+potential and the person who did the calculation, e.g. CD-Bonn (MS)) But
+for this case, what should be stated ?  If an NN potential is not used,
+how does the Gross equation account for the NN interaction ? It is based
+on first principles, from QCD ?
+
+3) In the Virtual Nucleon Approximation (VNA) by MS, the assumptions are:
+
+   a) consider only the initial state pn->pn transiton or component of the deuteron; 
+      neglecting inelastic or non-nucleoninc initial state transitions
+
+   b) negative energy projection of the virtual nucleon propagator gives negligible
+      contribution to the scattering amplitude
+
+      ** the preceding two conditions can be satisfied if we restrict the recoil
+      nucleon momentum, pr <= 700 MeV/c; 
+      
+   c) at large Q2 (>1 GeV^2), MEC can be neglected
+
+Also, the VNA does NOT account for vacuum fluctuations as these are expected
+to be negligible for pr < 700 MeV/c
+
+Now, I would ask the same questions for the fully relativistic Gross Eq. calculation
+a) Is only the pn -> pn transition considered ?
+b) negative energy projectioon asuume to give negligible contribution ? Yes, this is neglected.
+c) at large Q2 MEC are neglected in calculation ? Yes, MEC and IC are neglected
+d) are vacuum fluctuations accounted for ?
+e) can you verify, if single and double spin-flip contributions in calculation are responsible
+for the observed enhanced effect in the FSI peak ?
