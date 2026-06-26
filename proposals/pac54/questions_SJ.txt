@@ -15,9 +15,15 @@ in the impulse approximation. "
 
 2) How should we address the calculations (usually we just state an NN
 potential and the person who did the calculation, e.g. CD-Bonn (MS)) But
-for this case, what should be stated ?  If an NN potential is not used,
-how does the Gross equation account for the NN interaction ? It is based
-on first principles, from QCD ?
+for this case, what should be stated ?  Use: Covariant Spectator Model (CSM)
+and also emphasize the FSI used SAID NN scattering data, and includes the
+single and double spin flip contributions to the cross sections
+
+If an NN potential is not used,
+how does the Gross equation account for the NN interaction ?
+* Gross-Eq based calculation is relativistic, and puts one nucleon on-shell
+(the NN interaction is accounted in the calculation)
+
 
 3) In the Virtual Nucleon Approximation (VNA) by MS, the assumptions are:
 
@@ -36,9 +42,9 @@ Also, the VNA does NOT account for vacuum fluctuations as these are expected
 to be negligible for pr < 700 MeV/c
 
 Now, I would ask the same questions for the fully relativistic Gross Eq. calculation
-a) Is only the pn -> pn transition considered ?
+a) Is only the pn -> pn transition considered ?  YES
 b) negative energy projectioon asuume to give negligible contribution ? Yes, this is neglected.
 c) at large Q2 MEC are neglected in calculation ? Yes, MEC and IC are neglected
-d) are vacuum fluctuations accounted for ?
+d) are vacuum fluctuations accounted for ?  NO
 e) can you verify, if single and double spin-flip contributions in calculation are responsible
-for the observed enhanced effect in the FSI peak ?
+for the observed enhanced effect in the FSI peak ? YES
