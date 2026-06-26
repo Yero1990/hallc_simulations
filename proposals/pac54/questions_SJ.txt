@@ -48,3 +48,5 @@ c) at large Q2 MEC are neglected in calculation ? Yes, MEC and IC are neglected
 d) are vacuum fluctuations accounted for ?  NO
 e) can you verify, if single and double spin-flip contributions in calculation are responsible
 for the observed enhanced effect in the FSI peak ? YES
+
+
