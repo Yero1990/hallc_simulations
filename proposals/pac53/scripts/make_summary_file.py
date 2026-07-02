@@ -46,7 +46,7 @@ MeV2fm = 197.3**3    #convert MeV^-3 to fm^3
      
 
 #Get Reduced Xsec Data File
-#fname = './redXsec_combined.txt'    # 2018 data
+#fname = './redXsec_comm.txt'    # 2018 data
 fname = './redXsec_full.txt'     # 2023 data
 
 f = B.get_file(fname)
@@ -132,7 +132,8 @@ def write_output():
     #--------------------------------------------
     
     # define central pmiss
-    pm_c = [520, 560, 600, 640, 680, 720, 760, 800, 840, 880, 920, 960]
+    #pm_c = [520, 560, 600, 640, 680, 720, 760, 800, 840, 880, 920, 960]
+    pm_c = [160, 200, 240, 280, 320, 360, 400, 440, 480]
 
     
     for pm_i in pm_c:
@@ -140,7 +141,8 @@ def write_output():
         # set limits for missing momentum bins
         pm_min = pm_i/1000. - 0.02  # central momntum +/- 20 Mev
         pm_max = pm_i/1000. + 0.02
-                
+
+        
         # define pm selection
         pm_sel = (pm_avg>pm_min) & (pm_avg<pm_max)
 
@@ -196,7 +198,8 @@ def write_output():
         #------ define data Averaged Missing Momentum-----
         pmiss_avg = pm_avg[pm_sel]
         thnq_c = thnq[pm_sel]
-        thnq_avg_i = thnq_avg[pm_sel]
+        thnq_avg_i = thnq_avg[pm_sel]  # use this for full
+        #thnq_avg_i = thnq_c   # need this if doing comm data (as it does not have avg thnq)
         
         print('pmiss_avg = ',pmiss_avg)
         print('thnq_c = ',thnq_c)
@@ -227,7 +230,8 @@ def write_output():
         #print('thnq_c = ',thnq_c)
         #print('R_data = ', R_data)
         #print('R_data_CD = ', R_data_CD)
-        
+
+        #fout_name = './redXsec_HallC_pm%d_MeV.txt'%(pm_i)
         fout_name = './redXsec_fullexp_HallC_pm%d_MeV.txt'%(pm_i)
         fout = open(fout_name, 'w')
         comment1='#This datafile contains exp. redXsec and ratio to (JML Paris, MS CD-Bonn, MS AV18) PWIA, from Hall C Deuteron Experiment: E12-10-003\n' 

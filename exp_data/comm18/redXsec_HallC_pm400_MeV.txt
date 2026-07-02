@@ -1,0 +1,6 @@
+#This datafile contains exp. redXsec and ratio to (JML Paris, MS CD-Bonn, MS AV18) PWIA, from Hall C Deuteron Experiment: E12-10-003
+#Units: pm_avg [GeV/c] :: redXsec [fm^3], pm = 400 +/- 20 MeV/c 
+pm_avg,pm_c,thnq,thnq_avg,data_redXsec,data_redXsec_tot_err,redXsec_paris,redXsec_cd,redXsec_v18,R_paris,R_paris_err,R_cd,R_cd_err,R_v18,R_v18_err
+0.41900,0.420,55,55.000,NAN,2.07222E-04,3.05979E-04,2.20433E-04,2.76829E-04,nan,0.67675,nan,0.93939,nan,0.74801 
+0.41972,0.420,65,65.000,NAN,1.39699E-04,3.03641E-04,2.19595E-04,2.76349E-04,nan,0.45977,nan,0.63574,nan,0.50518 
+0.41934,0.420,75,75.000,NAN,3.01653E-04,3.04231E-04,2.19495E-04,2.75857E-04,nan,0.99018,nan,1.37244,nan,1.09202 

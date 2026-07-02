@@ -219,7 +219,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     output_file = "yield_estimates/d2_fsi/output_rates_d2fsi.txt";
     
     // define output directory where numerical histogram .txt will be placed
-    output_hist_data= Form("yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_%s", pm_set, thrq_set, model.Data()); 
+    output_hist_data= Form("yield_estimates/d2_fsi/histogram_data/rad/pm%d_thrq%d_%s", pm_set, thrq_set, model.Data()); 
   }
   
   if( analysis_flag == "d2pol") {
@@ -695,6 +695,8 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     TH1F *H_phi_pq_v  = new TH1F("H_phi_pq_v", "Out-of-Plane Angle, #phi_{pq} (vertex); out-of-plane angle, #phi_{pq} [deg]; Counts", phpq_nbins, phpq_xmin, phpq_xmax);
     TH1F *H_cphi_pq_v  = new TH1F("H_cphi_pq_v", "Out-of-Plane Angle, cos(#phi_{pq}); out-of-plane angle, cos(#phi_{pq}); Counts", 100, -1.2, 1.2);
 
+    // define histograms for quantifying resolutions (i.e., recon - vertex quantities)
+    TH1F *H_thrq_diff = new TH1F("H_thrq_diff", "In-Plane Angle, #theta_{rq} diff. (rec-vertex); in-plane angle, #theta^{rec}_{rq}-#theta^{vert}_{rq} [deg]; Counts", 50, -10, 10);
     
     //Add Kin Histos to TList
     
@@ -734,6 +736,8 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     kin_HList->Add( H_Pm_vs_thrq_dil );
     kin_HList->Add( H_Pm_vs_thrq_ps );
     kin_HList->Add( H_Pm_vs_thrq_xsec );
+
+
 
     // Add 2D Correlation Histos
     kin_HList->Add( H_Em_nuc_vs_Pm_noCut );
@@ -887,6 +891,8 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   accp_HList->Add( H_hxptar_vs_exptar );
   accp_HList->Add( H_hyptar_vs_eyptar );
   accp_HList->Add( H_hdelta_vs_edelta );
+
+  accp_HList->Add( H_thrq_diff );
   
   //---------------------------------------------------------------------------------------------------------
   
@@ -1076,7 +1082,9 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   Double_t ph_pq_v;     
   Double_t ph_rq_v;      
 
- //Electron Arm Focal Plane / Reconstructed Quantities (@ vertex)
+  Double_t thrq_diff;
+
+  //Electron Arm Focal Plane / Reconstructed Quantities (@ vertex)
   Double_t e_xptar_v;           
   Double_t e_yptar_v;
   Double_t h_xptar_v;
@@ -1249,7 +1257,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   
 
   if( analysis_flag == "d2fsi") {
-    Ib = 80;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
+    Ib = 65;       //beam current in (uA) microAmps (micro-Coulombs / sec),   1 mC = 1000 uC
     time = 1.0;     //estimated time (in hours) a run takes (start - end) of run
     charge_factor = Ib * time * 3600. / 1000.; // in mC
 
@@ -1359,7 +1367,7 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
   //---------------------
   //  LOOP OVER ENTRIES
   //---------------------
-  cout << "L1363 " << endl;
+
   for (Long64_t i=0; i < nentries; i++) {
   //for (Long64_t i=0; i < 500; i++) {
 
@@ -1654,7 +1662,9 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
     //momentum fraction of struck nucleon (normalized such that: alpha + alpha_n = 2)
     alpha_v = 2. - alpha_n_v;
     
-    
+
+    // define difference between vertex and recon quantities for resolution estimates
+    thrq_diff = th_rq - th_rq_v;
     
     //--------------------------------------------------------------------------------
     
@@ -1921,7 +1931,10 @@ void analyze_simc_d2(TString basename="", Bool_t heep_check=false){
       H_hyptar_vs_eyptar->Fill(e_yptar, h_yptar, FullWeight); 
       H_hdelta_vs_edelta->Fill(e_delta, h_delta, FullWeight);
 
-						 
+
+      // Fill (recon. - vertex) difference
+      H_thrq_diff->Fill(thrq_diff, FullWeight);
+      
     }
   
 

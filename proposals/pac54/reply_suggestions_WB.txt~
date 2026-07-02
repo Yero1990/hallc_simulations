@@ -1,0 +1,29 @@
+Suggestions froom Werner:
+
+
+I agree with mark these plots look fine. It is to be expected that the distributions are not perfect
+gaussians especially when radiative effects are included which lead to asymmetric distributions (e.g. in the
+missing energy distributions, or the pm component along q as seen in h(e,e’p)). Here are a few more comments
+regarding the various questions.
+
+Question 4: the choice of PWIA calculations (excluding exotic effects) should only affect the ratio if different
+off-shell e-p cross sections are involved which are expected to be small to these high momentum transfers, so I would
+expect that peak position and peak width will be unaffected but the overall scale can be different depending on the
+momentum distribution used. (If you want to get carried away you could calculate the ratio of Misak’s PWIA to Laget’s
+PWIA as an illustration).
+
+Question 6: As I remember we do not have any new data for 70 degree at pm = 500 MeV/c except the old Hall A experiment
+at 3.5 GeV/c and an additional data point there would be useful. I do not consider this as a normalization point as
+these are those at much lower missing momentum values. If time is critical I would even consider dropping this point.
+At high missing momenta (pm > 0.8 GeV/c) calculation differ by much more than a few % and a 5 - 10% normalization
+uncertainty is irrelevant especially if the statistical precision is of the same oder or larger
+
+Question 6: Show an angular distribution calculated with Laget compared to Misak with AV18 and CD-Bonn, this
+should answer this questions
+
+Question 8: You could take a typical angular distribution and convolute it with the distribution that you got
+from the SIMC calculations. This would demonstrate how the resolution affects the measurements (I would expect very little).
+
+Question 9: This experiment was designed to explore the hi-pm part of the d(e,e’p)n cross section in a kinematic area
+where we expect FSI to be small. There is not enough kinematic coverage to also extract an angular distribution at large pm,
+hence this proposal.

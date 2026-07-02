@@ -1,0 +1,63 @@
+For point 8 about the resolution in theta_nq, is the vertex value of theta_nq in the root tree?
+If not, can we calculate it from the other vertex quantities in the root tree? Otherwise we would need to add 
+theta_nq from the vertex to SIMC output. I think that the easiest way to answer this point 8 is to so a distribution
+of theta-nq(vertex) - theta_nq (reconstructed).
+
+You need to fit each theta_nq_ver - theta_nq_recon with a Gaussian
+for each bin in Pmss, thrq . Then you could fill a 2d histogram of Pmiss, thrq with the fitter width.
+I would first just see what theta_nq-ver-theta_nq_recon looks like for each setting for all bins jut to get a feel.
+We are binning in 5 deg theta_nq  bin so hopefully the width is < 5 deg.
+
+
+--------------------------
+
+From point 5, I am not sure what you are trying to say by this repsonse:
+
+"Another important point is that the data were taken back in 2018, and the hardware trigger has gone through a
+significant modification, which introduces additional systematics uncertainties to the data"
+
+The data that we took in 2023 already had the trigger changes. Also the trigger changes have reduced
+the electronic deadtime and so improved the systematic error of the electronic deadtime.
+
+Answer: I will make sure to remove this statement.
+
+---------------------------
+
+For point 5, did Gema give you her preliminary data to put in Fig 14? It should have the best error
+bars. Then we can really evaluate whether the 49 deg point is  worthwhile.
+
+Answer:  Yes this is the data provided by Gema which I overlaid on the
+existing data. The error bars from Gema are only statistical. I can make a plot
+of the relative errors from her preliminary data.
+
+
+-----------------------
+
+
+
+For point 2, I think that we can bring up that in addition to the kinematic suppression there is a dynamical
+suppression which we state in the proposal:
+
+" Dynamically, due to the spin-flip nature of the γ∗N → ∆ transition one expects a much steeper falloff of
+the transition form-factor with Q2 as compared to the elastic γ∗N → N scattering [25,26]."
+
+I do not think that we need to cut the x_bj range of the  72 deg setting. 
+
+------------------------
+
+
+
+How are the errors on the radiative corrections in the Fig in response to point 3
+calculated? Are they form the SIMC events or an estimate from the estimate data events.
+
+Answer: I simulated the kinematic setting with radiative effects ON and OFF.
+The events are weighted by Laget FSI, and also scaled to the allocated
+beam time for each setting. Then, I calculated the uncertainty as sqrt(N),
+and the error shown in the ratio is based on standard error propagation
+
+This is how I have it in my code: 
+
+ratio = fsi_N_norad / fsi_N_rad    
+ratio_err = ratio * np.sqrt((fsi_Nerr_norad/fsi_N_norad)**2 + (fsi_Nerr_rad/fsi_N_rad)**2)
+            
+-------------------------

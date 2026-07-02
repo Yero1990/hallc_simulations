@@ -1,0 +1,66 @@
+Suggestions froom Werner:
+
+
+I agree with mark these plots look fine. It is to be expected that the distributions are not perfect
+gaussians especially when radiative effects are included which lead to asymmetric distributions (e.g. in the
+missing energy distributions, or the pm component along q as seen in h(e,e’p)). Here are a few more comments
+regarding the various questions.
+
+----------------------------
+
+Question 4: the choice of PWIA calculations (excluding exotic effects) should only affect the ratio if different
+off-shell e-p cross sections are involved which are expected to be small to these high momentum transfers, so I would
+expect that peak position and peak width will be unaffected but the overall scale can be different depending on the
+momentum distribution used. (If you want to get carried away you could calculate the ratio of Misak’s PWIA to Laget’s
+PWIA as an illustration).
+
+----------------------------
+
+Question 5: [M. Jones]  I would say that our motivation for the 49 deg point was to have the  low th_nq side of the peak so that
+in one experiment we would cover the full range of th_nq so to map out the FSI contribution. But we probably need to concede that with the
+current data the 49 kinematics is not necessary and would only allow overlap with the previous measurement. I would not say that
+it is normalization or calibration. For normalizaton/calibration we need a pmiss = 120 setting.
+
+Can you make the plot of FIg 14 without the 49 kin setting and allocating the 200 hours evenly between the 60 and 72 deg setting to 
+show the reduction of error ( It should be a 25% reduction given the sqrt(144/244) and sqrt(160/260))  ?
+
+[C. Yero] This may not be a strong argument, but it would just be better
+to have ONE dedicated experiment (this proposal) to cover the full angular distributions,  
+that way we would be able to extract the reduced cross sections across all 
+recoil angle bins, in particular,  in the kin. region where FSI/PWIA ~ 1.  Rather
+than having to rely on separate experiments.
+
+----------------------------
+
+Question 6: [WB] As I remember we do not have any new data for 70 degree at pm = 500 MeV/c except the old Hall A experiment
+at 3.5 GeV/c and an additional data point there would be useful. I do not consider this as a normalization point as
+these are those at much lower missing momentum values. If time is critical I would even consider dropping this point.
+At high missing momenta (pm > 0.8 GeV/c) calculation differ by much more than a few % and a 5 - 10% normalization
+uncertainty is irrelevant especially if the statistical precision is of the same oder or larger
+
+
+[C. Yero[ With respect to the PAC question (6) , where they mention the "calibration point" at pm=500, thrq = 70 deg,
+I was examining out kinematic coverage at Pm = 800 central setting (see attached), and it does seem to cover
+the Pm = 500 MeV point, for each of the three recoil angles, 49, 60, 72 deg.   This means, we can perhaps
+simply drop the Pm=500 central setting ( that means 24 hours or 1 day of beamtime less), as Werner suggested.
+I did also, perhaps erroneously, write in the proposal, that this could be a calibration point, but I was just thinking in terms of the
+reproducibility of the data in a kinematic region we understand, i.e., pm = 500 MeV/c setting. 
+
+----------------------------
+
+Question 7: Show an angular distribution calculated with Laget compared to Misak with AV18 and CD-Bonn, this
+should answer this questions
+
+----------------------------
+
+Question 8: You could take a typical angular distribution and convolute it with the distribution that you got
+from the SIMC calculations. This would demonstrate how the resolution affects the measurements (I would expect very little).
+
+----------------------------
+
+Question 9: This experiment was designed to explore the hi-pm part of the d(e,e’p)n cross section in a kinematic area
+where we expect FSI to be small. There is not enough kinematic coverage to also extract an angular distribution at large pm,
+hence this proposal.
+
+----------------------------
+
