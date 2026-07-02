@@ -1445,14 +1445,14 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                         
                     
                     # plot theory angular dist.
-                    #plt.plot(theory_thrq , f_ratio_cd(theory_thrq), marker='None' , color=clr[i], linestyle='--', label=r'', zorder=4)
-                    #plt.plot(theory_thrq , f_ratio_v18(theory_thrq), marker='None', color=clr[i], linestyle='-', label=r'', zorder=4)
-                    #plt.plot(theory_thrq , f_ratio_sj(theory_thrq), marker='None', color=clr[i], linestyle=':', label=r'', zorder=4)
+                    plt.plot(theory_thrq , f_ratio_cd(theory_thrq), marker='None' , color=clr[i], linestyle='--', label=r'', zorder=4)
+                    plt.plot(theory_thrq , f_ratio_v18(theory_thrq), marker='None', color=clr[i], linestyle='-', label=r'', zorder=4)
+                    plt.plot(theory_thrq , f_ratio_sj(theory_thrq), marker='None', color=clr[i], linestyle=':', label=r'', zorder=4)
 
               
 
                     # plot Laget FSI/PWIA SIMC ratios (pac 54 simulations) - original projections
-                    #ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', color=clr[i], mec='k', linestyle='None', ms=5, label='', zorder=5)  #  label=r'$\theta_{nq}=%.1f$ deg'%ithrq,
+                    ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', color=clr[i], mec='k', linestyle='None', ms=5, label='', zorder=5)  #  label=r'$\theta_{nq}=%.1f$ deg'%ithrq,
 
 
                     # plot ratios of  FSI (or pwia) cross sections (for question 7 of pac 54 reply)
@@ -1492,6 +1492,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     thrq_bins_m = ma.masked_where(rel_error>rel_err_thrs,thrq_bins)
                     #---------------------------------------------------------
 
+                    '''
                     plt.axhline(0, linestyle='--', color='gray')
                 
                     plt.axhline(y = 0.20, color = 'r', linestyle = '--')
@@ -1499,19 +1500,19 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
                     plt.axhline(y = 0.1, color = 'r', linestyle = ':')
                     plt.axhline(y = -0.1, color = 'r', linestyle = ':')
-                       
+                    '''
 
 
                     #ax.errorbar(thrq_bins_m[df_fsi.y0==pm_bin], y_const_m[df_fsi.y0==pm_bin], rel_error_m[df_fsi.y0==pm_bin],    marker='o',   mfc='lightgray', mec='k', ecolor='k', capsize=5, linestyle='None', ms=5, zorder=2) #, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
                     #  Draw the shaded error band
                     # alpha controls transparency (0 = fully transparent, 1 = opaque)
-                    plt.fill_between(thrq_bins_m[df_fsi.y0==pm_bin], y_const_m[df_fsi.y0==pm_bin] - rel_error_m[df_fsi.y0==pm_bin],  y_const_m[df_fsi.y0==pm_bin] + rel_error_m[df_fsi.y0==pm_bin], color="lightgray", alpha=0.7, label="", zorder=2)
+                    #plt.fill_between(thrq_bins_m[df_fsi.y0==pm_bin], y_const_m[df_fsi.y0==pm_bin] - rel_error_m[df_fsi.y0==pm_bin],  y_const_m[df_fsi.y0==pm_bin] + rel_error_m[df_fsi.y0==pm_bin], color="lightgray", alpha=0.7, label="", zorder=2)
 
 
                     #ax.errorbar(thrq_xsec_bins_m, y_const_cd_m, scaled_rel_err_m,    marker='o',   color=clr[i], capsize=5, linestyle='None', ms=5, zorder=1) #, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
-                    plt.fill_between(thrq_xsec_bins_m, y_const_cd_m - scaled_rel_err_m,  y_const_cd_m + scaled_rel_err_m, color="red", alpha=0.2, label="", zorder=1)
+                    #plt.fill_between(thrq_xsec_bins_m, y_const_cd_m - scaled_rel_err_m,  y_const_cd_m + scaled_rel_err_m, color="red", alpha=0.2, label="", zorder=1)
 
-                    ax.set_ylim(-0.5,0.5)
+                    #ax.set_ylim(-0.5,0.5)
 
                     
                     # avoid double plotting data
@@ -1522,8 +1523,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                         #ax.errorbar(df_comm.thnq, df_comm.R_v18,   df_comm.R_v18_err,   marker='^', mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
 
                         # plot sig_exp / sig_pwia_cdBonn
-                        #ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='o', mec='k', mfc='k', mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=6, label='comm (2018)')
-                        #ax.errorbar(df_full.thnq, df_full.R_cd,    df_full.R_cd_err,    marker='s', mec='k', mfc='lightgray', mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=5, label='full (2023)')
+                        ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='o', mec='k', mfc='k', mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=6, label='comm (2018)')
+                        ax.errorbar(df_full.thnq, df_full.R_cd,    df_full.R_cd_err,    marker='s', mec='k', mfc='lightgray', mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=5, label='full (2023)')
 
 
 
@@ -1535,13 +1536,13 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
                     
                     ax.set_title('$p_{m}$ = %d $\pm$ %d MeV'%(pm_bin*1000, pm_binw*1000/2.), fontsize=20)
-                    #plt.axhline(1, linestyle='--', color='gray')
+                    plt.axhline(1, linestyle='--', color='gray')
                     
-                    #plt.vlines(x = 70, ymin=1, ymax=100., color = 'r', linestyle = '--', linewidth=1.5) # reference line at 70 deg
+                    plt.vlines(x = 70, ymin=1, ymax=100., color = 'r', linestyle = '--', linewidth=1.5) # reference line at 70 deg
 
                     # limits for angular dist
                     ax.set_xlim(20,90)
-                    #ax.set_ylim(0.2,100.)
+                    ax.set_ylim(0.2,100.)
                     #ax.set_ylim(0.,50.)
 
                     # limits of pwia cross section ratios
@@ -1563,7 +1564,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                     ax.yaxis.set_major_locator(yloc)
 
                     # set yscale log
-                    #ax.set_yscale('log')
+                    ax.set_yscale('log')
 
                 if plot_flag=='ratio_err':
 
