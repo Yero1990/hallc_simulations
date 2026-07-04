@@ -119,8 +119,8 @@ plt.show()
 
 plt.figure(figsize=(7, 7))
 
-pm_bin_set = [0.5]
-#pm_bin_set = [0.8]
+#pm_bin_set = [0.5]
+pm_bin_set = [0.520, 0.8]
 
 
 for pm_bin in pm_bin_set:
@@ -130,8 +130,8 @@ for pm_bin in pm_bin_set:
     #scale_I =  65./80. # beam current scaling
     scale_I =  1. # beam current scaling
 
-    #scale=[160,144,200]  # beam-on-target hours
-    scale=[12]  # beam-on-target hours
+    scale=[160,144,200]  # beam-on-target hours
+    #scale=[12]  # beam-on-target hours
 
     i = -1
     clr = ['tab:blue', 'tab:orange', 'tab:green'] 
@@ -151,21 +151,23 @@ for pm_bin in pm_bin_set:
     # read d(e,e'p) 2023  full data
     df_full = pd.read_csv(histos_file_path_full, comment='#')
 
-    thrq_set = [70]
-    #thrq_set = [72, 60, 49]
+    #thrq_set = [70]
+    thrq_set = [72, 60, 49]
 
     # define a common x range (that includes full th_rq range for multiple interpolations)
     theory_thrq = np.linspace(0, 90, num=200, endpoint=True)
- 
+
+    offset = 0
+    
     for ithrq in thrq_set:
         # increment index for this loop
         i = i+1
 
         # ---------------------- START: read histogram files for plotting Laget FSI/PWIA -----------------------
         
-        hist_file                 = 'H_Pm_vs_thrq_yield_d2fsi_pm%d_thrq%d.txt'%(500, ithrq)  # histogram file with numerical info
-        histos_file_path_pwia = '../../../beam_time_estimates/yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_pwia/%s'%(500, ithrq, hist_file)
-        histos_file_path_fsi  = '../../../beam_time_estimates/yield_estimates/d2_fsi/histogram_data/pm%d_thrq%d_fsi/%s'%(500, ithrq, hist_file)
+        hist_file                 = 'H_Pm_vs_thrq_yield_d2fsi_pm%d_thrq%d.txt'%(800, ithrq)  # histogram file with numerical info
+        histos_file_path_pwia = '../../../beam_time_estimates/yield_estimates/d2_fsi/histogram_data/rad/pm%d_thrq%d_pwia/%s'%(800, ithrq, hist_file)
+        histos_file_path_fsi  = '../../../beam_time_estimates/yield_estimates/d2_fsi/histogram_data/rad/pm%d_thrq%d_fsi/%s'%(800, ithrq, hist_file)
 
         rel_err_thrs = 0.45   #  relative stat. error threshold for masking
 
@@ -215,12 +217,12 @@ for pm_bin in pm_bin_set:
         theory_file_v18 = '../../../beam_time_estimates/yield_estimates/d2_fsi/theory_calculations/q4_sig_avkin_thnq_pm/csv/csec_calc_thrq%d_2_1_1_0_12.data' %(ithrq)
         
         # Sabine Jeschonnek (relativistic deuteron)
-        #theory_file_sj = '../../../beam_time_estimates/yield_estimates/d2_fsi/theory_calculations/SJ/d2_pm800_thrq%d_fsi_rad_output_avgkin.csv' %(ithrq)
-        theory_file_sj = '../../../beam_time_estimates/yield_estimates/d2_fsi/theory_calculations/SJ/d2_pm500_thrq%d_fsi_rad_output_avgkin.csv' %(ithrq)
+        theory_file_sj = '../../../beam_time_estimates/yield_estimates/d2_fsi/theory_calculations/SJ/d2_pm800_thrq%d_fsi_rad_output_avgkin.csv' %(ithrq)
+        #theory_file_sj = '../../../beam_time_estimates/yield_estimates/d2_fsi/theory_calculations/SJ/d2_pm500_thrq%d_fsi_rad_output_avgkin.csv' %(ithrq)
         
         # read the files
-        #df_cd  = pd.read_csv(theory_file_cd, comment='#')
-        #df_v18 = pd.read_csv(theory_file_v18, comment='#')
+        df_cd  = pd.read_csv(theory_file_cd, comment='#')
+        df_v18 = pd.read_csv(theory_file_v18, comment='#')
         
         df_sj = pd.read_csv(theory_file_sj, comment='#')
         
@@ -228,11 +230,11 @@ for pm_bin in pm_bin_set:
         pm_min = pm_bin - pm_bw
         pm_max = pm_bin + pm_bw
         
-        #thrq_cd  = ((df_cd['th_nq_mc'])[(df_cd['pr']>pm_min) & (df_cd['pr']<pm_max) ]).to_numpy()
-        #ratio_cd = ((df_cd['ratio'])[(df_cd['pr']>pm_min) & (df_cd['pr']<pm_max) ]).to_numpy()
+        thrq_cd  = ((df_cd['th_nq_mc'])[(df_cd['pr']>pm_min) & (df_cd['pr']<pm_max) ]).to_numpy()
+        ratio_cd = ((df_cd['ratio'])[(df_cd['pr']>pm_min) & (df_cd['pr']<pm_max) ]).to_numpy()
         
-        #thrq_v18  = ((df_v18['th_nq_mc'])[(df_v18['pr']>pm_min) & (df_v18['pr']<pm_max) ]).to_numpy()
-        #ratio_v18 = ((df_v18['ratio'])[(df_v18['pr']>pm_min) & (df_v18['pr']<pm_max) ]).to_numpy()
+        thrq_v18  = ((df_v18['th_nq_mc'])[(df_v18['pr']>pm_min) & (df_v18['pr']<pm_max) ]).to_numpy()
+        ratio_v18 = ((df_v18['ratio'])[(df_v18['pr']>pm_min) & (df_v18['pr']<pm_max) ]).to_numpy()
         
         thrq_sj  = ((df_sj['thnq'])[(df_sj['pmiss']>pm_min) & (df_sj['pmiss']<pm_max) ]).to_numpy()
         xsec_fsi_sj  = ((df_sj['xsec_fsi'])[(df_sj['pmiss']>pm_min) & (df_sj['pmiss']<pm_max) ]).to_numpy()
@@ -240,27 +242,27 @@ for pm_bin in pm_bin_set:
         ratio_sj = xsec_fsi_sj / xsec_pwia_sj
         
         # interpolate theory curves
-        #if len(ratio_cd)<=3:
-        #    f_ratio_cd  = interp1d(thrq_cd,  ratio_cd,  kind='linear', fill_value=np.nan, bounds_error=False)
-        #if len(ratio_v18)<=3:
-        #    f_ratio_v18 = interp1d(thrq_v18, ratio_v18, kind='linear', fill_value=np.nan, bounds_error=False)
+        if len(ratio_cd)<=3:
+            f_ratio_cd  = interp1d(thrq_cd,  ratio_cd,  kind='linear', fill_value=np.nan, bounds_error=False)
+        if len(ratio_v18)<=3:
+            f_ratio_v18 = interp1d(thrq_v18, ratio_v18, kind='linear', fill_value=np.nan, bounds_error=False)
         if len(ratio_sj)<=3:
             f_ratio_sj = interp1d(thrq_sj, ratio_sj, kind='linear', fill_value=np.nan, bounds_error=False)
 
         else:                            
-            #f_ratio_cd  = interp1d(thrq_cd,  ratio_cd,  kind='cubic', fill_value=np.nan, bounds_error=False)
-            #f_ratio_v18 = interp1d(thrq_v18, ratio_v18, kind='cubic', fill_value=np.nan, bounds_error=False)
+            f_ratio_cd  = interp1d(thrq_cd,  ratio_cd,  kind='cubic', fill_value=np.nan, bounds_error=False)
+            f_ratio_v18 = interp1d(thrq_v18, ratio_v18, kind='cubic', fill_value=np.nan, bounds_error=False)
             
             f_ratio_sj = interp1d(thrq_sj, ratio_sj, kind='cubic', fill_value=np.nan, bounds_error=False)
 
             
         # plot theory curves
 
-        if pm_bin==0.5:  # change to the setting with curves to be displayed in color
+        if pm_bin==0.8:  # change to the setting with curves to be displayed in color
             print('------> ', df_comm.thnq)
             
-            #plt.plot(theory_thrq , f_ratio_cd(theory_thrq),  marker='None', color=clr[i], linestyle='--', lw=3.5, label=r'', zorder=4)
-            #plt.plot(theory_thrq , f_ratio_v18(theory_thrq), marker='None', color=clr[i], linestyle='-',  lw=3.5, label=r'', zorder=3)
+            plt.plot(theory_thrq , f_ratio_cd(theory_thrq),  marker='None', color=clr[i], linestyle='--', lw=3.5, label=r'', zorder=4)
+            plt.plot(theory_thrq , f_ratio_v18(theory_thrq), marker='None', color=clr[i], linestyle='-',  lw=3.5, label=r'', zorder=3)
             plt.plot(theory_thrq , f_ratio_sj(theory_thrq),  marker='None', color=clr[i], linestyle=':',  lw=3.5, label=r'', zorder=2)
         else:
             plt.plot(theory_thrq , f_ratio_cd(theory_thrq),  marker='None', color='lightgray', linestyle='--', lw=3.5, label=r'', zorder=1)
@@ -270,8 +272,8 @@ for pm_bin in pm_bin_set:
    
         #-- plot PROJECTED DATA: Laget FSI/PWIA SIMC ratios (pac 53 simulations)--
         # change to current pm_bin being plotted
-        if(pm_bin==0.5):
-            plt.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', ms=9.0, color=clr[i], mec='k', mew = 2.5, linestyle='None', label='', zorder=7)
+        if(pm_bin==0.8):
+            plt.errorbar(thrq_bins[df_fsi.y0==pm_bin]+offset, ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', ms=9.0, color=clr[i], mec='k', mew = 2.5, linestyle='None', label='', zorder=7)
     
         # avoid double plotting data
         if( (ithrq==49) & (pm_bin==0.8)):
@@ -289,7 +291,7 @@ for pm_bin in pm_bin_set:
             plt.errorbar(df_full.thnq_avg, df_full.R_cd,    df_full.R_cd_err,        elinewidth=3, marker='s', ms=10.5, color='lightgray', linestyle='',     mew = 2.5, zorder=6, label='')
 
 
-
+        offset = offset + 1
             
 plt.xlim(20,90)
                     

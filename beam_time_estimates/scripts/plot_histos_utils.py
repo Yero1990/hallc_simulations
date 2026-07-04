@@ -1452,7 +1452,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
               
 
                     # plot Laget FSI/PWIA SIMC ratios (pac 54 simulations) - original projections
-                    ax.errorbar(thrq_bins[df_fsi.y0==pm_bin], ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', color=clr[i], mec='k', linestyle='None', ms=5, label='', zorder=5)  #  label=r'$\theta_{nq}=%.1f$ deg'%ithrq,
+                    ax.errorbar(thrq_bins[df_fsi.y0==pm_bin]+offset, ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', color=clr[i], mec='k', linestyle='None', ms=5, label='', zorder=5)  #  label=r'$\theta_{nq}=%.1f$ deg'%ithrq,
 
 
                     # plot ratios of  FSI (or pwia) cross sections (for question 7 of pac 54 reply)
@@ -1604,7 +1604,7 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
 
                     # plot laget FSI projected relative errors
                     thrq_bins_m = thrq_bins_m + offset
-                    #ax.errorbar(thrq_bins_m[df_fsi.y0==pm_bin], y_const_m[df_fsi.y0==pm_bin], rel_error_m[df_fsi.y0==pm_bin],    marker='o',   color=clr[i], capsize=5, linestyle='None', ms=5) #, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
+                    ax.errorbar(thrq_bins_m[df_fsi.y0==pm_bin], y_const_m[df_fsi.y0==pm_bin], rel_error_m[df_fsi.y0==pm_bin],    marker='o',   color=clr[i], capsize=5, linestyle='None', ms=5, zorder=5) #, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
                     #ax.errorbar(thrq2_bins_m[df_fsi.y0==pm_bin], y2_const_m[df_fsi.y0==pm_bin], rel2_error_m[df_fsi.y0==pm_bin], marker='o',  color=clr[i], capsize=5, linestyle='None', ms=5) #, label=r'$\theta_{nq}=%.1f$ deg'%ithrq)
 
                     #super_ratio =  rel2_error_m[df_fsi.y0==pm_bin] / rel_error_m[df_fsi.y0==pm_bin]
@@ -1644,13 +1644,13 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                         nan_mask = np.isnan(rel_err_cd)
                         nan_mask_f = np.isnan(rel_err_cd_full)
                         
-                        #rel_err_cd_m = ma.masked_where(rel_err_cd == 0, rel_err_cd)
-                        #y_const_c_m =  ma.masked_where(rel_err_cd == 0, y_const_c)
+                        rel_err_cd_m = ma.masked_where(rel_err_cd == 0, rel_err_cd)
+                        y_const_c_m =  ma.masked_where(rel_err_cd == 0, y_const_c)
                         thnq_c_m = ma.masked_where(rel_err_cd == 0, df_comm.thnq)
                         
                         #ax.errorbar(df_comm.thnq, y_const_p, rel_err_paris, marker='o', capsize=5, mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
                         #ax.errorbar(df_comm.thnq[~nan_mask] , y_const_c[~nan_mask], rel_err_cd[~nan_mask],             marker='o', capsize=5, mec='k', mfc='k',          mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=5, label='comm (2018)')
-                        #ax.errorbar(df_full.thnq[~nan_mask_f] , y_const_cf[~nan_mask_f], rel_err_cd_full[~nan_mask_f], marker='s', capsize=5, mec='k', mfc='lightgray' , mew = 1.5, ecolor='darkgray', linestyle='None', ms=6, zorder=6, label='full (2023)')
+                        ax.errorbar(df_full.thnq[~nan_mask_f] , y_const_cf[~nan_mask_f], rel_err_cd_full[~nan_mask_f], marker='s', capsize=5, mec='k', mfc='lightgray' , mew = 1.5, ecolor='darkgray', linestyle='None', ms=6, zorder=6, label='full (2023)')
 
                         #ax.errorbar(df_comm.thnq+2, y_const_v, rel_err_v18, marker='^', capsize=5, mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
 
@@ -2575,10 +2575,10 @@ scale_set = [160, 144, 200]  # hrs
 
 
 # pac54 plots
-make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio')  # scale represent hrs
+#make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio')  # scale represent hrs
 #make_ratios_d2fsi([800], [72, 60, 49], scale=[260,244,0], plot_flag='ratio')  # scale represent hrs
 
-#make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio_err')  # scale represent hrs
+make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio_err')  # scale represent hrs
 #make_ratios_d2fsi([800], [72, 60, 49], scale=[260,244,0], plot_flag='ratio_err')  # scale represent hrs
 
 # calculate rad. corr
