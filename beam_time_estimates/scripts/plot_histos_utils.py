@@ -1443,22 +1443,27 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                         f_pwia_paris = interp1d(thrq_xsec_bins[df_pwia_xsec.y0==pm_bin], pwia_paris_xsec[df_pwia_xsec.y0==pm_bin], kind='cubic', fill_value=np.nan, bounds_error=False)
 
                         
+                    # calculate the ratios of FSI CD to different PWIA models                
+                    ratio2v18 = f_fsi_cd(theory_thrq) / f_pwia_v18(theory_thrq)
+                    ratio2sj  = f_fsi_cd(theory_thrq) / f_pwia_sj(theory_thrq)
                     
-                    # plot theory angular dist.
-                    plt.plot(theory_thrq , f_ratio_cd(theory_thrq), marker='None' , color=clr[i], linestyle='--', label=r'', zorder=4)
-                    plt.plot(theory_thrq , f_ratio_v18(theory_thrq), marker='None', color=clr[i], linestyle='-', label=r'', zorder=4)
-                    plt.plot(theory_thrq , f_ratio_sj(theory_thrq), marker='None', color=clr[i], linestyle=':', label=r'', zorder=4)
+                        
+                    
+                    # plot theory angular dist. (pac54)
+                    #plt.plot(theory_thrq , f_ratio_cd(theory_thrq), marker='None' , color=clr[i], linestyle='--', label=r'', zorder=4)
+                    #plt.plot(theory_thrq , f_ratio_v18(theory_thrq), marker='None', color=clr[i], linestyle='-', label=r'', zorder=4)
+                    #plt.plot(theory_thrq , f_ratio_sj(theory_thrq), marker='None', color=clr[i], linestyle=':', label=r'', zorder=4)
 
               
 
                     # plot Laget FSI/PWIA SIMC ratios (pac 54 simulations) - original projections
-                    ax.errorbar(thrq_bins[df_fsi.y0==pm_bin]+offset, ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', color=clr[i], mec='k', linestyle='None', ms=5, label='', zorder=5)  #  label=r'$\theta_{nq}=%.1f$ deg'%ithrq,
+                    #ax.errorbar(thrq_bins[df_fsi.y0==pm_bin]+offset, ratio[df_fsi.y0==pm_bin], ratio_err[df_fsi.y0==pm_bin], marker='o', color=clr[i], mec='k', linestyle='None', ms=5, label='', zorder=5)  #  label=r'$\theta_{nq}=%.1f$ deg'%ithrq,
 
 
-                    # plot ratios of  FSI (or pwia) cross sections (for question 7 of pac 54 reply)
-                    # plt.plot(thrq_bins[df_fsi.y0==pm_bin] , f_fsi_cd(thrq_bins[df_fsi.y0==pm_bin])/f_fsi_paris(thrq_bins[df_fsi.y0==pm_bin]), marker='o', color=clr[i], linestyle='-', label=r'', zorder=4)
-                    # plt.plot(thrq_bins[df_fsi.y0==pm_bin] , f_fsi_v18(thrq_bins[df_fsi.y0==pm_bin])/f_fsi_paris(thrq_bins[df_fsi.y0==pm_bin]), marker='o', color=clr[i], linestyle='-', label=r'', zorder=4)
-                    #plt.plot(thrq_bins[df_fsi.y0==pm_bin] , f_pwia_cd(thrq_bins[df_fsi.y0==pm_bin])/f_pwia_paris(thrq_bins[df_fsi.y0==pm_bin]), marker='o', color=clr[i], linestyle='-', label=r'', zorder=4)
+                    # plot ratios of fsi-to-pwia cross sections (for question 7 of pac 54 reply)
+                    plt.plot(theory_thrq , f_fsi_cd(theory_thrq)/f_pwia_paris(theory_thrq), marker='', color=clr[i], linestyle='-', label=r'', zorder=4)
+                    plt.plot(theory_thrq , f_fsi_cd(theory_thrq)/f_pwia_v18(theory_thrq), marker='', color=clr[i], linestyle='--', label=r'', zorder=4)
+                    plt.plot(theory_thrq , f_fsi_cd(theory_thrq)/f_pwia_sj(theory_thrq), marker='', color=clr[i], linestyle=':', label=r'', zorder=4)
                     
                 
 
@@ -1523,8 +1528,8 @@ def make_ratios_d2fsi(pm_set, thrq_set, scale, plot_flag=''):
                         #ax.errorbar(df_comm.thnq, df_comm.R_v18,   df_comm.R_v18_err,   marker='^', mec='k', mfc='white', mew = 1.5, ecolor='k', linestyle='None', ms=7, zorder=5)
 
                         # plot sig_exp / sig_pwia_cdBonn
-                        ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='o', mec='k', mfc='k', mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=6, label='comm (2018)')
-                        ax.errorbar(df_full.thnq, df_full.R_cd,    df_full.R_cd_err,    marker='s', mec='k', mfc='lightgray', mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=5, label='full (2023)')
+                        #ax.errorbar(df_comm.thnq, df_comm.R_cd,    df_comm.R_cd_err,    marker='o', mec='k', mfc='k', mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=6, label='comm (2018)')
+                        #ax.errorbar(df_full.thnq, df_full.R_cd,    df_full.R_cd_err,    marker='s', mec='k', mfc='lightgray', mew = 1.5, ecolor='k', linestyle='None', ms=6, zorder=5, label='full (2023)')
 
 
 
@@ -2575,10 +2580,10 @@ scale_set = [160, 144, 200]  # hrs
 
 
 # pac54 plots
-#make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio')  # scale represent hrs
+make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio')  # scale represent hrs
 #make_ratios_d2fsi([800], [72, 60, 49], scale=[260,244,0], plot_flag='ratio')  # scale represent hrs
 
-make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio_err')  # scale represent hrs
+#make_ratios_d2fsi([800], [72, 60, 49], scale=[160,144,200], plot_flag='ratio_err')  # scale represent hrs
 #make_ratios_d2fsi([800], [72, 60, 49], scale=[260,244,0], plot_flag='ratio_err')  # scale represent hrs
 
 # calculate rad. corr
